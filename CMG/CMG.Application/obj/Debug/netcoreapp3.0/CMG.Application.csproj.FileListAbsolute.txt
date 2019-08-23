@@ -1,0 +1,9 @@
+C:\Apps\CMG\CMG.Application\bin\Debug\netcoreapp3.0\CMG.Application.deps.json
+C:\Apps\CMG\CMG.Application\bin\Debug\netcoreapp3.0\CMG.Application.dll
+C:\Apps\CMG\CMG.Application\bin\Debug\netcoreapp3.0\CMG.Application.pdb
+C:\Apps\CMG\CMG.Application\obj\Debug\netcoreapp3.0\CMG.Application.csprojAssemblyReference.cache
+C:\Apps\CMG\CMG.Application\obj\Debug\netcoreapp3.0\CMG.Application.csproj.CoreCompileInputs.cache
+C:\Apps\CMG\CMG.Application\obj\Debug\netcoreapp3.0\CMG.Application.AssemblyInfoInputs.cache
+C:\Apps\CMG\CMG.Application\obj\Debug\netcoreapp3.0\CMG.Application.AssemblyInfo.cs
+C:\Apps\CMG\CMG.Application\obj\Debug\netcoreapp3.0\CMG.Application.dll
+C:\Apps\CMG\CMG.Application\obj\Debug\netcoreapp3.0\CMG.Application.pdb

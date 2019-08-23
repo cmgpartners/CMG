@@ -1,0 +1,11 @@
+C:\Apps\CMG\CMG.DataAccess\bin\Debug\netcoreapp3.0\CMG.DataAccess.deps.json
+C:\Apps\CMG\CMG.DataAccess\bin\Debug\netcoreapp3.0\CMG.DataAccess.dll
+C:\Apps\CMG\CMG.DataAccess\obj\Debug\netcoreapp3.0\CMG.DataAccess.csprojAssemblyReference.cache
+C:\Apps\CMG\CMG.DataAccess\obj\Debug\netcoreapp3.0\CMG.DataAccess.csproj.CoreCompileInputs.cache
+C:\Apps\CMG\CMG.DataAccess\obj\Debug\netcoreapp3.0\CMG.DataAccess.AssemblyInfoInputs.cache
+C:\Apps\CMG\CMG.DataAccess\obj\Debug\netcoreapp3.0\CMG.DataAccess.AssemblyInfo.cs
+C:\Apps\CMG\CMG.DataAccess\bin\Debug\netcoreapp3.0\CMG.DataAccess.runtimeconfig.json
+C:\Apps\CMG\CMG.DataAccess\bin\Debug\netcoreapp3.0\CMG.DataAccess.runtimeconfig.dev.json
+C:\Apps\CMG\CMG.DataAccess\bin\Debug\netcoreapp3.0\CMG.DataAccess.pdb
+C:\Apps\CMG\CMG.DataAccess\obj\Debug\netcoreapp3.0\CMG.DataAccess.dll
+C:\Apps\CMG\CMG.DataAccess\obj\Debug\netcoreapp3.0\CMG.DataAccess.pdb
