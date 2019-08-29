@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Apps\\CMG\\CMG.Common\\CMG.Common.csproj": {}
+    "C:\\Projects\\CMG\\CMG.Common\\CMG.Common.csproj": {}
   },
   "projects": {
-    "C:\\Apps\\CMG\\CMG.Common\\CMG.Common.csproj": {
+    "C:\\Projects\\CMG\\CMG.Common\\CMG.Common.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Apps\\CMG\\CMG.Common\\CMG.Common.csproj",
+        "projectUniqueName": "C:\\Projects\\CMG\\CMG.Common\\CMG.Common.csproj",
         "projectName": "CMG.Common",
-        "projectPath": "C:\\Apps\\CMG\\CMG.Common\\CMG.Common.csproj",
+        "projectPath": "C:\\Projects\\CMG\\CMG.Common\\CMG.Common.csproj",
         "packagesPath": "C:\\Users\\Rishita\\.nuget\\packages\\",
-        "outputPath": "C:\\Apps\\CMG\\CMG.Common\\obj\\",
+        "outputPath": "C:\\Projects\\CMG\\CMG.Common\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

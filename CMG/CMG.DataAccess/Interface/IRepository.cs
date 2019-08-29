@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CMG.DataAccess.Interface
 {
@@ -7,5 +8,6 @@ namespace CMG.DataAccess.Interface
         Task<TEntity> Save(TEntity entity);
         Task<TEntity> Add(TEntity entity);
         void Delete(TEntity entity);
+        Task<ICollection<TEntity>> All();
     }
 }

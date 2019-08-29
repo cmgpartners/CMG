@@ -3015,11 +3015,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Apps\\CMG\\CMG.DataAccess\\CMG.DataAccess.csproj",
+      "projectUniqueName": "C:\\Projects\\CMG\\CMG.DataAccess\\CMG.DataAccess.csproj",
       "projectName": "CMG.DataAccess",
-      "projectPath": "C:\\Apps\\CMG\\CMG.DataAccess\\CMG.DataAccess.csproj",
+      "projectPath": "C:\\Projects\\CMG\\CMG.DataAccess\\CMG.DataAccess.csproj",
       "packagesPath": "C:\\Users\\Rishita\\.nuget\\packages\\",
-      "outputPath": "C:\\Apps\\CMG\\CMG.DataAccess\\obj\\",
+      "outputPath": "C:\\Projects\\CMG\\CMG.DataAccess\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

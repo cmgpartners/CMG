@@ -9,3 +9,14 @@ C:\Apps\CMG\CMG.DataAccess\bin\Debug\netcoreapp3.0\CMG.DataAccess.runtimeconfig.
 C:\Apps\CMG\CMG.DataAccess\bin\Debug\netcoreapp3.0\CMG.DataAccess.pdb
 C:\Apps\CMG\CMG.DataAccess\obj\Debug\netcoreapp3.0\CMG.DataAccess.dll
 C:\Apps\CMG\CMG.DataAccess\obj\Debug\netcoreapp3.0\CMG.DataAccess.pdb
+C:\Projects\CMG\CMG.DataAccess\bin\Debug\netcoreapp3.0\CMG.DataAccess.deps.json
+C:\Projects\CMG\CMG.DataAccess\bin\Debug\netcoreapp3.0\CMG.DataAccess.runtimeconfig.json
+C:\Projects\CMG\CMG.DataAccess\bin\Debug\netcoreapp3.0\CMG.DataAccess.runtimeconfig.dev.json
+C:\Projects\CMG\CMG.DataAccess\bin\Debug\netcoreapp3.0\CMG.DataAccess.dll
+C:\Projects\CMG\CMG.DataAccess\bin\Debug\netcoreapp3.0\CMG.DataAccess.pdb
+C:\Projects\CMG\CMG.DataAccess\obj\Debug\netcoreapp3.0\CMG.DataAccess.csprojAssemblyReference.cache
+C:\Projects\CMG\CMG.DataAccess\obj\Debug\netcoreapp3.0\CMG.DataAccess.csproj.CoreCompileInputs.cache
+C:\Projects\CMG\CMG.DataAccess\obj\Debug\netcoreapp3.0\CMG.DataAccess.AssemblyInfoInputs.cache
+C:\Projects\CMG\CMG.DataAccess\obj\Debug\netcoreapp3.0\CMG.DataAccess.AssemblyInfo.cs
+C:\Projects\CMG\CMG.DataAccess\obj\Debug\netcoreapp3.0\CMG.DataAccess.dll
+C:\Projects\CMG\CMG.DataAccess\obj\Debug\netcoreapp3.0\CMG.DataAccess.pdb
