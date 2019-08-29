@@ -31,7 +31,6 @@ namespace CMG.UI
         public readonly ICommissionRepository _commissionRepository;
         public readonly IUnitOfWork _unitOfWork;
 
-        public MainWindow(IUnitOfWork unitOfWork, IMapper mapper)
         public ObservableCollection<string> menuItems { get; set; }
 
         public ObservableCollection<PersonViewModel> PersonList { get; set; }
