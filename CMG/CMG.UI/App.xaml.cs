@@ -27,13 +27,14 @@ namespace CMG.UI
 
         protected void OnStartUp(object sernder, StartupEventArgs e)
         {        
-            var configurationBuilder = new ConfigurationBuilder();
-            configurationBuilder.AddJsonFile("appsettings.json");
+            var configurationBuilder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json");
+
             IConfiguration configuration = configurationBuilder.Build();
+            ServiceCollection serviceCollection = new ServiceCollection();
 
-            var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection, configuration);
-
             ServiceProvider = serviceCollection.BuildServiceProvider();
 
             var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
