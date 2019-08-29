@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CMG.Common
+﻿namespace CMG.Common
 {
     public static class Enums
     {

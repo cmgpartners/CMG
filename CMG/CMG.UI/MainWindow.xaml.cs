@@ -15,7 +15,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CMG.DataAccess.Respository;
 using CMG.DataAccess.Interface;
-using MediatR;
 using CMG.Application.ViewModel;
 using AutoMapper;
 

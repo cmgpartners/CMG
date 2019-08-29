@@ -1,7 +1,5 @@
 ﻿using CMG.DataAccess.Interface;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using CMG.DataAccess.Domain;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore.Storage;

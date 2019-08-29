@@ -1,12 +1,5 @@
 ﻿using CMG.DataAccess.Domain;
 using CMG.DataAccess.Interface;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace CMG.DataAccess.Respository
 {

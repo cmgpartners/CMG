@@ -1,9 +1,7 @@
 ﻿using CMG.Application.DTO;
 using CMG.DataAccess.Interface;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using CMG.Common;
 using AutoMapper;
 
 namespace CMG.Application.ViewModel
