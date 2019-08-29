@@ -11,7 +11,6 @@ namespace CMG.Application.Mapper
         public CommissionMapperProfile()
         {
             CreateMap<Comm, ViewCommissionDto>()
-                .ForMember(des => des.PayDate, mo => mo.MapFrom(src => src.Paydate))
                 .ForMember(des => des.PolicyNumber, mo => mo.MapFrom(src => src.Policynum))
                 .ForMember(des => des.CompanyName, mo => mo.MapFrom(src => src.Company))
                 .ForMember(des => des.InsuredName, mo => mo.MapFrom(src => src.Insured))

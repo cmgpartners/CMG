@@ -3,23 +3,35 @@ using CMG.DataAccess.Interface;
 using System.Collections.ObjectModel;
 using System.Linq;
 using AutoMapper;
+using System.Collections;
+using System.Globalization;
+using System.Collections.Generic;
+using System;
 
 namespace CMG.Application.ViewModel
 {
     public class CommissionViewModel : Profile
     {
-        public int Keycomm { get; set; }
-        public string Commtype { get; set; }
-        public string Yrmo { get; set; }
-
+        #region Member variables
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        #endregion Member variables
 
-        public CommissionViewModel(IUnitOfWork unitOfWork, IMapper mapper)
+        #region Properties
+        public ICollection<string> Months
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            GetAllComm();
+            get
+            {
+                return DateTimeFormatInfo.CurrentInfo.MonthNames.Where(t => t.Length > 0).Select(m => m.Substring(0, 3)).ToList();
+            }
+        }
+
+        public int CurrentYear
+        {
+            get
+            {
+                return DateTime.Now.Year;
+            }
         }
 
         private ObservableCollection<ViewCommissionDto> _dataCollection;
@@ -28,11 +40,23 @@ namespace CMG.Application.ViewModel
             get { return _dataCollection; }
             set { _dataCollection = value; }
         }
+        #endregion Properties
 
+        #region Constructor
+        public CommissionViewModel(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            GetAllComm();
+        }
+        #endregion Constructor
+
+        #region Methods
         public async void GetAllComm()
         {
             var dataCommissiosns = await _unitOfWork.Commissions.All();
             _dataCollection = new ObservableCollection<ViewCommissionDto>(dataCommissiosns.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
         }
+        #endregion Methods
     }
 }
