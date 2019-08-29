@@ -135,3 +135,6 @@
 /CMG/CMG.UI/obj/Debug/netcoreapp3.0/CMG.UI.designer.runtimeconfig.json
 /CMG/CMG.UI/obj/Debug/netcoreapp3.0/CMG.UI_Content.g.cs
 /CMG/CMG.UI/obj/Debug/netcoreapp3.0/CMG.UI_Content.g.i.cs
+/CMG/CMG.UI/obj/Debug/netcoreapp3.0/View/LeftNav.g.i.cs
+/CMG/CMG.UI/obj/Debug/netcoreapp3.0/View/RenewalsView.g.cs
+/CMG/CMG.UI/obj/Debug/netcoreapp3.0/View/RenewalsView.g.i.cs

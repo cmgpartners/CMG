@@ -25,7 +25,7 @@
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"></ColumnDefinition>
+            <ColumnDefinition Width="100"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -40,8 +40,8 @@
                 </Button>
             </StackPanel>
         </Grid>
-        
-        <Grid Grid.Column="0" Grid.Row="1">
+
+        <Grid Grid.Row="1" Grid.Column="0">
             <Grid.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FFE0E0E0" Offset="1"/>
@@ -49,12 +49,9 @@
                 </LinearGradientBrush>
             </Grid.Background>
             <Grid.RowDefinitions>
-                <RowDefinition Height="100"></RowDefinition>
+                <RowDefinition Height="110"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
-            <!--<Grid.Effect>
-                <DropShadowEffect BlurRadius="20" Color="#FFDAD5D5" RenderingBias="Quality" ShadowDepth="1" ></DropShadowEffect>
-            </Grid.Effect>-->
             <Grid Grid.Row="0">
                 <TextBlock Text="CMG" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontFamily="Arial" FontWeight="Bold"></TextBlock>
             </Grid>
@@ -75,26 +72,26 @@
                         </Style>
 
                     </ListView.ItemContainerStyle>
-                    <ListViewItem Height="45" Margin="5 0">
-                        <Grid Width="175">
+                    <ListViewItem Height="45">
+                        <Grid Width="100">
                             <materialDesign:PackIcon Kind="Autorenew" VerticalAlignment="Center"></materialDesign:PackIcon>
-                            <TextBlock HorizontalAlignment="Center" Text="RENEWALS"></TextBlock>
+                            <TextBlock HorizontalAlignment="Center" Text="Renewals"></TextBlock>
                         </Grid>
                     </ListViewItem>
-                    <ListViewItem Height="45" Margin="5 0">
-                        <Grid Width="150">
+                    <ListViewItem Height="45">
+                        <Grid Width="100">
                             <materialDesign:PackIcon Kind="AppleKeyboardCommand" VerticalAlignment="Center"></materialDesign:PackIcon>
                             <TextBlock HorizontalAlignment="Center" Text="FYC"></TextBlock>
                         </Grid>
                     </ListViewItem>
-                    <ListViewItem Height="45" Margin="5 0">
-                        <Grid Width="150">
+                    <ListViewItem Height="45">
+                        <Grid Width="100">
                             <materialDesign:PackIcon Kind="CurrencyUsdCircleOutline" VerticalAlignment="Center"></materialDesign:PackIcon>
                             <TextBlock HorizontalAlignment="Center" Text="Summary"></TextBlock>
                         </Grid>
                     </ListViewItem>
-                    <ListViewItem Height="45" Margin="5 0">
-                        <Grid Width="150">
+                    <ListViewItem Height="45">
+                        <Grid Width="100">
                             <materialDesign:PackIcon Kind="Search" VerticalAlignment="Center"></materialDesign:PackIcon>
                             <TextBlock HorizontalAlignment="Center" Text="Search"></TextBlock>
                         </Grid>
@@ -102,7 +99,7 @@
                 </ListView>
             </StackPanel>
         </Grid>
-
+<!-- move this to view-->
         <Grid Grid.Column="1" Grid.Row="1" Background="#FF9BADB8" Opacity="0.7">
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"></RowDefinition>
