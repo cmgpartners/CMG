@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CMG.DataAccess.Interface
+﻿namespace CMG.DataAccess.Interface
 {
     public interface IEntity
     {
-        long Id { get; set; }
+        //long Id { get; set; }
     }
 }

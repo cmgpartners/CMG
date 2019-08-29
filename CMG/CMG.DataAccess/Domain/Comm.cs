@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CMG.DataAccess.Domain
 {
-    public partial class Comm : AuditableUniqueEntityBase
+    public partial class Comm : EntityBase
     {
         public int Keycomm { get; set; }
         public string Commtype { get; set; }

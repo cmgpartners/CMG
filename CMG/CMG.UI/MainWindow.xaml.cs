@@ -1,4 +1,5 @@
-﻿using System;
+﻿//using CMG.Application.Command;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -13,6 +14,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using CMG.DataAccess.Respository;
+using CMG.DataAccess.Interface;
+using CMG.Application.ViewModel;
+using AutoMapper;
 using System.Collections.ObjectModel;
 
 namespace CMG.UI
@@ -22,13 +27,22 @@ namespace CMG.UI
     /// </summary>
     public partial class MainWindow : Window
     {
+        public readonly IMapper _mapper;
+        public readonly ICommissionRepository _commissionRepository;
+        public readonly IUnitOfWork _unitOfWork;
+
+        public MainWindow(IUnitOfWork unitOfWork, IMapper mapper)
         public ObservableCollection<string> menuItems { get; set; }
 
         public ObservableCollection<PersonViewModel> PersonList { get; set; }
 
         public int[] years { get; set; }
-        public MainWindow()
+        public MainWindow(IUnitOfWork unitOfWork, IMapper mapper)
         {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            CommissionViewModel test = new CommissionViewModel(_unitOfWork, _mapper);
+
             DataContext = this;
             InitializeComponent();
             InitializeData();
