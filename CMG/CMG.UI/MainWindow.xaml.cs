@@ -47,8 +47,8 @@ namespace CMG.UI
             InitializeComponent();
             InitializeData();
 
-            GetCommissions();
-            //GetFilteredCommission();
+            //GetCommissions();
+            GetFilteredCommission();
         }
 
         public void GetCommissions()
@@ -63,14 +63,17 @@ namespace CMG.UI
             SearchViewModel searchViewModel = new SearchViewModel(_unitOfWork, _mapper);
             SearchQuery searchQuery = new SearchQuery();
             FilterBy filterBy = new FilterBy();
-            filterBy.Property = "PolicyNumber";
-            filterBy.Contains = "N059645T";
-            searchQuery.FilterBy.Add(filterBy);
+            //filterBy.Property = "PolicyNumber";
+            //filterBy.Contains = "N059645T";
+            //searchQuery.FilterBy.Add(filterBy);
 
             filterBy = new FilterBy();
             filterBy.Property = "FYC";
             filterBy.Equal = "F";
             searchQuery.FilterBy.Add(filterBy);
+
+            searchQuery.Page = 10;
+            searchQuery.PageSize = 5;
 
             searchViewModel.GetSearchByRecords(searchQuery);
             var dataCollection = searchViewModel.DataCollection;
