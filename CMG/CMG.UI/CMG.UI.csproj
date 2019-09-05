@@ -8,6 +8,10 @@
 
   <ItemGroup>
     <None Remove="appsettings.json" />
+    <None Remove="Asset\Financial Summary.png" />
+    <None Remove="Asset\FYC.png" />
+    <None Remove="Asset\Renewals.png" />
+    <None Remove="Asset\Search.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,7 +34,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Asset\" />
+    <Resource Include="Asset\Financial Summary.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Asset\FYC.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Asset\Renewals.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Asset\Search.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>
