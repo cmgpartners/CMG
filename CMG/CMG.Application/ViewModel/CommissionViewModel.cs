@@ -54,17 +54,17 @@ namespace CMG.Application.ViewModel
         #region Constructor
         public CommissionViewModel(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            DataCollection = new ObservableCollection<ViewCommissionDto>();
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            GetAllComm();
         }
         #endregion Constructor
 
         #region Methods
-        public async void GetAllCommission()
+        public void GetAllComm()
         {
-            var dataCommissiosns = await _unitOfWork.Commissions.All();
-            _dataCollection = new ObservableCollection<ViewCommissionDto>(dataCommissiosns.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
+            var dataCommissiosns = _unitOfWork.Commissions.All();
+            DataCollection = new ObservableCollection<ViewCommissionDto>(dataCommissiosns.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
         }
         #endregion Methods
     }

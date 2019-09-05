@@ -8,7 +8,7 @@ namespace CMG.DataAccess.Interface
         Task<TEntity> Save(TEntity entity);
         Task<TEntity> Add(TEntity entity);
         void Delete(TEntity entity);
-        Task<ICollection<TEntity>> All();
+        ICollection<TEntity> All();
     }
 
     public interface IQueryResult<TEntity>
