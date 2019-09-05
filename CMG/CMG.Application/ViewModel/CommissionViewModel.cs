@@ -52,10 +52,10 @@ namespace CMG.Application.ViewModel
         #endregion Constructor
 
         #region Methods
-        public async void GetAllComm()
+        public void GetAllComm()
         {
-            var dataCommissiosns = await _unitOfWork.Commissions.All();
-            _dataCollection = new ObservableCollection<ViewCommissionDto>(dataCommissiosns.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
+            var dataCommissiosns = _unitOfWork.Commissions.All();
+            DataCollection = new ObservableCollection<ViewCommissionDto>(dataCommissiosns.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
         }
         #endregion Methods
     }

@@ -3,6 +3,7 @@ using CMG.DataAccess.Interface;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CMG.DataAccess.Respository
 {
@@ -37,9 +38,9 @@ namespace CMG.DataAccess.Respository
             return Task.FromResult(entity);
         }
 
-        public async Task<ICollection<TEntity>> All()
+        public ICollection<TEntity> All()
         {
-            return await Context.Set<TEntity>().ToListAsync();
+            return Context.Set<TEntity>().ToList();
         }
         #endregion Methods
     }
