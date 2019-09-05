@@ -19,6 +19,8 @@ using CMG.DataAccess.Interface;
 using CMG.Application.ViewModel;
 using AutoMapper;
 using System.Collections.ObjectModel;
+using CMG.DataAccess.Query;
+using CMG.Common;
 
 namespace CMG.UI
 {
@@ -40,11 +42,38 @@ namespace CMG.UI
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            CommissionViewModel test = new CommissionViewModel(_unitOfWork, _mapper);
 
             DataContext = this;
             InitializeComponent();
             InitializeData();
+
+            GetCommissions();
+            //GetFilteredCommission();
+        }
+
+        public void GetCommissions()
+        {
+            CommissionViewModel commissionViewModel = new CommissionViewModel(_unitOfWork, _mapper);
+            commissionViewModel.GetAllCommission();
+            var dataCollection = commissionViewModel.DataCollection;
+        }
+
+        public void GetFilteredCommission()
+        {
+            SearchViewModel searchViewModel = new SearchViewModel(_unitOfWork, _mapper);
+            SearchQuery searchQuery = new SearchQuery();
+            FilterBy filterBy = new FilterBy();
+            filterBy.Property = "PolicyNumber";
+            filterBy.Contains = "N059645T";
+            searchQuery.FilterBy.Add(filterBy);
+
+            filterBy = new FilterBy();
+            filterBy.Property = "FYC";
+            filterBy.Equal = "F";
+            searchQuery.FilterBy.Add(filterBy);
+
+            searchViewModel.GetSearchByRecords(searchQuery);
+            var dataCollection = searchViewModel.DataCollection;
         }
 
         private void btnShutDown_Click(object sender, RoutedEventArgs e)
