@@ -3,7 +3,6 @@ using CMG.DataAccess.Interface;
 using System.Collections.ObjectModel;
 using System.Linq;
 using AutoMapper;
-using System.Collections;
 using System.Globalization;
 using System.Collections.Generic;
 using System;
@@ -15,6 +14,7 @@ namespace CMG.Application.ViewModel
         #region Member variables
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private const int startYear = 1925;
         #endregion Member variables
 
         #region Properties
@@ -23,6 +23,14 @@ namespace CMG.Application.ViewModel
             get
             {
                 return DateTimeFormatInfo.CurrentInfo.MonthNames.Where(t => t.Length > 0).Select(m => m.Substring(0, 3)).ToList();
+            }
+        }
+
+        public ICollection<int> Years
+        {
+            get
+            {
+                return Enumerable.Range(startYear, CurrentYear + 1 - startYear).ToList();
             }
         }
 
@@ -40,6 +48,7 @@ namespace CMG.Application.ViewModel
             get { return _dataCollection; }
             set { _dataCollection = value; }
         }
+
         #endregion Properties
 
         #region Constructor
