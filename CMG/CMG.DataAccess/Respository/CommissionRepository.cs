@@ -19,7 +19,7 @@ namespace CMG.DataAccess.Respository
         {
             _context = context;
         }
-        public async Task<ICollection<Comm>> Find(ISearchCriteria criteria)
+        public async Task<IQueryResult<Comm>> Find(ISearchCriteria criteria)
         {
             var query = Context.Comm.AsQueryable();
             IQueryable<Comm> queryable = query;
@@ -33,9 +33,24 @@ namespace CMG.DataAccess.Respository
                 queryable = OrderByPredicate(queryable, criteria.SortBy);
             }
 
+            var totalRecords = queryable.Count();
+
+            if(criteria.Page.HasValue
+                && criteria.PageSize.HasValue)
+            {
+                var skip = (criteria.Page.Value - 1) * criteria.PageSize.Value;
+                var pageSize = criteria.PageSize.Value;
+                queryable = queryable.Skip(skip);
+                queryable = queryable.Take(pageSize);
+            }
+
             var result = await queryable.ToListAsync();
 
-            return result;
+            return new PagedQueryResult<Comm>()
+            {
+                Result = result,
+                TotalRecords = totalRecords
+            };
         }
 
         private static Expression<Func<Comm, bool>> GetPredicate(ISearchCriteria criteria)

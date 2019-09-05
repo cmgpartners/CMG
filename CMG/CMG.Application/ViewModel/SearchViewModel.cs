@@ -35,7 +35,7 @@ namespace CMG.Application.ViewModel
         public async void GetSearchByRecords(SearchQuery searchQuery)
         {
             var dataSearchBy = await _unitOfWork.Commissions.Find(searchQuery);
-            _dataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
+            DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
         }
         #endregion Methods
 
