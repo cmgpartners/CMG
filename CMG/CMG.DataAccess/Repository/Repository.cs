@@ -38,11 +38,6 @@ namespace CMG.DataAccess.Respository
             return Task.FromResult(entity);
         }
 
-        //public async Task<TEntity> Find(long? id)
-        //{
-        //    return await Context.Set<TEntity>().SingleOrDefaultAsync(x => x.Id == (id ?? 0));
-        //}
-
         public ICollection<TEntity> All()
         {
             return Context.Set<TEntity>().ToList();
