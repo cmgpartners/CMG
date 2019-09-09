@@ -5,6 +5,7 @@ namespace CMG.DataAccess.Interface
     public interface IUnitOfWork
     {
         ICommissionRepository Commissions { get; }
+        IAgentRepository Agents { get; }
 
         Task Commit();
         Task SaveChangesAsync();
