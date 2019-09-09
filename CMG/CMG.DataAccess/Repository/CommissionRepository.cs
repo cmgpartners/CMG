@@ -190,7 +190,7 @@ namespace CMG.DataAccess.Respository
                 case (int)Enums.AgentEnum.Frank:
                     predicate = w => w.Frank > 0;
                 break;
-                case (int)Enums.AgentEnum.Marty:
+                case (int)Enums.AgentEnum.Kate:
                     predicate = w => w.Marty > 0;
                 break;
                 case (int)Enums.AgentEnum.Mary:

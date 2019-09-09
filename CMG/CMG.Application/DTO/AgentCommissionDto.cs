@@ -2,9 +2,9 @@
 
 namespace CMG.Application.DTO
 {
-    public class AgentDto
+    public class AgentCommissionDto
     {        
-        public string Name { get; set; }
+        public string FirstName { get; set; }
         public decimal Commission { get; set; }
         public decimal Split { get; set; }
     }

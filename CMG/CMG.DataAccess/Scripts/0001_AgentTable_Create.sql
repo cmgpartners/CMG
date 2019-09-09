@@ -1,16 +1,17 @@
-IF NOT EXISTS(SELECT 1 FROM sys.Objects WHERE  Object_id = OBJECT_ID(N'dbo.Agent') AND Type = N'U')
+IF NOT EXISTS(SELECT 1 FROM sys.Objects WHERE  Object_id = OBJECT_ID(N'dbo.Agent') AND TYPE = N'U')
 BEGIN
    CREATE TABLE Agent
    (
-		Id int NOT NULL IDENTITY(1,1),
-		FirstName varchar(50) NOT NULL,
-		LastName varchar(50) NOT NULL,
-		AgentCode varchar(5) NOT NULL,
-		IsDeleted bit default(0) NOT NULL,
-		CreatedDate datetime NOT NULL,
-		CreatedBy varchar(50) NOT NULL,
-		ModifiedDate datetime,
-		ModifiedBy varchar(50),
+		Id INT NOT NULL IDENTITY(1,1),
+		FirstName VARCHAR(50) NOT NULL,
+		MiddleName VARCHAR(50),
+		LastName VARCHAR(50),
+		AgentCode VARCHAR(5),
+		IsDeleted BIT DEFAULT(0) NOT NULL,
+		CreatedDate DATETIME NOT NULL,
+		CreatedBy VARCHAR(50) NOT NULL,
+		ModifiedDate DATETIME,
+		ModifiedBy VARCHAR(50),
 		CONSTRAINT PK_Agent PRIMARY KEY (Id)
    )
 END

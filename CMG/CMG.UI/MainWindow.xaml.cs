@@ -19,6 +19,7 @@ using CMG.DataAccess.Interface;
 using CMG.Application.ViewModel;
 using AutoMapper;
 using System.Collections.ObjectModel;
+using CMG.Application.DTO;
 
 namespace CMG.UI
 {
@@ -49,6 +50,5 @@ namespace CMG.UI
         {
             DataContext = new CommissionViewModel(_unitOfWork, _mapper);
         }
-
     }
 }

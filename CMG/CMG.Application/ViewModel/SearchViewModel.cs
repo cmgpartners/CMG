@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace CMG.Application.ViewModel
 {
-    public class SearchViewModel : Profile
+    public class SearchViewModel
     {
         #region Member variables
         private readonly IUnitOfWork _unitOfWork;

@@ -9,6 +9,7 @@ namespace CMG.DataAccess.Interface
         Task<TEntity> Add(TEntity entity);
         void Delete(TEntity entity);
         ICollection<TEntity> All();
+        //Task<TEntity> Find(long? id);
     }
 
     public interface IQueryResult<TEntity>

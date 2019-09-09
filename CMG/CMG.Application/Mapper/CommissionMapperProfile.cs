@@ -16,19 +16,19 @@ namespace CMG.Application.Mapper
                 .ForMember(des => des.InsuredName, mo => mo.MapFrom(src => src.Insured))
                 .ForMember(des => des.Renewal, mo => mo.MapFrom(src => src.Renewals))
                 .ForMember(des => des.TotalAmount, mo => mo.MapFrom(src => src.Total))
-                .ForMember(des => des.Agents, mo => mo.MapFrom(src => new List<AgentDto>()))
+                .ForMember(des => des.Agents, mo => mo.MapFrom(src => new List<AgentCommissionDto>()))
                 .AfterMap(AfterMapAgents);
         }
 
         public void AfterMapAgents(Comm source, ViewCommissionDto des)
         {
-            var agents = new List<AgentDto>();
-            var agent = new AgentDto();
+            var agents = new List<AgentCommissionDto>();
+            var agent = new AgentCommissionDto();
             if(source != null)
             {
                 if (source.Marty > 0)
                 {
-                    agent.Name = Enums.AgentEnum.Marty.ToString();
+                    agent.FirstName = Enums.AgentEnum.Kate.ToString();
                     agent.Commission = source.Marty;
                     agent.Split = source.Split1;
                     agents.Add(agent);
@@ -36,40 +36,40 @@ namespace CMG.Application.Mapper
 
                 if (source.Peter > 0)
                 {
-                    agent = new AgentDto();
-                    agent.Name = Enums.AgentEnum.Peter.ToString();
+                    agent = new AgentCommissionDto();
+                    agent.FirstName = Enums.AgentEnum.Peter.ToString();
                     agent.Commission = source.Peter;
                     agent.Split = source.Split2;
                     agents.Add(agent);
                 }
                 if (source.Frank > 0)
                 {
-                    agent = new AgentDto();
-                    agent.Name = Enums.AgentEnum.Frank.ToString();
+                    agent = new AgentCommissionDto();
+                    agent.FirstName = Enums.AgentEnum.Frank.ToString();
                     agent.Commission = source.Frank;
                     agent.Split = source.Split3;
                     agents.Add(agent);
                 }
                 if (source.Bob > 0)
                 {
-                    agent = new AgentDto();
-                    agent.Name = Enums.AgentEnum.Bob.ToString();
+                    agent = new AgentCommissionDto();
+                    agent.FirstName = Enums.AgentEnum.Bob.ToString();
                     agent.Commission = source.Bob;
                     agent.Split = source.Split4;
                     agents.Add(agent);
                 }
                 if (source.Mary > 0)
                 {
-                    agent = new AgentDto();
-                    agent.Name = Enums.AgentEnum.Mary.ToString();
+                    agent = new AgentCommissionDto();
+                    agent.FirstName = Enums.AgentEnum.Mary.ToString();
                     agent.Commission = source.Mary;
                     agent.Split = source.Split5;
                     agents.Add(agent);
                 }
                 if (source.Other > 0)
                 {
-                    agent = new AgentDto();
-                    agent.Name = Enums.AgentEnum.Others.ToString();
+                    agent = new AgentCommissionDto();
+                    agent.FirstName = Enums.AgentEnum.Others.ToString();
                     agent.Commission = source.Other;
                     agent.Split = source.Split6;
                     agents.Add(agent);
