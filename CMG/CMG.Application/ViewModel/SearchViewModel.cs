@@ -20,7 +20,11 @@ namespace CMG.Application.ViewModel
         public ObservableCollection<ViewCommissionDto> DataCollection
         {
             get { return _dataCollection; }
-            set { _dataCollection = value; }
+            set
+            {
+                _dataCollection = value;
+                OnPropertyChanged("DataCollection");
+            }
         }
         public ICommand SearchCommand
         {
@@ -41,7 +45,7 @@ namespace CMG.Application.ViewModel
         {
             SearchQuery searchQuery = new SearchQuery();
             var dataSearchBy = _unitOfWork.Commissions.Find(searchQuery);
-           // DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
+            DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
         }
         #endregion Methods
     }

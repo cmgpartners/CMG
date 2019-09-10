@@ -50,7 +50,6 @@
                 <TextBlock Text="cmg" Style="{StaticResource logoTextBlock}"></TextBlock>
             </Grid>
             <StackPanel Grid.Row="1">
-                <Button x:Name="testbutton" Command="{Binding RenewalsCommand}" />
                 <ListView x:Name="lstNavItems" SelectionChanged="LstNavItems_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource listViewItemBackGround}">
                     <ListViewItem Height="60">
                         <Grid Width="100">
