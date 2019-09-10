@@ -2,7 +2,7 @@
 
 namespace CMG.Application.DTO
 {
-    public class AgentCommissionDto
+    public class ViewAgentCommissionDto
     {        
         public string FirstName { get; set; }
         public decimal Commission { get; set; }

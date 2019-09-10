@@ -5,6 +5,11 @@ namespace CMG.DataAccess.Domain
 {
     public partial class Agent : EntityBase
     {
+        public Agent()
+        {
+            AgentCommission = new HashSet<AgentCommission>();
+        }
+
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
@@ -15,5 +20,7 @@ namespace CMG.DataAccess.Domain
         public string CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
+
+        public virtual ICollection<AgentCommission> AgentCommission { get; set; }
     }
 }

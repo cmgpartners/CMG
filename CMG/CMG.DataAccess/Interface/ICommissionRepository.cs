@@ -6,6 +6,6 @@ namespace CMG.DataAccess.Interface
 {
     public interface ICommissionRepository : IRepository<Comm>
     {
-        new Task<IQueryResult<Comm>> Find(ISearchCriteria criteria);
+        new IQueryResult<Comm> Find(ISearchCriteria criteria);
     }
 }
