@@ -19,7 +19,7 @@ namespace CMG.DataAccess.Respository
         {
             _context = context;
         }
-        public async Task<IQueryResult<Comm>> Find(ISearchCriteria criteria)
+        public IQueryResult<Comm> Find(ISearchCriteria criteria)
         {
             var query = Context.Comm.AsQueryable();
             IQueryable<Comm> queryable = query;
@@ -44,7 +44,7 @@ namespace CMG.DataAccess.Respository
                 queryable = queryable.Take(pageSize);
             }
 
-            var result = await queryable.ToListAsync();
+            var result = queryable.ToList();
 
             return new PagedQueryResult<Comm>()
             {

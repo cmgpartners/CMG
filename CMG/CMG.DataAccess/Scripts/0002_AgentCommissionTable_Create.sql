@@ -3,6 +3,7 @@ BEGIN
    CREATE TABLE AgentCommission
    (
 		Id int NOT NULL IDENTITY(1,1),
+		AgentId INT,
 		CommissionId int NOT NULL,
 		Commission decimal,
 		Split decimal,
@@ -11,6 +12,7 @@ BEGIN
 		ModifiedDate datetime,
 		ModifiedBy varchar(50),
 		CONSTRAINT PK_AgentCommission PRIMARY KEY (Id),
-		FOREIGN KEY (CommissionId) REFERENCES [dbo].[COMM](KEYCOMM)
+		FOREIGN KEY (CommissionId) REFERENCES [dbo].[COMM](KEYCOMM),
+		FOREIGN KEY (AgentId) REFERENCES [dbo].[Agent](Id)
    )
 END

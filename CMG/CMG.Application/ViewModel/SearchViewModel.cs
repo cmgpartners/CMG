@@ -44,7 +44,5 @@ namespace CMG.Application.ViewModel
            // DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
         }
         #endregion Methods
-
-
     }
 }
