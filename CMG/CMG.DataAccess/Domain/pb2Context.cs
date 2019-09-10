@@ -152,11 +152,16 @@ namespace CMG.DataAccess.Domain
 
                 entity.Property(e => e.Split).HasColumnType("decimal(18, 0)");
 
+                entity.HasOne(d => d.Agent)
+                    .WithMany(p => p.AgentCommission)
+                    .HasForeignKey(d => d.AgentId)
+                    .HasConstraintName("FK__AgentComm__Agent__4FFF2056");
+
                 entity.HasOne(d => d.CommissionNavigation)
                     .WithMany(p => p.AgentCommission)
                     .HasForeignKey(d => d.CommissionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__AgentComm__Commi__4C2E8F72");
+                    .HasConstraintName("FK__AgentComm__Commi__4F0AFC1D");
             });
 
             modelBuilder.Entity<Business>(entity =>

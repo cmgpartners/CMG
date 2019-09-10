@@ -32,13 +32,11 @@ namespace CMG.Application.ViewModel
         #endregion Constructor
 
         #region Methods
-        public async void GetSearchByRecords(SearchQuery searchQuery)
+        public void GetSearchByRecords(SearchQuery searchQuery)
         {
-            var dataSearchBy = await _unitOfWork.Commissions.Find(searchQuery);
+            var dataSearchBy = _unitOfWork.Commissions.Find(searchQuery);
             DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
         }
         #endregion Methods
-
-
     }
 }
