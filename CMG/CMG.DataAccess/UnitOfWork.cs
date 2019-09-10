@@ -24,8 +24,10 @@ namespace CMG.DataAccess
 
         #region Repositories
         private ICommissionRepository _commissionRepository;
+        private IAgentRepository _agentRepository;
 
         public ICommissionRepository Commissions => _commissionRepository ?? (_commissionRepository = new CommissionRepository(_context));
+        public IAgentRepository Agents => _agentRepository ?? (_agentRepository = new AgentRepository(_context));
 
         public async Task Commit()
         {

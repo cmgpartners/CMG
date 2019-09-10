@@ -16,6 +16,8 @@ namespace CMG.DataAccess.Domain
         }
 
         public virtual DbSet<AccTable> AccTable { get; set; }
+        public virtual DbSet<Agent> Agent { get; set; }
+        public virtual DbSet<AgentCommission> AgentCommission { get; set; }
         public virtual DbSet<Business> Business { get; set; }
         public virtual DbSet<Calls> Calls { get; set; }
         public virtual DbSet<Cases> Cases { get; set; }
@@ -39,6 +41,15 @@ namespace CMG.DataAccess.Domain
         // Unable to generate entity type for table 'dbo.COMBO'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.ERRLOG'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.SF_Map'. Please see the warning messages.
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("Server=SERVER06;Database=pb2;Trusted_Connection=True;");
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -87,6 +98,65 @@ namespace CMG.DataAccess.Domain
                 entity.Property(e => e.OrgGrp)
                     .HasColumnName("ORG_GRP")
                     .HasColumnType("numeric(2, 0)");
+            });
+
+            modelBuilder.Entity<Agent>(entity =>
+            {
+                entity.Property(e => e.AgentCode)
+                    .HasMaxLength(5)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.FirstName)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LastName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.MiddleName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ModifiedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+            });
+
+            modelBuilder.Entity<AgentCommission>(entity =>
+            {
+                entity.Property(e => e.Commission).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Split).HasColumnType("decimal(18, 0)");
+
+                entity.HasOne(d => d.CommissionNavigation)
+                    .WithMany(p => p.AgentCommission)
+                    .HasForeignKey(d => d.CommissionId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__AgentComm__Commi__4C2E8F72");
             });
 
             modelBuilder.Entity<Business>(entity =>

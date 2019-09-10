@@ -4,12 +4,13 @@
     {
         public enum AgentEnum
         {
-            Marty = 1,
-            Peter = 2,
-            Frank = 3,
-            Bob = 4,
-            Mary = 5,
-            Others = 6
+            Peter = 1,
+            Frank = 2,
+            Bob = 3,
+            Mary = 4,
+            Kate = 5,
+            Marty = 6,
+            Others = 7
         }
     }
 }

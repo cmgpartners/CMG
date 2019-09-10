@@ -9,7 +9,7 @@ using System;
 
 namespace CMG.Application.ViewModel
 {
-    public class CommissionViewModel 
+    public class CommissionViewModel
     {
         #region Member variables
         private readonly IUnitOfWork _unitOfWork;
