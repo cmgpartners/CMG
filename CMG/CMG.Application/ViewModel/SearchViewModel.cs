@@ -4,10 +4,11 @@ using CMG.DataAccess.Interface;
 using CMG.DataAccess.Query;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Input;
 
 namespace CMG.Application.ViewModel
 {
-    public class SearchViewModel : Profile
+    public class SearchViewModel : BaseViewModel
     {
         #region Member variables
         private readonly IUnitOfWork _unitOfWork;
@@ -21,6 +22,10 @@ namespace CMG.Application.ViewModel
             get { return _dataCollection; }
             set { _dataCollection = value; }
         }
+        public ICommand SearchCommand
+        {
+            get { return CreateCommand(Search); }
+        }
         #endregion Properties
 
         #region Constructor
@@ -32,10 +37,11 @@ namespace CMG.Application.ViewModel
         #endregion Constructor
 
         #region Methods
-        public async void GetSearchByRecords(SearchQuery searchQuery)
+        public void Search()
         {
-            var dataSearchBy = await _unitOfWork.Commissions.Find(searchQuery);
-            DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
+            SearchQuery searchQuery = new SearchQuery();
+            var dataSearchBy = _unitOfWork.Commissions.Find(searchQuery);
+           // DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
         }
         #endregion Methods
 
