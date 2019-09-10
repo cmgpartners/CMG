@@ -10,7 +10,6 @@ namespace CMG.Application.ViewModel
     {
         protected BaseViewModel()
         {
-            //DispatcherObject = CoreWindow.GetForCurrentThread().Dispatcher;
             CommandManager.AssignOnPropertyChanged(ref this.PropertyChanged);
             _commandsList = new List<RelayCommand>();
         }
@@ -43,8 +42,6 @@ namespace CMG.Application.ViewModel
                 _commandsList[i].RemoveCommand();
             }
         }
-
-        //public virtual CoreDispatcher DispatcherObject { get; protected set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
