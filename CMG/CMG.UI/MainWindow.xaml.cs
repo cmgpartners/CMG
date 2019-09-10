@@ -48,7 +48,15 @@ namespace CMG.UI
 
         private void LstNavItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            DataContext = new CommissionViewModel(_unitOfWork, _mapper);
+            ListView lstNavigation = (ListView)sender;
+            if (lstNavigation.SelectedIndex == 0)
+            {
+                DataContext = new CommissionViewModel(_unitOfWork, _mapper);
+            }
+            else if (lstNavigation.SelectedIndex == 3)
+            {
+                DataContext = new SearchViewModel(_unitOfWork, _mapper);
+            }
         }
     }
 }
