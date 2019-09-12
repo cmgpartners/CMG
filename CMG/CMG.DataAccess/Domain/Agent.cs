@@ -15,6 +15,7 @@ namespace CMG.DataAccess.Domain
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public string AgentCode { get; set; }
+        public string Color { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime CreatedDate { get; set; }
         public string CreatedBy { get; set; }

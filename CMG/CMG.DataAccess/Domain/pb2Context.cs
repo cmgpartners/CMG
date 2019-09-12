@@ -38,7 +38,9 @@ namespace CMG.DataAccess.Domain
         // Unable to generate entity type for table 'dbo.KEY_TABLE'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.TEMPLATES1'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.POL_ILL2'. Please see the warning messages.
+        // Unable to generate entity type for table 'dbo.Commission'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.COMBO'. Please see the warning messages.
+        // Unable to generate entity type for table 'dbo.AgentReward'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.ERRLOG'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.SF_Map'. Please see the warning messages.
 
@@ -106,6 +108,11 @@ namespace CMG.DataAccess.Domain
                     .HasMaxLength(5)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Color)
+                    .IsRequired()
+                    .HasMaxLength(15)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.CreatedBy)
                     .IsRequired()
                     .HasMaxLength(50)
@@ -155,13 +162,13 @@ namespace CMG.DataAccess.Domain
                 entity.HasOne(d => d.Agent)
                     .WithMany(p => p.AgentCommission)
                     .HasForeignKey(d => d.AgentId)
-                    .HasConstraintName("FK__AgentComm__Agent__4FFF2056");
+                    .HasConstraintName("FK__AgentComm__Agent__64061903");
 
                 entity.HasOne(d => d.CommissionNavigation)
                     .WithMany(p => p.AgentCommission)
                     .HasForeignKey(d => d.CommissionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__AgentComm__Commi__4F0AFC1D");
+                    .HasConstraintName("FK__AgentComm__Commi__6311F4CA");
             });
 
             modelBuilder.Entity<Business>(entity =>
