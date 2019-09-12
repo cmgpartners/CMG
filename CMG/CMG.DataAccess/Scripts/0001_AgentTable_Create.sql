@@ -7,6 +7,7 @@ BEGIN
 		MiddleName VARCHAR(50),
 		LastName VARCHAR(50),
 		AgentCode VARCHAR(5),
+		Color VARCHAR(15) NOT NULL,
 		IsDeleted BIT DEFAULT(0) NOT NULL,
 		CreatedDate DATETIME NOT NULL,
 		CreatedBy VARCHAR(50) NOT NULL,
@@ -15,3 +16,4 @@ BEGIN
 		CONSTRAINT PK_Agent PRIMARY KEY (Id)
    )
 END
+

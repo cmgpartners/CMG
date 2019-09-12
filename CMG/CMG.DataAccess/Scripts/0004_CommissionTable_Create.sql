@@ -4,6 +4,7 @@ BEGIN
 	(
 		Id INT NOT NULL IDENTITY(1,1),
 		CommissionType CHAR, -- Create ENUMS C#
+		YearMonth INT,
 		PayDate DATETIME,
 		PolicyId INT,
 		Premium DECIMAL,
@@ -14,31 +15,6 @@ BEGIN
 		CreatedBy VARCHAR(50),
 		ModifiedDate DATETIME,
 		ModifiedBy VARCHAR(50),
-		FOREIGN KEY (PolicyId) REFERENCES [dbo].[Policy](Keynumo)
+		FOREIGN KEY (PolicyId) REFERENCES [dbo].[Policys](Keynumo)
 	)
 END
-
-/*
--- Didn't add following columns
-FROM MARTY  to SPLIT 5 columns
-YRMO
-INSURED
-KEYNUMP
-REV_LOCN
-REV_DATE
-_DEL
-AGENT6	
-SPLIT6	
-KATE
-
-*/
-
-select * from PEO_POL
-where KEYNUMO = '3330' --'5706'
---where HNAME LIKE '%Adout, Yossi%'
-
-select * FROM POLICYS
-where POLICYNUM = '8962618-3'
-
-SELECT * FROM COMBO
-WHERE FIELDNAME = 'COMPANY'
