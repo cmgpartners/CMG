@@ -11,6 +11,7 @@ namespace CMG.Application.DTO
         public string LastName { get; set; }
         public string MiddleName { get; set; }
         public string AgentCode { get; set; }
+        public string Color { get; set; }
         public bool IsDeleted { get; set; }
         public string CurrentUser { get; set; }
     }
