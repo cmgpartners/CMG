@@ -11,6 +11,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="\Resources\GridStyle.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="\Resources\LeftNavStyle.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
         
@@ -31,27 +32,12 @@
             <materialDesign:PackIcon Kind="Calendar" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10 15 0 0"></materialDesign:PackIcon>
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="0">
-            <ListView x:Name="menu" ItemsSource="{Binding Months}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="Black" >
+            <ListView x:Name="menu" ItemsSource="{Binding Months}" ScrollViewer.VerticalScrollBarVisibility="Disabled" Foreground="Black" ItemContainerStyle="{StaticResource listViewItemBackGround}">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal" Margin="10 10"></StackPanel>
                     </ItemsPanelTemplate>
                 </ListView.ItemsPanel>
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="#FF8A98A1"/>
-                                <Setter Property="Foreground" Value="Black"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#FF8A98A1"/>
-                                <Setter Property="BorderBrush" Value="Transparent" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-
-                </ListView.ItemContainerStyle>
             </ListView>
         </StackPanel>
         <StackPanel Grid.Column="2" Grid.Row="0">

@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:CMG.UI.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -13,11 +12,13 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
+
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="53"></RowDefinition>
-                <RowDefinition></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="35"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid>
                 <Grid>
@@ -36,7 +37,7 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="Policy #" Margin="15 5 0 0"></TextBlock>
-                        <TextBox Grid.Row="1" Margin="15 0 15 8"></TextBox>
+                        <TextBox Grid.Row="1" Margin="15 0 15 8" Text="{Binding PolicyNumber}"></TextBox>
                     </Grid>
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
@@ -44,7 +45,7 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="Insured" Margin="15 5 0 0"></TextBlock>
-                        <TextBox Grid.Row="1" Margin="15 0 15 8"></TextBox>
+                        <TextBox Grid.Row="1" Margin="15 0 15 8" Text="{Binding Insured}"></TextBox>
                     </Grid>
                     <Grid Grid.Column="2">
                         <Grid.RowDefinitions>
@@ -52,7 +53,7 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="Company" Margin="15 5 0 0"></TextBlock>
-                        <TextBox Grid.Row="1" Margin="15 0 15 8"></TextBox>
+                        <TextBox Grid.Row="1" Margin="15 0 15 8" Text="{Binding Company}"></TextBox>
                     </Grid>
                     <Grid Grid.Column="3">
                         <Grid.RowDefinitions>
@@ -64,16 +65,16 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Pay Date" Grid.ColumnSpan="1" Margin="15 5 0 0"></TextBlock>
-                        <DatePicker Grid.Row="1" Margin="15 0 15 8"></DatePicker>
-                        <DatePicker Grid.Row="1" Grid.Column="1" Margin="15 0 15 8"></DatePicker>
+                        <DatePicker Grid.Row="1" Margin="15 0 15 8" DisplayDate="{Binding FromPayDate}" Text="{Binding FromPayDate}"></DatePicker>
+                        <DatePicker Grid.Row="1" Grid.Column="1" Margin="15 0 15 8" DisplayDate="{Binding ToPayDate}" Text="{Binding ToPayDate}"></DatePicker>
                     </Grid>
                     <Grid Grid.Column="4">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="23"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="Agents" Margin="15 5 0 0"></TextBlock>
-                        <TextBox Grid.Row="1" Margin="15 0 15 8"></TextBox>
+                        <TextBlock Text="Agents" Margin="15 5 0 0"/>
+                        <TextBox Grid.Row="1" Margin="15 0 15 8" Text="{Binding Agent}"></TextBox>
                     </Grid>
                     <Grid Grid.Column="5">
                         <Button Command="{Binding SearchCommand}">
@@ -87,10 +88,95 @@
                 </Grid>
             </Grid>
             <Grid Grid.Row="1">
-                <DataGrid AutoGenerateColumns="True" x:Name="renewals" ItemsSource="{Binding DataCollection}"  ColumnHeaderStyle="{StaticResource HeaderStyle}" Background="White">
+                <DataGrid AutoGenerateColumns="False" x:Name="renewals" IsReadOnly="True" ItemsSource="{Binding DataCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}">
+                    <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="Pay Date" Width="90">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                    <TextBlock Text="{Binding Path=PayDate,  StringFormat='{}{0: MMM d, yyyy}'}" />
+                                </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Policy #" Width="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                    <TextBlock Text="{Binding Path=PolicyNumber}"></TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Company" Width="60">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                    <TextBlock Text="{Binding Path=CompanyName}"></TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Insured" Width="150">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                    <TextBlock Text="{Binding Path=InsuredName}"></TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="RN" Width="50">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                    <TextBlock Text="{Binding Path=Renewal}"></TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Agents" Width="200">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                    <ListView ItemsSource="{Binding Agents}" DisplayMemberPath="FirstName" ItemContainerStyle="{StaticResource RoundedItem}">
+                                    <ListView.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                             <StackPanel Orientation="Horizontal"></StackPanel>
+                                        </ItemsPanelTemplate>
+                                    </ListView.ItemsPanel>
+                                </ListView>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Splits (%)" Width="175">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ListView ItemsSource="{Binding Agents}" DisplayMemberPath="Split">
+                                        <ListView.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal"></StackPanel>
+
+                                            </ItemsPanelTemplate>
+                                        </ListView.ItemsPanel>
+                                    </ListView>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Commissions ($)" Width="250">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ListView ItemsSource="{Binding Agents}" DisplayMemberPath="Commission">
+                                        <ListView.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal"></StackPanel>
+                                            </ItemsPanelTemplate>
+                                        </ListView.ItemsPanel>
+                                    </ListView>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Total" Width="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                    <TextBlock Text="{Binding Path=TotalAmount, StringFormat='{}{0:#,#.0}'}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    </DataGrid.Columns>
                 </DataGrid>
             </Grid>
+            <Grid Grid.Row="2" Background="#FFCEEAFF">
+            </Grid>
         </Grid>
-            
     </Grid>
 </UserControl>
