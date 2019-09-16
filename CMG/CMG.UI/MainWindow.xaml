@@ -4,26 +4,25 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:local="clr-namespace:CMG.UI"
         xmlns:viewModels="clr-namespace:CMG.Application.ViewModel;assembly=CMG.Application"
         xmlns:views="clr-namespace:CMG.UI.View"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="1200" WindowStyle="None" WindowStartupLocation="CenterScreen">
+        Title="MainWindow" Height="600" Width="1400" WindowStyle="None" ResizeMode="CanResize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Resources/LeftNavStyles.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="/Resources/LeftNavStyle.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
             <DataTemplate DataType="{x:Type viewModels:CommissionViewModel}" >
-                <views:RenewalsView DataContext="{Binding}" ></views:RenewalsView>
+                <views:RenewalsView DataContext="{Binding}"></views:RenewalsView>
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:SearchViewModel}" >
-                <views:SearchView DataContext="{Binding}" ></views:SearchView>
+                <views:SearchView DataContext="{Binding}"></views:SearchView>
             </DataTemplate>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid Background="{StaticResource gridBackGround}">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -33,7 +32,7 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Grid.ColumnSpan="2">
+        <Grid Grid.Row="0" Grid.ColumnSpan="2" Background="{StaticResource gridBackGround}">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 0">
                 <Button Width="25" Height="25" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" Click="btnShutDown_Click">
                     <materialDesign:PackIcon Kind="Power"></materialDesign:PackIcon>
@@ -41,7 +40,7 @@
             </StackPanel>
         </Grid>
 
-        <Grid Grid.Row="1" Grid.Column="0">
+        <Grid Grid.Row="1" Grid.Column="0" Background="{StaticResource gridBackGround}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="70"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
@@ -94,8 +93,8 @@
                 </ListView>
             </StackPanel>
         </Grid>
-<!-- move this to view-->
-        <Grid Grid.Column="1" Grid.Row="1" Background="#FF9BADB8" Opacity="0.7">
+        
+        <Grid Grid.Row="1" Grid.Column="1" Style="{StaticResource pageHeader}">
             <ContentPresenter  Content="{Binding}" ></ContentPresenter>
         </Grid>
     </Grid>

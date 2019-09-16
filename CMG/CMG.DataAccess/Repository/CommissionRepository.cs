@@ -126,9 +126,9 @@ namespace CMG.DataAccess.Respository
             {
                 case "policynumber":
                     return PolicyNumberExpression(filterBy.Contains);
-                case "insuredname":
+                case "insured":
                     return InsuredNameExpession(filterBy.Contains);
-                case "companyname":
+                case "company":
                     return CompanyNameExpession(filterBy.Contains);
                 case "agent":
                     return AgentExpression(filterBy.Equal);
