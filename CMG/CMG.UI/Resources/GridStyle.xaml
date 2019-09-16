@@ -9,7 +9,7 @@
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="MinWidth" Value="0" />
-        <Setter Property="MinHeight" Value="50" />
+        <Setter Property="MinHeight" Value="45" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="FontSize" Value="12"/>
@@ -26,6 +26,24 @@
                         BorderBrush="Pink"
                         BorderThickness="1"
                         Background="Pink"
+                        Padding="5,3,5,0"
+                        Margin="2">
+                        <ContentPresenter />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="UnderlinedItem" TargetType="ListViewItem">
+        <Setter Property="MinHeight" Value="20"/>
+        <Setter Property="MinWidth" Value="30"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListViewItem">
+                    <Border x:Name="border"
+                        BorderBrush="Pink"
+                        BorderThickness="0,0,0,3"
                         Padding="5,3,5,0"
                         Margin="2">
                         <ContentPresenter />

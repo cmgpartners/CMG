@@ -15,6 +15,7 @@ namespace CMG.Application.ViewModel
         #region Member variables
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly int PageSize = 10;
         #endregion Member variables
 
         #region Properties
@@ -28,6 +29,19 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("DataCollection");
             }
         }
+
+        private ObservableCollection<ViewAgentDto> _agentList;
+
+        public ObservableCollection<ViewAgentDto> AgentList
+        {
+            get { return _agentList; }
+            set
+            {
+                _agentList = value;
+                OnPropertyChanged("AgentList");
+            }
+        }
+
         private string _policyNumber;
         public string PolicyNumber
         {
@@ -78,8 +92,8 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("ToPayDate");
             }
         }
-        private string _agent;
-        public string Agent
+        private ViewAgentDto _agent;
+        public ViewAgentDto Agent
         {
             get { return _agent; }
             set
@@ -92,6 +106,16 @@ namespace CMG.Application.ViewModel
         {
             get { return CreateCommand(Search); }
         }
+        private int _totalRecords;
+        public int TotalRecords
+        {
+            get { return _totalRecords; }
+            set
+            {
+                _totalRecords = value;
+                OnPropertyChanged("TotalRecords");
+            }
+        }
         #endregion Properties
 
         #region Constructor
@@ -99,6 +123,7 @@ namespace CMG.Application.ViewModel
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            LoadData();
         }
         #endregion Constructor
 
@@ -108,6 +133,7 @@ namespace CMG.Application.ViewModel
             SearchQuery searchQuery = BuildSearchQuery();
             var dataSearchBy = _unitOfWork.Commissions.Find(searchQuery);
             DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
+            TotalRecords = dataSearchBy.TotalRecords;
         }
         private SearchQuery BuildSearchQuery()
         {
@@ -133,6 +159,10 @@ namespace CMG.Application.ViewModel
             {
                 BuildFilterByRange("PayDate", FromPayDate.Value.ToShortDateString(), DateTime.Today.ToShortDateString(), searchBy);
             }
+            if(Agent != null)
+            {
+                BuildFilterByEquals("Agent", Agent.Id.ToString(), searchBy);
+            }
             searchQuery.FilterBy = searchBy;
             return searchQuery;
         }
@@ -151,6 +181,20 @@ namespace CMG.Application.ViewModel
             filterBy.GreaterThan = fromvalue;
             filterBy.LessThan = toValue;
             searchBy.Add(filterBy);
+        }
+
+        private void BuildFilterByEquals(string property, string value, List<FilterBy> searchBy)
+        {
+            FilterBy filterBy = new FilterBy();
+            filterBy.Property = property;
+            filterBy.Equal = value;
+            searchBy.Add(filterBy);
+        }
+
+        private void LoadData()
+        {
+            var agents = _unitOfWork.Agents.All();
+            AgentList = new ObservableCollection<ViewAgentDto>(agents.Select(r => _mapper.Map<ViewAgentDto>(r)).ToList());
         }
         #endregion Methods
     }

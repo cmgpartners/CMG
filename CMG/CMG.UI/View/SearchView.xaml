@@ -9,6 +9,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="\Resources\GridStyle.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="\Resources\ButtonStyle.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -16,7 +17,7 @@
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="53"></RowDefinition>
+                <RowDefinition Height="60"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="35"></RowDefinition>
             </Grid.RowDefinitions>
@@ -37,7 +38,7 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="Policy #" Margin="15 5 0 0"></TextBlock>
-                        <TextBox Grid.Row="1" Margin="15 0 15 8" Text="{Binding PolicyNumber}"></TextBox>
+                        <TextBox Grid.Row="1" Margin="15 0 15 5" Text="{Binding PolicyNumber}"></TextBox>
                     </Grid>
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
@@ -45,7 +46,7 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="Insured" Margin="15 5 0 0"></TextBlock>
-                        <TextBox Grid.Row="1" Margin="15 0 15 8" Text="{Binding Insured}"></TextBox>
+                        <TextBox Grid.Row="1" Margin="15 0 15 5" Text="{Binding Insured}"></TextBox>
                     </Grid>
                     <Grid Grid.Column="2">
                         <Grid.RowDefinitions>
@@ -53,7 +54,7 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="Company" Margin="15 5 0 0"></TextBlock>
-                        <TextBox Grid.Row="1" Margin="15 0 15 8" Text="{Binding Company}"></TextBox>
+                        <TextBox Grid.Row="1" Margin="15 0 15 5" Text="{Binding Company}"></TextBox>
                     </Grid>
                     <Grid Grid.Column="3">
                         <Grid.RowDefinitions>
@@ -65,8 +66,8 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Pay Date" Grid.ColumnSpan="1" Margin="15 5 0 0"></TextBlock>
-                        <DatePicker Grid.Row="1" Margin="15 0 15 8" DisplayDate="{Binding FromPayDate}" Text="{Binding FromPayDate}"></DatePicker>
-                        <DatePicker Grid.Row="1" Grid.Column="1" Margin="15 0 15 8" DisplayDate="{Binding ToPayDate}" Text="{Binding ToPayDate}"></DatePicker>
+                        <DatePicker Grid.Row="1" Margin="15 0 15 0" DisplayDate="{Binding FromPayDate}" Text="{Binding FromPayDate}"></DatePicker>
+                        <DatePicker Grid.Row="1" Grid.Column="1" Margin="15 0 15 0" DisplayDate="{Binding ToPayDate}" Text="{Binding ToPayDate}"></DatePicker>
                     </Grid>
                     <Grid Grid.Column="4">
                         <Grid.RowDefinitions>
@@ -74,7 +75,15 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="Agents" Margin="15 5 0 0"/>
-                        <TextBox Grid.Row="1" Margin="15 0 15 8" Text="{Binding Agent}"></TextBox>
+                        <ComboBox  Width="100"
+                            IsEditable="True"
+                            ItemsSource="{Binding AgentList}"
+                            IsTextSearchEnabled="True"
+                            HorizontalAlignment="Left"
+                            DisplayMemberPath="FirstName"
+                            SelectedValuePath="Id"
+                            SelectedItem="{Binding Agent, Mode=TwoWay}"
+                            Grid.Row="1" Margin="15 0 15 0"/>
                     </Grid>
                     <Grid Grid.Column="5">
                         <Button Command="{Binding SearchCommand}">
@@ -88,7 +97,7 @@
                 </Grid>
             </Grid>
             <Grid Grid.Row="1">
-                <DataGrid AutoGenerateColumns="False" x:Name="renewals" IsReadOnly="True" ItemsSource="{Binding DataCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}">
+                <DataGrid AutoGenerateColumns="False" x:Name="renewals" IsReadOnly="True" ItemsSource="{Binding DataCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" SelectionUnit="FullRow">
                     <DataGrid.Columns>
                     <DataGridTemplateColumn Header="Pay Date" Width="90">
                         <DataGridTemplateColumn.CellTemplate>
@@ -141,11 +150,10 @@
                         <DataGridTemplateColumn Header="Splits (%)" Width="175">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListView ItemsSource="{Binding Agents}" DisplayMemberPath="Split">
+                                    <ListView ItemsSource="{Binding Agents}" DisplayMemberPath="Split" ItemContainerStyle="{StaticResource UnderlinedItem}">
                                         <ListView.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Horizontal"></StackPanel>
-
                                             </ItemsPanelTemplate>
                                         </ListView.ItemsPanel>
                                     </ListView>
@@ -155,7 +163,7 @@
                         <DataGridTemplateColumn Header="Commissions ($)" Width="250">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListView ItemsSource="{Binding Agents}" DisplayMemberPath="Commission">
+                                    <ListView ItemsSource="{Binding Agents}" DisplayMemberPath="Commission" ItemContainerStyle="{StaticResource UnderlinedItem}">
                                         <ListView.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Horizontal"></StackPanel>
@@ -176,6 +184,12 @@
                 </DataGrid>
             </Grid>
             <Grid Grid.Row="2" Background="#FFCEEAFF">
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="&lt;&lt;" Style="{StaticResource PaginationButton}"/>
+                    <Button Content="&lt;" Style="{StaticResource PaginationButton}"/>
+                    <Button Content="&gt;" Style="{StaticResource PaginationButton}"/>
+                    <Button Content="&gt&gt;" Style="{StaticResource PaginationButton}"/>
+                </StackPanel>
             </Grid>
         </Grid>
     </Grid>
