@@ -7,14 +7,15 @@ BEGIN
 		YearMonth INT,
 		PayDate DATETIME,
 		PolicyId INT,
-		Premium DECIMAL,
+		Premium FLOAT,
 		RenewalType VARCHAR(5), -- Create ENUMS C#
-		Total DECIMAL,
+		Total FLOAT,
 		IsDeleted BIT,
 		CreatedDate DATETIME,
 		CreatedBy VARCHAR(50),
 		ModifiedDate DATETIME,
 		ModifiedBy VARCHAR(50),
+		CONSTRAINT PK_Commission PRIMARY KEY (Id),
 		FOREIGN KEY (PolicyId) REFERENCES [dbo].[Policys](Keynumo)
 	)
 END

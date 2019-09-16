@@ -4,15 +4,15 @@ BEGIN
    (
 		Id int NOT NULL IDENTITY(1,1),
 		AgentId INT,
-		CommissionId int NOT NULL,
-		Commission decimal,
-		Split decimal,
-		CreatedDate datetime NOT NULL,
-		CreatedBy varchar(50) NOT NULL,
-		ModifiedDate datetime,
-		ModifiedBy varchar(50),
+		CommissionId INT NOT NULL,
+		Commission FLOAT,
+		Split FLOAT,
+		CreatedDate DATETIME NOT NULL,
+		CreatedBy VARCHAR(50) NOT NULL,
+		ModifiedDate DATETIME,
+		ModifiedBy VARCHAR(50),
 		CONSTRAINT PK_AgentCommission PRIMARY KEY (Id),
-		FOREIGN KEY (CommissionId) REFERENCES [dbo].[COMM](KEYCOMM),
+		FOREIGN KEY (CommissionId) REFERENCES [dbo].[Commission](Id),
 		FOREIGN KEY (AgentId) REFERENCES [dbo].[Agent](Id)
    )
 END
