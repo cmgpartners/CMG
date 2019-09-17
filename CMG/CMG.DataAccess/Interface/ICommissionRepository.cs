@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace CMG.DataAccess.Interface
 {
-    public interface ICommissionRepository : IRepository<Comm>
+    public interface ICommissionRepository : IRepository<Commission>
     {
-        IQueryResult<Comm> Find(ISearchCriteria criteria);
+        IQueryResult<Commission> Find(ISearchCriteria criteria);
     }
 }

@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace CMG.DataAccess.Respository
 {
-    public class CommissionRepository : Repository<Comm>, ICommissionRepository
+    public class CommissionRepository : Repository<Commission>, ICommissionRepository
     {
         private readonly pb2Context _context;
 
@@ -19,10 +19,11 @@ namespace CMG.DataAccess.Respository
         {
             _context = context;
         }
-        public IQueryResult<Comm> Find(ISearchCriteria criteria)
+        public IQueryResult<Commission> Find(ISearchCriteria criteria)
         {
-            var query = Context.Comm.AsQueryable();
-            IQueryable<Comm> queryable = query;
+            var query = Context.Commission.AsQueryable().Include(x => x.AgentCommission).ThenInclude(x => x.Agent)
+                .Include(x => x.Policy);
+            IQueryable<Commission> queryable = query;
 
             if((criteria.FilterBy?.Count() ?? 0) > 0)
             {
@@ -46,16 +47,16 @@ namespace CMG.DataAccess.Respository
 
             var result = queryable.ToList();
 
-            return new PagedQueryResult<Comm>()
+            return new PagedQueryResult<Commission>()
             {
                 Result = result,
                 TotalRecords = totalRecords
             };
         }
 
-        private static Expression<Func<Comm, bool>> GetPredicate(ISearchCriteria criteria)
+        private static Expression<Func<Commission, bool>> GetPredicate(ISearchCriteria criteria)
         {
-            Expression<Func<Comm, bool>> predicate = null;
+            Expression<Func<Commission, bool>> predicate = null;
 
             foreach (var filterBy in criteria.FilterBy)
             {
@@ -71,7 +72,7 @@ namespace CMG.DataAccess.Respository
             return predicate;
         }
 
-        private IQueryable<Comm> OrderByPredicate(IQueryable<Comm> query, SortBy criteriaSortBy)
+        private IQueryable<Commission> OrderByPredicate(IQueryable<Commission> query, SortBy criteriaSortBy)
         {
             bool DescendingOrder = criteriaSortBy.DescendingOrder.HasValue && criteriaSortBy.DescendingOrder.Value;
 
@@ -80,34 +81,34 @@ namespace CMG.DataAccess.Respository
                 case "policynumber":
                     if (DescendingOrder)
                     {
-                        return query.OrderByDescending(o => o.Policynum);
+                        return query.OrderByDescending(o => o.Policy.Policynum);
                     }
-                    return query.OrderBy(o => o.Policynum);
-                case "insuredname":
-                    if (DescendingOrder)
-                    {
-                        return query.OrderByDescending(o => o.Insured);
-                    }
-                    return query.OrderBy(o => o.Insured);
+                    return query.OrderBy(o => o.Policy.Policynum);
+                //case "insuredname":
+                //    if (DescendingOrder)
+                //    {
+                //        return query.OrderByDescending(o => o.Insured);
+                //    }
+                    //return query.OrderBy(o => o.Insured);
                 case "companyname":
                     if (DescendingOrder)
                     {
-                        return query.OrderByDescending(o => o.Company);
+                        return query.OrderByDescending(o => o.Policy.Company);
                     }
-                    return query.OrderBy(o => o.Company);
+                    return query.OrderBy(o => o.Policy.Company);
                 case "fyc":
                 case "renewal":
                     if (DescendingOrder)
                     {
-                        return query.OrderByDescending(o => o.Commtype);
+                        return query.OrderByDescending(o => o.CommissionType);
                     }
-                    return query.OrderBy(o => o.Commtype);
+                    return query.OrderBy(o => o.CommissionType);
                 case "paydate":
                     if (DescendingOrder)
                     {
-                        return query.OrderByDescending(o => o.Paydate);
+                        return query.OrderByDescending(o => o.PayDate);
                     }
-                    return query.OrderBy(o => o.Paydate);
+                    return query.OrderBy(o => o.PayDate);
                 case "total":
                     if (DescendingOrder)
                     {
@@ -120,14 +121,14 @@ namespace CMG.DataAccess.Respository
 
         }
 
-        private static Expression<Func<Comm, bool>> FilterByClausure(FilterBy filterBy)
+        private static Expression<Func<Commission, bool>> FilterByClausure(FilterBy filterBy)
         {
             switch (filterBy.Property.ToLower())
             {
                 case "policynumber":
                     return PolicyNumberExpression(filterBy.Contains);
-                case "insured":
-                    return InsuredNameExpession(filterBy.Contains);
+                //case "insured":
+                //    return InsuredNameExpession(filterBy.Contains);
                 case "company":
                     return CompanyNameExpession(filterBy.Contains);
                 case "agent":
@@ -142,77 +143,50 @@ namespace CMG.DataAccess.Respository
             }
         }
 
-        private static Expression<Func<Comm, bool>> DateRangeExpression(string greaterThan, string lessThan)
+        private static Expression<Func<Commission, bool>> DateRangeExpression(string greaterThan, string lessThan)
         {
             if(!string.IsNullOrEmpty(greaterThan)
                 && !string.IsNullOrEmpty(lessThan))
             {
-                return w => w.Paydate >= Convert.ToDateTime(greaterThan)
-                    && w.Paydate <= Convert.ToDateTime(lessThan);
+                return w => w.PayDate >= Convert.ToDateTime(greaterThan)
+                    && w.PayDate <= Convert.ToDateTime(lessThan);
             }
 
             if(!string.IsNullOrEmpty(greaterThan))
             {
-                return w => w.Paydate >= Convert.ToDateTime(greaterThan);
+                return w => w.PayDate >= Convert.ToDateTime(greaterThan);
             }
 
             if (!string.IsNullOrEmpty(lessThan))
             {
-                return w => w.Paydate <= Convert.ToDateTime(lessThan);
+                return w => w.PayDate <= Convert.ToDateTime(lessThan);
             }
             return w => true;
         }
 
-        private static Expression<Func<Comm, bool>> PolicyNumberExpression(string contains)
+        private static Expression<Func<Commission, bool>> PolicyNumberExpression(string contains)
         {
-            return w => w.Policynum.ToLowerInvariant().Contains(contains.ToLowerInvariant());
+            return w => w.Policy.Policynum.ToLowerInvariant().Contains(contains.ToLowerInvariant());
         }
 
-        private static Expression<Func<Comm, bool>> InsuredNameExpession(string contains)
+        //private static Expression<Func<Commission, bool>> InsuredNameExpession(string contains)
+        //{
+        //    return w => w.Insured.ToLowerInvariant().Contains(contains.ToLowerInvariant());
+        //}
+
+        private static Expression<Func<Commission, bool>> CompanyNameExpession(string contains)
         {
-            return w => w.Insured.ToLowerInvariant().Contains(contains.ToLowerInvariant());
+            return w => w.Policy.Company.ToLowerInvariant().Contains(contains.ToLowerInvariant());
         }
 
-        private static Expression<Func<Comm, bool>> CompanyNameExpession(string contains)
+        private static Expression<Func<Commission, bool>> AgentExpression(string equals)
         {
-            return w => w.Company.ToLowerInvariant().Contains(contains.ToLowerInvariant());
+            return w => w.AgentCommission.Any(x => x.AgentId == Convert.ToInt32(equals));
         }
 
-        private static Expression<Func<Comm, bool>> AgentExpression(string equals)
+        private static Expression<Func<Commission, bool>> RenewalOrFYCExpression(string equal)
         {
-            Expression<Func<Comm, bool>> predicate = null;
-
-            switch (Convert.ToInt32(equals))
-            {
-                case (int)Enums.AgentEnum.Bob:
-                    predicate = w => w.Bob > 0;
-                break;
-                case (int)Enums.AgentEnum.Frank:
-                    predicate = w => w.Frank > 0;
-                break;
-                case (int)Enums.AgentEnum.Kate:
-                    predicate = w => w.Marty > 0;
-                break;
-                case (int)Enums.AgentEnum.Mary:
-                    predicate = w => w.Mary > 0;
-                break;
-                case (int)Enums.AgentEnum.Others:
-                    predicate = w => w.Other > 0;
-                break;
-                case (int)Enums.AgentEnum.Peter:
-                    predicate = w => w.Peter > 0;
-                break;
-                case (int)Enums.AgentEnum.Marty:
-                    predicate = w => w.Marty > 0;
-                    break;
-            }
-            return predicate;
-
-        }
-
-        private static Expression<Func<Comm,bool>> RenewalOrFYCExpression(string equal)
-        {
-            return w => w.Commtype.Equals(equal.Trim());
+            return w => w.CommissionType.Equals(equal.Trim());
         }
 
     }
