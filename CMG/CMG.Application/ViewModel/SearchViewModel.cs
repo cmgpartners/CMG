@@ -27,6 +27,7 @@ namespace CMG.Application.ViewModel
             {
                 _dataCollection = value;
                 OnPropertyChanged("DataCollection");
+                OnPropertyChanged("IsPaginationVisible");
             }
         }
 
@@ -102,10 +103,37 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("Agent");
             }
         }
-        public ICommand SearchCommand
+        private bool _isFYC;
+        public bool IsFYC
         {
-            get { return CreateCommand(Search); }
+            get { return _isFYC; }
+            set
+            {
+                _isFYC = value;
+                OnPropertyChanged("IsFYC");
+            }
         }
+        private bool _isRenewals;
+        public bool IsRenewals
+        {
+            get { return _isRenewals; }
+            set
+            {
+                _isRenewals = value;
+                OnPropertyChanged("IsRenewals");
+            }
+        }
+        private decimal _totalAmount;
+        public decimal TotalAmount
+        {
+            get { return _totalAmount; }
+            set
+            {
+                _totalAmount = value;
+                OnPropertyChanged("TotalAmount");
+            }
+        }
+        #region pagination properties
         private int _totalRecords;
         public int TotalRecords
         {
@@ -114,8 +142,63 @@ namespace CMG.Application.ViewModel
             {
                 _totalRecords = value;
                 OnPropertyChanged("TotalRecords");
+                OnPropertyChanged("TotalPages");
             }
         }
+        private int _currentPage = 1;
+        public int CurrentPage
+        {
+            get { return _currentPage; }
+            set
+            {
+                _currentPage = value;
+                OnPropertyChanged("CurrentPage");
+            }
+
+        }
+        private List<int> _pages;
+        public List<int> Pages
+        {
+            get { return _pages; }
+            set
+            {
+                _pages = value;
+                OnPropertyChanged("Pages");
+            }
+        }
+        public int TotalPages
+        {
+            get { return TotalRecords % PageSize == 0 ? (TotalRecords / PageSize) : (TotalRecords / PageSize) + 1; }
+        }
+        public bool IsPaginationVisible
+        {
+            get { return DataCollection != null && DataCollection.Count > 0; }
+        }
+        #endregion
+
+        #region command properties
+        public ICommand SearchCommand
+        {
+            get { return CreateCommand(Search); }
+        }
+
+        public ICommand FirstPageCommand
+        {
+            get { return CreateCommand(FirstPage); }
+        }
+        public ICommand LastPageCommand
+        {
+            get { return CreateCommand(LastPage); }
+        }
+        public ICommand NextPageCommand
+        {
+            get { return CreateCommand(NextPage); }
+        }
+        public ICommand PreviousPageCommand
+        {
+            get { return CreateCommand(PreviousPage); }
+        }
+        #endregion
         #endregion Properties
 
         #region Constructor
@@ -131,9 +214,40 @@ namespace CMG.Application.ViewModel
         public void Search()
         {
             SearchQuery searchQuery = BuildSearchQuery();
+            searchQuery.Page = CurrentPage;
+            searchQuery.PageSize = PageSize;
             var dataSearchBy = _unitOfWork.Commissions.Find(searchQuery);
             DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
             TotalRecords = dataSearchBy.TotalRecords;
+            TotalAmount = dataSearchBy.TotalAmount;
+            LoadPagination();
+        }
+
+        public void FirstPage()
+        {
+            CurrentPage = 1;
+            Search();
+        }
+        public void LastPage()
+        {
+            CurrentPage = TotalPages;
+            Search();
+        }
+        public void NextPage()
+        {
+            if (CurrentPage < TotalPages)
+            {
+                CurrentPage += 1;
+                Search();
+            }
+        }
+        public void PreviousPage()
+        {
+            if (CurrentPage > 1)
+            {
+                CurrentPage -= 1;
+                Search();
+            }
         }
         private SearchQuery BuildSearchQuery()
         {
@@ -162,6 +276,13 @@ namespace CMG.Application.ViewModel
             if(Agent != null)
             {
                 BuildFilterByEquals("Agent", Agent.Id.ToString(), searchBy);
+            }
+            if (!(IsFYC && IsRenewals))
+            {
+                if (IsFYC)
+                    BuildFilterByEquals("FYC", "F", searchBy);
+                else if(IsRenewals)
+                    BuildFilterByEquals("Renewal", "R", searchBy);
             }
             searchQuery.FilterBy = searchBy;
             return searchQuery;
@@ -195,6 +316,11 @@ namespace CMG.Application.ViewModel
         {
             var agents = _unitOfWork.Agents.All();
             AgentList = new ObservableCollection<ViewAgentDto>(agents.Select(r => _mapper.Map<ViewAgentDto>(r)).ToList());
+        }
+        private void LoadPagination()
+        {
+            _pages = new List<int>();
+            Pages.AddRange(Enumerable.Range(1, TotalPages));
         }
         #endregion Methods
     }

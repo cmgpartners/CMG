@@ -14,7 +14,7 @@ namespace CMG.Application.Mapper
                 .ForMember(des => des.PolicyNumber, mo => mo.MapFrom(src => src.Policynum))
                 .ForMember(des => des.CompanyName, mo => mo.MapFrom(src => src.Company))
                 .ForMember(des => des.InsuredName, mo => mo.MapFrom(src => src.Insured))
-                .ForMember(des => des.Renewal, mo => mo.MapFrom(src => src.Renewals))
+                .ForMember(des => des.Renewal, mo => mo.MapFrom(src => src.Commtype))
                 .ForMember(des => des.TotalAmount, mo => mo.MapFrom(src => src.Total))
                 .ForMember(des => des.Agents, mo => mo.MapFrom(src => new List<ViewAgentCommissionDto>()))
                 .AfterMap(AfterMapAgents);
