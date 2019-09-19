@@ -35,6 +35,7 @@ namespace CMG.DataAccess.Respository
             }
 
             var totalRecords = queryable.Count();
+            var totalAmount = queryable.AsEnumerable().Sum(x => x.Total);
 
             if(criteria.Page.HasValue
                 && criteria.PageSize.HasValue)
@@ -50,6 +51,7 @@ namespace CMG.DataAccess.Respository
 
             return new PagedQueryResult<Commission>()
             {
+                TotalAmount = Convert.ToDecimal(totalAmount),
                 Result = result,
                 TotalRecords = totalRecords
             };

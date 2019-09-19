@@ -11,7 +11,9 @@
                 <ResourceDictionary Source="\Resources\GridStyle.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="\Resources\ButtonStyle.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="VisibilityConverter" />
         </ResourceDictionary>
+        
     </UserControl.Resources>
 
     <Grid>
@@ -25,12 +27,13 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="200"/>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="230"/>
                         <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
                         <ColumnDefinition Width="50"/>
-                        <ColumnDefinition Width="350"/>
+                        <ColumnDefinition Width="400"/>
                     </Grid.ColumnDefinitions>
                     <Grid>
                         <Grid.RowDefinitions>
@@ -85,21 +88,42 @@
                             SelectedItem="{Binding Agent, Mode=TwoWay}"
                             Grid.Row="1" Margin="15 0 15 0"/>
                     </Grid>
-                    <Grid Grid.Column="5">
+                    <Grid Grid.Column="5" >
+                        <StackPanel Orientation="Vertical">
+                            <CheckBox Content="FYC" IsChecked="{Binding IsFYC}" Margin="0 10 0 0" ></CheckBox>
+                            <CheckBox Content="Renewals" IsChecked="{Binding IsRenewals}" Margin="0 5 0 0"></CheckBox>
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Column="6">
                         <Button Command="{Binding SearchCommand}">
                             <Image Source="/Asset/Search.png"></Image>
                         </Button>
                     </Grid>
-                    <Grid Grid.Column="6">
+                    <Grid Grid.Column="7">
                         <Button Content="Generate Report" Width="150" HorizontalAlignment="Right" Margin="0 0 15 0" ></Button>
                     </Grid>
 
                 </Grid>
             </Grid>
             <Grid Grid.Row="1">
-                <DataGrid AutoGenerateColumns="False" x:Name="renewals" IsReadOnly="True" ItemsSource="{Binding DataCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" SelectionUnit="FullRow">
+                <DataGrid AutoGenerateColumns="False" x:Name="renewals" IsReadOnly="True" ItemsSource="{Binding DataCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" SelectionUnit="FullRow" RowHeight="50">
                     <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="Pay Date" Width="90">
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Menu Name="menu1" Height="100" Background="#FFA9D1F4" BorderBrush="{x:Null}">
+                                        <MenuItem Margin="-13,-10,-40,0" > 
+                                            <MenuItem.Icon>
+                                                <Image Source="../Asset/Renewals.png"></Image>
+                                            </MenuItem.Icon>
+                                            <MenuItem Header="_Copy"/>
+                                            <MenuItem Header="_Delete"/>
+                                        </MenuItem>
+                                    </Menu>
+                                </DataTemplate>        
+                        </DataGridTemplateColumn.CellTemplate>        
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Pay Date" Width="105">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                     <TextBlock Text="{Binding Path=PayDate,  StringFormat='{}{0: MMM d, yyyy}'}" />
@@ -127,48 +151,76 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="RN" Width="50">
+                    <DataGridTemplateColumn Header="RN" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                     <TextBlock Text="{Binding Path=Renewal}"></TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Agents" Width="200">
+                    <DataGridTemplateColumn Header="Agents" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                    <ListView ItemsSource="{Binding Agents}" DisplayMemberPath="FirstName" ItemContainerStyle="{StaticResource RoundedItem}">
+                                    <ListView ItemsSource="{Binding AgentCommissions}" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled" >
                                     <ListView.ItemsPanel>
                                         <ItemsPanelTemplate>
                                              <StackPanel Orientation="Horizontal"></StackPanel>
                                         </ItemsPanelTemplate>
                                     </ListView.ItemsPanel>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border CornerRadius="15"
+                                                BorderBrush="{Binding Agent.Color}"
+                                                BorderThickness="1"
+                                                Background="{Binding Agent.Color}">                
+                                                    <Label Content="{Binding Agent.FirstName}"></Label>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
                                 </ListView>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Splits (%)" Width="175">
+                        <DataGridTemplateColumn Header="Splits (%)" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListView ItemsSource="{Binding Agents}" DisplayMemberPath="Split" ItemContainerStyle="{StaticResource UnderlinedItem}">
+                                    <ListView ItemsSource="{Binding AgentCommissions}" DisplayMemberPath="Split" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                                         <ListView.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Horizontal"></StackPanel>
                                             </ItemsPanelTemplate>
                                         </ListView.ItemsPanel>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border x:Name="border"
+                                                    BorderBrush="{Binding Agent.Color}"
+                                                    BorderThickness="0,0,0,3">
+                                                    <Label Content="{Binding Split}"></Label>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
                                     </ListView>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Commissions ($)" Width="250">
+                        <DataGridTemplateColumn Header="Commissions ($)" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListView ItemsSource="{Binding Agents}" DisplayMemberPath="Commission" ItemContainerStyle="{StaticResource UnderlinedItem}">
+                                    <ListView ItemsSource="{Binding AgentCommissions}" DisplayMemberPath="Commission" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                                         <ListView.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Horizontal"></StackPanel>
                                             </ItemsPanelTemplate>
                                         </ListView.ItemsPanel>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border x:Name="border"
+                                                    BorderBrush="{Binding Agent.Color}"
+                                                    BorderThickness="0,0,0,3">
+                                                    <Label Content="{Binding Commission}"></Label>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
                                     </ListView>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -176,7 +228,7 @@
                         <DataGridTemplateColumn Header="Total" Width="100">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                    <TextBlock Text="{Binding Path=TotalAmount, StringFormat='{}{0:#,#.0}'}" />
+                                    <TextBlock HorizontalAlignment="Right" Text="{Binding Path=TotalAmount, StringFormat='{}{0:#,#.0}'}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -184,12 +236,22 @@
                 </DataGrid>
             </Grid>
             <Grid Grid.Row="2" Background="#FFCEEAFF">
-                <StackPanel Orientation="Horizontal">
-                    <Button Content="&lt;&lt;" Style="{StaticResource PaginationButton}"/>
-                    <Button Content="&lt;" Style="{StaticResource PaginationButton}"/>
-                    <Button Content="&gt;" Style="{StaticResource PaginationButton}"/>
-                    <Button Content="&gt;&gt;" Style="{StaticResource PaginationButton}"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" Visibility="{Binding IsPaginationVisible, Converter={StaticResource VisibilityConverter}}" Grid.Column="0">
+                    <Button Content="&lt;&lt;" Style="{StaticResource PaginationButton}" Command="{Binding FirstPageCommand}"/>
+                    <Button Content="&lt;" Style="{StaticResource PaginationButton}" Command="{Binding PreviousPageCommand}"/>
+                    <Label Content="{Binding CurrentPage}" VerticalAlignment="Center"/>
+                    <Label Content="of" VerticalAlignment="Center"/>
+                    <Label Content="{Binding TotalPages}" VerticalAlignment="Center"/>
+                    <Button Content="&gt;" Style="{StaticResource PaginationButton}" Command="{Binding NextPageCommand}"/>
+                    <Button Content="&gt;&gt;" Style="{StaticResource PaginationButton}" Command="{Binding LastPageCommand}"/>
+                    
                 </StackPanel>
+                <Label HorizontalAlignment="Right" Content="{Binding TotalAmount}" ContentStringFormat="Total Commission of the search result is  {0}" Grid.Column="1" 
+                       Visibility="{Binding IsPaginationVisible, Converter={StaticResource VisibilityConverter}}" ></Label>
             </Grid>
         </Grid>
     </Grid>
