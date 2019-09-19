@@ -22,6 +22,7 @@ namespace CMG.DataAccess.Domain
         public virtual DbSet<Calls> Calls { get; set; }
         public virtual DbSet<Cases> Cases { get; set; }
         public virtual DbSet<Comm> Comm { get; set; }
+        public virtual DbSet<Commission> Commission { get; set; }
         public virtual DbSet<Grp> Grp { get; set; }
         public virtual DbSet<Grpitem> Grpitem { get; set; }
         public virtual DbSet<PeoCall> PeoCall { get; set; }
@@ -38,7 +39,6 @@ namespace CMG.DataAccess.Domain
         // Unable to generate entity type for table 'dbo.KEY_TABLE'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.TEMPLATES1'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.POL_ILL2'. Please see the warning messages.
-        // Unable to generate entity type for table 'dbo.Commission'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.COMBO'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.AgentReward'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.ERRLOG'. Please see the warning messages.
@@ -142,8 +142,6 @@ namespace CMG.DataAccess.Domain
 
             modelBuilder.Entity<AgentCommission>(entity =>
             {
-                entity.Property(e => e.Commission).HasColumnType("decimal(18, 0)");
-
                 entity.Property(e => e.CreatedBy)
                     .IsRequired()
                     .HasMaxLength(50)
@@ -157,18 +155,16 @@ namespace CMG.DataAccess.Domain
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.Split).HasColumnType("decimal(18, 0)");
-
                 entity.HasOne(d => d.Agent)
                     .WithMany(p => p.AgentCommission)
                     .HasForeignKey(d => d.AgentId)
-                    .HasConstraintName("FK__AgentComm__Agent__64061903");
+                    .HasConstraintName("FK__AgentComm__Agent__35A02FD5");
 
                 entity.HasOne(d => d.CommissionNavigation)
                     .WithMany(p => p.AgentCommission)
                     .HasForeignKey(d => d.CommissionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__AgentComm__Commi__6311F4CA");
+                    .HasConstraintName("FK__AgentComm__Commi__34AC0B9C");
             });
 
             modelBuilder.Entity<Business>(entity =>
@@ -1111,6 +1107,36 @@ namespace CMG.DataAccess.Domain
                     .HasColumnName("YRMO")
                     .HasMaxLength(6)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Commission>(entity =>
+            {
+                entity.Property(e => e.CommissionType)
+                    .HasMaxLength(1)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.PayDate).HasColumnType("datetime");
+
+                entity.Property(e => e.RenewalType)
+                    .HasMaxLength(5)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Policy)
+                    .WithMany(p => p.Commission)
+                    .HasForeignKey(d => d.PolicyId)
+                    .HasConstraintName("FK__Commissio__Polic__31CF9EF1");
             });
 
             modelBuilder.Entity<Grp>(entity =>

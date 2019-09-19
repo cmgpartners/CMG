@@ -5,11 +5,6 @@ namespace CMG.DataAccess.Domain
 {
     public partial class Comm : EntityBase
     {
-        public Comm()
-        {
-            AgentCommission = new HashSet<AgentCommission>();
-        }
-
         public int Keycomm { get; set; }
         public string Commtype { get; set; }
         public string Yrmo { get; set; }
@@ -46,7 +41,5 @@ namespace CMG.DataAccess.Domain
         public string Agent6 { get; set; }
         public decimal Split6 { get; set; }
         public decimal Kate { get; set; }
-
-        public virtual ICollection<AgentCommission> AgentCommission { get; set; }
     }
 }

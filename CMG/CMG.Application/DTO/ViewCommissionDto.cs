@@ -5,6 +5,7 @@ namespace CMG.Application.DTO
 {
     public class ViewCommissionDto
     {
+        public int CommissionId { get; set; }
         public DateTime PayDate { get; set; }
         public string PolicyNumber { get; set; }
         public string  CompanyName{ get; set; }

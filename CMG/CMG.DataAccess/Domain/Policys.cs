@@ -3,8 +3,13 @@ using System.Collections.Generic;
 
 namespace CMG.DataAccess.Domain
 {
-    public partial class Policys
+    public partial class Policys : EntityBase
     {
+        public Policys()
+        {
+            Commission = new HashSet<Commission>();
+        }
+
         public int Keynumo { get; set; }
         public int Restricted { get; set; }
         public string Policynum { get; set; }
@@ -72,5 +77,7 @@ namespace CMG.DataAccess.Domain
         public DateTime? AorStart { get; set; }
         public DateTime? AorEnd { get; set; }
         public string Status2 { get; set; }
+
+        public virtual ICollection<Commission> Commission { get; set; }
     }
 }
