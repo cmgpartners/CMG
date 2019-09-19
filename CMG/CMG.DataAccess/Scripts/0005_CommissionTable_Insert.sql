@@ -68,6 +68,7 @@ BEGIN
 	DECLARE @agent4 VARCHAR(5)
 	DECLARE @agent5 VARCHAR(5)
 	DECLARE @agent6 VARCHAR(5)
+	DECLARE @insured VARCHAR(500)
 
 	DECLARE @split1 FLOAT
 	DECLARE @split2 FLOAT
@@ -124,7 +125,8 @@ BEGIN
 		comm.SPLIT3,
 		comm.SPLIT4,
 		comm.SPLIT5,
-		comm.SPLIT6		
+		comm.SPLIT6,
+		comm.INSURED
 	FROM COMM comm
 	INNER JOIN POLICYS plcy
 		ON plcy.KEYNUMO = comm.KEYNUMO
@@ -134,7 +136,7 @@ BEGIN
 		FETCH NEXT FROM db_cursorOne INTO @commissionType, @yearMonth, @payDate, @policyId, @premium, @renewalType, @total, @isDeleted, @createdDate, @createdBy, @modifiedDate, @modifiedBy, 
 		@commissionMarty, @commissionPeter, @commissionFrank, @commissionBob, @commissionMary, @commissionKate, @commissionOther, 
 		@agent1, @agent2, @agent3, @agent4, @agent5, @agent6, 
-		@split1, @split2, @split3, @split4, @split5, @split6
+		@split1, @split2, @split3, @split4, @split5, @split6, @insured
 
 		WHILE @@fetch_status = 0
 		BEGIN
@@ -151,7 +153,8 @@ BEGIN
 				CreatedDate,
 				CreatedBy,
 				ModifiedDate,
-				ModifiedBy
+				ModifiedBy,
+				Insured
 			)
 			VALUES
 			(
@@ -166,7 +169,8 @@ BEGIN
 				@createdDate,
 				@createdBy,
 				@modifiedDate,
-				@modifiedBy
+				@modifiedBy,
+				@insured
 			)
 			
 			SET @i = 0
@@ -523,7 +527,7 @@ BEGIN
 			FETCH NEXT FROM db_cursorOne INTO @commissionType, @yearMonth, @payDate, @policyId, @premium, @renewalType, @total, @isDeleted, @createdDate, @createdBy, @modifiedDate, @modifiedBy, 
 			@commissionMarty, @commissionPeter, @commissionFrank, @commissionBob, @commissionMary, @commissionKate, @commissionOther, 
 			@agent1, @agent2, @agent3, @agent4, @agent5, @agent6, 
-			@split1, @split2, @split3, @split4, @split5, @split6
+			@split1, @split2, @split3, @split4, @split5, @split6, @insured
 
 		END
 
@@ -565,7 +569,8 @@ BEGIN
 			comm.SPLIT3,
 			comm.SPLIT4,
 			comm.SPLIT5,
-			comm.SPLIT6
+			comm.SPLIT6,
+			comm.INSURED
 		FROM COMM comm
 		WHERE TRIM(comm.POLICYNUM) IN (SELECT TRIM(POLICYNUM) FROM POLICYS)
 			AND comm.KEYNUMO = 0
@@ -575,7 +580,7 @@ BEGIN
 		FETCH NEXT FROM db_cursorTwo INTO @commissionType, @yearMonth, @payDate, @policyId, @premium, @renewalType, @total, @isDeleted, @createdDate, @createdBy, @modifiedDate, @modifiedBy, 
 		@commissionMarty, @commissionPeter, @commissionFrank, @commissionBob, @commissionMary, @commissionKate, @commissionOther, 
 		@agent1, @agent2, @agent3, @agent4, @agent5, @agent6, 
-		@split1, @split2, @split3, @split4, @split5, @split6
+		@split1, @split2, @split3, @split4, @split5, @split6, @insured
 
 		WHILE @@fetch_status = 0
 		BEGIN
@@ -592,7 +597,8 @@ BEGIN
 				CreatedDate,
 				CreatedBy,
 				ModifiedDate,
-				ModifiedBy
+				ModifiedBy,
+				Insured
 			)
 			VALUES
 			(
@@ -607,7 +613,8 @@ BEGIN
 				@createdDate,
 				@createdBy,
 				@modifiedDate,
-				@modifiedBy
+				@modifiedBy,
+				@insured
 			)
 
 			SET @i = 0
@@ -962,7 +969,7 @@ BEGIN
 			FETCH NEXT FROM db_cursorTwo INTO @commissionType, @yearMonth, @payDate, @policyId, @premium, @renewalType, @total, @isDeleted, @createdDate, @createdBy, @modifiedDate, @modifiedBy, 
 			@commissionMarty, @commissionPeter, @commissionFrank, @commissionBob, @commissionMary, @commissionKate, @commissionOther, 
 			@agent1, @agent2, @agent3, @agent4, @agent5, @agent6, 
-			@split1, @split2, @split3, @split4, @split5, @split6
+			@split1, @split2, @split3, @split4, @split5, @split6, @insured
 
 		END
 
@@ -1004,7 +1011,8 @@ BEGIN
 			comm.SPLIT3,
 			comm.SPLIT4,
 			comm.SPLIT5,
-			comm.SPLIT6	
+			comm.SPLIT6,
+			comm.INSURED
 		FROM COMM comm
 		WHERE comm.KEYNUMO = 0
 			AND TRIM(comm.POLICYNUM) = ''
@@ -1014,7 +1022,7 @@ BEGIN
 		FETCH NEXT FROM db_cursorThree INTO @commissionType, @yearMonth, @payDate, @policyId, @premium, @renewalType, @total, @isDeleted, @createdDate, @createdBy, @modifiedDate, @modifiedBy, 
 		@commissionMarty, @commissionPeter, @commissionFrank, @commissionBob, @commissionMary, @commissionKate, @commissionOther, 
 		@agent1, @agent2, @agent3, @agent4, @agent5, @agent6, 
-		@split1, @split2, @split3, @split4, @split5, @split6
+		@split1, @split2, @split3, @split4, @split5, @split6, @insured
 
 		WHILE @@fetch_status = 0
 		BEGIN
@@ -1031,7 +1039,8 @@ BEGIN
 				CreatedDate,
 				CreatedBy,
 				ModifiedDate,
-				ModifiedBy
+				ModifiedBy,
+				Insured
 			)
 			VALUES
 			(
@@ -1046,7 +1055,8 @@ BEGIN
 				@createdDate,
 				@createdBy,
 				@modifiedDate,
-				@modifiedBy
+				@modifiedBy,
+				@insured
 			)
 
 			SET @i = 0
@@ -1402,7 +1412,7 @@ BEGIN
 			FETCH NEXT FROM db_cursorThree INTO @commissionType, @yearMonth, @payDate, @policyId, @premium, @renewalType, @total, @isDeleted, @createdDate, @createdBy, @modifiedDate, @modifiedBy, 
 			@commissionMarty, @commissionPeter, @commissionFrank, @commissionBob, @commissionMary, @commissionKate, @commissionOther, 
 			@agent1, @agent2, @agent3, @agent4, @agent5, @agent6, 
-			@split1, @split2, @split3, @split4, @split5, @split6
+			@split1, @split2, @split3, @split4, @split5, @split6, @insured
 		END
 
 	CLOSE db_cursorThree
@@ -1444,7 +1454,8 @@ BEGIN
 			comm.SPLIT3,
 			comm.SPLIT4,
 			comm.SPLIT5,
-			comm.SPLIT6		
+			comm.SPLIT6,
+			comm.INSURED
 		FROM COMM comm
 		WHERE comm.KEYNUMO = 0
 			AND insured LIKE '%Daneluzzi, Denise%'
@@ -1455,7 +1466,7 @@ BEGIN
 		FETCH NEXT FROM db_cursorFour INTO @commissionType, @yearMonth, @payDate, @policyId, @premium, @renewalType, @total, @isDeleted, @createdDate, @createdBy, @modifiedDate, @modifiedBy, 
 		@commissionMarty, @commissionPeter, @commissionFrank, @commissionBob, @commissionMary, @commissionKate, @commissionOther, 
 		@agent1, @agent2, @agent3, @agent4, @agent5, @agent6, 
-		@split1, @split2, @split3, @split4, @split5, @split6
+		@split1, @split2, @split3, @split4, @split5, @split6, @insured
 
 		WHILE @@fetch_status = 0
 		BEGIN
@@ -1472,7 +1483,8 @@ BEGIN
 				CreatedDate,
 				CreatedBy,
 				ModifiedDate,
-				ModifiedBy
+				ModifiedBy,
+				Insured
 			)
 			VALUES
 			(
@@ -1487,7 +1499,8 @@ BEGIN
 				@createdDate,
 				@createdBy,
 				@modifiedDate,
-				@modifiedBy
+				@modifiedBy,
+				@insured
 			)
 
 			SET @i = 0
@@ -1844,7 +1857,7 @@ BEGIN
 			FETCH NEXT FROM db_cursorFour INTO @commissionType, @yearMonth, @payDate, @policyId, @premium, @renewalType, @total, @isDeleted, @createdDate, @createdBy, @modifiedDate, @modifiedBy, 
 			@commissionMarty, @commissionPeter, @commissionFrank, @commissionBob, @commissionMary, @commissionKate, @commissionOther, 
 			@agent1, @agent2, @agent3, @agent4, @agent5, @agent6, 
-			@split1, @split2, @split3, @split4, @split5, @split6
+			@split1, @split2, @split3, @split4, @split5, @split6, @insured
 
 		END
 
@@ -1887,7 +1900,8 @@ BEGIN
 			comm.SPLIT3,
 			comm.SPLIT4,
 			comm.SPLIT5,
-			comm.SPLIT6		
+			comm.SPLIT6,
+			comm.INSURED
 		FROM COMM comm
 		WHERE comm.KEYNUMO = 0
 			AND insured <> 'Daneluzzi, Denise'
@@ -1898,7 +1912,7 @@ BEGIN
 		FETCH NEXT FROM db_cursorFive INTO @commissionType, @yearMonth, @payDate, @policyId, @premium, @renewalType, @total, @isDeleted, @createdDate, @createdBy, @modifiedDate, @modifiedBy, 
 		@commissionMarty, @commissionPeter, @commissionFrank, @commissionBob, @commissionMary, @commissionKate, @commissionOther, 
 		@agent1, @agent2, @agent3, @agent4, @agent5, @agent6, 
-		@split1, @split2, @split3, @split4, @split5, @split6
+		@split1, @split2, @split3, @split4, @split5, @split6, @insured
 
 		WHILE @@fetch_status = 0
 		BEGIN
@@ -1915,7 +1929,8 @@ BEGIN
 				CreatedDate,
 				CreatedBy,
 				ModifiedDate,
-				ModifiedBy
+				ModifiedBy,
+				Insured
 			)
 			VALUES
 			(
@@ -1930,7 +1945,8 @@ BEGIN
 				@createdDate,
 				@createdBy,
 				@modifiedDate,
-				@modifiedBy
+				@modifiedBy,
+				@insured
 			)
 
 			SET @i = 0
@@ -2286,7 +2302,7 @@ BEGIN
 			FETCH NEXT FROM db_cursorFive INTO @commissionType, @yearMonth, @payDate, @policyId, @premium, @renewalType, @total, @isDeleted, @createdDate, @createdBy, @modifiedDate, @modifiedBy, 
 			@commissionMarty, @commissionPeter, @commissionFrank, @commissionBob, @commissionMary, @commissionKate, @commissionOther, 
 			@agent1, @agent2, @agent3, @agent4, @agent5, @agent6, 
-			@split1, @split2, @split3, @split4, @split5, @split6
+			@split1, @split2, @split3, @split4, @split5, @split6, @insured
 
 		END
 
@@ -2328,7 +2344,8 @@ BEGIN
 			comm.SPLIT3,
 			comm.SPLIT4,
 			comm.SPLIT5,
-			comm.SPLIT6			
+			comm.SPLIT6,
+			comm.INSURED
 		FROM COMM comm
 		WHERE comm.KEYNUMO > 0
 			AND comm.KEYNUMO NOT IN(SELECT KEYNUMO FROM POLICYS)
@@ -2338,7 +2355,7 @@ BEGIN
 		FETCH NEXT FROM db_cursorSix INTO @commissionType, @yearMonth, @payDate, @policyId, @premium, @renewalType, @total, @isDeleted, @createdDate, @createdBy, @modifiedDate, @modifiedBy, 
 		@commissionMarty, @commissionPeter, @commissionFrank, @commissionBob, @commissionMary, @commissionKate, @commissionOther, 
 		@agent1, @agent2, @agent3, @agent4, @agent5, @agent6, 
-		@split1, @split2, @split3, @split4, @split5, @split6
+		@split1, @split2, @split3, @split4, @split5, @split6, @insured
 
 		WHILE @@fetch_status = 0
 		BEGIN
@@ -2355,7 +2372,8 @@ BEGIN
 				CreatedDate,
 				CreatedBy,
 				ModifiedDate,
-				ModifiedBy
+				ModifiedBy,
+				Insured
 			)
 			VALUES
 			(
@@ -2370,7 +2388,8 @@ BEGIN
 				@createdDate,
 				@createdBy,
 				@modifiedDate,
-				@modifiedBy
+				@modifiedBy,
+				@insured
 			)
 
 			SET @i = 0

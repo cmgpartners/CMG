@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace CMG.DataAccess.Domain
 {
@@ -13,7 +13,6 @@ namespace CMG.DataAccess.Domain
         public pb2Context(DbContextOptions<pb2Context> options)
             : base(options)
         {
-            
         }
 
         public virtual DbSet<AccTable> AccTable { get; set; }
@@ -160,7 +159,7 @@ namespace CMG.DataAccess.Domain
                     .WithMany(p => p.AgentCommission)
                     .HasForeignKey(d => d.CommissionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_CommissionAgentCommission");
+                    .HasConstraintName("FK_Commission_AgentCommission");
             });
 
             modelBuilder.Entity<Business>(entity =>
@@ -1117,6 +1116,10 @@ namespace CMG.DataAccess.Domain
 
                 entity.Property(e => e.CreatedDate).HasColumnType("datetime");
 
+                entity.Property(e => e.Insured)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.ModifiedBy)
                     .HasMaxLength(50)
                     .IsUnicode(false);
@@ -1132,7 +1135,7 @@ namespace CMG.DataAccess.Domain
                 entity.HasOne(d => d.Policy)
                     .WithMany(p => p.Commission)
                     .HasForeignKey(d => d.PolicyId)
-                    .HasConstraintName("FK_PolicysCommission");
+                    .HasConstraintName("FK_Policys_Commission");
             });
 
             modelBuilder.Entity<Grp>(entity =>
