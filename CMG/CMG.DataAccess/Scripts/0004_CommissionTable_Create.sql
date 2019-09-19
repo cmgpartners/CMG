@@ -16,6 +16,6 @@ BEGIN
 		ModifiedDate DATETIME,
 		ModifiedBy VARCHAR(50),
 		CONSTRAINT PK_Commission PRIMARY KEY (Id),
-		FOREIGN KEY (PolicyId) REFERENCES [dbo].[Policys](Keynumo)
+		CONSTRAINT FK_Policys_Commission FOREIGN KEY (PolicyId) REFERENCES [dbo].[Policys](Keynumo)
 	)
 END
