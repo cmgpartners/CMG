@@ -188,7 +188,7 @@
                     <Button Content="&lt;&lt;" Style="{StaticResource PaginationButton}"/>
                     <Button Content="&lt;" Style="{StaticResource PaginationButton}"/>
                     <Button Content="&gt;" Style="{StaticResource PaginationButton}"/>
-                    <Button Content="&gt&gt;" Style="{StaticResource PaginationButton}"/>
+                    <Button Content="&gt;&gt;" Style="{StaticResource PaginationButton}"/>
                 </StackPanel>
             </Grid>
         </Grid>
