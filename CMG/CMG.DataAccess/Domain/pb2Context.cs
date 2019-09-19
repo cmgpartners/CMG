@@ -158,13 +158,13 @@ namespace CMG.DataAccess.Domain
                 entity.HasOne(d => d.Agent)
                     .WithMany(p => p.AgentCommission)
                     .HasForeignKey(d => d.AgentId)
-                    .HasConstraintName("FK__AgentComm__Agent__3E9F8A2A");
+                    .HasConstraintName("FK__AgentComm__Agent__35A02FD5");
 
                 entity.HasOne(d => d.CommissionNavigation)
                     .WithMany(p => p.AgentCommission)
                     .HasForeignKey(d => d.CommissionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__AgentComm__Commi__3DAB65F1");
+                    .HasConstraintName("FK__AgentComm__Commi__34AC0B9C");
             });
 
             modelBuilder.Entity<Business>(entity =>
@@ -1136,7 +1136,7 @@ namespace CMG.DataAccess.Domain
                 entity.HasOne(d => d.Policy)
                     .WithMany(p => p.Commission)
                     .HasForeignKey(d => d.PolicyId)
-                    .HasConstraintName("FK__Commissio__Polic__3ACEF946");
+                    .HasConstraintName("FK__Commissio__Polic__31CF9EF1");
             });
 
             modelBuilder.Entity<Grp>(entity =>

@@ -7,6 +7,7 @@ BEGIN
 		CommissionId INT NOT NULL,
 		Commission FLOAT,
 		Split FLOAT,
+		AgentOrder INT,
 		CreatedDate DATETIME NOT NULL,
 		CreatedBy VARCHAR(50) NOT NULL,
 		ModifiedDate DATETIME,
