@@ -161,7 +161,7 @@
                     <DataGridTemplateColumn Header="Agents" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                    <ListView ItemsSource="{Binding Agents}" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled" >
+                                    <ListView ItemsSource="{Binding AgentCommissions}" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled" >
                                     <ListView.ItemsPanel>
                                         <ItemsPanelTemplate>
                                              <StackPanel Orientation="Horizontal"></StackPanel>
@@ -184,7 +184,7 @@
                         <DataGridTemplateColumn Header="Splits (%)" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListView ItemsSource="{Binding Agents}" DisplayMemberPath="Split" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                    <ListView ItemsSource="{Binding AgentCommissions}" DisplayMemberPath="Split" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                                         <ListView.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Horizontal"></StackPanel>
@@ -206,7 +206,7 @@
                         <DataGridTemplateColumn Header="Commissions ($)" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListView ItemsSource="{Binding Agents}" DisplayMemberPath="Commission" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                    <ListView ItemsSource="{Binding AgentCommissions}" DisplayMemberPath="Commission" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                                         <ListView.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Horizontal"></StackPanel>
