@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace CMG.DataAccess.Domain
 {
@@ -13,6 +13,7 @@ namespace CMG.DataAccess.Domain
         public pb2Context(DbContextOptions<pb2Context> options)
             : base(options)
         {
+            
         }
 
         public virtual DbSet<AccTable> AccTable { get; set; }
@@ -38,9 +39,9 @@ namespace CMG.DataAccess.Domain
         // Unable to generate entity type for table 'dbo.POL_ILL'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.KEY_TABLE'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.TEMPLATES1'. Please see the warning messages.
+        // Unable to generate entity type for table 'dbo.AgentReward'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.POL_ILL2'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.COMBO'. Please see the warning messages.
-        // Unable to generate entity type for table 'dbo.AgentReward'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.ERRLOG'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.SF_Map'. Please see the warning messages.
 
@@ -155,16 +156,11 @@ namespace CMG.DataAccess.Domain
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
-                entity.HasOne(d => d.Agent)
-                    .WithMany(p => p.AgentCommission)
-                    .HasForeignKey(d => d.AgentId)
-                    .HasConstraintName("FK__AgentComm__Agent__35A02FD5");
-
                 entity.HasOne(d => d.CommissionNavigation)
                     .WithMany(p => p.AgentCommission)
                     .HasForeignKey(d => d.CommissionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__AgentComm__Commi__34AC0B9C");
+                    .HasConstraintName("FK_CommissionAgentCommission");
             });
 
             modelBuilder.Entity<Business>(entity =>
@@ -1136,7 +1132,7 @@ namespace CMG.DataAccess.Domain
                 entity.HasOne(d => d.Policy)
                     .WithMany(p => p.Commission)
                     .HasForeignKey(d => d.PolicyId)
-                    .HasConstraintName("FK__Commissio__Polic__31CF9EF1");
+                    .HasConstraintName("FK_PolicysCommission");
             });
 
             modelBuilder.Entity<Grp>(entity =>
