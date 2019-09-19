@@ -106,7 +106,7 @@
                 </Grid>
             </Grid>
             <Grid Grid.Row="1">
-                <DataGrid AutoGenerateColumns="False" x:Name="renewals" IsReadOnly="True" ItemsSource="{Binding DataCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" SelectionUnit="FullRow" RowHeight="47">
+                <DataGrid AutoGenerateColumns="False" x:Name="renewals" IsReadOnly="True" ItemsSource="{Binding DataCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" SelectionUnit="FullRow" RowHeight="50">
                     <DataGrid.Columns>
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
@@ -151,48 +151,76 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="RN" Width="30">
+                    <DataGridTemplateColumn Header="RN" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                     <TextBlock Text="{Binding Path=Renewal}"></TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Agents" Width="200">
+                    <DataGridTemplateColumn Header="Agents" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                    <ListView ItemsSource="{Binding Agents}" DisplayMemberPath="FirstName" ItemContainerStyle="{StaticResource RoundedItem}">
+                                    <ListView ItemsSource="{Binding Agents}" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled" >
                                     <ListView.ItemsPanel>
                                         <ItemsPanelTemplate>
                                              <StackPanel Orientation="Horizontal"></StackPanel>
                                         </ItemsPanelTemplate>
                                     </ListView.ItemsPanel>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border CornerRadius="15"
+                                                BorderBrush="{Binding Agent.Color}"
+                                                BorderThickness="1"
+                                                Background="{Binding Agent.Color}">                
+                                                    <Label Content="{Binding Agent.FirstName}"></Label>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
                                 </ListView>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Splits (%)" Width="220">
+                        <DataGridTemplateColumn Header="Splits (%)" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListView ItemsSource="{Binding Agents}" DisplayMemberPath="Split" ItemContainerStyle="{StaticResource UnderlinedItem}">
+                                    <ListView ItemsSource="{Binding Agents}" DisplayMemberPath="Split" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                                         <ListView.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Horizontal"></StackPanel>
                                             </ItemsPanelTemplate>
                                         </ListView.ItemsPanel>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border x:Name="border"
+                                                    BorderBrush="{Binding Agent.Color}"
+                                                    BorderThickness="0,0,0,3">
+                                                    <Label Content="{Binding Split}"></Label>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
                                     </ListView>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Commissions ($)" Width="270">
+                        <DataGridTemplateColumn Header="Commissions ($)" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListView ItemsSource="{Binding Agents}" DisplayMemberPath="Commission" ItemContainerStyle="{StaticResource UnderlinedItem}">
+                                    <ListView ItemsSource="{Binding Agents}" DisplayMemberPath="Commission" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                                         <ListView.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Horizontal"></StackPanel>
                                             </ItemsPanelTemplate>
                                         </ListView.ItemsPanel>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border x:Name="border"
+                                                    BorderBrush="{Binding Agent.Color}"
+                                                    BorderThickness="0,0,0,3">
+                                                    <Label Content="{Binding Commission}"></Label>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
                                     </ListView>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
