@@ -15,6 +15,7 @@ BEGIN
 		CreatedBy VARCHAR(50),
 		ModifiedDate DATETIME,
 		ModifiedBy VARCHAR(50),
+		Insured VARCHAR(500),
 		CONSTRAINT PK_Commission PRIMARY KEY (Id),
 		CONSTRAINT FK_Policys_Commission FOREIGN KEY (PolicyId) REFERENCES [dbo].[Policys](Keynumo)
 	)

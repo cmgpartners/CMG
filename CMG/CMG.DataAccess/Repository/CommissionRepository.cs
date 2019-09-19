@@ -87,12 +87,12 @@ namespace CMG.DataAccess.Respository
                         return query.OrderByDescending(o => o.Policy.Policynum);
                     }
                     return query.OrderBy(o => o.Policy.Policynum);
-                //case "insuredname":
-                //    if (DescendingOrder)
-                //    {
-                //        return query.OrderByDescending(o => o.Insured);
-                //    }
-                    //return query.OrderBy(o => o.Insured);
+                case "insuredname":
+                    if (DescendingOrder)
+                    {
+                        return query.OrderByDescending(o => o.Insured);
+                    }
+                    return query.OrderBy(o => o.Insured);
                 case "companyname":
                     if (DescendingOrder)
                     {
@@ -130,8 +130,8 @@ namespace CMG.DataAccess.Respository
             {
                 case "policynumber":
                     return PolicyNumberExpression(filterBy.Contains);
-                //case "insured":
-                //    return InsuredNameExpession(filterBy.Contains);
+                case "insured":
+                    return InsuredNameExpession(filterBy.Contains);
                 case "company":
                     return CompanyNameExpession(filterBy.Contains);
                 case "agent":
@@ -172,10 +172,10 @@ namespace CMG.DataAccess.Respository
             return w => w.Policy.Policynum.ToLowerInvariant().Contains(contains.ToLowerInvariant());
         }
 
-        //private static Expression<Func<Commission, bool>> InsuredNameExpession(string contains)
-        //{
-        //    return w => w.Insured.ToLowerInvariant().Contains(contains.ToLowerInvariant());
-        //}
+        private static Expression<Func<Commission, bool>> InsuredNameExpession(string contains)
+        {
+            return w => w.Insured.ToLowerInvariant().Contains(contains.ToLowerInvariant());
+        }
 
         private static Expression<Func<Commission, bool>> CompanyNameExpession(string contains)
         {

@@ -23,7 +23,7 @@ namespace CMG.DataAccess.Domain
         public string CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
-
+        public string Insured { get; set; }
         public virtual Policys Policy { get; set; }
         public virtual ICollection<AgentCommission> AgentCommission { get; set; }
     }
