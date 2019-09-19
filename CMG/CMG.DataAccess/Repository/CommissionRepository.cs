@@ -47,6 +47,7 @@ namespace CMG.DataAccess.Respository
             }
 
             var result = queryable.ToList();
+            
 
             return new PagedQueryResult<Commission>()
             {

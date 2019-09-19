@@ -13,7 +13,7 @@ BEGIN
 		ModifiedDate DATETIME,
 		ModifiedBy VARCHAR(50),
 		CONSTRAINT PK_AgentCommission PRIMARY KEY (Id),
-		FOREIGN KEY (CommissionId) REFERENCES [dbo].[Commission](Id),
-		FOREIGN KEY (AgentId) REFERENCES [dbo].[Agent](Id)
+		CONSTRAINT FK_Commission_AgentCommission FOREIGN KEY (CommissionId) REFERENCES [dbo].[Commission](Id),
+		CONSTRAINT FK_Agent_AgentCommission FOREIGN KEY (AgentId) REFERENCES [dbo].[Agent](Id)
    )
 END

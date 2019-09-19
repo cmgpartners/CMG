@@ -11,7 +11,7 @@ BEGIN
 		CreatedBy VARCHAR(50),
 		ModifiedDate DATETIME,
 		ModifiedBy VARCHAR(50)
-		FOREIGN KEY (AgentId) REFERENCES [dbo].[Agent](Id)
+		CONSTRAINT FK_Agent_AgentReward FOREIGN KEY (AgentId) REFERENCES [dbo].[Agent](Id)
 	)
 END
 
