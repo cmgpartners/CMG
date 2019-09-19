@@ -12,6 +12,6 @@ namespace CMG.Application.DTO
         public string InsuredName { get; set; }
         public string Renewal { get; set; }
         public decimal TotalAmount { get; set; }
-        public ICollection<ViewAgentCommissionDto> Agents { get; set; }
+        public ICollection<ViewAgentCommissionDto> Agents { get; set; } = new List<ViewAgentCommissionDto>();
     }
 }

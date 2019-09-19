@@ -50,7 +50,7 @@ namespace CMG.DataAccess.Respository
 
             return new PagedQueryResult<Commission>()
             {
-                TotalAmount = totalAmount,
+                TotalAmount = Convert.ToDecimal(totalAmount),
                 Result = result,
                 TotalRecords = totalRecords
             };

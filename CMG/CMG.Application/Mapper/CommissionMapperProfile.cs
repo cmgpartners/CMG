@@ -26,7 +26,6 @@ namespace CMG.Application.Mapper
                 .ForMember(des => des.InsuredName, mo => mo.MapFrom(src => "InsuredName-Test"))
                 .ForMember(des => des.Renewal, mo => mo.MapFrom(src => src.RenewalType))
                 .ForMember(des => des.TotalAmount, mo => mo.MapFrom(src => src.Total))
-                .ForMember(des => des.Agents, mo => mo.MapFrom(src => new List<ViewAgentCommissionDto>()))
                 .AfterMap(AfterMapAgentCommissions);
 
             CreateMap<Agent, ViewAgentDto>();
