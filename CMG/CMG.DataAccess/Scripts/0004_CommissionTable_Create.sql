@@ -6,7 +6,7 @@ BEGIN
 		CommissionType CHAR, -- Create ENUMS C#
 		YearMonth INT,
 		PayDate DATETIME,
-		PolicyId INT,
+		PolicyId INT NOT NULL,
 		Premium FLOAT,
 		RenewalType VARCHAR(5), -- Create ENUMS C#
 		Total FLOAT,

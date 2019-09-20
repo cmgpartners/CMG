@@ -1,15 +1,8 @@
-﻿using CMG.Common;
-using CMG.DataAccess.Domain;
+﻿using CMG.DataAccess.Domain;
 using CMG.DataAccess.Interface;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using LinqKit;
-using System.Collections.Generic;
 
-namespace CMG.DataAccess.Respository
+namespace CMG.DataAccess.Repository
 {
     public class AgentRepository : Repository<Agent>, IAgentRepository
     {

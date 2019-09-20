@@ -7,6 +7,8 @@ namespace CMG.DataAccess.Interface
         ICommissionRepository Commissions { get; }
         IAgentRepository Agents { get; }
 
+        ICommissionSearchRepository CommissionSearch { get; }
+
         Task Commit();
         Task SaveChangesAsync();
     }

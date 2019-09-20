@@ -4,7 +4,7 @@ using CMG.DataAccess.Domain;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Threading.Tasks;
-using CMG.DataAccess.Respository;
+using CMG.DataAccess.Repository;
 
 namespace CMG.DataAccess
 {
@@ -24,10 +24,13 @@ namespace CMG.DataAccess
 
         #region Repositories
         private ICommissionRepository _commissionRepository;
+        private ICommissionSearchRepository _commissionSearchRepository;
         private IAgentRepository _agentRepository;
 
         public ICommissionRepository Commissions => _commissionRepository ?? (_commissionRepository = new CommissionRepository(_context));
         public IAgentRepository Agents => _agentRepository ?? (_agentRepository = new AgentRepository(_context));
+
+        public ICommissionSearchRepository CommissionSearch => _commissionSearchRepository ?? (_commissionSearchRepository = new CommissionSearchRepository(_context));
 
         public async Task Commit()
         {

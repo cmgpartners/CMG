@@ -8,25 +8,44 @@ using LinqKit;
 
 namespace CMG.DataAccess.Repository
 {
-    public class CommissionRepository : Repository<Commission>, ICommissionRepository
+    public class CommissionSearchRepository : Repository<Commission>, ICommissionSearchRepository
     {
         private readonly pb2Context _context;
 
-        public CommissionRepository(pb2Context context) : base(context)
+        public CommissionSearchRepository(pb2Context context) : base(context)
         {
             _context = context;
         }
-        public IQueryResult<Commission> Find(ISearchCriteria criteria)
+
+        public IQueryResult<CommissionSearch> Search(ISearchCriteria criteria)
         {
             var query = Context.Commission.AsQueryable().Include(x => x.AgentCommission).ThenInclude(x => x.Agent)
-                .Include(x => x.Policy);
-            IQueryable<Commission> queryable = query;
+                .Include(x => x.Policy)
+                .Select(x => new CommissionSearch
+                {
+                    Id = x.Id,
+                    PayDate = x.PayDate,
+                    CommissionType = x.CommissionType,
+                    PolicyId = x.PolicyId,
+                    RenewalType = x.RenewalType,
+                    Total = x.Total.HasValue ? Convert.ToDecimal(x.Total.Value) : 0,
+                    Insured = x.Insured,
+                    PolicyNumber = x.Policy.Policynum,
+                    AgentCommissions = x.AgentCommission.Select(a => new AgentCommission
+                    {
+                        Agent = a.Agent,
+                        Split = a.Split,
+                        Commission = a.Commission
+                    }).ToList(),
 
-            if((criteria.FilterBy?.Count() ?? 0) > 0)
+                });
+            IQueryable<CommissionSearch> queryable = query;
+
+            if ((criteria.FilterBy?.Count() ?? 0) > 0)
             {
                 queryable = queryable.Where(GetPredicate(criteria));
             }
-            if(criteria.SortBy != null)
+            if (criteria.SortBy != null)
             {
                 queryable = OrderByPredicate(queryable, criteria.SortBy);
             }
@@ -34,7 +53,7 @@ namespace CMG.DataAccess.Repository
             var totalRecords = queryable.Count();
             var totalAmount = queryable.AsEnumerable().Sum(x => x.Total);
 
-            if(criteria.Page.HasValue
+            if (criteria.Page.HasValue
                 && criteria.PageSize.HasValue)
             {
                 var skip = (criteria.Page.Value - 1) * criteria.PageSize.Value;
@@ -44,9 +63,9 @@ namespace CMG.DataAccess.Repository
             }
 
             var result = queryable.ToList();
-            
 
-            return new PagedQueryResult<Commission>()
+
+            return new PagedQueryResult<CommissionSearch>()
             {
                 TotalAmount = Convert.ToDecimal(totalAmount),
                 Result = result,
@@ -54,9 +73,9 @@ namespace CMG.DataAccess.Repository
             };
         }
 
-        private static Expression<Func<Commission, bool>> GetPredicate(ISearchCriteria criteria)
+        private static Expression<Func<CommissionSearch, bool>> GetPredicate(ISearchCriteria criteria)
         {
-            Expression<Func<Commission, bool>> predicate = null;
+            Expression<Func<CommissionSearch, bool>> predicate = null;
 
             foreach (var filterBy in criteria.FilterBy)
             {
@@ -72,18 +91,18 @@ namespace CMG.DataAccess.Repository
             return predicate;
         }
 
-        private IQueryable<Commission> OrderByPredicate(IQueryable<Commission> query, SortBy criteriaSortBy)
+        private IQueryable<CommissionSearch> OrderByPredicate(IQueryable<CommissionSearch> query, SortBy criteriaSortBy)
         {
             bool DescendingOrder = criteriaSortBy.DescendingOrder.HasValue && criteriaSortBy.DescendingOrder.Value;
 
-            switch(criteriaSortBy.Property.ToLower())
+            switch (criteriaSortBy.Property.ToLower())
             {
                 case "policynumber":
                     if (DescendingOrder)
                     {
-                        return query.OrderByDescending(o => o.Policy.Policynum);
+                        return query.OrderByDescending(o => o.PolicyNumber);
                     }
-                    return query.OrderBy(o => o.Policy.Policynum);
+                    return query.OrderBy(o => o.PolicyNumber);
                 case "insuredname":
                     if (DescendingOrder)
                     {
@@ -93,9 +112,9 @@ namespace CMG.DataAccess.Repository
                 case "companyname":
                     if (DescendingOrder)
                     {
-                        return query.OrderByDescending(o => o.Policy.Company);
+                        return query.OrderByDescending(o => o.Company);
                     }
-                    return query.OrderBy(o => o.Policy.Company);
+                    return query.OrderBy(o => o.Company);
                 case "fyc":
                 case "renewal":
                     if (DescendingOrder)
@@ -121,7 +140,7 @@ namespace CMG.DataAccess.Repository
 
         }
 
-        private static Expression<Func<Commission, bool>> FilterByClausure(FilterBy filterBy)
+        private static Expression<Func<CommissionSearch, bool>> FilterByClausure(FilterBy filterBy)
         {
             switch (filterBy.Property.ToLower())
             {
@@ -143,16 +162,16 @@ namespace CMG.DataAccess.Repository
             }
         }
 
-        private static Expression<Func<Commission, bool>> DateRangeExpression(string greaterThan, string lessThan)
+        private static Expression<Func<CommissionSearch, bool>> DateRangeExpression(string greaterThan, string lessThan)
         {
-            if(!string.IsNullOrEmpty(greaterThan)
+            if (!string.IsNullOrEmpty(greaterThan)
                 && !string.IsNullOrEmpty(lessThan))
             {
                 return w => w.PayDate >= Convert.ToDateTime(greaterThan)
                     && w.PayDate <= Convert.ToDateTime(lessThan);
             }
 
-            if(!string.IsNullOrEmpty(greaterThan))
+            if (!string.IsNullOrEmpty(greaterThan))
             {
                 return w => w.PayDate >= Convert.ToDateTime(greaterThan);
             }
@@ -164,27 +183,27 @@ namespace CMG.DataAccess.Repository
             return w => true;
         }
 
-        private static Expression<Func<Commission, bool>> PolicyNumberExpression(string contains)
+        private static Expression<Func<CommissionSearch, bool>> PolicyNumberExpression(string contains)
         {
-            return w => w.Policy.Policynum.ToLowerInvariant().Contains(contains.ToLowerInvariant());
+            return w => w.PolicyNumber.ToLowerInvariant().Contains(contains.ToLowerInvariant());
         }
 
-        private static Expression<Func<Commission, bool>> InsuredNameExpession(string contains)
+        private static Expression<Func<CommissionSearch, bool>> InsuredNameExpession(string contains)
         {
             return w => w.Insured.ToLowerInvariant().Contains(contains.ToLowerInvariant());
         }
 
-        private static Expression<Func<Commission, bool>> CompanyNameExpession(string contains)
+        private static Expression<Func<CommissionSearch, bool>> CompanyNameExpession(string contains)
         {
-            return w => w.Policy.Company.ToLowerInvariant().Contains(contains.ToLowerInvariant());
+            return w => w.Company.ToLowerInvariant().Contains(contains.ToLowerInvariant());
         }
 
-        private static Expression<Func<Commission, bool>> AgentExpression(string equals)
+        private static Expression<Func<CommissionSearch, bool>> AgentExpression(string equals)
         {
-            return w => w.AgentCommission.Any(x => x.AgentId == Convert.ToInt32(equals));
+            return w => w.AgentCommissions.Any(x => x.AgentId == Convert.ToInt32(equals));
         }
 
-        private static Expression<Func<Commission, bool>> RenewalOrFYCExpression(string equal)
+        private static Expression<Func<CommissionSearch, bool>> RenewalOrFYCExpression(string equal)
         {
             return w => w.CommissionType.Equals(equal.Trim());
         }

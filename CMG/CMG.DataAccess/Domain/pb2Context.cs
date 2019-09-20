@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace CMG.DataAccess.Domain
 {
@@ -1135,6 +1133,7 @@ namespace CMG.DataAccess.Domain
                 entity.HasOne(d => d.Policy)
                     .WithMany(p => p.Commission)
                     .HasForeignKey(d => d.PolicyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Policys_Commission");
             });
 

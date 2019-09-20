@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CMG.DataAccess.Respository
+namespace CMG.DataAccess.Repository
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : EntityBase
     {

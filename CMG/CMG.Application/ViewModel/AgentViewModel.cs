@@ -2,7 +2,6 @@
 using CMG.Application.DTO;
 using CMG.DataAccess.Domain;
 using CMG.DataAccess.Interface;
-using CMG.DataAccess.Respository;
 using System.Collections.ObjectModel;
 
 namespace CMG.Application.ViewModel
