@@ -1,25 +1,9 @@
 ﻿//using CMG.Application.Command;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using CMG.DataAccess.Respository;
 using CMG.DataAccess.Interface;
 using CMG.Application.ViewModel;
 using AutoMapper;
-using System.Collections.ObjectModel;
-using CMG.Application.DTO;
 
 namespace CMG.UI
 {
@@ -39,6 +23,10 @@ namespace CMG.UI
 
             InitializeComponent();
             lstNavItems.SelectedItem = lstNavItems.Items[0];
+
+            //SearchViewModel searchViewModel = new SearchViewModel(unitOfWork, mapper);
+            //searchViewModel.PolicyNumber = "CP0126832";
+            //searchViewModel.Search();
         }
 
         private void btnShutDown_Click(object sender, RoutedEventArgs e)

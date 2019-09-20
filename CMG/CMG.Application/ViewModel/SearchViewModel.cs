@@ -211,18 +211,6 @@ namespace CMG.Application.ViewModel
         #endregion Constructor
 
         #region Methods
-        public void Search()
-        {
-            SearchQuery searchQuery = BuildSearchQuery();
-            searchQuery.Page = CurrentPage;
-            searchQuery.PageSize = PageSize;
-            var dataSearchBy = _unitOfWork.Commissions.Find(searchQuery);
-            DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
-            TotalRecords = dataSearchBy.TotalRecords;
-            TotalAmount = dataSearchBy.TotalAmount;
-            LoadPagination();
-        }
-
         public void FirstPage()
         {
             CurrentPage = 1;
@@ -321,6 +309,18 @@ namespace CMG.Application.ViewModel
         {
             _pages = new List<int>();
             Pages.AddRange(Enumerable.Range(1, TotalPages));
+        }
+
+        public void Search()
+        {
+            SearchQuery searchQuery = BuildSearchQuery();
+            searchQuery.Page = CurrentPage;
+            searchQuery.PageSize = PageSize;
+            var dataSearchBy = _unitOfWork.CommissionSearch.Search(searchQuery);
+            DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
+            TotalRecords = dataSearchBy.TotalRecords;
+            TotalAmount = dataSearchBy.TotalAmount;
+            LoadPagination();
         }
         #endregion Methods
     }

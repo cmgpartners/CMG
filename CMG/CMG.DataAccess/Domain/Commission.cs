@@ -14,7 +14,7 @@ namespace CMG.DataAccess.Domain
         public string CommissionType { get; set; }
         public int? YearMonth { get; set; }
         public DateTime? PayDate { get; set; }
-        public int? PolicyId { get; set; }
+        public int PolicyId { get; set; }
         public double? Premium { get; set; }
         public string RenewalType { get; set; }
         public double? Total { get; set; }

@@ -1,14 +1,8 @@
 ﻿using CMG.DataAccess.Interface;
-using CMG.DataAccess.Respository;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-//using System.Configuration;
-using System.Data;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using CMG.DataAccess.Domain;
 using Microsoft.EntityFrameworkCore;
