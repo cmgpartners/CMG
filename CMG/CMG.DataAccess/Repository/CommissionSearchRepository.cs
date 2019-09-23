@@ -32,17 +32,7 @@ namespace CMG.DataAccess.Repository
                 queryable = OrderByPredicate(queryable, criteria.SortBy);
             }
 
-            var totalRecords = queryable.Count();
-            var totalAmount = queryable.AsEnumerable().Sum(x => x.Total);
-
-            if (criteria.Page.HasValue
-                && criteria.PageSize.HasValue)
-            {
-                var skip = (criteria.Page.Value - 1) * criteria.PageSize.Value;
-                var pageSize = criteria.PageSize.Value;
-                queryable = queryable.Skip(skip);
-                queryable = queryable.Take(pageSize);
-            }
+          
 
             var result = queryable.Select(x => new CommissionSearch
             {
@@ -64,6 +54,17 @@ namespace CMG.DataAccess.Repository
                 }).ToList(),
             });
 
+            var totalRecords = result.Count();
+            var totalAmount = result.AsEnumerable().Sum(x => x.Total);
+
+            if (criteria.Page.HasValue
+                && criteria.PageSize.HasValue)
+            {
+                var skip = (criteria.Page.Value - 1) * criteria.PageSize.Value;
+                var pageSize = criteria.PageSize.Value;
+                result = result.Skip(skip);
+                result = result.Take(pageSize);
+            }
 
             return new PagedQueryResult<CommissionSearch>()
             {
