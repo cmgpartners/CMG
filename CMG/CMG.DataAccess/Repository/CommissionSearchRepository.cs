@@ -20,26 +20,8 @@ namespace CMG.DataAccess.Repository
         public IQueryResult<CommissionSearch> Search(ISearchCriteria criteria)
         {
             var query = Context.Commission.AsQueryable().Include(x => x.AgentCommission).ThenInclude(x => x.Agent)
-                .Include(x => x.Policy)
-                .Select(x => new CommissionSearch
-                {
-                    Id = x.Id,
-                    PayDate = x.PayDate,
-                    CommissionType = x.CommissionType,
-                    PolicyId = x.PolicyId,
-                    RenewalType = x.RenewalType,
-                    Total = x.Total.HasValue ? Convert.ToDecimal(x.Total.Value) : 0,
-                    Insured = x.Insured,
-                    PolicyNumber = x.Policy.Policynum,
-                    AgentCommissions = x.AgentCommission.Select(a => new AgentCommission
-                    {
-                        Agent = a.Agent,
-                        Split = a.Split,
-                        Commission = a.Commission
-                    }).ToList(),
-
-                });
-            IQueryable<CommissionSearch> queryable = query;
+                .Include(x => x.Policy);
+            IQueryable<Commission> queryable = query;
 
             if ((criteria.FilterBy?.Count() ?? 0) > 0)
             {
@@ -62,20 +44,38 @@ namespace CMG.DataAccess.Repository
                 queryable = queryable.Take(pageSize);
             }
 
-            var result = queryable.ToList();
+            var result = queryable.Select(x => new CommissionSearch
+            {
+                Id = x.Id,
+                PayDate = x.PayDate,
+                CommissionType = x.CommissionType,
+                PolicyId = x.PolicyId,
+                RenewalType = x.RenewalType,
+                Total = x.Total.HasValue ? Convert.ToDecimal(x.Total.Value) : 0,
+                Insured = x.Insured,
+                PolicyNumber = x.Policy.Policynum,
+                Company = x.Policy.Company,
+                AgentCommissions = x.AgentCommission.Select(a => new AgentCommission
+                {
+                    AgentId = a.AgentId,
+                    Agent = a.Agent,
+                    Split = a.Split,
+                    Commission = a.Commission
+                }).ToList(),
+            });
 
 
             return new PagedQueryResult<CommissionSearch>()
             {
                 TotalAmount = Convert.ToDecimal(totalAmount),
-                Result = result,
+                Result = result.ToList(),
                 TotalRecords = totalRecords
             };
         }
 
-        private static Expression<Func<CommissionSearch, bool>> GetPredicate(ISearchCriteria criteria)
+        private static Expression<Func<Commission, bool>> GetPredicate(ISearchCriteria criteria)
         {
-            Expression<Func<CommissionSearch, bool>> predicate = null;
+            Expression<Func<Commission, bool>> predicate = null;
 
             foreach (var filterBy in criteria.FilterBy)
             {
@@ -91,7 +91,7 @@ namespace CMG.DataAccess.Repository
             return predicate;
         }
 
-        private IQueryable<CommissionSearch> OrderByPredicate(IQueryable<CommissionSearch> query, SortBy criteriaSortBy)
+        private IQueryable<Commission> OrderByPredicate(IQueryable<Commission> query, SortBy criteriaSortBy)
         {
             bool DescendingOrder = criteriaSortBy.DescendingOrder.HasValue && criteriaSortBy.DescendingOrder.Value;
 
@@ -100,9 +100,9 @@ namespace CMG.DataAccess.Repository
                 case "policynumber":
                     if (DescendingOrder)
                     {
-                        return query.OrderByDescending(o => o.PolicyNumber);
+                        return query.OrderByDescending(o => o.Policy.Policynum);
                     }
-                    return query.OrderBy(o => o.PolicyNumber);
+                    return query.OrderBy(o => o.Policy.Policynum);
                 case "insuredname":
                     if (DescendingOrder)
                     {
@@ -112,9 +112,9 @@ namespace CMG.DataAccess.Repository
                 case "companyname":
                     if (DescendingOrder)
                     {
-                        return query.OrderByDescending(o => o.Company);
+                        return query.OrderByDescending(o => o.Policy.Company);
                     }
-                    return query.OrderBy(o => o.Company);
+                    return query.OrderBy(o => o.Policy.Company);
                 case "fyc":
                 case "renewal":
                     if (DescendingOrder)
@@ -140,7 +140,7 @@ namespace CMG.DataAccess.Repository
 
         }
 
-        private static Expression<Func<CommissionSearch, bool>> FilterByClausure(FilterBy filterBy)
+        private static Expression<Func<Commission, bool>> FilterByClausure(FilterBy filterBy)
         {
             switch (filterBy.Property.ToLower())
             {
@@ -162,7 +162,7 @@ namespace CMG.DataAccess.Repository
             }
         }
 
-        private static Expression<Func<CommissionSearch, bool>> DateRangeExpression(string greaterThan, string lessThan)
+        private static Expression<Func<Commission, bool>> DateRangeExpression(string greaterThan, string lessThan)
         {
             if (!string.IsNullOrEmpty(greaterThan)
                 && !string.IsNullOrEmpty(lessThan))
@@ -183,30 +183,29 @@ namespace CMG.DataAccess.Repository
             return w => true;
         }
 
-        private static Expression<Func<CommissionSearch, bool>> PolicyNumberExpression(string contains)
+        private static Expression<Func<Commission, bool>> PolicyNumberExpression(string contains)
         {
-            return w => w.PolicyNumber.ToLowerInvariant().Contains(contains.ToLowerInvariant());
+            return w => w.Policy.Policynum.ToLowerInvariant().Contains(contains.ToLowerInvariant());
         }
 
-        private static Expression<Func<CommissionSearch, bool>> InsuredNameExpession(string contains)
+        private static Expression<Func<Commission, bool>> InsuredNameExpession(string contains)
         {
             return w => w.Insured.ToLowerInvariant().Contains(contains.ToLowerInvariant());
         }
 
-        private static Expression<Func<CommissionSearch, bool>> CompanyNameExpession(string contains)
+        private static Expression<Func<Commission, bool>> CompanyNameExpession(string contains)
         {
-            return w => w.Company.ToLowerInvariant().Contains(contains.ToLowerInvariant());
+            return w => w.Policy.Company.ToLowerInvariant().Contains(contains.ToLowerInvariant());
         }
 
-        private static Expression<Func<CommissionSearch, bool>> AgentExpression(string equals)
+        private static Expression<Func<Commission, bool>> AgentExpression(string equals)
         {
-            return w => w.AgentCommissions.Any(x => x.AgentId == Convert.ToInt32(equals));
+            return w => w.AgentCommission.Any(x => x.AgentId == Convert.ToInt32(equals));
         }
 
-        private static Expression<Func<CommissionSearch, bool>> RenewalOrFYCExpression(string equal)
+        private static Expression<Func<Commission, bool>> RenewalOrFYCExpression(string equal)
         {
             return w => w.CommissionType.Equals(equal.Trim());
         }
-
     }
 }
