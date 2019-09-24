@@ -8,7 +8,7 @@
         xmlns:views="clr-namespace:CMG.UI.View"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1400" WindowStyle="None" ResizeMode="CanResize" WindowStartupLocation="CenterScreen">
+        Title="CMG" MinHeight="600" MinWidth="1400" ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -28,15 +28,12 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="20"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0" Grid.ColumnSpan="2" Background="{StaticResource gridBackGround}">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 0">
-                <Button Width="25" Height="25" Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" Click="btnShutDown_Click">
-                    <materialDesign:PackIcon Kind="Power"></materialDesign:PackIcon>
-                </Button>
             </StackPanel>
         </Grid>
 
