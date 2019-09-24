@@ -30,6 +30,11 @@
         <Setter Property="Foreground" Value="White" />
         <Setter Property="FontSize" Value="14"/>
     </Style>
+    <Style x:Key="hyperLinkStyle" TargetType="Hyperlink">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="TextDecorations" Value=""/>
+    </Style>
     <Style x:Key="pageHeader" TargetType="Grid">
         <Setter Property="Background" Value="#FF9BADB8"/>
         <Setter Property="Opacity" Value="0.7"/>

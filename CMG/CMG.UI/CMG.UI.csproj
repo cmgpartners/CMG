@@ -11,7 +11,11 @@
     <None Remove="Asset\Financial Summary.png" />
     <None Remove="Asset\FYC.png" />
     <None Remove="Asset\Renewals.png" />
+    <None Remove="Asset\RowSelector.png" />
+    <None Remove="Asset\RowSelectorHover.png" />
+    <None Remove="Asset\Salesforce.png" />
     <None Remove="Asset\Search.png" />
+    <None Remove="Asset\Settings.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,7 +47,19 @@
     <Resource Include="Asset\Renewals.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Asset\RowSelectorHover.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Asset\RowSelector.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Asset\Salesforce.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Asset\Search.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Asset\Settings.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
