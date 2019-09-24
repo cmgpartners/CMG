@@ -41,6 +41,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="70"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="40"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <TextBlock Text="cmg" Style="{StaticResource logoTextBlock}"></TextBlock>
@@ -87,8 +88,25 @@
                             <TextBlock Grid.Row="1" Style="{StaticResource textBlockStyle}" Text="Search"></TextBlock>
                         </Grid>
                     </ListViewItem>
+                    <ListViewItem Height="60">
+                        <Grid Width="100">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"></RowDefinition>
+                                <RowDefinition Height="30"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Button Click="Button_NavigationClick" Background="Transparent" BorderThickness="0">
+                                <Image Source="/Asset/Salesforce.png" Style="{StaticResource imageIconStyle}"></Image>    
+                            </Button>
+                            <TextBlock Grid.Row="1" Style="{StaticResource textBlockStyle}">
+                                 <Hyperlink  NavigateUri="http://www.google.com" RequestNavigate="Hyperlink_RequestNavigate"  Style="{StaticResource hyperLinkStyle}">
+                                     Salesforce
+                                </Hyperlink>
+                            </TextBlock>
+                        </Grid>
+                    </ListViewItem>
                 </ListView>
             </StackPanel>
+            <Image  Grid.Row="2" Source="/Asset/Settings.png" VerticalAlignment="Center" Height="24" Width="24" Margin="0,0,0,20"></Image>
         </Grid>
         
         <Grid Grid.Row="1" Grid.Column="1" Style="{StaticResource pageHeader}">
