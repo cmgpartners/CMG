@@ -45,6 +45,7 @@ namespace CMG.UI
             {
                 mc.AddProfile(new CommissionMapperProfile());
                 mc.AddProfile(new AgentMapperProfile());
+                mc.AddProfile(new PolicyMapperProfile());
             });
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
