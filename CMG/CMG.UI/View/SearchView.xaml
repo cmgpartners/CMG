@@ -123,28 +123,28 @@
                                 </DataTemplate>        
                         </DataGridTemplateColumn.CellTemplate>        
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Pay Date" Width="105">
+                    <DataGridTemplateColumn Header="Pay Date" Width="105" SortMemberPath="PayDate" CanUserSort="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                     <TextBlock Text="{Binding Path=PayDate,  StringFormat='{}{0: MMM d, yyyy}'}" />
                                 </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Policy #" Width="100">
+                        <DataGridTemplateColumn Header="Policy #" Width="100" SortMemberPath="PolicyNumber" CanUserSort="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                     <TextBlock Text="{Binding Path=PolicyNumber}"></TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Company" Width="60">
+                        <DataGridTemplateColumn Header="Company" Width="60" SortMemberPath="CompanyName" CanUserSort="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                     <TextBlock Text="{Binding Path=CompanyName}"></TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Insured" Width="150">
+                        <DataGridTemplateColumn Header="Insured" Width="150" SortMemberPath="InsuredName" CanUserSort="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                     <TextBlock Text="{Binding Path=InsuredName}"></TextBlock>

@@ -32,8 +32,6 @@ namespace CMG.DataAccess.Repository
                 queryable = OrderByPredicate(queryable, criteria.SortBy);
             }
 
-          
-
             var result = queryable.Select(x => new CommissionSearch
             {
                 Id = x.Id,
