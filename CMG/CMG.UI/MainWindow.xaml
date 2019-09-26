@@ -8,13 +8,11 @@
         xmlns:views="clr-namespace:CMG.UI.View"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d"
-        MinHeight="600" MinWidth="1400" ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen">
+        MinHeight="600" MinWidth="1400" ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen"
+        Icon="Asset/ApplicationIcon.ico">
     <Window.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Resources/LeftNavStyle.xaml"></ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
-            <DataTemplate DataType="{x:Type viewModels:CommissionViewModel}" >
+            <DataTemplate DataType="{x:Type viewModels:RenewalsViewModel}" >
                 <views:RenewalsView DataContext="{Binding}"></views:RenewalsView>
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:SearchViewModel}" >
@@ -32,30 +30,30 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Grid.ColumnSpan="2" Background="{StaticResource gridBackGround}">
+        <Grid Grid.Row="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 0">
             </StackPanel>
         </Grid>
 
-        <Grid Grid.Row="1" Grid.Column="0" Background="{StaticResource gridBackGround}">
+        <Grid Grid.Row="1" Grid.Column="0" Background="{StaticResource GridBackGround}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="70"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="40"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <TextBlock Text="cmg" Style="{StaticResource logoTextBlock}"></TextBlock>
+                <TextBlock Text="cmg" Style="{StaticResource LogoTextBlock}"></TextBlock>
             </Grid>
             <StackPanel Grid.Row="1">
-                <ListView x:Name="lstNavItems" SelectionChanged="LstNavItems_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource listViewItemBackGround}">
+                <ListView x:Name="lstNavItems" SelectionChanged="LstNavItems_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource LeftNavigationListView}">
                     <ListViewItem Height="60">
                         <Grid Width="100">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30"></RowDefinition>
                                 <RowDefinition Height="30"></RowDefinition>
                             </Grid.RowDefinitions>
-                            <Image Source="/Asset/Renewals.png" Style="{StaticResource imageIconStyle}"></Image>
-                            <TextBlock Grid.Row="1" Style="{StaticResource textBlockStyle}" Text="Renewals"></TextBlock>
+                            <Image Source="/Asset/Renewals.png" Style="{StaticResource ImageIconStyle}"></Image>
+                            <TextBlock Grid.Row="1" Style="{StaticResource TextBlockStyle}" Text="Renewals"></TextBlock>
                         </Grid>
                     </ListViewItem>
                     <ListViewItem Height="60">
@@ -64,8 +62,8 @@
                                 <RowDefinition Height="30"></RowDefinition>
                                 <RowDefinition Height="30"></RowDefinition>
                             </Grid.RowDefinitions>
-                            <Image Source="/Asset/FYC.png" Style="{StaticResource imageIconStyle}"></Image>
-                            <TextBlock Grid.Row="1" Style="{StaticResource textBlockStyle}" Text="FYC"></TextBlock>
+                            <Image Source="/Asset/FYC.png" Style="{StaticResource ImageIconStyle}"></Image>
+                            <TextBlock Grid.Row="1" Style="{StaticResource TextBlockStyle}" Text="FYC"></TextBlock>
                         </Grid>
                     </ListViewItem>
                     <ListViewItem Height="60">
@@ -74,8 +72,8 @@
                                 <RowDefinition Height="30"></RowDefinition>
                                 <RowDefinition Height="30"></RowDefinition>
                             </Grid.RowDefinitions>
-                            <Image Source="/Asset/Financial Summary.png" Style="{StaticResource imageIconStyle}"></Image>
-                            <TextBlock Grid.Row="1" Style="{StaticResource textBlockStyle}" Text="Summary"></TextBlock>
+                            <Image Source="/Asset/Financial Summary.png" Style="{StaticResource ImageIconStyle}"></Image>
+                            <TextBlock Grid.Row="1" Style="{StaticResource TextBlockStyle}" Text="Summary"></TextBlock>
                         </Grid>
                     </ListViewItem>
                     <ListViewItem Height="60">
@@ -84,8 +82,8 @@
                                 <RowDefinition Height="30"></RowDefinition>
                                 <RowDefinition Height="30"></RowDefinition>
                             </Grid.RowDefinitions>
-                            <Image Source="/Asset/Search.png" Style="{StaticResource imageIconStyle}"></Image>
-                            <TextBlock Grid.Row="1" Style="{StaticResource textBlockStyle}" Text="Search"></TextBlock>
+                            <Image Source="/Asset/Search.png" Style="{StaticResource ImageIconStyle}"></Image>
+                            <TextBlock Grid.Row="1" Style="{StaticResource TextBlockStyle}" Text="Search"></TextBlock>
                         </Grid>
                     </ListViewItem>
                     <ListViewItem Height="60">
@@ -95,10 +93,10 @@
                                 <RowDefinition Height="30"></RowDefinition>
                             </Grid.RowDefinitions>
                             <Button Click="Button_NavigationClick" Background="Transparent" BorderThickness="0">
-                                <Image Source="/Asset/Salesforce.png" Style="{StaticResource imageIconStyle}"></Image>    
+                                <Image Source="/Asset/Salesforce.png" Style="{StaticResource ImageIconStyle}"></Image>    
                             </Button>
-                            <TextBlock Grid.Row="1" Style="{StaticResource textBlockStyle}">
-                                 <Hyperlink  NavigateUri="http://www.google.com" RequestNavigate="Hyperlink_RequestNavigate"  Style="{StaticResource hyperLinkStyle}">
+                            <TextBlock Grid.Row="1" Style="{StaticResource TextBlockStyle}">
+                                 <Hyperlink  NavigateUri="http://www.google.com" RequestNavigate="Hyperlink_RequestNavigate"  Style="{StaticResource HyperLinkStyle}">
                                      Salesforce
                                 </Hyperlink>
                             </TextBlock>
@@ -109,7 +107,7 @@
             <Image  Grid.Row="2" Source="/Asset/Settings.png" VerticalAlignment="Center" Height="24" Width="24" Margin="0,0,0,20"></Image>
         </Grid>
         
-        <Grid Grid.Row="1" Grid.Column="1" Style="{StaticResource pageHeader}">
+        <Grid Grid.Row="1" Grid.Column="1" Style="{StaticResource PageHeader}">
             <ContentPresenter  Content="{Binding}" ></ContentPresenter>
         </Grid>
     </Grid>

@@ -5,19 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="\Resources\GridStyle.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="\Resources\ButtonStyle.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="\Resources\TextBlockStyle.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="\Resources\MenuStyle.xaml"></ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
-            <BooleanToVisibilityConverter x:Key="VisibilityConverter" />
-        </ResourceDictionary>
-        
-    </UserControl.Resources>
-
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
@@ -124,7 +111,7 @@
                         <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Menu Name="menu1" HorizontalAlignment="Left" VerticalAlignment="Top" >
-                                        <MenuItem Header="::" Style="{StaticResource menuParentStyle}" ItemContainerStyle="{StaticResource menuItemStyle}">
+                                        <MenuItem Header="::" Style="{StaticResource MenuParentStyle}" ItemContainerStyle="{StaticResource MenuItemStyle}">
                                             <MenuItem Header="_Copy" />
                                             <MenuItem Header="_Delete" />
                                         </MenuItem>
