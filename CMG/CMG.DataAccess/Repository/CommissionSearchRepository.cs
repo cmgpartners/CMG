@@ -150,7 +150,7 @@ namespace CMG.DataAccess.Repository
                 case "company":
                     return CompanyNameExpession(filterBy.Contains);
                 case "agent":
-                    return AgentExpression(filterBy.Equal);
+                    return AgentExpression(filterBy.In);
                 case "fyc":
                 case "renewal":
                     return RenewalOrFYCExpression(filterBy.Equal);
@@ -197,9 +197,10 @@ namespace CMG.DataAccess.Repository
             return w => w.Policy.Company.ToLowerInvariant().Contains(contains.ToLowerInvariant());
         }
 
-        private static Expression<Func<Commission, bool>> AgentExpression(string equals)
+        private static Expression<Func<Commission, bool>> AgentExpression(string any)
         {
-            return w => w.AgentCommission.Any(x => x.AgentId == Convert.ToInt32(equals));
+            var agentList = any.Split(',').Select(id => int.Parse(id.Trim())).ToList();
+            return w => w.AgentCommission.Any(x => agentList.Contains(x.AgentId.Value));
         }
 
         private static Expression<Func<Commission, bool>> RenewalOrFYCExpression(string equal)
