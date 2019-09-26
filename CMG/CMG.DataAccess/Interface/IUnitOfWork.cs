@@ -6,7 +6,7 @@ namespace CMG.DataAccess.Interface
     {
         ICommissionRepository Commissions { get; }
         IAgentRepository Agents { get; }
-        IPolicyRepository Policys { get; }
+        IPolicyRepository Policies { get; }
         ICommissionSearchRepository CommissionSearch { get; }
 
         Task Commit();

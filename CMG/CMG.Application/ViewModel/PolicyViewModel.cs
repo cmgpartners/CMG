@@ -39,7 +39,7 @@ namespace CMG.Application.ViewModel
         #region Methods
         private void GetAllPolicy()
         {
-            var policies = _unitOfWork.Policys.GetAllPolicyNumber();
+            var policies = _unitOfWork.Policies.GetAllPolicyNumber();
             DataCollection = new ObservableCollection<ViewPolicyListDto>(policies.Select(r => _mapper.Map<ViewPolicyListDto>(r)).ToList());
         }
         #endregion Methods

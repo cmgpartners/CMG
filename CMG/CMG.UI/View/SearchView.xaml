@@ -10,6 +10,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="\Resources\GridStyle.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="\Resources\ButtonStyle.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="\Resources\TextBlockStyle.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="\Resources\MenuStyle.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="VisibilityConverter" />
         </ResourceDictionary>
@@ -102,22 +104,21 @@
                     <Grid Grid.Column="7">
                         <Button Content="Generate Report" Width="150" HorizontalAlignment="Right" Margin="0 0 15 0" ></Button>
                     </Grid>
-
                 </Grid>
+                
             </Grid>
             <Grid Grid.Row="1">
-                <DataGrid AutoGenerateColumns="False" x:Name="renewals" IsReadOnly="True" ItemsSource="{Binding DataCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" SelectionUnit="FullRow" RowHeight="50">
+                <DataGrid AutoGenerateColumns="False" x:Name="renewals" IsReadOnly="True" 
+                          ItemsSource="{Binding DataCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" 
+                          SelectionUnit="FullRow" RowHeight="50">
                     <DataGrid.Columns>
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Menu Name="menu1" Height="100" BorderBrush="{x:Null}">
-                                        <MenuItem Margin="-13,-10,-40,0"> 
-                                            <MenuItem.Icon>
-                                                <Image Source="../Asset/RowSelector.png" Height="auto" Width="auto" ></Image>
-                                            </MenuItem.Icon>
-                                            <MenuItem Header="_Copy"/>
-                                            <MenuItem Header="_Delete"/>
+                                    <Menu Name="menu1" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                                        <MenuItem Header="::" Style="{StaticResource menuParentStyle}" ItemContainerStyle="{StaticResource menuItemStyle}">
+                                            <MenuItem Header="_Copy" />
+                                            <MenuItem Header="_Delete" />
                                         </MenuItem>
                                     </Menu>
                                 </DataTemplate>        
@@ -234,6 +235,12 @@
                     </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
+                <TextBlock Text="No records found" 
+                           HorizontalAlignment="Center" 
+                           VerticalAlignment="Center" 
+                           Visibility="{Binding IsNoRecordFound, Converter={StaticResource VisibilityConverter}}" 
+                           Style="{StaticResource NoRecordsTextBlock}"
+                           ></TextBlock>
             </Grid>
             <Grid Grid.Row="2" Background="#FFCEEAFF">
                 <Grid.ColumnDefinitions>
