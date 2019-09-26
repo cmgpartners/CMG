@@ -1,0 +1,13 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style x:Key="menuParentStyle" TargetType="MenuItem">
+        <Setter Property="Foreground" Value="Gray"/>
+    </Style>
+
+    <Style x:Key="menuItemStyle" TargetType="MenuItem">
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+    </Style>
+
+</ResourceDictionary>

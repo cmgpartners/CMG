@@ -4,15 +4,19 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>ICON (32px).ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="appsettings.json" />
     <None Remove="Asset\Financial Summary.png" />
     <None Remove="Asset\FYC.png" />
+    <None Remove="Asset\ICON %2832px%29.ico" />
     <None Remove="Asset\Renewals.png" />
     <None Remove="Asset\RowSelector.png" />
+    <None Remove="Asset\RowSelector2.png" />
     <None Remove="Asset\RowSelectorHover.png" />
+    <None Remove="Asset\RowSelectorKP.png" />
     <None Remove="Asset\Salesforce.png" />
     <None Remove="Asset\Search.png" />
     <None Remove="Asset\Settings.png" />
@@ -44,13 +48,20 @@
     <Resource Include="Asset\FYC.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Asset\ICON (32px).ico" />
     <Resource Include="Asset\Renewals.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Asset\RowSelector2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Asset\RowSelectorHover.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Asset\RowSelector.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Asset\RowSelectorKP.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Asset\Salesforce.png">
@@ -60,6 +71,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Asset\Settings.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Update="Asset\ICON %2832px%29.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

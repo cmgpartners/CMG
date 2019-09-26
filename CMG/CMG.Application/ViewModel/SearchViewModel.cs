@@ -28,6 +28,7 @@ namespace CMG.Application.ViewModel
                 _dataCollection = value;
                 OnPropertyChanged("DataCollection");
                 OnPropertyChanged("IsPaginationVisible");
+                OnPropertyChanged("IsNoRecordFound");
             }
         }
 
@@ -56,7 +57,7 @@ namespace CMG.Application.ViewModel
         private string _insured;
         public string Insured
         {
-            get { return _insured;  }
+            get { return _insured; }
             set
             {
                 _insured = value;
@@ -174,6 +175,14 @@ namespace CMG.Application.ViewModel
         {
             get { return DataCollection != null && DataCollection.Count > 0; }
         }
+
+        public bool IsNoRecordFound
+        {
+            get
+            {
+                return DataCollection != null && DataCollection.Count == 0;
+            }
+        }
         #endregion
 
         #region command properties
@@ -253,15 +262,15 @@ namespace CMG.Application.ViewModel
             {
                 BuildFilterByContains("Company", Company, searchBy);
             }
-            if(FromPayDate != null && ToPayDate != null)
+            if (FromPayDate != null && ToPayDate != null)
             {
-                BuildFilterByRange("PayDate", FromPayDate.Value.ToShortDateString() , ToPayDate.Value.ToShortDateString(), searchBy);
+                BuildFilterByRange("PayDate", FromPayDate.Value.ToShortDateString(), ToPayDate.Value.ToShortDateString(), searchBy);
             }
-            else if(FromPayDate != null && ToPayDate == null)
+            else if (FromPayDate != null && ToPayDate == null)
             {
                 BuildFilterByRange("PayDate", FromPayDate.Value.ToShortDateString(), DateTime.Today.ToShortDateString(), searchBy);
             }
-            if(Agent != null)
+            if (Agent != null)
             {
                 BuildFilterByEquals("Agent", Agent.Id.ToString(), searchBy);
             }
@@ -269,7 +278,7 @@ namespace CMG.Application.ViewModel
             {
                 if (IsFYC)
                     BuildFilterByEquals("FYC", "F", searchBy);
-                else if(IsRenewals)
+                else if (IsRenewals)
                     BuildFilterByEquals("Renewal", "R", searchBy);
             }
             searchQuery.FilterBy = searchBy;
