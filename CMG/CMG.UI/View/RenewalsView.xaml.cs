@@ -21,19 +21,9 @@ namespace CMG.UI.View
     /// </summary>
     public partial class RenewalsView : UserControl
     {
-        public ObservableCollection<string> menuItems { get; set; }
-
         public RenewalsView()
         {
             InitializeComponent();
-            this.LoadData();
-        }
-
-        public void LoadData()
-        {
-            int currentYearCount = DateTime.Now.Year - 1950;
-            cmbYears.ItemsSource = Enumerable.Range(1950, currentYearCount + 1).ToArray();
-            cmbYears.SelectedValue = DateTime.Now.Year;
         }
     }
 }

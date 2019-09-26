@@ -1,0 +1,9 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:CMG.UI.Resources">
+    <Style x:Key="HyperLinkStyle" TargetType="Hyperlink">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="TextDecorations" Value=""/>
+    </Style>
+</ResourceDictionary>
