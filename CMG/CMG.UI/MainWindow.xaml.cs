@@ -32,7 +32,7 @@ namespace CMG.UI
             ListView lstNavigation = (ListView)sender;
             if (lstNavigation.SelectedIndex == 0)
             {
-                DataContext = new CommissionViewModel(_unitOfWork, _mapper);
+                DataContext = new RenewalsViewModel(_unitOfWork, _mapper);
             }
             else if (lstNavigation.SelectedIndex == 3)
             {

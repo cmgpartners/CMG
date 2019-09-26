@@ -14,7 +14,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/LeftNavStyle.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
-            <DataTemplate DataType="{x:Type viewModels:CommissionViewModel}" >
+            <DataTemplate DataType="{x:Type viewModels:RenewalsViewModel}" >
                 <views:RenewalsView DataContext="{Binding}"></views:RenewalsView>
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:SearchViewModel}" >
