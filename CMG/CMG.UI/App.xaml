@@ -11,7 +11,15 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Blue.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Indigo.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="/Resources/ListViewStyle.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="/Resources/GridStyle.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="/Resources/ButtonStyle.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="/Resources/TextBlockStyle.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="/Resources/MenuStyle.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="/Resources/ImageStyle.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="/Resources/HyperLinkStyle.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="VisibilityConverter" />
         </ResourceDictionary>
         
     </Application.Resources>

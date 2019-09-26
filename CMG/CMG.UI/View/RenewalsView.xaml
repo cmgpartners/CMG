@@ -7,17 +7,6 @@
              xmlns:local="clr-namespace:CMG.UI.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="\Resources\GridStyle.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="\Resources\ButtonStyle.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="\Resources\LeftNavStyle.xaml"></ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
-            <BooleanToVisibilityConverter x:Key="VisibilityConverter" />
-        </ResourceDictionary>
-        
-    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"></RowDefinition>
@@ -35,7 +24,7 @@
             <materialDesign:PackIcon Kind="Calendar" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10 22 0 0"></materialDesign:PackIcon>
         </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="0">
-            <ListView x:Name="menu" ItemsSource="{Binding Months}" ItemContainerStyle="{StaticResource monthListView}" SelectedItem="{Binding SelectedMonth, Mode=TwoWay}">
+            <ListView x:Name="menu" ItemsSource="{Binding Months}" ItemContainerStyle="{StaticResource MonthListView}" SelectedItem="{Binding SelectedMonth, Mode=TwoWay}">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal" Margin="10 10"></StackPanel>
