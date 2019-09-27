@@ -71,11 +71,19 @@
                             IsEditable="True"
                             ItemsSource="{Binding AgentList}"
                             IsTextSearchEnabled="True"
-                            HorizontalAlignment="Left"
-                            DisplayMemberPath="FirstName"
+                            HorizontalAlignment="Left"                            
                             SelectedValuePath="Id"
-                            SelectedItem="{Binding Agent, Mode=TwoWay}"
-                            Grid.Row="1" Margin="15 0 15 0"/>
+                            Grid.Row="1" Margin="15 0 15 0" >
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <CheckBox Name="chkAgents" Width="100" 
+                                              Content="{Binding FirstName}" 
+                                              CommandParameter="{Binding Id}"
+                                              IsChecked="{Binding IsChecked}">
+                                    </CheckBox>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
                     </Grid>
                     <Grid Grid.Column="5" >
                         <StackPanel Orientation="Vertical">

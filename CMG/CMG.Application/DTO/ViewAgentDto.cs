@@ -14,5 +14,6 @@ namespace CMG.Application.DTO
         public string Color { get; set; }
         public bool IsDeleted { get; set; }
         public string CurrentUser { get; set; }
+        public bool IsChecked { get; set; }
     }
 }

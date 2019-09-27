@@ -95,15 +95,7 @@ namespace CMG.Application.ViewModel
             }
         }
         private ViewAgentDto _agent;
-        public ViewAgentDto Agent
-        {
-            get { return _agent; }
-            set
-            {
-                _agent = value;
-                OnPropertyChanged("Agent");
-            }
-        }
+
         private bool _isFYC;
         public bool IsFYC
         {
@@ -190,7 +182,6 @@ namespace CMG.Application.ViewModel
         {
             get { return CreateCommand(Search); }
         }
-
         public ICommand FirstPageCommand
         {
             get { return CreateCommand(FirstPage); }
@@ -270,9 +261,10 @@ namespace CMG.Application.ViewModel
             {
                 BuildFilterByRange("PayDate", FromPayDate.Value.ToShortDateString(), DateTime.Today.ToShortDateString(), searchBy);
             }
-            if (Agent != null)
+            if (AgentList.Any(x => x.IsChecked))
             {
-                BuildFilterByEquals("Agent", Agent.Id.ToString(), searchBy);
+                var slectedAgents = string.Join(",", AgentList.Where(a => a.IsChecked).Select(a => a.Id).ToList());
+                BuildFilterByIn("Agent", slectedAgents, searchBy);
             }
             if (!(IsFYC && IsRenewals))
             {
@@ -284,6 +276,15 @@ namespace CMG.Application.ViewModel
             searchQuery.FilterBy = searchBy;
             return searchQuery;
         }
+
+        private void BuildFilterByIn(string property, string value, List<FilterBy> searchBy)
+        {
+            FilterBy filterBy = new FilterBy();
+            filterBy.Property = property;
+            filterBy.In = value;
+            searchBy.Add(filterBy);
+        }
+
         private void BuildFilterByContains(string property, string value, List<FilterBy> searchBy)
         {
             FilterBy filterBy = new FilterBy();
