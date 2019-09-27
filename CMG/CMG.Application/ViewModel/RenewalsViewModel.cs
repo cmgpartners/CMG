@@ -27,7 +27,6 @@ namespace CMG.Application.ViewModel
             _mapper = mapper;
             LoadPagination();
             GetCommissions();
-
         }
         #endregion Constructor
 
