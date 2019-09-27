@@ -49,7 +49,7 @@ namespace CMG.DataAccess.Repository
                     Agent = a.Agent,
                     Split = a.Split,
                     Commission = a.Commission
-                }).ToList(),
+                })
             });
 
             var totalRecords = result.Count();

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace CMG.DataAccess.Domain
 {
@@ -15,6 +15,6 @@ namespace CMG.DataAccess.Domain
         public string Insured { get; set; }
         public string RenewalType { get; set; }
         public decimal? Total { get; set; }
-        public ICollection<AgentCommission> AgentCommissions { get; set; }
+        public IEnumerable<AgentCommission> AgentCommissions { get; set; }
     }
 }
