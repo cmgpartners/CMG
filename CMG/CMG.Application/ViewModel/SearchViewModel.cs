@@ -18,6 +18,15 @@ namespace CMG.Application.ViewModel
         private readonly int PageSize = 10;
         #endregion Member variables
 
+        #region Constructor
+        public SearchViewModel(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            LoadData();
+        }
+        #endregion Constructor
+
         #region Properties
         private ObservableCollection<ViewCommissionDto> _dataCollection;
         public ObservableCollection<ViewCommissionDto> DataCollection
@@ -42,6 +51,11 @@ namespace CMG.Application.ViewModel
                 _agentList = value;
                 OnPropertyChanged("AgentList");
             }
+        }
+
+        public string SelectedAgents
+        {
+            get { return string.Join(",", AgentList.Where(a => a.IsChecked).Select(a => a.FirstName).ToList()); }
         }
 
         private string _policyNumber;
@@ -200,15 +214,6 @@ namespace CMG.Application.ViewModel
         }
         #endregion
         #endregion Properties
-
-        #region Constructor
-        public SearchViewModel(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            LoadData();
-        }
-        #endregion Constructor
 
         #region Methods
         public void FirstPage()

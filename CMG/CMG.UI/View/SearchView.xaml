@@ -69,14 +69,16 @@
                         <TextBlock Text="Agents" Margin="15 5 0 0"/>
                         <ComboBox  Width="100"
                             IsEditable="True"
-                            ItemsSource="{Binding AgentList}"
+                            ItemsSource="{Binding AgentList, Mode=TwoWay}"
                             IsTextSearchEnabled="True"
-                            HorizontalAlignment="Left"                            
+                            HorizontalAlignment="Left"
                             SelectedValuePath="Id"
-                            Grid.Row="1" Margin="15 0 15 0" >
+                            StaysOpenOnEdit="True"
+                            Grid.Row="1" Margin="15 0 15 0"  
+                            Text="{Binding SelectedAgents, Mode=OneWay}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <CheckBox Name="chkAgents" Width="100" 
+                                    <CheckBox Name="chkAgents" Width="100"
                                               Content="{Binding FirstName}" 
                                               CommandParameter="{Binding Id}"
                                               IsChecked="{Binding IsChecked}">
