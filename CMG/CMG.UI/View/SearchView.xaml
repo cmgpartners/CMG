@@ -236,8 +236,7 @@
                            HorizontalAlignment="Center" 
                            VerticalAlignment="Center" 
                            Visibility="{Binding IsNoRecordFound, Converter={StaticResource VisibilityConverter}}" 
-                           Style="{StaticResource NoRecordsTextBlock}"
-                           ></TextBlock>
+                           Style="{StaticResource NoRecordsTextBlock}" />
             </Grid>
             <Grid Grid.Row="2" Background="#FFCEEAFF">
                 <Grid.ColumnDefinitions>

@@ -20,6 +20,17 @@ namespace CMG.Application.ViewModel
         private readonly int PageSize = 10;
         #endregion Member variables
 
+        #region Constructor
+        public RenewalsViewModel(IUnitOfWork unitOfWork, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            LoadPagination();
+            GetCommissions();
+
+        }
+        #endregion Constructor
+
         #region Properties
 
         public ICollection<string> Months
@@ -71,6 +82,15 @@ namespace CMG.Application.ViewModel
                 _dataCollection = value;
                 OnPropertyChanged("DataCollection");
                 OnPropertyChanged("IsPaginationVisible");
+                OnPropertyChanged("IsNoRecordFound");
+            }
+        }
+
+        public bool IsNoRecordFound
+        {
+            get
+            {
+                return DataCollection != null && DataCollection.Count == 0;
             }
         }
 
@@ -134,17 +154,6 @@ namespace CMG.Application.ViewModel
         #endregion
 
         #endregion Properties
-
-        #region Constructor
-        public RenewalsViewModel(IUnitOfWork unitOfWork, IMapper mapper)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            LoadPagination();
-            GetCommissions();
-            
-        }
-        #endregion Constructor
 
         #region Methods
         public void GetCommissions()
