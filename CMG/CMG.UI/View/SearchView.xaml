@@ -113,6 +113,9 @@
                         <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Menu Name="menu1" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                                        <Menu.Background>
+                                            <SolidColorBrush Color="Transparent"></SolidColorBrush>
+                                        </Menu.Background>
                                         <MenuItem Header="::" Style="{StaticResource MenuParentStyle}" ItemContainerStyle="{StaticResource MenuItemStyle}">
                                             <MenuItem Header="_Copy" />
                                             <MenuItem Header="_Delete" />
