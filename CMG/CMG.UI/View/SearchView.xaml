@@ -112,7 +112,7 @@
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Menu Name="menu1" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                                    <Menu Name="menu1" HorizontalAlignment="Left" VerticalAlignment="Top">
                                         <Menu.Background>
                                             <SolidColorBrush Color="Transparent"></SolidColorBrush>
                                         </Menu.Background>
@@ -145,7 +145,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Insured" Width="150" SortMemberPath="InsuredName" CanUserSort="True">
+                        <DataGridTemplateColumn Header="Insured" Width="250" SortMemberPath="InsuredName" CanUserSort="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                     <TextBlock Text="{Binding Path=InsuredName}"></TextBlock>
