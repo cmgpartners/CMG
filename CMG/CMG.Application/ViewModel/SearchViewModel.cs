@@ -110,6 +110,16 @@ namespace CMG.Application.ViewModel
         }
         private ViewAgentDto _agent;
 
+        public ViewAgentDto Agent
+        {
+            get { return _agent; }
+            set
+            {
+                _agent = value;
+                OnPropertyChanged("Agent");
+            }
+        }
+
         private bool _isFYC;
         public bool IsFYC
         {
@@ -219,19 +229,19 @@ namespace CMG.Application.ViewModel
         public void FirstPage()
         {
             CurrentPage = 1;
-            Search();
+            Search(false);
         }
         public void LastPage()
         {
             CurrentPage = TotalPages;
-            Search();
+            Search(false);
         }
         public void NextPage()
         {
             if (CurrentPage < TotalPages)
             {
                 CurrentPage += 1;
-                Search();
+                Search(false);
             }
         }
         public void PreviousPage()
@@ -239,7 +249,7 @@ namespace CMG.Application.ViewModel
             if (CurrentPage > 1)
             {
                 CurrentPage -= 1;
-                Search();
+                Search(false);
             }
         }
         private SearchQuery BuildSearchQuery()
@@ -266,10 +276,9 @@ namespace CMG.Application.ViewModel
             {
                 BuildFilterByRange("PayDate", FromPayDate.Value.ToShortDateString(), DateTime.Today.ToShortDateString(), searchBy);
             }
-            if (AgentList.Any(x => x.IsChecked))
+            if (Agent != null)
             {
-                var slectedAgents = string.Join(",", AgentList.Where(a => a.IsChecked).Select(a => a.Id).ToList());
-                BuildFilterByIn("Agent", slectedAgents, searchBy);
+                BuildFilterByEquals("Agent", Agent.Id.ToString(), searchBy);
             }
             if (!(IsFYC && IsRenewals))
             {
@@ -326,9 +335,13 @@ namespace CMG.Application.ViewModel
             Pages.AddRange(Enumerable.Range(1, TotalPages));
         }
 
-        public void Search()
+        public void Search(object isPageReset)
         {
             SearchQuery searchQuery = BuildSearchQuery();
+            if (Convert.ToBoolean(isPageReset))
+            {
+                CurrentPage = 1;
+            }
             searchQuery.Page = CurrentPage;
             searchQuery.PageSize = PageSize;
             var dataSearchBy = _unitOfWork.CommissionSearch.Search(searchQuery);
