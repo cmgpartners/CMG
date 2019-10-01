@@ -3,6 +3,7 @@ using CMG.Application.DTO;
 using CMG.DataAccess.Domain;
 using CMG.DataAccess.Interface;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace CMG.Application.ViewModel
 {
@@ -27,6 +28,7 @@ namespace CMG.Application.ViewModel
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            LoadData();
         }
         #endregion Constructor
         
@@ -52,6 +54,12 @@ namespace CMG.Application.ViewModel
 
             _unitOfWork.Agents.Save(agent);
             _unitOfWork.Commit();
+        }
+
+        private void LoadData()
+        {
+            var agents = _unitOfWork.Agents.All();
+            DataCollection = new ObservableCollection<ViewAgentDto>(agents.Select(r => _mapper.Map<ViewAgentDto>(r)).ToList());
         }
         #endregion Methods
     }
