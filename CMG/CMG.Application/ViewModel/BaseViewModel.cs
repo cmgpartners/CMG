@@ -12,11 +12,18 @@ namespace CMG.Application.ViewModel
         {
             CommandManager.AssignOnPropertyChanged(ref this.PropertyChanged);
             _commandsList = new List<RelayCommand>();
+            _genericCommandsList = new List<RelayCommand<object>>();
         }
 
         private List<RelayCommand> _commandsList;
+        private List<RelayCommand<object>> _genericCommandsList;
 
         protected RelayCommand CreateCommand(Action execute)
+        {
+            return CreateCommand(execute, null);
+        }
+
+        protected RelayCommand<object> CreateCommand(Action<object> execute)
         {
             return CreateCommand(execute, null);
         }
@@ -34,12 +41,30 @@ namespace CMG.Application.ViewModel
                 return tempCmd;
             }
         }
+        protected RelayCommand<object> CreateCommand(Action<object> execute, Predicate<object> canExecute)
+        {
+            var tempCmd = new RelayCommand<object>(execute, canExecute);
+            if (_genericCommandsList.Contains(tempCmd))
+            {
+                return _genericCommandsList[_genericCommandsList.IndexOf(tempCmd)];
+            }
+            else
+            {
+                _genericCommandsList.Add(tempCmd);
+                return tempCmd;
+            }
+        }
 
         public void RemoveCommands()
         {
             for (var i = 0; i < _commandsList.Count; i++)
             {
                 _commandsList[i].RemoveCommand();
+            }
+
+            for (var i = 0; i < _genericCommandsList.Count; i++)
+            {
+                _genericCommandsList[i].RemoveCommand();
             }
         }
 

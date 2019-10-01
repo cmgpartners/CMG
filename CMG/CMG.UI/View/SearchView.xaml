@@ -58,8 +58,8 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Pay Date" Grid.ColumnSpan="1" Margin="15 5 0 0"></TextBlock>
-                        <DatePicker Grid.Row="1" Margin="15 0 15 0" DisplayDate="{Binding FromPayDate}" Text="{Binding FromPayDate}"></DatePicker>
-                        <DatePicker Grid.Row="1" Grid.Column="1" Margin="15 0 15 0" DisplayDate="{Binding ToPayDate}" Text="{Binding ToPayDate}"></DatePicker>
+                        <DatePicker Grid.Row="1" Margin="15 0 15 0" SelectedDate="{Binding FromPayDate}"></DatePicker>
+                        <DatePicker Grid.Row="1" Grid.Column="1" Margin="15 0 15 0"  SelectedDate="{Binding ToPayDate}"></DatePicker>
                     </Grid>
                     <Grid Grid.Column="4">
                         <Grid.RowDefinitions>
@@ -69,23 +69,13 @@
                         <TextBlock Text="Agents" Margin="15 5 0 0"/>
                         <ComboBox  Width="100"
                             IsEditable="True"
-                            ItemsSource="{Binding AgentList, Mode=TwoWay}"
+                            ItemsSource="{Binding AgentList}"
                             IsTextSearchEnabled="True"
                             HorizontalAlignment="Left"
+                            DisplayMemberPath="FirstName"
                             SelectedValuePath="Id"
-                            StaysOpenOnEdit="True"
-                            Grid.Row="1" Margin="15 0 15 0"  
-                            Text="{Binding SelectedAgents, Mode=OneWay}">
-                            <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <CheckBox Name="chkAgents" Width="100"
-                                              Content="{Binding FirstName}" 
-                                              CommandParameter="{Binding Id}"
-                                              IsChecked="{Binding IsChecked}">
-                                    </CheckBox>
-                                </DataTemplate>
-                            </ComboBox.ItemTemplate>
-                        </ComboBox>
+                            SelectedItem="{Binding Agent, Mode=TwoWay}"
+                            Grid.Row="1" Margin="15 0 15 0"/>
                     </Grid>
                     <Grid Grid.Column="5" >
                         <StackPanel Orientation="Vertical">
@@ -94,7 +84,7 @@
                         </StackPanel>
                     </Grid>
                     <Grid Grid.Column="6">
-                        <Button Command="{Binding SearchCommand}">
+                        <Button Command="{Binding SearchCommand}" CommandParameter="true">
                             <Image Source="/Asset/Search.png"></Image>
                         </Button>
                     </Grid>
@@ -112,7 +102,10 @@
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Menu Name="menu1" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                                    <Menu Name="menu1" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                        <Menu.Background>
+                                            <SolidColorBrush Color="Transparent"></SolidColorBrush>
+                                        </Menu.Background>
                                         <MenuItem Header="::" Style="{StaticResource MenuParentStyle}" ItemContainerStyle="{StaticResource MenuItemStyle}">
                                             <MenuItem Header="_Copy" />
                                             <MenuItem Header="_Delete" />
@@ -142,14 +135,14 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Insured" Width="150" SortMemberPath="InsuredName" CanUserSort="True">
+                        <DataGridTemplateColumn Header="Insured" Width="200" SortMemberPath="InsuredName" CanUserSort="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                     <TextBlock Text="{Binding Path=InsuredName}"></TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="RN" Width="auto">
+                    <DataGridTemplateColumn Header="RN" Width="50">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                     <TextBlock Text="{Binding Path=Renewal}"></TextBlock>
@@ -179,7 +172,14 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Splits (%)" Width="auto">
+                    <DataGridTemplateColumn Width="50">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text=""></TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Splits (%)" Width="auto">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <ListView ItemsSource="{Binding AgentCommissions}" DisplayMemberPath="Split" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
@@ -201,10 +201,17 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Commissions ($)" Width="auto">
+                        <DataGridTemplateColumn Width="50">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ListView ItemsSource="{Binding AgentCommissions}" DisplayMemberPath="Commission" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                    <TextBlock Text=""></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Commissions ($)" Width="auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ListView ItemsSource="{Binding AgentCommissions}" DisplayMemberPath="Commission" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                                         <ListView.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Horizontal"></StackPanel>
@@ -220,7 +227,7 @@
                                             </DataTemplate>
                                         </ListView.ItemTemplate>
                                     </ListView>
-                                </DataTemplate>
+                            </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                         <DataGridTemplateColumn Header="Total" Width="100">
