@@ -84,7 +84,7 @@
                         </StackPanel>
                     </Grid>
                     <Grid Grid.Column="6">
-                        <Button Command="{Binding SearchCommand}" CommandParameter="true">
+                        <Button Command="{Binding SearchCommand}" CommandParameter="true" IsDefault="True">
                             <Image Source="/Asset/Search.png"></Image>
                         </Button>
                     </Grid>
@@ -230,7 +230,7 @@
                             </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Total" Width="100">
+                        <DataGridTemplateColumn Header="Total" Width="100" HeaderStyle="{StaticResource TotalHeaderStyle}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                     <TextBlock HorizontalAlignment="Right" Text="{Binding Path=TotalAmount, StringFormat='{}{0:#,#.0}'}" />

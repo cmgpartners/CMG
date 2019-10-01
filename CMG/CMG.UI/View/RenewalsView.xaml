@@ -171,7 +171,7 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Total" Width="100">
+                    <DataGridTemplateColumn Header="Total" Width="100" HeaderStyle="{StaticResource TotalHeaderStyle}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock HorizontalAlignment="Right" Text="{Binding Path=TotalAmount, StringFormat='{}{0:#,#.0}'}" />
