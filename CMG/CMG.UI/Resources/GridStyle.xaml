@@ -37,4 +37,8 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    <Style x:Key="TotalHeaderStyle" TargetType="DataGridColumnHeader"  BasedOn="{StaticResource ResourceKey={x:Type DataGridColumnHeader}}">
+        <Setter Property="Control.HorizontalContentAlignment" Value="Right" />        
+        <Setter Property="Padding" Value="0"/>
+    </Style>
 </ResourceDictionary>
