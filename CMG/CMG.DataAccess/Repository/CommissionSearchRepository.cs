@@ -43,6 +43,7 @@ namespace CMG.DataAccess.Repository
                 Insured = x.Insured,
                 PolicyNumber = x.Policy.Policynum,
                 Company = x.Policy.Company,
+                Comment = x.Comment,
                 AgentCommissions = x.AgentCommission.Select(a => new AgentCommission
                 {
                     AgentId = a.AgentId,
@@ -156,6 +157,8 @@ namespace CMG.DataAccess.Repository
                     return RenewalOrFYCExpression(filterBy.Equal);
                 case "paydate":
                     return DateRangeExpression(filterBy.GreaterThan, filterBy.LessThan);
+                case "comment":
+                    return CommentExpession(filterBy.Contains);
                 default:
                     throw new InvalidOperationException($"Can not filter for criteria: filter by {filterBy.Property}");
             }
@@ -190,6 +193,11 @@ namespace CMG.DataAccess.Repository
         private static Expression<Func<Commission, bool>> InsuredNameExpession(string contains)
         {
             return w => w.Insured.ToLowerInvariant().Contains(contains.ToLowerInvariant());
+        }
+
+        private static Expression<Func<Commission, bool>> CommentExpession(string contains)
+        {
+            return w => (w.Comment ?? string.Empty).ToLowerInvariant().Contains(contains.ToLowerInvariant());
         }
 
         private static Expression<Func<Commission, bool>> CompanyNameExpession(string contains)

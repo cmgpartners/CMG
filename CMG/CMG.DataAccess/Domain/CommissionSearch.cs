@@ -15,6 +15,7 @@ namespace CMG.DataAccess.Domain
         public string Insured { get; set; }
         public string RenewalType { get; set; }
         public decimal? Total { get; set; }
+        public string Comment { get; set; }
         public IEnumerable<AgentCommission> AgentCommissions { get; set; }
     }
 }

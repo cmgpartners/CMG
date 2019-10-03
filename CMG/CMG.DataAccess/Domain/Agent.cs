@@ -5,6 +5,7 @@ namespace CMG.DataAccess.Domain
 {
     public partial class Agent : EntityBase
     {
+
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
