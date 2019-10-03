@@ -11,7 +11,6 @@ namespace CMG.Application.DTO
         public string  CompanyName{ get; set; }
         public string InsuredName { get; set; }
         public string Renewal { get; set; }
-
         public string CommissionType { get; set; }
         public decimal TotalAmount { get; set; }
         public string Comment { get; set; }
