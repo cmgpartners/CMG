@@ -1,0 +1,81 @@
+IF NOT EXISTS(SELECT TOP 1 * FROM BUSINESS_POLICYS)
+BEGIN
+	--Matched KEYNUMB
+	INSERT INTO [dbo].[BUSINESS_POLICYS]
+	(
+		KEYNUM,
+		KEYNUMO,
+		CATGRY,
+		BUS,
+		HNAME,
+		KEYNUMB,
+		RELATN,
+		REV_LOCN,
+		REV_DATE,
+		CR8_LOCN,
+		CR8_DATE,
+		DEL_,
+		split,
+		Hsplit,
+		Salesforce_Id
+	)
+	SELECT 
+		KEYNUML,
+		KEYNUMO,
+		CATGRY,
+		BUS,
+		HNAME,
+		KEYNUMBP,
+		RELATN,
+		REV_LOCN,
+		REV_DATE,
+		CR8_LOCN,
+		CR8_DATE,
+		DEL_,
+		split,
+		Hsplit,
+		Salesforce_Id
+	FROM PEO_POL 
+	WHERE KEYNUMBP IN (SELECT keynumb FROM BUSINESS) 
+		AND BUS = 1 
+		AND KEYNUMBP <> 0
+
+	-- Zero KEYNUMB
+	INSERT INTO [dbo].[BUSINESS_POLICYS]
+	(
+		KEYNUM,
+		KEYNUMO,
+		CATGRY,
+		BUS,
+		HNAME,
+		KEYNUMB,
+		RELATN,
+		REV_LOCN,
+		REV_DATE,
+		CR8_LOCN,
+		CR8_DATE,
+		DEL_,
+		split,
+		Hsplit,
+		Salesforce_Id
+	)
+	SELECT 
+		KEYNUML,
+		KEYNUMO,
+		CATGRY,
+		BUS,
+		HNAME,
+		KEYNUMBP,
+		RELATN,
+		REV_LOCN,
+		REV_DATE,
+		CR8_LOCN,
+		CR8_DATE,
+		DEL_,
+		split,
+		Hsplit,
+		Salesforce_Id
+	FROM PEO_POL 
+	WHERE KEYNUMBP = 0 
+		ANd BUS = 1
+END
