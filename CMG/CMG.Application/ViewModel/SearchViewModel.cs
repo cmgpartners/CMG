@@ -140,6 +140,17 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("IsRenewals");
             }
         }
+
+        private string _comment;
+        public string Comment
+        {
+            get { return _comment; }
+            set
+            {
+                _comment = value;
+                OnPropertyChanged("Comment");
+            }
+        }
         private decimal _totalAmount;
         public decimal TotalAmount
         {
@@ -252,6 +263,23 @@ namespace CMG.Application.ViewModel
                 Search(false);
             }
         }
+
+        public void Search(object isPageReset)
+        {
+            SearchQuery searchQuery = BuildSearchQuery();
+            if (Convert.ToBoolean(isPageReset))
+            {
+                CurrentPage = 1;
+            }
+            searchQuery.Page = CurrentPage;
+            searchQuery.PageSize = PageSize;
+            var dataSearchBy = _unitOfWork.CommissionSearch.Search(searchQuery);
+            DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
+            TotalRecords = dataSearchBy.TotalRecords;
+            TotalAmount = dataSearchBy.TotalAmount;
+            LoadPagination();
+        }
+
         private SearchQuery BuildSearchQuery()
         {
             SearchQuery searchQuery = new SearchQuery();
@@ -286,6 +314,10 @@ namespace CMG.Application.ViewModel
                     BuildFilterByEquals("FYC", "F", searchBy);
                 else if (IsRenewals)
                     BuildFilterByEquals("Renewal", "R", searchBy);
+            }
+            if (!string.IsNullOrEmpty(Comment))
+            {
+                BuildFilterByContains("Comment", Comment, searchBy);
             }
             searchQuery.FilterBy = searchBy;
             return searchQuery;
@@ -335,21 +367,6 @@ namespace CMG.Application.ViewModel
             Pages.AddRange(Enumerable.Range(1, TotalPages));
         }
 
-        public void Search(object isPageReset)
-        {
-            SearchQuery searchQuery = BuildSearchQuery();
-            if (Convert.ToBoolean(isPageReset))
-            {
-                CurrentPage = 1;
-            }
-            searchQuery.Page = CurrentPage;
-            searchQuery.PageSize = PageSize;
-            var dataSearchBy = _unitOfWork.CommissionSearch.Search(searchQuery);
-            DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
-            TotalRecords = dataSearchBy.TotalRecords;
-            TotalAmount = dataSearchBy.TotalAmount;
-            LoadPagination();
-        }
         #endregion Methods
     }
 }

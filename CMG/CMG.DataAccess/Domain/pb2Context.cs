@@ -1104,6 +1104,8 @@ namespace CMG.DataAccess.Domain
 
             modelBuilder.Entity<Commission>(entity =>
             {
+                entity.Property(e => e.Comment).IsUnicode(false);
+
                 entity.Property(e => e.CommissionType)
                     .HasMaxLength(1)
                     .IsUnicode(false);
