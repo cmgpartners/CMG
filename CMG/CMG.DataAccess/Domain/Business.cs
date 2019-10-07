@@ -5,6 +5,12 @@ namespace CMG.DataAccess.Domain
 {
     public partial class Business
     {
+        public Business()
+        {
+            BusinessPolicys = new HashSet<BusinessPolicys>();
+            RelBp = new HashSet<RelBp>();
+        }
+
         public int Keynumb { get; set; }
         public string Busname { get; set; }
         public string Parname { get; set; }
@@ -66,5 +72,8 @@ namespace CMG.DataAccess.Domain
         public string Mapid { get; set; }
         public short SummPolc { get; set; }
         public string SalesforceId { get; set; }
+
+        public virtual ICollection<BusinessPolicys> BusinessPolicys { get; set; }
+        public virtual ICollection<RelBp> RelBp { get; set; }
     }
 }

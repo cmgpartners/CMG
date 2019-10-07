@@ -3,4 +3,16 @@ BEGIN
 	delete from POL_ILL where KEYNUMO not in (select KEYNUMO from POLICYS) -- 2492 -- IGNORE
 
 	ALTER TABLE POL_ILL ADD CONSTRAINT FK_Policys_POL_ILL FOREIGN KEY (KEYNUMO) REFERENCES [dbo].[Policys](Keynumo)
+
+	IF NOT EXISTS(SELECT 1 FROM sys.columns WHERE Name = N'Id'
+        AND Object_ID = Object_ID(N'dbo.POL_ILL'))
+	BEGIN
+		ALTER TABLE POL_ILL ADD Id int identity(1,1) not null
+	END
+
+	IF (OBJECT_ID('PK_POL_ILL') IS NULL)
+	BEGIN
+		ALTER TABLE [dbo].[POL_ILL]
+			ADD CONSTRAINT [PK_POL_ILL] PRIMARY KEY (Id)
+	END
 END

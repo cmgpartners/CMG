@@ -19,5 +19,8 @@ namespace CMG.DataAccess.Domain
         public DateTime Cr8Date { get; set; }
         public bool Del { get; set; }
         public string SalesforceId { get; set; }
+
+        public virtual Business KeynumbNavigation { get; set; }
+        public virtual People KeynumpNavigation { get; set; }
     }
 }
