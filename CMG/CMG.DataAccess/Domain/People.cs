@@ -3,8 +3,16 @@ using System.Collections.Generic;
 
 namespace CMG.DataAccess.Domain
 {
-    public partial class People
+    public partial class People : EntityBase
     {
+        public People()
+        {
+            PeoplePolicys = new HashSet<PeoplePolicys>();
+            RelBp = new HashSet<RelBp>();
+            RelPpKeynump2Navigation = new HashSet<RelPp>();
+            RelPpKeynumpNavigation = new HashSet<RelPp>();
+        }
+
         public int Keynump { get; set; }
         public string MrMrs { get; set; }
         public string Firstname { get; set; }
@@ -96,5 +104,10 @@ namespace CMG.DataAccess.Domain
         public int? Keyasst { get; set; }
         public string Spouse { get; set; }
         public decimal? Annprem { get; set; }
+
+        public virtual ICollection<PeoplePolicys> PeoplePolicys { get; set; }
+        public virtual ICollection<RelBp> RelBp { get; set; }
+        public virtual ICollection<RelPp> RelPpKeynump2Navigation { get; set; }
+        public virtual ICollection<RelPp> RelPpKeynumpNavigation { get; set; }
     }
 }

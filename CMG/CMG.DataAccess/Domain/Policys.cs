@@ -8,6 +8,8 @@ namespace CMG.DataAccess.Domain
         public Policys()
         {
             Commission = new HashSet<Commission>();
+            PolIll = new HashSet<PolIll>();
+            PolicyAgent = new HashSet<PolicyAgent>();
         }
 
         public int Keynumo { get; set; }
@@ -79,5 +81,7 @@ namespace CMG.DataAccess.Domain
         public string Status2 { get; set; }
 
         public virtual ICollection<Commission> Commission { get; set; }
+        public virtual ICollection<PolIll> PolIll { get; set; }
+        public virtual ICollection<PolicyAgent> PolicyAgent { get; set; }
     }
 }

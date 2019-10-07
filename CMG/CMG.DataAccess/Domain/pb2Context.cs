@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace CMG.DataAccess.Domain
 {
@@ -17,6 +19,7 @@ namespace CMG.DataAccess.Domain
         public virtual DbSet<Agent> Agent { get; set; }
         public virtual DbSet<AgentCommission> AgentCommission { get; set; }
         public virtual DbSet<Business> Business { get; set; }
+        public virtual DbSet<BusinessPolicys> BusinessPolicys { get; set; }
         public virtual DbSet<Calls> Calls { get; set; }
         public virtual DbSet<Cases> Cases { get; set; }
         public virtual DbSet<Comm> Comm { get; set; }
@@ -26,18 +29,21 @@ namespace CMG.DataAccess.Domain
         public virtual DbSet<PeoCall> PeoCall { get; set; }
         public virtual DbSet<PeoPol> PeoPol { get; set; }
         public virtual DbSet<People> People { get; set; }
+        public virtual DbSet<PeoplePolicys> PeoplePolicys { get; set; }
         public virtual DbSet<PolChg> PolChg { get; set; }
+        public virtual DbSet<PolIll> PolIll { get; set; }
+        public virtual DbSet<PolicyAgent> PolicyAgent { get; set; }
         public virtual DbSet<Policys> Policys { get; set; }
         public virtual DbSet<RelBp> RelBp { get; set; }
         public virtual DbSet<RelPp> RelPp { get; set; }
         public virtual DbSet<Todo> Todo { get; set; }
         public virtual DbSet<Withd> Withd { get; set; }
 
-        // Unable to generate entity type for table 'dbo.POL_ILL'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.KEY_TABLE'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.TEMPLATES1'. Please see the warning messages.
-        // Unable to generate entity type for table 'dbo.AgentReward'. Please see the warning messages.
+        // Unable to generate entity type for table 'dbo.POL_ILL_TEST'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.POL_ILL2'. Please see the warning messages.
+        // Unable to generate entity type for table 'dbo.POL_ILL_BACKUP'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.COMBO'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.ERRLOG'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.SF_Map'. Please see the warning messages.
@@ -492,6 +498,123 @@ namespace CMG.DataAccess.Domain
                     .HasMaxLength(4)
                     .IsUnicode(false)
                     .HasDefaultValueSql("('')");
+            });
+
+            modelBuilder.Entity<BusinessPolicys>(entity =>
+            {
+                entity.HasKey(e => e.Keynum)
+                    .ForSqlServerIsClustered(false);
+
+                entity.ToTable("BUSINESS_POLICYS");
+
+                entity.Property(e => e.Keynum)
+                    .HasColumnName("KEYNUM")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Bus).HasColumnName("BUS");
+
+                entity.Property(e => e.Catgry)
+                    .IsRequired()
+                    .HasColumnName("CATGRY")
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Cr8Date)
+                    .HasColumnName("CR8_DATE")
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Cr8Locn)
+                    .IsRequired()
+                    .HasColumnName("CR8_LOCN")
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("(suser_sname())");
+
+                entity.Property(e => e.Del).HasColumnName("DEL_");
+
+                entity.Property(e => e.Dphonebusc)
+                    .HasColumnName("DPHONEBUSC")
+                    .HasMaxLength(250)
+                    .IsUnicode(false)
+                    .HasComputedColumnSql("([dbo].[FUNC_Cinfo]([keynumb],[bus],'A.DPHONEBUS'))");
+
+                entity.Property(e => e.Dphoneextc)
+                    .HasColumnName("DPHONEEXTC")
+                    .HasMaxLength(250)
+                    .IsUnicode(false)
+                    .HasComputedColumnSql("([dbo].[FUNC_Cinfo]([keynumb],[bus],'B.DPHONEEXT'))");
+
+                entity.Property(e => e.Emailc)
+                    .HasColumnName("EMAILC")
+                    .HasMaxLength(250)
+                    .IsUnicode(false)
+                    .HasComputedColumnSql("([dbo].[FUNC_Cinfo]([keynumb],[bus],'A.EMAIL'))");
+
+                entity.Property(e => e.Hname)
+                    .IsRequired()
+                    .HasColumnName("HNAME")
+                    .HasMaxLength(35)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Hnamec)
+                    .HasColumnName("hnamec")
+                    .HasMaxLength(250)
+                    .IsUnicode(false)
+                    .HasComputedColumnSql("([dbo].[FUNC_hname]([keynumb],[bus],[hname],(5)))");
+
+                entity.Property(e => e.Hsplit).HasColumnType("numeric(5, 2)");
+
+                entity.Property(e => e.Islinked)
+                    .HasColumnName("islinked")
+                    .HasComputedColumnSql("([dbo].[FUNC_linkpol]([keynumb],[bus]))");
+
+                entity.Property(e => e.Keynumb).HasColumnName("KEYNUMB");
+
+                entity.Property(e => e.Keynumo).HasColumnName("KEYNUMO");
+
+                entity.Property(e => e.Phonebusc)
+                    .HasColumnName("PHONEBUSC")
+                    .HasMaxLength(250)
+                    .IsUnicode(false)
+                    .HasComputedColumnSql("([dbo].[FUNC_Cinfo]([keynumb],[bus],'C.PHONEBUS'))");
+
+                entity.Property(e => e.Relatn)
+                    .IsRequired()
+                    .HasColumnName("RELATN")
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.RevDate)
+                    .HasColumnName("REV_DATE")
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.RevLocn)
+                    .IsRequired()
+                    .HasColumnName("REV_LOCN")
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("(suser_sname())");
+
+                entity.Property(e => e.SalesforceId)
+                    .HasColumnName("Salesforce_Id")
+                    .HasMaxLength(18)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Split)
+                    .HasColumnName("split")
+                    .HasColumnType("numeric(5, 2)")
+                    .HasDefaultValueSql("((0.0))");
+
+                entity.HasOne(d => d.KeynumbNavigation)
+                    .WithMany(p => p.BusinessPolicys)
+                    .HasForeignKey(d => d.Keynumb)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_BUSINESS_POLICYS_BUSINESS");
             });
 
             modelBuilder.Entity<Calls>(entity =>
@@ -2001,6 +2124,123 @@ namespace CMG.DataAccess.Domain
                     .HasColumnType("datetime");
             });
 
+            modelBuilder.Entity<PeoplePolicys>(entity =>
+            {
+                entity.HasKey(e => e.Keynuml)
+                    .ForSqlServerIsClustered(false);
+
+                entity.ToTable("PEOPLE_POLICYS");
+
+                entity.Property(e => e.Keynuml)
+                    .HasColumnName("KEYNUML")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Bus).HasColumnName("BUS");
+
+                entity.Property(e => e.Catgry)
+                    .IsRequired()
+                    .HasColumnName("CATGRY")
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Cr8Date)
+                    .HasColumnName("CR8_DATE")
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Cr8Locn)
+                    .IsRequired()
+                    .HasColumnName("CR8_LOCN")
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("(suser_sname())");
+
+                entity.Property(e => e.Del).HasColumnName("DEL_");
+
+                entity.Property(e => e.Dphonebusc)
+                    .HasColumnName("DPHONEBUSC")
+                    .HasMaxLength(250)
+                    .IsUnicode(false)
+                    .HasComputedColumnSql("([dbo].[FUNC_Cinfo]([KEYNUMP],[bus],'A.DPHONEBUS'))");
+
+                entity.Property(e => e.Dphoneextc)
+                    .HasColumnName("DPHONEEXTC")
+                    .HasMaxLength(250)
+                    .IsUnicode(false)
+                    .HasComputedColumnSql("([dbo].[FUNC_Cinfo]([KEYNUMP],[bus],'B.DPHONEEXT'))");
+
+                entity.Property(e => e.Emailc)
+                    .HasColumnName("EMAILC")
+                    .HasMaxLength(250)
+                    .IsUnicode(false)
+                    .HasComputedColumnSql("([dbo].[FUNC_Cinfo]([KEYNUMP],[bus],'A.EMAIL'))");
+
+                entity.Property(e => e.Hname)
+                    .IsRequired()
+                    .HasColumnName("HNAME")
+                    .HasMaxLength(35)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Hnamec)
+                    .HasColumnName("hnamec")
+                    .HasMaxLength(250)
+                    .IsUnicode(false)
+                    .HasComputedColumnSql("([dbo].[FUNC_hname]([KEYNUMP],[bus],[hname],(5)))");
+
+                entity.Property(e => e.Hsplit).HasColumnType("numeric(5, 2)");
+
+                entity.Property(e => e.Islinked)
+                    .HasColumnName("islinked")
+                    .HasComputedColumnSql("([dbo].[FUNC_linkpol]([KEYNUMP],[bus]))");
+
+                entity.Property(e => e.Keynumo).HasColumnName("KEYNUMO");
+
+                entity.Property(e => e.Keynump).HasColumnName("KEYNUMP");
+
+                entity.Property(e => e.Phonebusc)
+                    .HasColumnName("PHONEBUSC")
+                    .HasMaxLength(250)
+                    .IsUnicode(false)
+                    .HasComputedColumnSql("([dbo].[FUNC_Cinfo]([KEYNUMP],[bus],'C.PHONEBUS'))");
+
+                entity.Property(e => e.Relatn)
+                    .IsRequired()
+                    .HasColumnName("RELATN")
+                    .HasMaxLength(10)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.RevDate)
+                    .HasColumnName("REV_DATE")
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.RevLocn)
+                    .IsRequired()
+                    .HasColumnName("REV_LOCN")
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("(suser_sname())");
+
+                entity.Property(e => e.SalesforceId)
+                    .HasColumnName("Salesforce_Id")
+                    .HasMaxLength(18)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Split)
+                    .HasColumnName("split")
+                    .HasColumnType("numeric(5, 2)")
+                    .HasDefaultValueSql("((0.0))");
+
+                entity.HasOne(d => d.KeynumpNavigation)
+                    .WithMany(p => p.PeoplePolicys)
+                    .HasForeignKey(d => d.Keynump)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PEOPLE_POLICYS_PEOPLE");
+            });
+
             modelBuilder.Entity<PolChg>(entity =>
             {
                 entity.HasKey(e => e.Keychgs)
@@ -2091,6 +2331,163 @@ namespace CMG.DataAccess.Domain
                     .HasMaxLength(95)
                     .IsUnicode(false)
                     .HasDefaultValueSql("('')");
+            });
+
+            modelBuilder.Entity<PolIll>(entity =>
+            {
+                entity.ToTable("POL_ILL");
+
+                entity.HasIndex(e => e.Divscale)
+                    .HasName("IDX_POL_ILL_DIVSCALE");
+
+                entity.HasIndex(e => e.Keynumo)
+                    .HasName("IDX_POL_ILL_KEYNUMO");
+
+                entity.HasIndex(e => e.Year)
+                    .HasName("IDX_POL_ILL_YEAR");
+
+                entity.Property(e => e.Acb)
+                    .HasColumnName("ACB")
+                    .HasColumnType("numeric(12, 0)");
+
+                entity.Property(e => e.Acbact)
+                    .HasColumnName("ACBACT")
+                    .HasColumnType("numeric(12, 0)");
+
+                entity.Property(e => e.Acbre)
+                    .HasColumnName("ACBRE")
+                    .HasColumnType("numeric(12, 0)");
+
+                entity.Property(e => e.Anndep)
+                    .HasColumnName("ANNDEP")
+                    .HasColumnType("numeric(12, 2)");
+
+                entity.Property(e => e.Anndepact)
+                    .HasColumnName("ANNDEPACT")
+                    .HasColumnType("numeric(12, 2)");
+
+                entity.Property(e => e.Anndepre)
+                    .HasColumnName("ANNDEPRE")
+                    .HasColumnType("numeric(12, 2)");
+
+                entity.Property(e => e.Cr8Date)
+                    .HasColumnName("CR8_DATE")
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Cr8Locn)
+                    .IsRequired()
+                    .HasColumnName("CR8_LOCN")
+                    .HasMaxLength(14)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("(suser_sname())");
+
+                entity.Property(e => e.Cv)
+                    .HasColumnName("CV")
+                    .HasColumnType("numeric(12, 0)");
+
+                entity.Property(e => e.Cvact)
+                    .HasColumnName("CVACT")
+                    .HasColumnType("numeric(12, 0)");
+
+                entity.Property(e => e.Cvre)
+                    .HasColumnName("CVRE")
+                    .HasColumnType("numeric(12, 0)");
+
+                entity.Property(e => e.Db)
+                    .HasColumnName("DB")
+                    .HasColumnType("numeric(12, 0)");
+
+                entity.Property(e => e.Dbact)
+                    .HasColumnName("DBACT")
+                    .HasColumnType("numeric(12, 0)");
+
+                entity.Property(e => e.Dbre)
+                    .HasColumnName("DBRE")
+                    .HasColumnType("numeric(12, 0)");
+
+                entity.Property(e => e.Del).HasColumnName("DEL_");
+
+                entity.Property(e => e.Display)
+                    .IsRequired()
+                    .HasColumnName("DISPLAY")
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Divscale).HasColumnName("DIVSCALE");
+
+                entity.Property(e => e.Incpay)
+                    .HasColumnName("INCPAY")
+                    .HasColumnType("numeric(12, 2)");
+
+                entity.Property(e => e.KeyIll).HasColumnName("KEY_ILL");
+
+                entity.Property(e => e.Keynumo).HasColumnName("KEYNUMO");
+
+                entity.Property(e => e.Lifepay)
+                    .HasColumnName("LIFEPAY")
+                    .HasColumnType("numeric(12, 2)");
+
+                entity.Property(e => e.Ncpi)
+                    .HasColumnName("NCPI")
+                    .HasColumnType("numeric(12, 0)");
+
+                entity.Property(e => e.Ncpiact)
+                    .HasColumnName("NCPIACT")
+                    .HasColumnType("numeric(12, 0)");
+
+                entity.Property(e => e.Ncpire)
+                    .HasColumnName("NCPIRE")
+                    .HasColumnType("numeric(12, 0)");
+
+                entity.Property(e => e.RevDate)
+                    .HasColumnName("REV_DATE")
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.RevLocn)
+                    .IsRequired()
+                    .HasColumnName("REV_LOCN")
+                    .HasMaxLength(14)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("(suser_sname())");
+
+                entity.Property(e => e.Year)
+                    .HasColumnName("YEAR")
+                    .HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.Yearcal)
+                    .HasColumnName("YEARCAL")
+                    .HasComputedColumnSql("([dbo].[FUNC_ICalYr]([keynumo],[year]))");
+
+                entity.HasOne(d => d.KeynumoNavigation)
+                    .WithMany(p => p.PolIll)
+                    .HasForeignKey(d => d.Keynumo)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Policys_POL_ILL");
+            });
+
+            modelBuilder.Entity<PolicyAgent>(entity =>
+            {
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Policy)
+                    .WithMany(p => p.PolicyAgent)
+                    .HasForeignKey(d => d.PolicyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Policies_PolicyAgent");
             });
 
             modelBuilder.Entity<Policys>(entity =>
@@ -2572,6 +2969,18 @@ namespace CMG.DataAccess.Domain
                     .HasMaxLength(60)
                     .IsUnicode(false)
                     .HasDefaultValueSql("('')");
+
+                entity.HasOne(d => d.KeynumbNavigation)
+                    .WithMany(p => p.RelBp)
+                    .HasForeignKey(d => d.Keynumb)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_REL_BP_BUSINESS");
+
+                entity.HasOne(d => d.KeynumpNavigation)
+                    .WithMany(p => p.RelBp)
+                    .HasForeignKey(d => d.Keynump)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_REL_BP_PEOPLE");
             });
 
             modelBuilder.Entity<RelPp>(entity =>
@@ -2708,6 +3117,17 @@ namespace CMG.DataAccess.Domain
                     .HasMaxLength(60)
                     .IsUnicode(false)
                     .HasDefaultValueSql("('')");
+
+                entity.HasOne(d => d.KeynumpNavigation)
+                    .WithMany(p => p.RelPpKeynumpNavigation)
+                    .HasForeignKey(d => d.Keynump)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_REL_PP_PEOPLE");
+
+                entity.HasOne(d => d.Keynump2Navigation)
+                    .WithMany(p => p.RelPpKeynump2Navigation)
+                    .HasForeignKey(d => d.Keynump2)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<Todo>(entity =>

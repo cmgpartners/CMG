@@ -26,5 +26,8 @@ namespace CMG.DataAccess.Domain
         public DateTime? StatDate2 { get; set; }
         public string Leader { get; set; }
         public string SalesforceId { get; set; }
+
+        public virtual People Keynump2Navigation { get; set; }
+        public virtual People KeynumpNavigation { get; set; }
     }
 }
