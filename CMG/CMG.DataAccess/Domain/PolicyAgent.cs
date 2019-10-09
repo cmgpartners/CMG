@@ -15,6 +15,7 @@ namespace CMG.DataAccess.Domain
         public string CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
+        public bool IsServiceAgent { get; set; }
 
         public virtual Agent Agent { get; set; }
         public virtual Policys Policy { get; set; }
