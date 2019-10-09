@@ -7,43 +7,109 @@ BEGIN
 	SET @PolicyNumberRollUp = 7824
 
 	DECLARE @agentPeter INT
-	SET @agentPeter = 1
-
-	DECLARE @agentFrank INT
-	SET @agentFrank = 2
-
-	DECLARE @agentBob INT
-	SET @agentBob = 3
-
-	DECLARE @agentMary INT
-	SET @agentMary = 4
-
-	DECLARE @agentKate INT
-	SET @agentKate = 5
-
-	DECLARE @agentMarty INT
-	SET @agentMarty = 6
-
-	DECLARE @agentOthers INT
-	SET @agentOthers = 7
-
+	SET @agentPeter = 1	
 	DECLARE @agentCodePeter VARCHAR(5)
 	SET @agentCodePeter = 'PFC'
 
+	DECLARE @agentFrank INT
+	SET @agentFrank = 2	
 	DECLARE @agentCodeFrank VARCHAR(5)
 	SET @agentCodeFrank = 'FAC'
 
+	DECLARE @agentBob INT
+	SET @agentBob = 3
 	DECLARE @agentCodeBob VARCHAR(5)
 	SET @agentCodeBob = 'RRG'
 
+	DECLARE @agentMary INT
+	SET @agentMary = 4
 	DECLARE @agentCodeMary VARCHAR(5)
 	SET @agentCodeMary = 'MEM'
 
+	DECLARE @agentKate INT
+	SET @agentKate = 5
 	DECLARE @agentCodeKate VARCHAR(5)
 	SET @agentCodeKate = 'KAC'
 
+	DECLARE @agentMarty INT
+	SET @agentMarty = 6	
 	DECLARE @agentCodeMarty VARCHAR(5)
 	SET @agentCodeMarty = 'MJM'
+
+	DECLARE @agentCMG INT
+	SET @agentCMG = 7
+	DECLARE @agentCodeCMG VARCHAR(5)
+	SET @agentCodeCMG = 'CMG'
+
+	DECLARE @agentOthers INT
+	SET @agentOthers = 8
+	DECLARE @agentCodeOthers VARCHAR(5)
+	SET @agentCodeOthers = 'OTH'
+
+	DECLARE @agentDean INT
+	SET @agentDean = 9
+	DECLARE @agentCodeDean VARCHAR(5)
+	SET @agentCodeDean = 'DRF'
+	
+	DECLARE @agentEdward INT
+	SET @agentEdward = 10
+	DECLARE @agentCodeEdward VARCHAR(5)
+	SET @agentCodeEdward = 'EJM'
+	
+	DECLARE @agentGAS INT
+	SET @agentGAS = 11
+	DECLARE @agentCodeGAS VARCHAR(5)
+	SET @agentCodeGAS = 'GAS'
+	
+	DECLARE @agentJohn INT
+	SET @agentJohn = 12
+	DECLARE @agentCodeJohn VARCHAR(5)
+	SET @agentCodeJohn = 'JEM'
+	
+	DECLARE @agentKirk INT
+	SET @agentKirk = 13
+	DECLARE @agentCodeKirk VARCHAR(5)
+	SET @agentCodeKirk = 'JKP'
+	
+	DECLARE @agentLawrance INT
+	SET @agentLawrance = 14
+	DECLARE @agentCodeLawrance VARCHAR(5)
+	SET @agentCodeLawrance = 'LIG'
+	
+	DECLARE @agentPeterEmerson INT
+	SET @agentPeterEmerson = 15
+	DECLARE @agentCodePeterEmerson VARCHAR(5)
+	SET @agentCodePeterEmerson = 'PE'
+	
+	DECLARE @agentPhil INT
+	SET @agentPhil = 16
+	DECLARE @agentCodePhil VARCHAR(5)
+	SET @agentCodePhil = 'PJB'
+
+	DECLARE @agentPaul INT
+	SET @agentPaul = 17
+	DECLARE @agentCodePaul VARCHAR(5)
+	SET @agentCodePaul = 'PMT'
+
+	DECLARE @agentRC INT
+	SET @agentRC = 18
+	DECLARE @agentCodeRC VARCHAR(5)
+	SET @agentCodeRC = 'RC'
+	
+	DECLARE @agentTIC INT
+	SET @agentTIC = 19
+	DECLARE @agentCodeTIC VARCHAR(5)
+	SET @agentCodeTIC = 'TIC'
+
+	DECLARE @agentTom INT
+	SET @agentTom = 20
+	DECLARE @agentCodeTom VARCHAR(5)
+	SET @agentCodeTom = 'TM'
+	
+	DECLARE @agentTP INT
+	SET @agentTP = 21
+	DECLARE @agentCodeTP VARCHAR(5)
+	SET @agentCodeTP = 'TP'
 
 	DECLARE @agentCommission FLOAT
 	-- Commission Table
@@ -185,6 +251,7 @@ BEGIN
 				INSERT INTO @temp VALUES(@commissionBob) 
 				INSERT INTO @temp VALUES(@commissionMary) 
 				INSERT INTO @temp VALUES(@commissionKate) 
+				INSERT INTO @temp VALUES(@commissionOther) 
 
 				--DECLARE @agentCommission FLOAT
 				DECLARE cursor_temp CURSOR FOR
@@ -200,42 +267,49 @@ BEGIN
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentMarty, @commissionId, @commissionMarty, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentMarty, @commissionId, @commissionMarty, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 
 						ELSE IF (@agentCommission = @commissionPeter)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentPeter, @commissionId, @commissionPeter, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentPeter, @commissionId, @commissionPeter, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 
 						ELSE IF (@agentCommission = @commissionFrank)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentFrank, @commissionId, @commissionFrank, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentFrank, @commissionId, @commissionFrank, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 
 						ELSE IF (@agentCommission = @commissionBob)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentBob, @commissionId, @commissionBob, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentBob, @commissionId, @commissionBob, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 					
 						ELSE IF (@agentCommission = @commissionMary)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentMary, @commissionId, @commissionMary, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentMary, @commissionId, @commissionMary, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 					
 						ELSE IF (@agentCommission = @commissionKate)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentKate, @commissionId, @commissionKate, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentKate, @commissionId, @commissionKate, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
+						END
+
+						ELSE IF (@agentCommission = @commissionOther)
+						BEGIN
+							SET @i = @i + 1
+							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+							VALUES ( @agentOthers, @commissionId, @commissionOther, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 					END
 					FETCH NEXT FROM cursor_temp INTO @agentCommission
@@ -291,6 +365,113 @@ BEGIN
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent1) = @agentCodeCMG AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent1) = @agentCodeOthers AND (@commissionOther <> 0 OR @split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeDean AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeEdward AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeGAS AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeJohn AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeKirk AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeLawrance AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodePeterEmerson AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodePhil AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodePaul AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeRC AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeTIC AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeTom AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeTP AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
 				END
 
 				-- Check Agent2
@@ -336,6 +517,113 @@ BEGIN
 						SET @i = @i + 1
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent2) = @agentCodeCMG AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent2) = @agentCodeOthers AND (@commissionOther <> 0 OR @split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeDean AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeEdward AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeGAS AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeJohn AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeKirk AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeLawrance AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodePeterEmerson AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodePhil AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodePaul AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeRC AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeTIC AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeTom AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeTP AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
 				END
 
@@ -383,6 +671,113 @@ BEGIN
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent3) = @agentCodeCMG AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent3) = @agentCodeOthers AND (@commissionOther <> 0 OR @split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeDean AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeEdward AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeGAS AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeJohn AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeKirk AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeLawrance AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodePeterEmerson AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodePhil AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodePaul AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeRC AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeTIC AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeTom AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeTP AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
 				END
 
 				-- Check Agent4
@@ -428,6 +823,113 @@ BEGIN
 						SET @i = @i + 1
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent4) = @agentCodeCMG AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent4) = @agentCodeOthers AND (@commissionOther <> 0 OR @split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeDean AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeEdward AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeGAS AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeJohn AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeKirk AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeLawrance AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodePeterEmerson AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodePhil AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodePaul AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeRC AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeTIC AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeTom AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeTP AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
 				END
 
@@ -475,6 +977,113 @@ BEGIN
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent5) = @agentCodeCMG AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent5) = @agentCodeOthers AND (@commissionOther <> 0 OR @split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeDean AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeEdward AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeGAS AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeJohn AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeKirk AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeLawrance AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodePeterEmerson AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodePhil AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodePaul AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeRC AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeTIC AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeTom AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeTP AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
 				END
 
 				-- Check Agent6
@@ -521,7 +1130,114 @@ BEGIN
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
-				END	
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent6) = @agentCodeCMG AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent6) = @agentCodeOthers AND (@commissionOther <> 0 OR @split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeDean AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeEdward AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeGAS AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeJohn AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeKirk AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeLawrance AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodePeterEmerson AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodePhil AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodePaul AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeRC AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeTIC AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeTom AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeTP AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+				END
 			END	
 			
 			FETCH NEXT FROM db_cursorOne INTO @commissionType, @yearMonth, @payDate, @policyId, @premium, @renewalType, @total, @isDeleted, @createdDate, @createdBy, @modifiedDate, @modifiedBy, 
@@ -533,6 +1249,7 @@ BEGIN
 
 	CLOSE db_cursorOne
 	DEALLOCATE db_cursorOne
+	
 	
 	/*
 		SCENARIO 2 - 132 Records
@@ -628,7 +1345,8 @@ BEGIN
 				INSERT INTO @temp VALUES(@commissionFrank) 
 				INSERT INTO @temp VALUES(@commissionBob) 
 				INSERT INTO @temp VALUES(@commissionMary) 
-				INSERT INTO @temp VALUES(@commissionKate) 
+				INSERT INTO @temp VALUES(@commissionKate)
+				INSERT INTO @temp VALUES(@commissionOther)
 
 				DECLARE cursor_temp CURSOR FOR
 				SELECT Amount FROM @temp ORDER BY Amount DESC
@@ -643,42 +1361,49 @@ BEGIN
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentMarty, @commissionId, @commissionMarty, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentMarty, @commissionId, @commissionMarty, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 
 						ELSE IF (@agentCommission = @commissionPeter)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentPeter, @commissionId, @commissionPeter, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentPeter, @commissionId, @commissionPeter, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 
 						ELSE IF (@agentCommission = @commissionFrank)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentFrank, @commissionId, @commissionFrank, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentFrank, @commissionId, @commissionFrank, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 
 						ELSE IF (@agentCommission = @commissionBob)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentBob, @commissionId, @commissionBob, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentBob, @commissionId, @commissionBob, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 					
 						ELSE IF (@agentCommission = @commissionMary)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentMary, @commissionId, @commissionMary, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentMary, @commissionId, @commissionMary, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 					
 						ELSE IF (@agentCommission = @commissionKate)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentKate, @commissionId, @commissionKate, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentKate, @commissionId, @commissionKate, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
+						END
+						
+						ELSE IF (@agentCommission = @commissionOther)
+						BEGIN
+							SET @i = @i + 1
+							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+							VALUES ( @agentOthers, @commissionId, @commissionOther, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 					END
 					FETCH NEXT FROM cursor_temp INTO @agentCommission
@@ -734,6 +1459,113 @@ BEGIN
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent1) = @agentCodeCMG AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent1) = @agentCodeOthers AND (@commissionOther <> 0 OR @split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeDean AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeEdward AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeGAS AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeJohn AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeKirk AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeLawrance AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodePeterEmerson AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodePhil AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodePaul AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeRC AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeTIC AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeTom AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeTP AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
 				END
 
 				-- Check Agent2
@@ -779,6 +1611,113 @@ BEGIN
 						SET @i = @i + 1
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent2) = @agentCodeCMG AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent2) = @agentCodeOthers AND (@commissionOther <> 0 OR @split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeDean AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeEdward AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeGAS AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeJohn AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeKirk AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeLawrance AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodePeterEmerson AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodePhil AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodePaul AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeRC AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeTIC AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeTom AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeTP AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
 				END
 
@@ -826,6 +1765,113 @@ BEGIN
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent3) = @agentCodeCMG AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent3) = @agentCodeOthers AND (@commissionOther <> 0 OR @split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeDean AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeEdward AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeGAS AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeJohn AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeKirk AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeLawrance AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodePeterEmerson AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodePhil AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodePaul AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeRC AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeTIC AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeTom AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeTP AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
 				END
 
 				-- Check Agent4
@@ -871,6 +1917,113 @@ BEGIN
 						SET @i = @i + 1
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent4) = @agentCodeCMG AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent4) = @agentCodeOthers AND (@commissionOther <> 0 OR @split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeDean AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeEdward AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeGAS AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeJohn AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeKirk AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeLawrance AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodePeterEmerson AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodePhil AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodePaul AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeRC AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeTIC AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeTom AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeTP AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
 				END
 
@@ -918,6 +2071,113 @@ BEGIN
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent5) = @agentCodeCMG AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent5) = @agentCodeOthers AND (@commissionOther <> 0 OR @split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeDean AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeEdward AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeGAS AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeJohn AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeKirk AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeLawrance AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodePeterEmerson AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodePhil AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodePaul AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeRC AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeTIC AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeTom AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeTP AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
 				END
 
 				-- Check Agent6
@@ -964,7 +2224,114 @@ BEGIN
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
-				END	
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent6) = @agentCodeCMG AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent6) = @agentCodeOthers AND (@commissionOther <> 0 OR @split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeDean AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeEdward AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeGAS AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeJohn AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeKirk AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeLawrance AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodePeterEmerson AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodePhil AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodePaul AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeRC AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeTIC AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeTom AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeTP AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+				END
 			END	
 			FETCH NEXT FROM db_cursorTwo INTO @commissionType, @yearMonth, @payDate, @policyId, @premium, @renewalType, @total, @isDeleted, @createdDate, @createdBy, @modifiedDate, @modifiedBy, 
 			@commissionMarty, @commissionPeter, @commissionFrank, @commissionBob, @commissionMary, @commissionKate, @commissionOther, 
@@ -1071,6 +2438,7 @@ BEGIN
 				INSERT INTO @temp VALUES(@commissionBob) 
 				INSERT INTO @temp VALUES(@commissionMary) 
 				INSERT INTO @temp VALUES(@commissionKate) 
+				INSERT INTO @temp VALUES(@commissionOther) 
 
 				--DECLARE @agentCommission FLOAT
 				DECLARE cursor_temp CURSOR FOR
@@ -1086,42 +2454,49 @@ BEGIN
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentMarty, @commissionId, @commissionMarty, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentMarty, @commissionId, @commissionMarty, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 
 						ELSE IF (@agentCommission = @commissionPeter)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentPeter, @commissionId, @commissionPeter, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentPeter, @commissionId, @commissionPeter, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 
 						ELSE IF (@agentCommission = @commissionFrank)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentFrank, @commissionId, @commissionFrank, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentFrank, @commissionId, @commissionFrank, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 
 						ELSE IF (@agentCommission = @commissionBob)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentBob, @commissionId, @commissionBob, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentBob, @commissionId, @commissionBob, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 					
 						ELSE IF (@agentCommission = @commissionMary)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentMary, @commissionId, @commissionMary, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentMary, @commissionId, @commissionMary, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 					
 						ELSE IF (@agentCommission = @commissionKate)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentKate, @commissionId, @commissionKate, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentKate, @commissionId, @commissionKate, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
+						END
+
+						ELSE IF (@agentCommission = @commissionOther)
+						BEGIN
+							SET @i = @i + 1
+							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+							VALUES ( @agentOthers, @commissionId, @commissionOther, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 					END
 					FETCH NEXT FROM cursor_temp INTO @agentCommission
@@ -1177,6 +2552,113 @@ BEGIN
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent1) = @agentCodeCMG AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent1) = @agentCodeOthers AND (@commissionOther <> 0 OR @split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeDean AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeEdward AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeGAS AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeJohn AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeKirk AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeLawrance AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodePeterEmerson AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodePhil AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodePaul AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeRC AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeTIC AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeTom AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeTP AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
 				END
 
 				-- Check Agent2
@@ -1222,6 +2704,113 @@ BEGIN
 						SET @i = @i + 1
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent2) = @agentCodeCMG AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent2) = @agentCodeOthers AND (@commissionOther <> 0 OR @split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeDean AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeEdward AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeGAS AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeJohn AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeKirk AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeLawrance AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodePeterEmerson AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodePhil AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodePaul AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeRC AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeTIC AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeTom AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeTP AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
 				END
 
@@ -1269,6 +2858,113 @@ BEGIN
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent3) = @agentCodeCMG AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent3) = @agentCodeOthers AND (@commissionOther <> 0 OR @split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeDean AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeEdward AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeGAS AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeJohn AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeKirk AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeLawrance AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodePeterEmerson AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodePhil AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodePaul AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeRC AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeTIC AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeTom AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeTP AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
 				END
 
 				-- Check Agent4
@@ -1314,6 +3010,113 @@ BEGIN
 						SET @i = @i + 1
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent4) = @agentCodeCMG AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent4) = @agentCodeOthers AND (@commissionOther <> 0 OR @split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeDean AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeEdward AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeGAS AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeJohn AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeKirk AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeLawrance AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodePeterEmerson AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodePhil AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodePaul AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeRC AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeTIC AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeTom AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeTP AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
 				END
 
@@ -1361,6 +3164,113 @@ BEGIN
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent5) = @agentCodeCMG AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent5) = @agentCodeOthers AND (@commissionOther <> 0 OR @split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeDean AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeEdward AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeGAS AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeJohn AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeKirk AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeLawrance AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodePeterEmerson AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodePhil AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodePaul AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeRC AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeTIC AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeTom AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeTP AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
 				END
 
 				-- Check Agent6
@@ -1407,7 +3317,114 @@ BEGIN
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
-				END	
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent6) = @agentCodeCMG AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent6) = @agentCodeOthers AND (@commissionOther <> 0 OR @split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeDean AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeEdward AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeGAS AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeJohn AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeKirk AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeLawrance AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodePeterEmerson AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodePhil AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodePaul AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeRC AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeTIC AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeTom AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeTP AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+				END
 			END
 			FETCH NEXT FROM db_cursorThree INTO @commissionType, @yearMonth, @payDate, @policyId, @premium, @renewalType, @total, @isDeleted, @createdDate, @createdBy, @modifiedDate, @modifiedBy, 
 			@commissionMarty, @commissionPeter, @commissionFrank, @commissionBob, @commissionMary, @commissionKate, @commissionOther, 
@@ -1515,6 +3532,7 @@ BEGIN
 				INSERT INTO @temp VALUES(@commissionBob) 
 				INSERT INTO @temp VALUES(@commissionMary) 
 				INSERT INTO @temp VALUES(@commissionKate) 
+				INSERT INTO @temp VALUES(@commissionOther) 
 
 				--DECLARE @agentCommission FLOAT
 				DECLARE cursor_temp CURSOR FOR
@@ -1530,42 +3548,49 @@ BEGIN
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentMarty, @commissionId, @commissionMarty, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentMarty, @commissionId, @commissionMarty, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 
 						ELSE IF (@agentCommission = @commissionPeter)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentPeter, @commissionId, @commissionPeter, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentPeter, @commissionId, @commissionPeter, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 
 						ELSE IF (@agentCommission = @commissionFrank)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentFrank, @commissionId, @commissionFrank, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentFrank, @commissionId, @commissionFrank, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 
 						ELSE IF (@agentCommission = @commissionBob)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentBob, @commissionId, @commissionBob, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentBob, @commissionId, @commissionBob, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 					
 						ELSE IF (@agentCommission = @commissionMary)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentMary, @commissionId, @commissionMary, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentMary, @commissionId, @commissionMary, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 					
 						ELSE IF (@agentCommission = @commissionKate)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentKate, @commissionId, @commissionKate, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentKate, @commissionId, @commissionKate, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
+						END
+
+						ELSE IF (@agentCommission = @commissionOther)
+						BEGIN
+							SET @i = @i + 1
+							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+							VALUES ( @agentOthers, @commissionId, @commissionOther, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 					END
 					FETCH NEXT FROM cursor_temp INTO @agentCommission
@@ -1621,6 +3646,113 @@ BEGIN
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent1) = @agentCodeCMG AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent1) = @agentCodeOthers AND (@commissionOther <> 0 OR @split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeDean AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeEdward AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeGAS AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeJohn AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeKirk AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeLawrance AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodePeterEmerson AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodePhil AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodePaul AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeRC AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeTIC AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeTom AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeTP AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
 				END
 
 				-- Check Agent2
@@ -1666,6 +3798,113 @@ BEGIN
 						SET @i = @i + 1
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent2) = @agentCodeCMG AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent2) = @agentCodeOthers AND (@commissionOther <> 0 OR @split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeDean AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeEdward AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeGAS AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeJohn AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeKirk AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeLawrance AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodePeterEmerson AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodePhil AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodePaul AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeRC AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeTIC AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeTom AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeTP AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
 				END
 
@@ -1713,6 +3952,113 @@ BEGIN
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent3) = @agentCodeCMG AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent3) = @agentCodeOthers AND (@commissionOther <> 0 OR @split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeDean AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeEdward AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeGAS AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeJohn AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeKirk AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeLawrance AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodePeterEmerson AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodePhil AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodePaul AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeRC AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeTIC AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeTom AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeTP AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
 				END
 
 				-- Check Agent4
@@ -1758,6 +4104,113 @@ BEGIN
 						SET @i = @i + 1
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent4) = @agentCodeCMG AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent4) = @agentCodeOthers AND (@commissionOther <> 0 OR @split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeDean AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeEdward AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeGAS AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeJohn AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeKirk AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeLawrance AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodePeterEmerson AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodePhil AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodePaul AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeRC AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeTIC AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeTom AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeTP AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
 				END
 
@@ -1805,6 +4258,113 @@ BEGIN
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent5) = @agentCodeCMG AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent5) = @agentCodeOthers AND (@commissionOther <> 0 OR @split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeDean AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeEdward AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeGAS AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeJohn AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeKirk AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeLawrance AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodePeterEmerson AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodePhil AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodePaul AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeRC AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeTIC AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeTom AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeTP AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
 				END
 
 				-- Check Agent6
@@ -1851,7 +4411,114 @@ BEGIN
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
-				END	
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent6) = @agentCodeCMG AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent6) = @agentCodeOthers AND (@commissionOther <> 0 OR @split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeDean AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeEdward AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeGAS AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeJohn AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeKirk AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeLawrance AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodePeterEmerson AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodePhil AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodePaul AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeRC AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeTIC AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeTom AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeTP AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+				END
 			END		
 			
 			FETCH NEXT FROM db_cursorFour INTO @commissionType, @yearMonth, @payDate, @policyId, @premium, @renewalType, @total, @isDeleted, @createdDate, @createdBy, @modifiedDate, @modifiedBy, 
@@ -1961,6 +4628,7 @@ BEGIN
 				INSERT INTO @temp VALUES(@commissionBob) 
 				INSERT INTO @temp VALUES(@commissionMary) 
 				INSERT INTO @temp VALUES(@commissionKate) 
+				INSERT INTO @temp VALUES(@commissionOther) 
 
 				--DECLARE @agentCommission FLOAT
 				DECLARE cursor_temp CURSOR FOR
@@ -1976,42 +4644,49 @@ BEGIN
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentMarty, @commissionId, @commissionMarty, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentMarty, @commissionId, @commissionMarty, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 
 						ELSE IF (@agentCommission = @commissionPeter)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentPeter, @commissionId, @commissionPeter, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentPeter, @commissionId, @commissionPeter, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 
 						ELSE IF (@agentCommission = @commissionFrank)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentFrank, @commissionId, @commissionFrank, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentFrank, @commissionId, @commissionFrank, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 
 						ELSE IF (@agentCommission = @commissionBob)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentBob, @commissionId, @commissionBob, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentBob, @commissionId, @commissionBob, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 					
 						ELSE IF (@agentCommission = @commissionMary)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentMary, @commissionId, @commissionMary, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentMary, @commissionId, @commissionMary, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 					
 						ELSE IF (@agentCommission = @commissionKate)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentKate, @commissionId, @commissionKate, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentKate, @commissionId, @commissionKate, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
+						END
+
+						ELSE IF (@agentCommission = @commissionOther)
+						BEGIN
+							SET @i = @i + 1
+							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+							VALUES ( @agentOthers, @commissionId, @commissionOther, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 					END
 					FETCH NEXT FROM cursor_temp INTO @agentCommission
@@ -2067,6 +4742,113 @@ BEGIN
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent1) = @agentCodeCMG AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent1) = @agentCodeOthers AND (@commissionOther <> 0 OR @split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeDean AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeEdward AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeGAS AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeJohn AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeKirk AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeLawrance AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodePeterEmerson AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodePhil AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodePaul AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeRC AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeTIC AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeTom AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeTP AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
 				END
 
 				-- Check Agent2
@@ -2112,6 +4894,113 @@ BEGIN
 						SET @i = @i + 1
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent2) = @agentCodeCMG AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent2) = @agentCodeOthers AND (@commissionOther <> 0 OR @split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeDean AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeEdward AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeGAS AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeJohn AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeKirk AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeLawrance AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodePeterEmerson AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodePhil AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodePaul AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeRC AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeTIC AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeTom AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeTP AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
 				END
 
@@ -2159,6 +5048,113 @@ BEGIN
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent3) = @agentCodeCMG AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent3) = @agentCodeOthers AND (@commissionOther <> 0 OR @split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeDean AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeEdward AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeGAS AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeJohn AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeKirk AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeLawrance AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodePeterEmerson AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodePhil AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodePaul AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeRC AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeTIC AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeTom AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeTP AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
 				END
 
 				-- Check Agent4
@@ -2204,6 +5200,113 @@ BEGIN
 						SET @i = @i + 1
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent4) = @agentCodeCMG AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent4) = @agentCodeOthers AND (@commissionOther <> 0 OR @split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeDean AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeEdward AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeGAS AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeJohn AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeKirk AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeLawrance AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodePeterEmerson AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodePhil AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodePaul AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeRC AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeTIC AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeTom AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeTP AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
 				END
 
@@ -2251,6 +5354,113 @@ BEGIN
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent5) = @agentCodeCMG AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent5) = @agentCodeOthers AND (@commissionOther <> 0 OR @split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeDean AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeEdward AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeGAS AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeJohn AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeKirk AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeLawrance AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodePeterEmerson AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodePhil AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodePaul AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeRC AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeTIC AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeTom AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeTP AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
 				END
 
 				-- Check Agent6
@@ -2297,7 +5507,114 @@ BEGIN
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
-				END	
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent6) = @agentCodeCMG AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent6) = @agentCodeOthers AND (@commissionOther <> 0 OR @split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeDean AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeEdward AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeGAS AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeJohn AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeKirk AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeLawrance AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodePeterEmerson AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodePhil AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodePaul AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeRC AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeTIC AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeTom AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeTP AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+				END
 			END
 			FETCH NEXT FROM db_cursorFive INTO @commissionType, @yearMonth, @payDate, @policyId, @premium, @renewalType, @total, @isDeleted, @createdDate, @createdBy, @modifiedDate, @modifiedBy, 
 			@commissionMarty, @commissionPeter, @commissionFrank, @commissionBob, @commissionMary, @commissionKate, @commissionOther, 
@@ -2404,6 +5721,7 @@ BEGIN
 				INSERT INTO @temp VALUES(@commissionBob) 
 				INSERT INTO @temp VALUES(@commissionMary) 
 				INSERT INTO @temp VALUES(@commissionKate) 
+				INSERT INTO @temp VALUES(@commissionOther) 
 
 				--DECLARE @agentCommission FLOAT
 				DECLARE cursor_temp CURSOR FOR
@@ -2419,42 +5737,49 @@ BEGIN
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentMarty, @commissionId, @commissionMarty, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentMarty, @commissionId, @commissionMarty, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 
 						ELSE IF (@agentCommission = @commissionPeter)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentPeter, @commissionId, @commissionPeter, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentPeter, @commissionId, @commissionPeter, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 
 						ELSE IF (@agentCommission = @commissionFrank)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentFrank, @commissionId, @commissionFrank, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentFrank, @commissionId, @commissionFrank, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 
 						ELSE IF (@agentCommission = @commissionBob)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentBob, @commissionId, @commissionBob, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentBob, @commissionId, @commissionBob, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 					
 						ELSE IF (@agentCommission = @commissionMary)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentMary, @commissionId, @commissionMary, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentMary, @commissionId, @commissionMary, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 					
 						ELSE IF (@agentCommission = @commissionKate)
 						BEGIN
 							SET @i = @i + 1
 							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
-							VALUES ( @agentKate, @commissionId, @commissionKate, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+							VALUES ( @agentKate, @commissionId, @commissionKate, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
+						END
+
+						ELSE IF (@agentCommission = @commissionOther)
+						BEGIN
+							SET @i = @i + 1
+							INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+							VALUES ( @agentOthers, @commissionId, @commissionOther, 0, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy ) -- take 0 instead of @split1
 						END
 					END
 					FETCH NEXT FROM cursor_temp INTO @agentCommission
@@ -2510,6 +5835,113 @@ BEGIN
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent1) = @agentCodeCMG AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent1) = @agentCodeOthers AND (@commissionOther <> 0 OR @split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeDean AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeEdward AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeGAS AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeJohn AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeKirk AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeLawrance AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodePeterEmerson AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodePhil AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodePaul AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeRC AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeTIC AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeTom AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent1) = @agentCodeTP AND (@split1 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split1, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
 				END
 
 				-- Check Agent2
@@ -2555,6 +5987,113 @@ BEGIN
 						SET @i = @i + 1
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent2) = @agentCodeCMG AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent2) = @agentCodeOthers AND (@commissionOther <> 0 OR @split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeDean AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeEdward AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeGAS AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeJohn AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeKirk AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeLawrance AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodePeterEmerson AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodePhil AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodePaul AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeRC AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeTIC AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeTom AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent2) = @agentCodeTP AND (@split2 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split2, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
 				END
 
@@ -2602,6 +6141,113 @@ BEGIN
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent3) = @agentCodeCMG AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent3) = @agentCodeOthers AND (@commissionOther <> 0 OR @split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeDean AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeEdward AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeGAS AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeJohn AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeKirk AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeLawrance AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodePeterEmerson AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodePhil AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodePaul AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeRC AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeTIC AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeTom AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent3) = @agentCodeTP AND (@split3 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split3, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
 				END
 
 				-- Check Agent4
@@ -2647,6 +6293,113 @@ BEGIN
 						SET @i = @i + 1
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent4) = @agentCodeCMG AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent4) = @agentCodeOthers AND (@commissionOther <> 0 OR @split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeDean AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeEdward AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeGAS AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeJohn AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeKirk AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeLawrance AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodePeterEmerson AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodePhil AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodePaul AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeRC AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeTIC AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeTom AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent4) = @agentCodeTP AND (@split4 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split4, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
 				END
 
@@ -2694,6 +6447,113 @@ BEGIN
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent5) = @agentCodeCMG AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent5) = @agentCodeOthers AND (@commissionOther <> 0 OR @split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeDean AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeEdward AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeGAS AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeJohn AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeKirk AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeLawrance AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodePeterEmerson AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodePhil AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodePaul AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeRC AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeTIC AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeTom AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent5) = @agentCodeTP AND (@split5 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split5, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
 				END
 
 				-- Check Agent6
@@ -2740,12 +6600,119 @@ BEGIN
 						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
 						VALUES ( @agentKate, @commissionId, @commissionKate, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
 					END
-				END	
+
+					-- ***** NEW AGENTS *****
+					ELSE IF (TRIM(@agent6) = @agentCodeCMG AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentCMG, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+
+					--***** OTHERS *****
+					ELSE IF (TRIM(@agent6) = @agentCodeOthers AND (@commissionOther <> 0 OR @split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentOthers, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeDean AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentDean, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeEdward AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentEdward, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeGAS AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentGAS, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeJohn AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentJohn, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeKirk AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentKirk, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeLawrance AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentLawrance, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodePeterEmerson AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPeterEmerson, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodePhil AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPhil, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodePaul AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentPaul, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeRC AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentRC, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeTIC AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTIC, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END					
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeTom AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTom, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END			
+					
+					ELSE IF (TRIM(@agent6) = @agentCodeTP AND (@split6 <> 0))
+					BEGIN
+						SET @i = @i + 1
+						INSERT INTO [dbo].[AgentCommission] (AgentId, CommissionId, Commission, Split, AgentOrder, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy )
+						VALUES ( @agentTP, @commissionId, @commissionOther, @split6, @i, @createdDate, @createdBy, @modifiedDate, @modifiedBy )
+					END
+				END
 			END
 			FETCH NEXT FROM db_cursorSix INTO @commissionType, @yearMonth, @payDate, @policyId, @premium, @renewalType, @total, @isDeleted, @createdDate, @createdBy, @modifiedDate, @modifiedBy, 
 			@commissionMarty, @commissionPeter, @commissionFrank, @commissionBob, @commissionMary, @commissionKate, @commissionOther, 
 			@agent1, @agent2, @agent3, @agent4, @agent5, @agent6, 
-			@split1, @split2, @split3, @split4, @split5, @split6
+			@split1, @split2, @split3, @split4, @split5, @split6, @insured
 
 		END
 

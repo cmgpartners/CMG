@@ -12,6 +12,7 @@ namespace CMG.DataAccess.Domain
         public string AgentCode { get; set; }
         public string Color { get; set; }
         public bool IsDeleted { get; set; }
+        public bool IsExternal { get; set; }
         public DateTime CreatedDate { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }

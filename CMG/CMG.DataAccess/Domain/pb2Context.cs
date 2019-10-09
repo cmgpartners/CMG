@@ -47,6 +47,7 @@ namespace CMG.DataAccess.Domain
         // Unable to generate entity type for table 'dbo.COMBO'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.ERRLOG'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.SF_Map'. Please see the warning messages.
+        // Unable to generate entity type for table 'dbo.POLICYS_BACKUP'. Please see the warning messages.
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -2497,21 +2498,6 @@ namespace CMG.DataAccess.Domain
 
                 entity.ToTable("POLICYS");
 
-                entity.HasIndex(e => e.Agent1)
-                    .HasName("IDX_POLICYS_AGENT1");
-
-                entity.HasIndex(e => e.Agent2)
-                    .HasName("IDX_POLICYS_AGENT2");
-
-                entity.HasIndex(e => e.Agent3)
-                    .HasName("IDX_POLICYS_AGENT3");
-
-                entity.HasIndex(e => e.Agent4)
-                    .HasName("IDX_POLICYS_AGENT4");
-
-                entity.HasIndex(e => e.Agent5)
-                    .HasName("IDX_POLICYS_AGENT5");
-
                 entity.HasIndex(e => e.Class)
                     .HasName("IDX_POLICYS_CLASS");
 
@@ -2559,48 +2545,6 @@ namespace CMG.DataAccess.Domain
                 entity.Property(e => e.Acc2)
                     .HasColumnName("ACC_2")
                     .HasComputedColumnSql("(CONVERT([bit],(4)&[restricted],0))");
-
-                entity.Property(e => e.Agent1)
-                    .IsRequired()
-                    .HasColumnName("AGENT1")
-                    .HasMaxLength(3)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("('')");
-
-                entity.Property(e => e.Agent2)
-                    .IsRequired()
-                    .HasColumnName("AGENT2")
-                    .HasMaxLength(3)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("('')");
-
-                entity.Property(e => e.Agent3)
-                    .IsRequired()
-                    .HasColumnName("AGENT3")
-                    .HasMaxLength(3)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("('')");
-
-                entity.Property(e => e.Agent4)
-                    .IsRequired()
-                    .HasColumnName("AGENT4")
-                    .HasMaxLength(3)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("('')");
-
-                entity.Property(e => e.Agent5)
-                    .IsRequired()
-                    .HasColumnName("AGENT5")
-                    .HasMaxLength(3)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("('')");
-
-                entity.Property(e => e.Agent6)
-                    .IsRequired()
-                    .HasColumnName("AGENT6")
-                    .HasMaxLength(3)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("('')");
 
                 entity.Property(e => e.Amount)
                     .HasColumnName("AMOUNT")
@@ -2829,30 +2773,6 @@ namespace CMG.DataAccess.Domain
                     .HasDefaultValueSql("('')");
 
                 entity.Property(e => e.Rpr).HasColumnName("RPR");
-
-                entity.Property(e => e.Split1)
-                    .HasColumnName("SPLIT1")
-                    .HasColumnType("numeric(5, 2)");
-
-                entity.Property(e => e.Split2)
-                    .HasColumnName("SPLIT2")
-                    .HasColumnType("numeric(5, 2)");
-
-                entity.Property(e => e.Split3)
-                    .HasColumnName("SPLIT3")
-                    .HasColumnType("numeric(5, 2)");
-
-                entity.Property(e => e.Split4)
-                    .HasColumnName("SPLIT4")
-                    .HasColumnType("numeric(5, 2)");
-
-                entity.Property(e => e.Split5)
-                    .HasColumnName("SPLIT5")
-                    .HasColumnType("numeric(5, 2)");
-
-                entity.Property(e => e.Split6)
-                    .HasColumnName("SPLIT6")
-                    .HasColumnType("numeric(5, 2)");
 
                 entity.Property(e => e.Status)
                     .IsRequired()
