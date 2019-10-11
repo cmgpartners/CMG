@@ -9,14 +9,14 @@ namespace CMG.Application.Mapper
         public CommissionMapperProfile()
         {
             // This mapping has to be removed <Commission, ViewCommissionDto>()
-            CreateMap<Commission, ViewCommissionDto>()
-                .ForMember(des => des.CommissionId, mo => mo.MapFrom(src => src.Id))
+            CreateMap<Comm, ViewCommissionDto>()
+                .ForMember(des => des.CommissionId, mo => mo.MapFrom(src => src.Keycomm))
                 .ForMember(des => des.PolicyNumber, mo => mo.MapFrom(src => src.Policy.Policynum))
                 .ForMember(des => des.CompanyName, mo => mo.MapFrom(src => src.Policy.Company))
                 .ForMember(des => des.InsuredName, mo => mo.MapFrom(src => src.Insured))
-                .ForMember(des => des.Renewal, mo => mo.MapFrom(src => src.RenewalType))
+                .ForMember(des => des.Renewal, mo => mo.MapFrom(src => src.Renewals))
                 .ForMember(des => des.TotalAmount, mo => mo.MapFrom(src => src.Total))
-                .ForMember(des => des.AgentCommissions, mo => mo.MapFrom(src => src.AgentCommission));
+                .ForMember(des => des.AgentCommissions, mo => mo.MapFrom(src => src.AgentCommissions));
 
             CreateMap<AgentCommission, ViewAgentCommissionDto>()
                 .ForMember(des => des.Commission, mo => mo.MapFrom(src => src.Commission.HasValue ? (decimal)src.Commission.Value : 0))
