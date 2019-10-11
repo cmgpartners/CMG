@@ -17,6 +17,6 @@ namespace CMG.DataAccess.Domain
         public string ModifiedBy { get; set; }
 
         public virtual Agent Agent { get; set; }
-        public virtual Commission CommissionNavigation { get; set; }
+        public virtual Comm CommissionNavigation { get; set; }
     }
 }
