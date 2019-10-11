@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System;
 using CMG.DataAccess.Query;
 using System.Windows.Input;
+using CMG.DataAccess.Domain;
 
 namespace CMG.Application.ViewModel
 {
@@ -25,8 +26,7 @@ namespace CMG.Application.ViewModel
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            LoadPagination();
-            GetCommissions();
+            LoadData();
         }
         #endregion Constructor
 
@@ -55,6 +55,8 @@ namespace CMG.Application.ViewModel
             set
             {
                 _selectedYear = value;
+                IsImportEnabled = false;
+                CurrentPage = 1;
                 OnPropertyChanged("SelectedYear");
                 GetCommissions();
             }
@@ -67,6 +69,8 @@ namespace CMG.Application.ViewModel
             set
             {
                 _selectedMonth = value;
+                IsImportEnabled = false;
+                CurrentPage = 1;
                 OnPropertyChanged("SelectedMonth");
                 GetCommissions();
             }
@@ -90,6 +94,26 @@ namespace CMG.Application.ViewModel
             get
             {
                 return DataCollection != null && DataCollection.Count == 0;
+            }
+        }
+
+        public ICommand ImportCommand
+        {
+            get { return CreateCommand(Import); }
+        }
+
+        public ICommand SaveCommand
+        {
+            get { return CreateCommand(Save); }
+        }
+        private bool isImportEnabled;
+        public bool IsImportEnabled
+        {
+            get { return isImportEnabled; }
+            set
+            {
+                isImportEnabled = value;
+                OnPropertyChanged("IsImportEnabled");
             }
         }
 
@@ -157,18 +181,53 @@ namespace CMG.Application.ViewModel
         #region Methods
         public void GetCommissions()
         {
-            SearchQuery searchQuery = BuildSearchQuery();
+            int year;
+            if (IsImportEnabled)
+            {
+                year = SelectedYear - 1;
+            }
+            else
+            {
+                year = SelectedYear;
+            }
+            SearchQuery searchQuery = BuildSearchQuery(year, SelectedMonth);
             searchQuery.Page = CurrentPage;
             searchQuery.PageSize = PageSize;
-            var dataSearchBy = _unitOfWork.CommissionSearch.Search(searchQuery);
+            var dataSearchBy = _unitOfWork.Commissions.Find(searchQuery);
             DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
             TotalRecords = dataSearchBy.TotalRecords;
+            if (IsImportEnabled)
+            {
+                UpdateImportCollection();
+            }
         }
 
-        private void LoadPagination()
+        public void Import()
         {
-            _pages = new List<int>();
-            Pages.AddRange(Enumerable.Range(1, TotalPages));
+            IsImportEnabled = true;
+            CurrentPage = 1;
+            GetCommissions();
+        }
+
+        public void Save()
+        {
+            if(DataCollection != null && DataCollection.Count > 0)
+            {
+                if (isImportEnabled)
+                {
+                    foreach(ViewCommissionDto commission in DataCollection)
+                    {
+                        //foreach(ViewAgentCommissionDto agentComm in commission.AgentCommissions)
+                        //{
+                        //    agentComm.Agent = null;
+                        //}
+                        commission.CommissionId = 0;
+                        var entityCommission = _mapper.Map<Commission>(commission);
+                        var commissionId = _unitOfWork.Commissions.Add(entityCommission);
+                        _unitOfWork.SaveChanges();
+                    }
+                }
+            }
         }
 
         public void FirstPage()
@@ -197,11 +256,18 @@ namespace CMG.Application.ViewModel
                 GetCommissions();
             }
         }
-        private SearchQuery BuildSearchQuery()
+
+        private void LoadData()
+        {
+            _pages = new List<int>();
+            Pages.AddRange(Enumerable.Range(1, TotalPages));
+            GetCommissions();
+        }
+        private SearchQuery BuildSearchQuery(int year, string month)
         {
             SearchQuery searchQuery = new SearchQuery();
             List<FilterBy> searchBy = new List<FilterBy>();
-            var fromPayDate = new DateTime(SelectedYear, Array.IndexOf(Months.ToArray(),SelectedMonth) + 1, 1);
+            var fromPayDate = new DateTime(year, Array.IndexOf(Months.ToArray(),month) + 1, 1);
             var toPayDate = fromPayDate.AddMonths(1).AddDays(-1);
             FilterBy filterBy = new FilterBy();
             filterBy.Property = "PayDate";
@@ -210,6 +276,18 @@ namespace CMG.Application.ViewModel
             searchBy.Add(filterBy);
             searchQuery.FilterBy = searchBy;
             return searchQuery;
+        }
+
+        private void UpdateImportCollection()
+        {
+            if (DataCollection != null && DataCollection.Count > 0)
+            {
+                foreach(ViewCommissionDto commission in DataCollection)
+                {
+                    commission.TotalAmount = 0;
+                    commission.AgentCommissions.Select(comm => { comm.Commission = 0; return comm; }).ToList();
+                }
+            }
         }
         #endregion Methods
     }

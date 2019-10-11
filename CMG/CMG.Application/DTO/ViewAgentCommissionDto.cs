@@ -6,6 +6,7 @@ namespace CMG.Application.DTO
     {
         public decimal Commission { get; set; }
         public decimal Split { get; set; }
+        public int AgentId { get; set; }
         public ViewAgentDto Agent { get; set; } = new ViewAgentDto();
     }
 }

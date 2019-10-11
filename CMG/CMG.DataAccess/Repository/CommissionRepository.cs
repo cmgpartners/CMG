@@ -18,7 +18,7 @@ namespace CMG.DataAccess.Repository
         }
         public IQueryResult<Commission> Find(ISearchCriteria criteria)
         {
-            var query = Context.Commission.AsQueryable().Include(x => x.AgentCommission).ThenInclude(x => x.Agent)
+            var query = Context.Commission.AsQueryable().Include(x => x.AgentCommissions).ThenInclude(x => x.Agent)
                 .Include(x => x.Policy);
             IQueryable<Commission> queryable = query;
 
@@ -31,25 +31,46 @@ namespace CMG.DataAccess.Repository
                 queryable = OrderByPredicate(queryable, criteria.SortBy);
             }
 
-            var totalRecords = queryable.Count();
-            var totalAmount = queryable.AsEnumerable().Sum(x => x.Total);
+            var result = queryable.Select(x => new Commission
+            {
+                Id = x.Id,
+                PayDate = x.PayDate,
+                CommissionType = x.CommissionType,
+                PolicyId = x.PolicyId,
+                RenewalType = x.RenewalType,
+                Total = x.Total,
+                Insured = x.Insured,
+                Policy = new Policys
+                {
+                    Policynum = x.Policy.Policynum,
+                    Company = x.Policy.Company
+                },
+                Comment = x.Comment,
+                AgentCommissions = x.AgentCommissions.Select(a => new AgentCommission
+                {
+                    AgentId = a.AgentId,
+                    Agent = a.Agent,
+                    Split = a.Split,
+                    Commission = a.Commission
+                })
+            });
 
-            if(criteria.Page.HasValue
+            var totalRecords = result.Count();
+            var totalAmount = result.AsEnumerable().Sum(x => x.Total);
+
+            if (criteria.Page.HasValue
                 && criteria.PageSize.HasValue)
             {
                 var skip = (criteria.Page.Value - 1) * criteria.PageSize.Value;
                 var pageSize = criteria.PageSize.Value;
-                queryable = queryable.Skip(skip);
-                queryable = queryable.Take(pageSize);
+                result = result.Skip(skip);
+                result = result.Take(pageSize);
             }
-
-            var result = queryable.ToList();
-            
 
             return new PagedQueryResult<Commission>()
             {
                 TotalAmount = Convert.ToDecimal(totalAmount),
-                Result = result,
+                Result = result.ToList(),
                 TotalRecords = totalRecords
             };
         }
@@ -181,7 +202,7 @@ namespace CMG.DataAccess.Repository
 
         private static Expression<Func<Commission, bool>> AgentExpression(string equals)
         {
-            return w => w.AgentCommission.Any(x => x.AgentId == Convert.ToInt32(equals));
+            return w => w.AgentCommissions.Any(x => x.AgentId == Convert.ToInt32(equals));
         }
 
         private static Expression<Func<Commission, bool>> RenewalOrFYCExpression(string equal)

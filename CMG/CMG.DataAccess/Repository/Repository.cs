@@ -21,9 +21,9 @@ namespace CMG.DataAccess.Repository
         #endregion Properties
 
         #region Methods
-        public async Task<TEntity> Add(TEntity entity)
+        public virtual TEntity Add(TEntity entity)
         {
-            var result = await Context.Set<TEntity>().AddAsync(entity);
+            var result = Context.Set<TEntity>().Add(entity);
             return result.Entity;
         }
 

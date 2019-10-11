@@ -7,7 +7,7 @@ namespace CMG.DataAccess.Domain
     {
         public Commission()
         {
-            AgentCommission = new HashSet<AgentCommission>();
+            AgentCommissions = new HashSet<AgentCommission>();
         }
 
         public int Id { get; set; }
@@ -27,6 +27,6 @@ namespace CMG.DataAccess.Domain
         public string Comment { get; set; }
 
         public virtual Policys Policy { get; set; }
-        public virtual ICollection<AgentCommission> AgentCommission { get; set; }
+        public virtual IEnumerable<AgentCommission> AgentCommissions { get; set; }
     }
 }

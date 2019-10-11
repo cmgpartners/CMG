@@ -48,11 +48,11 @@ namespace CMG.DataAccess
             }
         }
 
-        public async Task SaveChangesAsync()
+        public void SaveChanges()
         {
             try
             {
-                await _context.SaveChangesAsync();
+                 _context.SaveChanges();
             }
             catch(Exception ex)
             {

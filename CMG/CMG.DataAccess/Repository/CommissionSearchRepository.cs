@@ -19,7 +19,7 @@ namespace CMG.DataAccess.Repository
 
         public IQueryResult<CommissionSearch> Search(ISearchCriteria criteria)
         {
-            var query = Context.Commission.AsQueryable().Include(x => x.AgentCommission).ThenInclude(x => x.Agent)
+            var query = Context.Commission.AsQueryable().Include(x => x.AgentCommissions).ThenInclude(x => x.Agent)
                 .Include(x => x.Policy);
             IQueryable<Commission> queryable = query;
 
@@ -44,7 +44,7 @@ namespace CMG.DataAccess.Repository
                 PolicyNumber = x.Policy.Policynum,
                 Company = x.Policy.Company,
                 Comment = x.Comment,
-                AgentCommissions = x.AgentCommission.Select(a => new AgentCommission
+                AgentCommissions = x.AgentCommissions.Select(a => new AgentCommission
                 {
                     AgentId = a.AgentId,
                     Agent = a.Agent,
@@ -207,7 +207,7 @@ namespace CMG.DataAccess.Repository
 
         private static Expression<Func<Commission, bool>> AgentExpression(string equals)
         {
-            return w => w.AgentCommission.Any(x => x.AgentId == Convert.ToInt32(equals));
+            return w => w.AgentCommissions.Any(x => x.AgentId == Convert.ToInt32(equals));
         }
 
         private static Expression<Func<Commission, bool>> RenewalOrFYCExpression(string equal)

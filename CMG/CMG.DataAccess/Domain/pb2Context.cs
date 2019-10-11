@@ -160,7 +160,7 @@ namespace CMG.DataAccess.Domain
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
                 entity.HasOne(d => d.CommissionNavigation)
-                    .WithMany(p => p.AgentCommission)
+                    .WithMany(p => p.AgentCommissions)
                     .HasForeignKey(d => d.CommissionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Commission_AgentCommission");

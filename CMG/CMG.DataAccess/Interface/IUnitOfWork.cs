@@ -10,6 +10,6 @@ namespace CMG.DataAccess.Interface
         ICommissionSearchRepository CommissionSearch { get; }
 
         Task Commit();
-        Task SaveChangesAsync();
+        void SaveChanges();
     }
 }
