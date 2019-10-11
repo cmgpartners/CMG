@@ -9,6 +9,7 @@ BEGIN
 		AgentCode VARCHAR(5),
 		Color VARCHAR(15) NOT NULL,
 		IsDeleted BIT DEFAULT(0) NOT NULL,
+		IsExternal BIT DEFAULT(0) NOT NULL,
 		CreatedDate DATETIME NOT NULL,
 		CreatedBy VARCHAR(50) NOT NULL,
 		ModifiedDate DATETIME,

@@ -7,7 +7,7 @@ namespace CMG.DataAccess.Domain
     {
         public Policys()
         {
-            Commission = new HashSet<Commission>();
+            Commissions = new HashSet<Comm>();
             PolIll = new HashSet<PolIll>();
             PolicyAgent = new HashSet<PolicyAgent>();
         }
@@ -25,16 +25,6 @@ namespace CMG.DataAccess.Domain
         public decimal Amount { get; set; }
         public decimal Payment { get; set; }
         public DateTime? Dateplaced { get; set; }
-        public string Agent1 { get; set; }
-        public string Agent2 { get; set; }
-        public string Agent3 { get; set; }
-        public string Agent4 { get; set; }
-        public string Agent5 { get; set; }
-        public decimal Split1 { get; set; }
-        public decimal Split2 { get; set; }
-        public decimal Split3 { get; set; }
-        public decimal Split4 { get; set; }
-        public decimal Split5 { get; set; }
         public bool Ownocc { get; set; }
         public string Class { get; set; }
         public string Oclass { get; set; }
@@ -69,8 +59,6 @@ namespace CMG.DataAccess.Domain
         public DateTime? Reprojdate { get; set; }
         public bool Noprint { get; set; }
         public string Currency { get; set; }
-        public string Agent6 { get; set; }
-        public decimal Split6 { get; set; }
         public string Id { get; set; }
         public decimal? CumDepact { get; set; }
         public string Benef { get; set; }
@@ -80,7 +68,7 @@ namespace CMG.DataAccess.Domain
         public DateTime? AorEnd { get; set; }
         public string Status2 { get; set; }
 
-        public virtual ICollection<Commission> Commission { get; set; }
+        public virtual IEnumerable<Comm> Commissions { get; set; }
         public virtual ICollection<PolIll> PolIll { get; set; }
         public virtual ICollection<PolicyAgent> PolicyAgent { get; set; }
     }

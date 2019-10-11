@@ -8,19 +8,19 @@ namespace CMG.Application.Mapper
     {
         public CommissionMapperProfile()
         {
-            CreateMap<Commission, ViewCommissionDto>()
-                .ForMember(des => des.CommissionId, mo => mo.MapFrom(src => src.Id))
+            CreateMap<Comm, ViewCommissionDto>()
+                .ForMember(des => des.CommissionId, mo => mo.MapFrom(src => src.Keycomm))
                 .ForMember(des => des.PolicyNumber, mo => mo.MapFrom(src => src.Policy.Policynum))
                 .ForMember(des => des.CompanyName, mo => mo.MapFrom(src => src.Policy.Company))
                 .ForMember(des => des.InsuredName, mo => mo.MapFrom(src => src.Insured))
-                .ForMember(des => des.Renewal, mo => mo.MapFrom(src => src.RenewalType))
+                .ForMember(des => des.Renewal, mo => mo.MapFrom(src => src.Renewals))
                 .ForMember(des => des.TotalAmount, mo => mo.MapFrom(src => src.Total))
                 .ForMember(des => des.AgentCommissions, mo => mo.MapFrom(src => src.AgentCommissions))
                 .ReverseMap();
 
-            CreateMap<ViewCommissionDto, Commission>()
-                .ForMember(des => des.CreatedDate, mo => mo.MapFrom(src => System.DateTime.Now))
-                .ForMember(des => des.ModifiedDate, mo => mo.MapFrom(src => System.DateTime.Now));
+            CreateMap<ViewCommissionDto, Comm>()
+                .ForMember(des => des.Cr8Date, mo => mo.MapFrom(src => System.DateTime.Now))
+                .ForMember(des => des.RevDate, mo => mo.MapFrom(src => System.DateTime.Now));
 
             CreateMap<AgentCommission, ViewAgentCommissionDto>()
                 .ForMember(des => des.Commission, mo => mo.MapFrom(src => src.Commission.HasValue ? (decimal)src.Commission.Value : 0))

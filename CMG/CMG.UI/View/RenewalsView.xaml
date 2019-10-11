@@ -86,7 +86,13 @@
                     <DataGridTemplateColumn Header="Policy #" Width="100" SortMemberPath="PolicyNumber" CanUserSort="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Path=PolicyNumber}"></TextBlock>
+                                <TextBlock Text="{Binding Path=PolicyNumber}">
+                                    <TextBlock.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Search Similar"></MenuItem>
+                                        </ContextMenu>
+                                    </TextBlock.ContextMenu>
+                                </TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

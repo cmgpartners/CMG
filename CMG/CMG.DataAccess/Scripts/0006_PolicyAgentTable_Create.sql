@@ -8,6 +8,7 @@ BEGIN
 		Split FLOAT,
 		AgentOrder INT,
 		IsDeleted BIT,
+		IsServiceAgent BIT DEFAULT(0) NOT NULL,
 		CreatedDate DATETIME NOT NULL,
 		CreatedBy VARCHAR(50) NOT NULL,
 		ModifiedDate DATETIME,
