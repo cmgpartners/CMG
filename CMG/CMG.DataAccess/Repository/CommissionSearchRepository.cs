@@ -39,7 +39,7 @@ namespace CMG.DataAccess.Repository
                 CommissionType = x.Commtype,
                 PolicyId = x.Keynumo,
                 RenewalType = x.Renewals,
-                Total = x.Total.HasValue ? Convert.ToDecimal(x.Total.Value) : 0,
+                Total = x.Total,
                 Insured = x.Insured,
                 PolicyNumber = x.Policy.Policynum,
                 Company = x.Policy.Company,

@@ -8,17 +8,17 @@ namespace CMG.DataAccess.Domain
     {
         public int Keycomm { get; set; }
         public string Commtype { get; set; }
-        public int? Yrmo { get; set; }
+        public string Yrmo { get; set; }
         public DateTime? Paydate { get; set; }
         [ForeignKey("Policy")]
         public int Keynumo { get; set; }
-        public double? Premium { get; set; }
+        public decimal Premium { get; set; }
         public string Renewals { get; set; }
-        public double? Total { get; set; }
+        public decimal Total { get; set; }
         public bool? Del { get; set; }
-        public DateTime? Cr8Date { get; set; }
+        public DateTime Cr8Date { get; set; }
         public string Cr8Locn { get; set; }
-        public DateTime? RevDate { get; set; }
+        public DateTime RevDate { get; set; }
         public string RevLocn { get; set; }
         public string Insured { get; set; }
         public string Comment { get; set; }

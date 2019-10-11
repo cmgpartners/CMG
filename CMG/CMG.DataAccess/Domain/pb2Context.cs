@@ -1025,6 +1025,7 @@ namespace CMG.DataAccess.Domain
                     .IsUnicode(false);
 
                 entity.Property(e => e.Commtype)
+                    .IsRequired()
                     .HasColumnName("COMMTYPE")
                     .HasMaxLength(1)
                     .IsUnicode(false)
@@ -1043,6 +1044,7 @@ namespace CMG.DataAccess.Domain
                     .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.Cr8Locn)
+                    .IsRequired()
                     .HasColumnName("CR8_LOCN")
                     .HasMaxLength(50)
                     .IsUnicode(false)
@@ -1053,8 +1055,9 @@ namespace CMG.DataAccess.Domain
                     .HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.Insured)
+                    .IsRequired()
                     .HasColumnName("INSURED")
-                    .HasMaxLength(500)
+                    .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasDefaultValueSql("('')");
 
@@ -1075,11 +1078,12 @@ namespace CMG.DataAccess.Domain
 
                 entity.Property(e => e.Premium)
                     .HasColumnName("PREMIUM")
-                    .HasDefaultValueSql("((0))");
+                    .HasColumnType("numeric(8, 0)");
 
                 entity.Property(e => e.Renewals)
+                    .IsRequired()
                     .HasColumnName("RENEWALS")
-                    .HasMaxLength(5)
+                    .HasMaxLength(2)
                     .IsUnicode(false)
                     .HasDefaultValueSql("('')");
 
@@ -1089,6 +1093,7 @@ namespace CMG.DataAccess.Domain
                     .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.RevLocn)
+                    .IsRequired()
                     .HasColumnName("REV_LOCN")
                     .HasMaxLength(50)
                     .IsUnicode(false)
@@ -1096,9 +1101,13 @@ namespace CMG.DataAccess.Domain
 
                 entity.Property(e => e.Total)
                     .HasColumnName("TOTAL")
-                    .HasDefaultValueSql("((0))");
+                    .HasColumnType("numeric(10, 2)");
 
-                entity.Property(e => e.Yrmo).HasColumnName("YRMO");
+                entity.Property(e => e.Yrmo)
+                    .IsRequired()
+                    .HasColumnName("YRMO")
+                    .HasMaxLength(6)
+                    .IsUnicode(false);
 
                 entity.HasOne(d => d.Policy)
                     .WithMany(p => p.Commissions)

@@ -178,7 +178,7 @@ SET @firstName = 'CMG'
 SET @color = '#FFFF35C5'
 SET @agentCode = 'CMG'
 
-IF NOT EXISTS (SELECT TOP 1 * FROM [dbo].Agent WHERE FirstName = @firstName AND LastName = @lastName)
+IF NOT EXISTS (SELECT TOP 1 * FROM [dbo].Agent WHERE FirstName = @firstName)
 BEGIN
 	INSERT INTO Agent
 	(
@@ -204,7 +204,7 @@ SET @firstName = 'Others'
 SET @color = '#FFE5EBF1'
 SET @agentCode = 'OTH'
 
-IF NOT EXISTS (SELECT TOP 1 * FROM [dbo].Agent WHERE FirstName = @firstName AND LastName = @lastName)
+IF NOT EXISTS (SELECT TOP 1 * FROM [dbo].Agent WHERE FirstName = @firstName)
 BEGIN
 	INSERT INTO Agent
 	(
@@ -517,7 +517,7 @@ END
 SET @firstName = 'RC'
 SET @color = '#FFE5EBF1'
 
-IF NOT EXISTS (SELECT TOP 1 * FROM [dbo].Agent WHERE FirstName = @firstName AND LastName = @lastName)
+IF NOT EXISTS (SELECT TOP 1 * FROM [dbo].Agent WHERE FirstName = @firstName)
 BEGIN
 	INSERT INTO Agent
 	(
@@ -542,7 +542,7 @@ END
 SET @firstName = 'TIC'
 SET @color = '#FFE5EBF1'
 
-IF NOT EXISTS (SELECT TOP 1 * FROM [dbo].Agent WHERE FirstName = @firstName AND LastName = @lastName)
+IF NOT EXISTS (SELECT TOP 1 * FROM [dbo].Agent WHERE FirstName = @firstName)
 BEGIN
 	INSERT INTO Agent
 	(
@@ -596,7 +596,7 @@ END
 SET @firstName = 'TP'
 SET @color = '#FFE5EBF1'
 
-IF NOT EXISTS (SELECT TOP 1 * FROM [dbo].Agent WHERE FirstName = @firstName AND LastName = @lastName)
+IF NOT EXISTS (SELECT TOP 1 * FROM [dbo].Agent WHERE FirstName = @firstName)
 BEGIN
 	INSERT INTO Agent
 	(
