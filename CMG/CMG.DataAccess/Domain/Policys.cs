@@ -7,7 +7,7 @@ namespace CMG.DataAccess.Domain
     {
         public Policys()
         {
-            Commission = new HashSet<Commission>();
+            Commissions = new HashSet<Comm>();
             PolIll = new HashSet<PolIll>();
             PolicyAgent = new HashSet<PolicyAgent>();
         }
@@ -68,7 +68,7 @@ namespace CMG.DataAccess.Domain
         public DateTime? AorEnd { get; set; }
         public string Status2 { get; set; }
 
-        public virtual ICollection<Commission> Commission { get; set; }
+        public virtual IEnumerable<Comm> Commissions { get; set; }
         public virtual ICollection<PolIll> PolIll { get; set; }
         public virtual ICollection<PolicyAgent> PolicyAgent { get; set; }
     }

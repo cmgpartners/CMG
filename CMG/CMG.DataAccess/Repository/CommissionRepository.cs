@@ -8,7 +8,7 @@ using LinqKit;
 
 namespace CMG.DataAccess.Repository
 {
-    public class CommissionRepository : Repository<Commission>, ICommissionRepository
+    public class CommissionRepository : Repository<Comm>, ICommissionRepository
     {
         private readonly pb2Context _context;
 
@@ -16,11 +16,11 @@ namespace CMG.DataAccess.Repository
         {
             _context = context;
         }
-        public IQueryResult<Commission> Find(ISearchCriteria criteria)
+        public IQueryResult<Comm> Find(ISearchCriteria criteria)
         {
-            var query = Context.Commission.AsQueryable().Include(x => x.AgentCommission).ThenInclude(x => x.Agent)
+            var query = Context.Comm.AsQueryable().Include(x => x.AgentCommissions).ThenInclude(x => x.Agent)
                 .Include(x => x.Policy);
-            IQueryable<Commission> queryable = query;
+            IQueryable<Comm> queryable = query;
 
             if((criteria.FilterBy?.Count() ?? 0) > 0)
             {
@@ -46,7 +46,7 @@ namespace CMG.DataAccess.Repository
             var result = queryable.ToList();
             
 
-            return new PagedQueryResult<Commission>()
+            return new PagedQueryResult<Comm>()
             {
                 TotalAmount = Convert.ToDecimal(totalAmount),
                 Result = result,
@@ -54,9 +54,9 @@ namespace CMG.DataAccess.Repository
             };
         }
 
-        private static Expression<Func<Commission, bool>> GetPredicate(ISearchCriteria criteria)
+        private static Expression<Func<Comm, bool>> GetPredicate(ISearchCriteria criteria)
         {
-            Expression<Func<Commission, bool>> predicate = null;
+            Expression<Func<Comm, bool>> predicate = null;
 
             foreach (var filterBy in criteria.FilterBy)
             {
@@ -72,7 +72,7 @@ namespace CMG.DataAccess.Repository
             return predicate;
         }
 
-        private IQueryable<Commission> OrderByPredicate(IQueryable<Commission> query, SortBy criteriaSortBy)
+        private IQueryable<Comm> OrderByPredicate(IQueryable<Comm> query, SortBy criteriaSortBy)
         {
             bool DescendingOrder = criteriaSortBy.DescendingOrder.HasValue && criteriaSortBy.DescendingOrder.Value;
 
@@ -100,15 +100,15 @@ namespace CMG.DataAccess.Repository
                 case "renewal":
                     if (DescendingOrder)
                     {
-                        return query.OrderByDescending(o => o.CommissionType);
+                        return query.OrderByDescending(o => o.Commtype);
                     }
-                    return query.OrderBy(o => o.CommissionType);
+                    return query.OrderBy(o => o.Commtype);
                 case "paydate":
                     if (DescendingOrder)
                     {
-                        return query.OrderByDescending(o => o.PayDate);
+                        return query.OrderByDescending(o => o.Paydate);
                     }
-                    return query.OrderBy(o => o.PayDate);
+                    return query.OrderBy(o => o.Paydate);
                 case "total":
                     if (DescendingOrder)
                     {
@@ -121,7 +121,7 @@ namespace CMG.DataAccess.Repository
 
         }
 
-        private static Expression<Func<Commission, bool>> FilterByClausure(FilterBy filterBy)
+        private static Expression<Func<Comm, bool>> FilterByClausure(FilterBy filterBy)
         {
             switch (filterBy.Property.ToLower())
             {
@@ -143,50 +143,50 @@ namespace CMG.DataAccess.Repository
             }
         }
 
-        private static Expression<Func<Commission, bool>> DateRangeExpression(string greaterThan, string lessThan)
+        private static Expression<Func<Comm, bool>> DateRangeExpression(string greaterThan, string lessThan)
         {
             if(!string.IsNullOrEmpty(greaterThan)
                 && !string.IsNullOrEmpty(lessThan))
             {
-                return w => w.PayDate >= Convert.ToDateTime(greaterThan)
-                    && w.PayDate <= Convert.ToDateTime(lessThan);
+                return w => w.Paydate >= Convert.ToDateTime(greaterThan)
+                    && w.Paydate <= Convert.ToDateTime(lessThan);
             }
 
             if(!string.IsNullOrEmpty(greaterThan))
             {
-                return w => w.PayDate >= Convert.ToDateTime(greaterThan);
+                return w => w.Paydate >= Convert.ToDateTime(greaterThan);
             }
 
             if (!string.IsNullOrEmpty(lessThan))
             {
-                return w => w.PayDate <= Convert.ToDateTime(lessThan);
+                return w => w.Paydate <= Convert.ToDateTime(lessThan);
             }
             return w => true;
         }
 
-        private static Expression<Func<Commission, bool>> PolicyNumberExpression(string contains)
+        private static Expression<Func<Comm, bool>> PolicyNumberExpression(string contains)
         {
             return w => w.Policy.Policynum.ToLowerInvariant().Contains(contains.ToLowerInvariant());
         }
 
-        private static Expression<Func<Commission, bool>> InsuredNameExpession(string contains)
+        private static Expression<Func<Comm, bool>> InsuredNameExpession(string contains)
         {
             return w => w.Insured.ToLowerInvariant().Contains(contains.ToLowerInvariant());
         }
 
-        private static Expression<Func<Commission, bool>> CompanyNameExpession(string contains)
+        private static Expression<Func<Comm, bool>> CompanyNameExpession(string contains)
         {
             return w => w.Policy.Company.ToLowerInvariant().Contains(contains.ToLowerInvariant());
         }
 
-        private static Expression<Func<Commission, bool>> AgentExpression(string equals)
+        private static Expression<Func<Comm, bool>> AgentExpression(string equals)
         {
-            return w => w.AgentCommission.Any(x => x.AgentId == Convert.ToInt32(equals));
+            return w => w.AgentCommissions.Any(x => x.AgentId == Convert.ToInt32(equals));
         }
 
-        private static Expression<Func<Commission, bool>> RenewalOrFYCExpression(string equal)
+        private static Expression<Func<Comm, bool>> RenewalOrFYCExpression(string equal)
         {
-            return w => w.CommissionType.Equals(equal.Trim());
+            return w => w.Commtype.Equals(equal.Trim());
         }
 
     }

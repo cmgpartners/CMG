@@ -23,7 +23,6 @@ namespace CMG.DataAccess.Domain
         public virtual DbSet<Calls> Calls { get; set; }
         public virtual DbSet<Cases> Cases { get; set; }
         public virtual DbSet<Comm> Comm { get; set; }
-        public virtual DbSet<Commission> Commission { get; set; }
         public virtual DbSet<Grp> Grp { get; set; }
         public virtual DbSet<Grpitem> Grpitem { get; set; }
         public virtual DbSet<PeoCall> PeoCall { get; set; }
@@ -41,7 +40,7 @@ namespace CMG.DataAccess.Domain
 
         // Unable to generate entity type for table 'dbo.KEY_TABLE'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.TEMPLATES1'. Please see the warning messages.
-        // Unable to generate entity type for table 'dbo.POL_ILL_TEST'. Please see the warning messages.
+        // Unable to generate entity type for table 'dbo.COMM_BACKUP'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.POL_ILL2'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.POL_ILL_BACKUP'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.COMBO'. Please see the warning messages.
@@ -159,9 +158,8 @@ namespace CMG.DataAccess.Domain
                     .IsUnicode(false);
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
-
                 entity.HasOne(d => d.CommissionNavigation)
-                    .WithMany(p => p.AgentCommission)
+                    .WithMany(p => p.AgentCommissions)
                     .HasForeignKey(d => d.CommissionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Commission_AgentCommission");
@@ -1016,83 +1014,15 @@ namespace CMG.DataAccess.Domain
             modelBuilder.Entity<Comm>(entity =>
             {
                 entity.HasKey(e => e.Keycomm)
-                    .ForSqlServerIsClustered(false);
+                    .HasName("PK_Commission");
 
                 entity.ToTable("COMM");
 
-                entity.HasIndex(e => e.Commtype)
-                    .HasName("IDX_COMM_COMMTYPE");
+                entity.Property(e => e.Keycomm).HasColumnName("KEYCOMM");
 
-                entity.HasIndex(e => e.Company)
-                    .HasName("IDX_COMM_COMPANY");
-
-                entity.HasIndex(e => e.Insured)
-                    .HasName("IDX_COMM_INSURED");
-
-                entity.HasIndex(e => e.Keynumo)
-                    .HasName("IDX_COMM_KEYNUMO");
-
-                entity.HasIndex(e => e.Paydate)
-                    .HasName("IDX_COMM_PAYDATE");
-
-                entity.HasIndex(e => e.Policynum)
-                    .HasName("IDX_COMM_POLICYNUM");
-
-                entity.HasIndex(e => e.Renewals)
-                    .HasName("IDX_COMM_RENEWALS");
-
-                entity.HasIndex(e => e.Yrmo)
-                    .HasName("IDX_COMM_YRMO");
-
-                entity.Property(e => e.Keycomm)
-                    .HasColumnName("KEYCOMM")
-                    .ValueGeneratedNever();
-
-                entity.Property(e => e.Agent1)
-                    .IsRequired()
-                    .HasColumnName("AGENT1")
-                    .HasMaxLength(3)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("('')");
-
-                entity.Property(e => e.Agent2)
-                    .IsRequired()
-                    .HasColumnName("AGENT2")
-                    .HasMaxLength(3)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("('')");
-
-                entity.Property(e => e.Agent3)
-                    .IsRequired()
-                    .HasColumnName("AGENT3")
-                    .HasMaxLength(3)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("('')");
-
-                entity.Property(e => e.Agent4)
-                    .IsRequired()
-                    .HasColumnName("AGENT4")
-                    .HasMaxLength(3)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("('')");
-
-                entity.Property(e => e.Agent5)
-                    .IsRequired()
-                    .HasColumnName("AGENT5")
-                    .HasMaxLength(3)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("('')");
-
-                entity.Property(e => e.Agent6)
-                    .IsRequired()
-                    .HasColumnName("AGENT6")
-                    .HasMaxLength(3)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("('')");
-
-                entity.Property(e => e.Bob)
-                    .HasColumnName("BOB")
-                    .HasColumnType("numeric(10, 2)");
+                entity.Property(e => e.Comment)
+                    .HasColumnName("COMMENT")
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Commtype)
                     .IsRequired()
@@ -1116,15 +1046,13 @@ namespace CMG.DataAccess.Domain
                 entity.Property(e => e.Cr8Locn)
                     .IsRequired()
                     .HasColumnName("CR8_LOCN")
-                    .HasMaxLength(14)
+                    .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasDefaultValueSql("(suser_sname())");
 
-                entity.Property(e => e.Del).HasColumnName("DEL_");
-
-                entity.Property(e => e.Frank)
-                    .HasColumnName("FRANK")
-                    .HasColumnType("numeric(10, 2)");
+                entity.Property(e => e.Del)
+                    .HasColumnName("DEL_")
+                    .HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.Insured)
                     .IsRequired()
@@ -1133,38 +1061,18 @@ namespace CMG.DataAccess.Domain
                     .IsUnicode(false)
                     .HasDefaultValueSql("('')");
 
-                entity.Property(e => e.Kate)
-                    .HasColumnName("KATE")
-                    .HasColumnType("numeric(10, 2)");
-
                 entity.Property(e => e.Keynumo).HasColumnName("KEYNUMO");
 
                 entity.Property(e => e.Keynump).HasColumnName("KEYNUMP");
-
-                entity.Property(e => e.Marty)
-                    .HasColumnName("MARTY")
-                    .HasColumnType("numeric(10, 2)");
-
-                entity.Property(e => e.Mary)
-                    .HasColumnName("MARY")
-                    .HasColumnType("numeric(10, 2)");
-
-                entity.Property(e => e.Other)
-                    .HasColumnName("OTHER")
-                    .HasColumnType("numeric(10, 2)");
 
                 entity.Property(e => e.Paydate)
                     .HasColumnName("PAYDATE")
                     .HasColumnType("datetime");
 
-                entity.Property(e => e.Peter)
-                    .HasColumnName("PETER")
-                    .HasColumnType("numeric(10, 2)");
-
                 entity.Property(e => e.Policynum)
                     .IsRequired()
                     .HasColumnName("POLICYNUM")
-                    .HasMaxLength(15)
+                    .HasMaxLength(25)
                     .IsUnicode(false)
                     .HasDefaultValueSql("('')");
 
@@ -1187,33 +1095,9 @@ namespace CMG.DataAccess.Domain
                 entity.Property(e => e.RevLocn)
                     .IsRequired()
                     .HasColumnName("REV_LOCN")
-                    .HasMaxLength(14)
+                    .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasDefaultValueSql("(suser_sname())");
-
-                entity.Property(e => e.Split1)
-                    .HasColumnName("SPLIT1")
-                    .HasColumnType("numeric(5, 2)");
-
-                entity.Property(e => e.Split2)
-                    .HasColumnName("SPLIT2")
-                    .HasColumnType("numeric(5, 2)");
-
-                entity.Property(e => e.Split3)
-                    .HasColumnName("SPLIT3")
-                    .HasColumnType("numeric(5, 2)");
-
-                entity.Property(e => e.Split4)
-                    .HasColumnName("SPLIT4")
-                    .HasColumnType("numeric(5, 2)");
-
-                entity.Property(e => e.Split5)
-                    .HasColumnName("SPLIT5")
-                    .HasColumnType("numeric(5, 2)");
-
-                entity.Property(e => e.Split6)
-                    .HasColumnName("SPLIT6")
-                    .HasColumnType("numeric(5, 2)");
 
                 entity.Property(e => e.Total)
                     .HasColumnName("TOTAL")
@@ -1224,41 +1108,10 @@ namespace CMG.DataAccess.Domain
                     .HasColumnName("YRMO")
                     .HasMaxLength(6)
                     .IsUnicode(false);
-            });
-
-            modelBuilder.Entity<Commission>(entity =>
-            {
-                entity.Property(e => e.Comment).IsUnicode(false);
-
-                entity.Property(e => e.CommissionType)
-                    .HasMaxLength(1)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.Insured)
-                    .HasMaxLength(500)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ModifiedBy)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
-
-                entity.Property(e => e.PayDate).HasColumnType("datetime");
-
-                entity.Property(e => e.RenewalType)
-                    .HasMaxLength(5)
-                    .IsUnicode(false);
 
                 entity.HasOne(d => d.Policy)
-                    .WithMany(p => p.Commission)
-                    .HasForeignKey(d => d.PolicyId)
+                    .WithMany(p => p.Commissions)
+                    .HasForeignKey(d => d.Keynumo)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Policys_Commission");
             });
