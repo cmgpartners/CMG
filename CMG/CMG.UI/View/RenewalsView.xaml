@@ -223,15 +223,6 @@
         </Grid>
 
         <Grid Grid.Row="2" Background="#FFCEEAFF" Grid.ColumnSpan="4">
-            <StackPanel Orientation="Horizontal" Visibility="{Binding IsPaginationVisible, Converter={StaticResource VisibilityConverter}}" Grid.Column="0">
-                <Button Content="&lt;&lt;" Style="{StaticResource PaginationButton}" Command="{Binding FirstPageCommand}"/>
-                <Button Content="&lt;" Style="{StaticResource PaginationButton}" Command="{Binding PreviousPageCommand}"/>
-                <Label Content="{Binding CurrentPage}" VerticalAlignment="Center"/>
-                <Label Content="of" VerticalAlignment="Center"/>
-                <Label Content="{Binding TotalPages}" VerticalAlignment="Center"/>
-                <Button Content="&gt;" Style="{StaticResource PaginationButton}" Command="{Binding NextPageCommand}"/>
-                <Button Content="&gt;&gt;" Style="{StaticResource PaginationButton}" Command="{Binding LastPageCommand}"/>
-            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>

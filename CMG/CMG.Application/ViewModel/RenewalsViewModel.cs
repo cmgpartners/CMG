@@ -9,6 +9,7 @@ using System;
 using CMG.DataAccess.Query;
 using System.Windows.Input;
 using CMG.DataAccess.Domain;
+using System.Windows;
 
 namespace CMG.Application.ViewModel
 {
@@ -18,7 +19,6 @@ namespace CMG.Application.ViewModel
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private const int startYear = 1925;
-        private readonly int PageSize = 10;
         #endregion Member variables
 
         #region Constructor
@@ -56,7 +56,6 @@ namespace CMG.Application.ViewModel
             {
                 _selectedYear = value;
                 IsImportEnabled = false;
-                CurrentPage = 1;
                 OnPropertyChanged("SelectedYear");
                 GetCommissions();
             }
@@ -70,7 +69,6 @@ namespace CMG.Application.ViewModel
             {
                 _selectedMonth = value;
                 IsImportEnabled = false;
-                CurrentPage = 1;
                 OnPropertyChanged("SelectedMonth");
                 GetCommissions();
             }
@@ -84,7 +82,6 @@ namespace CMG.Application.ViewModel
             {
                 _dataCollection = value;
                 OnPropertyChanged("DataCollection");
-                OnPropertyChanged("IsPaginationVisible");
                 OnPropertyChanged("IsNoRecordFound");
             }
         }
@@ -117,65 +114,6 @@ namespace CMG.Application.ViewModel
             }
         }
 
-        #region pagination properties
-        private int _totalRecords;
-        public int TotalRecords
-        {
-            get { return _totalRecords; }
-            set
-            {
-                _totalRecords = value;
-                OnPropertyChanged("TotalRecords");
-                OnPropertyChanged("TotalPages");
-            }
-        }
-        private int _currentPage = 1;
-        public int CurrentPage
-        {
-            get { return _currentPage; }
-            set
-            {
-                _currentPage = value;
-                OnPropertyChanged("CurrentPage");
-            }
-
-        }
-        private List<int> _pages;
-        public List<int> Pages
-        {
-            get { return _pages; }
-            set
-            {
-                _pages = value;
-                OnPropertyChanged("Pages");
-            }
-        }
-        public int TotalPages
-        {
-            get { return TotalRecords % PageSize == 0 ? (TotalRecords / PageSize) : (TotalRecords / PageSize) + 1; }
-        }
-        public bool IsPaginationVisible
-        {
-            get { return DataCollection != null && DataCollection.Count > 0; }
-        }
-        public ICommand FirstPageCommand
-        {
-            get { return CreateCommand(FirstPage); }
-        }
-        public ICommand LastPageCommand
-        {
-            get { return CreateCommand(LastPage); }
-        }
-        public ICommand NextPageCommand
-        {
-            get { return CreateCommand(NextPage); }
-        }
-        public ICommand PreviousPageCommand
-        {
-            get { return CreateCommand(PreviousPage); }
-        }
-        #endregion
-
         #endregion Properties
 
         #region Methods
@@ -191,11 +129,8 @@ namespace CMG.Application.ViewModel
                 year = SelectedYear;
             }
             SearchQuery searchQuery = BuildSearchQuery(year, SelectedMonth);
-            searchQuery.Page = CurrentPage;
-            searchQuery.PageSize = PageSize;
             var dataSearchBy = _unitOfWork.Commissions.Find(searchQuery);
             DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
-            TotalRecords = dataSearchBy.TotalRecords;
             if (IsImportEnabled)
             {
                 UpdateImportCollection();
@@ -205,7 +140,6 @@ namespace CMG.Application.ViewModel
         public void Import()
         {
             IsImportEnabled = true;
-            CurrentPage = 1;
             GetCommissions();
         }
 
@@ -215,54 +149,35 @@ namespace CMG.Application.ViewModel
             {
                 if (isImportEnabled)
                 {
-                    foreach(ViewCommissionDto commission in DataCollection)
+                    try
                     {
-                        foreach (ViewAgentCommissionDto agentComm in commission.AgentCommissions)
+                        foreach (ViewCommissionDto commission in DataCollection)
                         {
-                            agentComm.Agent = null;
-                            agentComm.CreatedDate = null;
-                            agentComm.CreatedBy = null;
+                            foreach (ViewAgentCommissionDto agentComm in commission.AgentCommissions)
+                            {
+                                agentComm.Agent = null;
+                                agentComm.CreatedDate = null;
+                                agentComm.CreatedBy = null;
+                            }
+                            var entityCommission = _mapper.Map<Comm>(commission);
+                            entityCommission.Yrmo = entityCommission.Paydate?.ToString("yyyyMM");
+                            var commissionId = _unitOfWork.Commissions.Add(entityCommission);
+                            _unitOfWork.Commit();
                         }
-                        var entityCommission = _mapper.Map<Comm>(commission);
-                        entityCommission.Yrmo = entityCommission.Paydate?.ToString("yyyyMM");
-                        var commissionId = _unitOfWork.Commissions.Add(entityCommission);
-                        _unitOfWork.Commit();
+                        //MessageBox.Show("Records saved successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        //MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
             }
         }
 
-        public void FirstPage()
-        {
-            CurrentPage = 1;
-            GetCommissions();
-        }
-        public void LastPage()
-        {
-            CurrentPage = TotalPages;
-            GetCommissions();
-        }
-        public void NextPage()
-        {
-            if (CurrentPage < TotalPages)
-            {
-                CurrentPage += 1;
-                GetCommissions();
-            }
-        }
-        public void PreviousPage()
-        {
-            if (CurrentPage > 1)
-            {
-                CurrentPage -= 1;
-                GetCommissions();
-            }
-        }
-
+       
         private void LoadData()
         {
-            _pages = new List<int>();
-            Pages.AddRange(Enumerable.Range(1, TotalPages));
+            GetCommissions();
             GetCommissions();
         }
         private SearchQuery BuildSearchQuery(int year, string month)
