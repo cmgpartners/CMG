@@ -149,15 +149,25 @@ namespace CMG.DataAccess.Domain
                 entity.Property(e => e.CreatedBy)
                     .IsRequired()
                     .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("(suser_sname())");
 
-                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+                entity.Property(e => e.CreatedDate)
+                    .IsRequired()
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.ModifiedBy)
+                    .IsRequired()
                     .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("(suser_sname())");
 
-                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+                entity.Property(e => e.ModifiedDate)
+                    .IsRequired()
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())"); 
+
                 entity.HasOne(d => d.CommissionNavigation)
                     .WithMany(p => p.AgentCommissions)
                     .HasForeignKey(d => d.CommissionId)

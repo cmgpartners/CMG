@@ -18,8 +18,8 @@ namespace CMG.DataAccess.Repository
         }
         public IQueryResult<Comm> Find(ISearchCriteria criteria)
         {
-            var query = Context.Comm.AsQueryable().Include(x => x.AgentCommissions).ThenInclude(x => x.Agent)
-                .Include(x => x.Policy);
+            var query = Context.Comm.AsQueryable().Include(x => x.AgentCommissions).ThenInclude(x => x.Agent);
+
             IQueryable<Comm> queryable = query;
 
             if((criteria.FilterBy?.Count() ?? 0) > 0)
@@ -31,26 +31,28 @@ namespace CMG.DataAccess.Repository
                 queryable = OrderByPredicate(queryable, criteria.SortBy);
             }
 
-            var result = queryable.Select(x => new Commission
+            var result = queryable.Select(x => new Comm
             {
-                Id = x.Id,
-                PayDate = x.PayDate,
-                CommissionType = x.CommissionType,
-                PolicyId = x.PolicyId,
-                RenewalType = x.RenewalType,
+                Keycomm = x.Keycomm,
+                Paydate = x.Paydate,
+                Commtype = x.Commtype,
+                Keynumo = x.Keynumo,
+                Renewals = x.Renewals,
                 Total = x.Total,
                 Insured = x.Insured,
-                Policy = new Policys
-                {
-                    Policynum = x.Policy.Policynum,
-                    Company = x.Policy.Company
-                },
+                Policynum = x.Policynum,
+                Company = x.Company,
                 Comment = x.Comment,
+                Premium = x.Premium,
+                Yrmo = x.Yrmo,
+                Cr8Date = x.Cr8Date,
+                RevDate = x.RevDate,
                 AgentCommissions = x.AgentCommissions.Select(a => new AgentCommission
                 {
                     AgentId = a.AgentId,
                     Agent = a.Agent,
                     Split = a.Split,
+                    AgentOrder = a.AgentOrder,
                     Commission = a.Commission
                 })
             });

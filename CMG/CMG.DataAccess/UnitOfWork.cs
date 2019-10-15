@@ -33,11 +33,11 @@ namespace CMG.DataAccess
         public ICommissionSearchRepository CommissionSearch => _commissionSearchRepository ?? (_commissionSearchRepository = new CommissionSearchRepository(_context));
         public IPolicyRepository Policies => _policyRepository ?? (_policyRepository = new PolicyRepository(_context));
 
-        public async Task Commit()
+        public void Commit()
         {
             try
             {
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
                 _transaction.Commit();
                 _transaction = _context.Database.BeginTransaction();
             }

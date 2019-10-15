@@ -9,7 +9,7 @@ namespace CMG.DataAccess.Interface
         IPolicyRepository Policies { get; }
         ICommissionSearchRepository CommissionSearch { get; }
 
-        Task Commit();
+        void Commit();
         void SaveChanges();
     }
 }

@@ -217,14 +217,16 @@ namespace CMG.Application.ViewModel
                 {
                     foreach(ViewCommissionDto commission in DataCollection)
                     {
-                        //foreach(ViewAgentCommissionDto agentComm in commission.AgentCommissions)
-                        //{
-                        //    agentComm.Agent = null;
-                        //}
-                        commission.CommissionId = 0;
-                        var entityCommission = _mapper.Map<Commission>(commission);
+                        foreach (ViewAgentCommissionDto agentComm in commission.AgentCommissions)
+                        {
+                            agentComm.Agent = null;
+                            agentComm.CreatedDate = null;
+                            agentComm.CreatedBy = null;
+                        }
+                        var entityCommission = _mapper.Map<Comm>(commission);
+                        entityCommission.Yrmo = entityCommission.Paydate?.ToString("yyyyMM");
                         var commissionId = _unitOfWork.Commissions.Add(entityCommission);
-                        _unitOfWork.SaveChanges();
+                        _unitOfWork.Commit();
                     }
                 }
             }
@@ -284,6 +286,9 @@ namespace CMG.Application.ViewModel
             {
                 foreach(ViewCommissionDto commission in DataCollection)
                 {
+                    commission.CommissionId = 0;
+                    commission.CreatedDate = null;
+                    commission.CreatedBy = null;
                     commission.TotalAmount = 0;
                     commission.AgentCommissions.Select(comm => { comm.Commission = 0; return comm; }).ToList();
                 }

@@ -1,4 +1,4 @@
-﻿using CMG.Common;
+﻿using System;
 
 namespace CMG.Application.DTO
 {
@@ -7,6 +7,9 @@ namespace CMG.Application.DTO
         public decimal Commission { get; set; }
         public decimal Split { get; set; }
         public int AgentId { get; set; }
+        public int AgentOrder { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public string? CreatedBy { get; set; }
         public ViewAgentDto Agent { get; set; } = new ViewAgentDto();
     }
 }
