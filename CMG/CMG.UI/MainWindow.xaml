@@ -13,13 +13,10 @@
     <Window.Resources>
         <ResourceDictionary>
             <DataTemplate DataType="{x:Type viewModels:RenewalsViewModel}" >
-                <views:RenewalsView DataContext="{Binding}"></views:RenewalsView>
+                <views:RenewalsView DataContext="{Binding }"></views:RenewalsView>
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModels:SearchViewModel}" >
-                <views:SearchView DataContext="{Binding}"></views:SearchView>
-            </DataTemplate>
-            <DataTemplate DataType="{x:Type viewModels:AgentViewModel}">
-                <views:AgentsView DataContext="{Binding}"></views:AgentsView>
+                <views:SearchView DataContext="{Binding }"></views:SearchView>
             </DataTemplate>
         </ResourceDictionary>
     </Window.Resources>
@@ -48,7 +45,7 @@
                 <TextBlock Text="cmg" Style="{StaticResource LogoTextBlock}"></TextBlock>
             </Grid>
             <StackPanel Grid.Row="1">
-                <ListView x:Name="lstNavItems" SelectionChanged="LstNavItems_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource LeftNavigationListView}">
+                <ListView x:Name="lstNavItems" SelectedIndex="{Binding SelectedIndexLeftNavigation}" SelectionChanged="LstNavItems_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource LeftNavigationListView}">
                     <ListViewItem Height="60">
                         <Grid Width="100">
                             <Grid.RowDefinitions>
@@ -107,13 +104,10 @@
                     </ListViewItem>
                 </ListView>
             </StackPanel>
-            <Button Grid.Row="2" Click="Button_SettingsClick" Background="Transparent" BorderThickness="0">
-                <Image  Grid.Row="2" Source="/Asset/Settings.png" Style="{StaticResource ImageIconStyle}"></Image>
-            </Button>
         </Grid>
         
         <Grid Grid.Row="1" Grid.Column="1" Style="{StaticResource PageHeader}">
-            <ContentPresenter  Content="{Binding}" ></ContentPresenter>
+            <ContentPresenter  Content="{Binding SelectedViewModel}" ></ContentPresenter>
         </Grid>
     </Grid>
 </Window>

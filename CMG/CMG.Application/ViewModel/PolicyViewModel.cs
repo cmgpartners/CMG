@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace CMG.Application.ViewModel
 {
-    public class PolicyViewModel : BaseViewModel
+    public class PolicyViewModel : MainViewModel
     {
         #region Member variables
         private readonly IUnitOfWork _unitOfWork;
@@ -14,7 +14,8 @@ namespace CMG.Application.ViewModel
         #endregion
 
         #region Constructor
-        public PolicyViewModel(IUnitOfWork unitOfWork, IMapper mapper)
+        public PolicyViewModel(IUnitOfWork unitOfWork, IMapper mapper) 
+            : base(unitOfWork, mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;

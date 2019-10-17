@@ -12,5 +12,14 @@
             Marty = 6,
             Others = 7
         }
+
+        public enum LeftNavigation
+        {
+            Renewals = 0,
+            FirstYearCommission = 1,
+            Summary = 2,
+            Search = 3,
+            SalesForce = 4
+        }
     }
 }
