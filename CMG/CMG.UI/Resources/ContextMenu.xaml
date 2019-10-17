@@ -1,0 +1,13 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style x:Key="ContextMenuItemStyle" TargetType="ContextMenu">
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Padding" Value="10 0 0 0"/>
+        <Setter Property="FontWeight" Value="Regular"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Foreground" Value="Gray"/>
+        <Setter Property="HasDropShadow" Value="False" />
+    </Style>
+    
+</ResourceDictionary>

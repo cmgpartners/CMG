@@ -8,16 +8,22 @@ namespace CMG.Application.ViewModel
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
+        #region MemberVariables
+        private List<RelayCommand> _commandsList;
+        private List<RelayCommand<object>> _genericCommandsList;
+        public event PropertyChangedEventHandler PropertyChanged;
+        #endregion MemberVariables
+
+        #region Constructor
         protected BaseViewModel()
         {
             CommandManager.AssignOnPropertyChanged(ref this.PropertyChanged);
             _commandsList = new List<RelayCommand>();
             _genericCommandsList = new List<RelayCommand<object>>();
         }
+        #endregion Constructor
 
-        private List<RelayCommand> _commandsList;
-        private List<RelayCommand<object>> _genericCommandsList;
-
+        #region Methods
         protected RelayCommand CreateCommand(Action execute)
         {
             return CreateCommand(execute, null);
@@ -67,9 +73,6 @@ namespace CMG.Application.ViewModel
                 _genericCommandsList[i].RemoveCommand();
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
         protected void ChangeProperty<T>(ref T property, T value, [CallerMemberName] string propertyName = null)
         {
             if (Object.Equals(property, value))
@@ -97,5 +100,6 @@ namespace CMG.Application.ViewModel
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+        #endregion Methods
     }
 }
