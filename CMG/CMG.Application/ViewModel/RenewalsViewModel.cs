@@ -107,6 +107,11 @@ namespace CMG.Application.ViewModel
         {
             get { return CreateCommand(Delete); }
         }
+        public ICommand AddCommand
+        {
+            get { return CreateCommand(Add); }
+        }
+
         private bool isImportEnabled;
         public bool IsImportEnabled
         {
@@ -216,6 +221,11 @@ namespace CMG.Application.ViewModel
                     GetCommissions();
                 }
             }
+        }
+
+        public void Add()
+        {
+            DataCollection.Add(new ViewCommissionDto());
         }
         private void LoadData()
         {

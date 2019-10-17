@@ -223,6 +223,7 @@
         </Grid>
 
         <Grid Grid.Row="2" Background="#FFCEEAFF" Grid.ColumnSpan="4">
+            <Button x:Name="buttonAdd" Content="+" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding AddCommand}"></Button>
         </Grid>
     </Grid>
 </UserControl>
