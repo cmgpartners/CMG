@@ -18,7 +18,10 @@ namespace CMG.Application.DTO
         public string YearMonth { get; set; }
         public decimal Premium { get; set; }
         public DateTime? CreatedDate { get; set; }
-        public DateTime? CreatedBy { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; } = null;
+        public string ModifiedBy { get; set; } = null;
+        public bool IsDeleted { get; set; }
         public ICollection<ViewAgentCommissionDto> AgentCommissions { get; set; } = new List<ViewAgentCommissionDto>();
     }
 }

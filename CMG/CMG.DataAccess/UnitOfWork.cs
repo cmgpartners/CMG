@@ -27,11 +27,15 @@ namespace CMG.DataAccess
         private ICommissionSearchRepository _commissionSearchRepository;
         private IAgentRepository _agentRepository;
         private IPolicyRepository _policyRepository;
+        private IAgentCommissionRepository _agentCommissionRepository;
 
         public ICommissionRepository Commissions => _commissionRepository ?? (_commissionRepository = new CommissionRepository(_context));
         public IAgentRepository Agents => _agentRepository ?? (_agentRepository = new AgentRepository(_context));
         public ICommissionSearchRepository CommissionSearch => _commissionSearchRepository ?? (_commissionSearchRepository = new CommissionSearchRepository(_context));
         public IPolicyRepository Policies => _policyRepository ?? (_policyRepository = new PolicyRepository(_context));
+        public IAgentCommissionRepository AgentCommissions => _agentCommissionRepository ?? (_agentCommissionRepository = new AgentCommissionRepository(_context));
+
+
 
         public void Commit()
         {

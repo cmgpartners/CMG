@@ -27,6 +27,6 @@ namespace CMG.DataAccess.Domain
         public int Keynump { get; set; }
 
         public virtual Policys Policy { get; set; }
-        public virtual IEnumerable<AgentCommission> AgentCommissions { get; set; }
+        public virtual IEnumerable<AgentCommission> AgentCommissions { get; set; } = new List<AgentCommission>();
     }
 }

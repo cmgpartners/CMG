@@ -103,6 +103,10 @@ namespace CMG.Application.ViewModel
         {
             get { return CreateCommand(Save); }
         }
+        public ICommand DeleteCommand
+        {
+            get { return CreateCommand(Delete); }
+        }
         private bool isImportEnabled;
         public bool IsImportEnabled
         {
@@ -159,11 +163,13 @@ namespace CMG.Application.ViewModel
                                 agentComm.CreatedDate = null;
                                 agentComm.CreatedBy = null;
                             }
+                            commission.CommissionId = 0;
                             var entityCommission = _mapper.Map<Comm>(commission);
                             entityCommission.Yrmo = entityCommission.Paydate?.ToString("yyyyMM");
                             var commissionId = _unitOfWork.Commissions.Add(entityCommission);
                             _unitOfWork.Commit();
                         }
+                        IsImportEnabled = false;
                         //MessageBox.Show("Records saved successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     catch (Exception ex)
@@ -171,13 +177,48 @@ namespace CMG.Application.ViewModel
                         //MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
+                else
+                {
+                    foreach (ViewCommissionDto commission in DataCollection)
+                    {
+                        var entity = _mapper.Map<Comm>(commission);
+                        entity.Yrmo = entity.Paydate?.ToString("yyyyMM");
+                        entity.RevDate = DateTime.Now;
+                        entity.RevLocn = $"{Environment.UserDomainName}\\{Environment.UserName}";
+                        foreach (AgentCommission agentComm in entity.AgentCommissions)
+                        {
+                            agentComm.ModifiedBy = $"{Environment.UserDomainName}\\{Environment.UserName}";
+                            agentComm.ModifiedDate = DateTime.Now;
+                            _unitOfWork.AgentCommissions.Save(agentComm);
+                        }
+                        var commissionId = _unitOfWork.Commissions.Save(entity);
+                        _unitOfWork.Commit();
+                    }
+                    
+                }
             }
         }
 
-       
+        public void Delete(object commissionId)
+        {
+            if (IsImportEnabled)
+            {
+                DataCollection.Remove(DataCollection.Where(commission => commission.CommissionId == Convert.ToInt32(commissionId)).SingleOrDefault());
+            } 
+            else
+            {
+                if(commissionId != null && Convert.ToInt32(commissionId) > 0)
+                {
+                    var commission = _unitOfWork.Commissions.Find(Convert.ToInt32(commissionId));
+                    commission.Del = true;
+                    commission.AgentCommissions = commission.AgentCommissions.Select(agentComm => { agentComm.IsDeleted = true; return agentComm; }).AsEnumerable();
+                    _unitOfWork.Commit();
+                    GetCommissions();
+                }
+            }
+        }
         private void LoadData()
         {
-            GetCommissions();
             GetCommissions();
         }
         private SearchQuery BuildSearchQuery(int year, string month)
@@ -201,11 +242,10 @@ namespace CMG.Application.ViewModel
             {
                 foreach(ViewCommissionDto commission in DataCollection)
                 {
-                    commission.CommissionId = 0;
                     commission.CreatedDate = null;
                     commission.CreatedBy = null;
-                    commission.TotalAmount = 0;
-                    commission.AgentCommissions.Select(comm => { comm.Commission = 0; return comm; }).ToList();
+                    commission.TotalAmount = 0.0M;
+                    commission.AgentCommissions.Select(comm => { comm.Commission = 0.0M; return comm; }).ToList();
                 }
             }
         }

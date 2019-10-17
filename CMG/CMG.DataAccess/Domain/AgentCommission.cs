@@ -14,7 +14,7 @@ namespace CMG.DataAccess.Domain
         public string CreatedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
-
+        public bool IsDeleted { get; set; }
         public virtual Agent Agent { get; set; }
         public virtual Comm CommissionNavigation { get; set; }
     }

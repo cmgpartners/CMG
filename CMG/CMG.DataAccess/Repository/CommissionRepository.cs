@@ -16,6 +16,10 @@ namespace CMG.DataAccess.Repository
         {
             _context = context;
         }
+        public Comm Find(long? id)
+        {
+            return Context.Set<Comm>().Include(x => x.AgentCommissions).SingleOrDefault(x => x.Keycomm == (id ?? 0));
+        }
         public IQueryResult<Comm> Find(ISearchCriteria criteria)
         {
             var query = Context.Comm.AsQueryable().Include(x => x.AgentCommissions).ThenInclude(x => x.Agent);
@@ -46,14 +50,20 @@ namespace CMG.DataAccess.Repository
                 Premium = x.Premium,
                 Yrmo = x.Yrmo,
                 Cr8Date = x.Cr8Date,
-                RevDate = x.RevDate,
+                Cr8Locn = x.Cr8Locn,
+                Del = x.Del,
                 AgentCommissions = x.AgentCommissions.Select(a => new AgentCommission
                 {
+                    Id = a.Id,
+                    CommissionId = a.CommissionId,
                     AgentId = a.AgentId,
                     Agent = a.Agent,
                     Split = a.Split,
                     AgentOrder = a.AgentOrder,
-                    Commission = a.Commission
+                    Commission = a.Commission,
+                    CreatedBy = a.CreatedBy,
+                    CreatedDate = a.CreatedDate,
+                    IsDeleted = a.IsDeleted
                 })
             });
 

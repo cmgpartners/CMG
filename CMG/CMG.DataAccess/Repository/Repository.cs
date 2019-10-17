@@ -32,16 +32,16 @@ namespace CMG.DataAccess.Repository
             Context.Set<TEntity>().Remove(entity);
         }
 
-        public Task<TEntity> Save(TEntity entity)
+        public TEntity Save(TEntity entity)
         {
             Context.Entry(entity).State = EntityState.Modified;
-            return Task.FromResult(entity);
+            return entity;
         }
 
         public ICollection<TEntity> All()
         {
             return Context.Set<TEntity>().ToList();
-        }
+        }   
         #endregion Methods
     }
 }

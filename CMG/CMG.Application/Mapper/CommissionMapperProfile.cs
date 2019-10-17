@@ -22,6 +22,7 @@ namespace CMG.Application.Mapper
                .ForMember(des => des.Yrmo, mo => mo.MapFrom(src => src.YearMonth))
                .ForMember(des => des.Cr8Date, mo => mo.MapFrom(src => src.CreatedDate))
                .ForMember(des => des.Cr8Locn, mo => mo.MapFrom(src => src.CreatedBy))
+               .ForMember(des => des.Del, mo => mo.MapFrom(src => src.IsDeleted))
                .ForMember(des => des.AgentCommissions, mo => mo.MapFrom(src => src.AgentCommissions))
                .ReverseMap();
                 
@@ -30,6 +31,7 @@ namespace CMG.Application.Mapper
                 .ForMember(des => des.Split, mo => mo.MapFrom(src => src.Split.HasValue ? (decimal)src.Split.Value : 0))
                 .ForMember(des => des.CreatedBy, mo => mo.MapFrom(src => src.CreatedBy))
                 .ForMember(des => des.CreatedDate, mo => mo.MapFrom(src => src.CreatedDate))
+                .ForMember(des => des.IsDeleted, mo => mo.MapFrom(src => src.IsDeleted))
                 .ReverseMap();
         }
     }

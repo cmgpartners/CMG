@@ -12,6 +12,7 @@ BEGIN
 		CreatedBy VARCHAR(50) NOT NULL,
 		ModifiedDate DATETIME NOT NULL,
 		ModifiedBy VARCHAR(50) NOT NULL,
+		IsDeleted BIT NOT NULL,
 		CONSTRAINT PK_AgentCommission PRIMARY KEY (Id),
 		CONSTRAINT FK_Commission_AgentCommission FOREIGN KEY (CommissionId) REFERENCES [dbo].[Commission](Id),
 		CONSTRAINT FK_Agent_AgentCommission FOREIGN KEY (AgentId) REFERENCES [dbo].[Agent](Id)
@@ -25,4 +26,5 @@ BEGIN
 
 	ALTER TABLE [dbo].[AgentCommission] ADD  CONSTRAINT [DF_AgentCommission_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
 
+	ALTER TABLE [dbo].[AgentCommission] ADD  CONSTRAINT [DF_AgentCommission_IsDeleted]  DEFAULT (0) FOR [IsDeleted]
 END

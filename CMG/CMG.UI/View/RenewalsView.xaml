@@ -63,7 +63,7 @@
                                     </Menu.Background>
                                     <MenuItem Header="::" Style="{StaticResource MenuParentStyle}" ItemContainerStyle="{StaticResource MenuItemStyle}">
                                         <MenuItem Header="_Copy" />
-                                        <MenuItem Header="_Delete" />
+                                        <MenuItem Header="_Delete" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" CommandParameter="{Binding CommissionId}"/>
                                     </MenuItem>
                                 </Menu>
                             </DataTemplate>
@@ -176,10 +176,10 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Total" Width="100" HeaderStyle="{StaticResource TotalHeaderStyle}">
+                    <DataGridTemplateColumn Header="Total" HeaderStyle="{StaticResource TotalHeaderStyle}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock HorizontalAlignment="Right" Text="{Binding Path=TotalAmount, StringFormat='{}{0:#,#.0}'}" />
+                                <TextBox TextAlignment="Right" MinWidth="40"  Text="{Binding TotalAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -204,7 +204,7 @@
                                             <Border x:Name="border"
                                                     BorderBrush="{Binding Agent.Color}"
                                                     BorderThickness="0,0,0,3">
-                                                <TextBox Text="{Binding Commission}"></TextBox>
+                                                <TextBox Text="{Binding Commission, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="30" TextAlignment="Right"></TextBox>
                                             </Border>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>

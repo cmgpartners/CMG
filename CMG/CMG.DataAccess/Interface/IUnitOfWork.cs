@@ -8,6 +8,7 @@ namespace CMG.DataAccess.Interface
         IAgentRepository Agents { get; }
         IPolicyRepository Policies { get; }
         ICommissionSearchRepository CommissionSearch { get; }
+        IAgentCommissionRepository AgentCommissions { get; }
 
         void Commit();
         void SaveChanges();
