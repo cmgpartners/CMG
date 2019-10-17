@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace CMG.Application.ViewModel
 {
-    public class SearchViewModel : BaseViewModel
+    public class SearchViewModel : MainViewModel
     {
         #region Member variables
         private readonly IUnitOfWork _unitOfWork;
@@ -20,6 +20,7 @@ namespace CMG.Application.ViewModel
 
         #region Constructor
         public SearchViewModel(IUnitOfWork unitOfWork, IMapper mapper)
+            : base(unitOfWork, mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;

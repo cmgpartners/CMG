@@ -6,6 +6,7 @@ using CMG.Application.ViewModel;
 using AutoMapper;
 using System.Windows.Navigation;
 using System.Diagnostics;
+using static CMG.Common.Enums;
 
 namespace CMG.UI
 {
@@ -17,6 +18,7 @@ namespace CMG.UI
         public readonly IMapper _mapper;
         public readonly IUnitOfWork _unitOfWork;
         public string _navigateURL = "https://cmgpartners.my.salesforce.com/";
+        private MainViewModel _mainViewModel;
 
         public int[] years { get; set; }
         public MainWindow(IUnitOfWork unitOfWork, IMapper mapper)
@@ -24,6 +26,7 @@ namespace CMG.UI
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             InitializeComponent();
+            _mainViewModel = new MainViewModel(_unitOfWork, _mapper);
             lstNavItems.SelectedItem = lstNavItems.Items[0];
         }
 
@@ -32,11 +35,20 @@ namespace CMG.UI
             ListView lstNavigation = (ListView)sender;
             if (lstNavigation.SelectedIndex == 0)
             {
-                DataContext = new RenewalsViewModel(_unitOfWork, _mapper);
+                _mainViewModel.SelectedIndexLeftNavigation = (int)LeftNavigation.Renewals;
+                RenewalsViewModel renewalsViewModel = new RenewalsViewModel(_unitOfWork, _mapper);
+                _mainViewModel.SelectedViewModel = renewalsViewModel;
+                DataContext = _mainViewModel;
             }
             else if (lstNavigation.SelectedIndex == 3)
             {
-                DataContext = new SearchViewModel(_unitOfWork, _mapper);
+                if (!(_mainViewModel.SelectedViewModel is SearchViewModel))
+                {
+                    _mainViewModel.SelectedIndexLeftNavigation = (int)LeftNavigation.Search;
+                    SearchViewModel searchViewModel = new SearchViewModel(_unitOfWork, _mapper);
+                    _mainViewModel.SelectedViewModel = searchViewModel;
+                    DataContext = _mainViewModel;
+                }
             }
         }
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)

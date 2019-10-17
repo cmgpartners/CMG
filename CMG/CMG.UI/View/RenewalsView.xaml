@@ -65,10 +65,14 @@
                     <DataGridTemplateColumn Header="Policy #" Width="100" SortMemberPath="PolicyNumber" CanUserSort="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Path=PolicyNumber}">
+                                <TextBlock Text="{Binding Path=PolicyNumber}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
                                     <TextBlock.ContextMenu>
-                                        <ContextMenu>
-                                            <MenuItem Header="Search Similar"></MenuItem>
+                                        <ContextMenu Style="{StaticResource ContextMenuItemStyle}" Tag="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                                            <ContextMenu.Items>
+                                                <MenuItem Header="Search Similar" 
+                                                          Command="{Binding PlacementTarget.Tag.DataContext.SearchPolicyCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" 
+                                                          CommandParameter="{Binding PolicyNumber}" />
+                                            </ContextMenu.Items>
                                         </ContextMenu>
                                     </TextBlock.ContextMenu>
                                 </TextBlock>
@@ -78,14 +82,34 @@
                     <DataGridTemplateColumn Header="Company" Width="60" SortMemberPath="CompanyName" CanUserSort="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Path=CompanyName}"></TextBlock>
+                                <TextBlock Text="{Binding Path=CompanyName}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
+                                    <TextBlock.ContextMenu>
+                                        <ContextMenu Style="{StaticResource ContextMenuItemStyle}" Tag="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                                            <ContextMenu.Items>
+                                                <MenuItem Header="Search Similar" 
+                                                          Command="{Binding PlacementTarget.Tag.DataContext.SearchCompanyCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" 
+                                                          CommandParameter="{Binding CompanyName}" />
+                                            </ContextMenu.Items>
+                                        </ContextMenu>
+                                    </TextBlock.ContextMenu>
+                                </TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="Insured" Width="200" SortMemberPath="InsuredName" CanUserSort="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Path=InsuredName}"></TextBlock>
+                                <TextBlock Text="{Binding Path=InsuredName}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
+                                    <TextBlock.ContextMenu>
+                                        <ContextMenu Style="{StaticResource ContextMenuItemStyle}" Tag="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                                            <ContextMenu.Items>
+                                                <MenuItem Header="Search Similar" 
+                                                          Command="{Binding PlacementTarget.Tag.DataContext.SearchInsuredCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" 
+                                                          CommandParameter="{Binding InsuredName}" />
+                                            </ContextMenu.Items>
+                                        </ContextMenu>
+                                    </TextBlock.ContextMenu>
+                                </TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

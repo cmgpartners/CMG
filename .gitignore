@@ -292,3 +292,10 @@
 /CMG/CMG.UI/obj
 /CMG/CMG.UI/Properties/PublishProfiles/CMG-RN.pubxml.user
 /CMG/CMG.UI/Properties/PublishProfiles/CMG-RN.pubxml
+/CMG/CMG.Application/bin/x64/Debug/netcoreapp3.0
+/CMG/CMG.Application/obj/x64/Debug/netcoreapp3.0
+/CMG/CMG.Common/bin/x64/Debug/netcoreapp3.0
+/CMG/CMG.Common/obj/x64/Debug/netcoreapp3.0
+/CMG/CMG.DataAccess/bin/x64/Debug/netcoreapp3.0
+/CMG/CMG.DataAccess/obj/x64/Debug/netcoreapp3.0
+/CMG/CMG.UI/bin/x64/Debug/netcoreapp3.0

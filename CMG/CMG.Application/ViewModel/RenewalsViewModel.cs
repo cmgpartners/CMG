@@ -11,7 +11,7 @@ using System.Windows.Input;
 
 namespace CMG.Application.ViewModel
 {
-    public class RenewalsViewModel : BaseViewModel
+    public class RenewalsViewModel : MainViewModel
     {
         #region Member variables
         private readonly IUnitOfWork _unitOfWork;
@@ -22,6 +22,7 @@ namespace CMG.Application.ViewModel
 
         #region Constructor
         public RenewalsViewModel(IUnitOfWork unitOfWork, IMapper mapper)
+            : base(unitOfWork, mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
