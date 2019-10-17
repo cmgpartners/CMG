@@ -21,9 +21,9 @@ namespace CMG.DataAccess.Repository
         #endregion Properties
 
         #region Methods
-        public async Task<TEntity> Add(TEntity entity)
+        public virtual TEntity Add(TEntity entity)
         {
-            var result = await Context.Set<TEntity>().AddAsync(entity);
+            var result = Context.Set<TEntity>().Add(entity);
             return result.Entity;
         }
 
@@ -32,16 +32,16 @@ namespace CMG.DataAccess.Repository
             Context.Set<TEntity>().Remove(entity);
         }
 
-        public Task<TEntity> Save(TEntity entity)
+        public TEntity Save(TEntity entity)
         {
             Context.Entry(entity).State = EntityState.Modified;
-            return Task.FromResult(entity);
+            return entity;
         }
 
         public ICollection<TEntity> All()
         {
             return Context.Set<TEntity>().ToList();
-        }
+        }   
         #endregion Methods
     }
 }

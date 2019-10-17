@@ -16,10 +16,14 @@ namespace CMG.DataAccess.Repository
         {
             _context = context;
         }
+        public Comm Find(long? id)
+        {
+            return Context.Set<Comm>().Include(x => x.AgentCommissions).SingleOrDefault(x => x.Keycomm == (id ?? 0));
+        }
         public IQueryResult<Comm> Find(ISearchCriteria criteria)
         {
-            var query = Context.Comm.AsQueryable().Include(x => x.AgentCommissions).ThenInclude(x => x.Agent)
-                .Include(x => x.Policy);
+            var query = Context.Comm.AsQueryable().Include(x => x.AgentCommissions).ThenInclude(x => x.Agent);
+
             IQueryable<Comm> queryable = query;
 
             if((criteria.FilterBy?.Count() ?? 0) > 0)
@@ -31,25 +35,54 @@ namespace CMG.DataAccess.Repository
                 queryable = OrderByPredicate(queryable, criteria.SortBy);
             }
 
-            var totalRecords = queryable.Count();
-            var totalAmount = queryable.AsEnumerable().Sum(x => x.Total);
+            var result = queryable.Select(x => new Comm
+            {
+                Keycomm = x.Keycomm,
+                Paydate = x.Paydate,
+                Commtype = x.Commtype,
+                Keynumo = x.Keynumo,
+                Renewals = x.Renewals,
+                Total = x.Total,
+                Insured = x.Insured,
+                Policynum = x.Policynum,
+                Company = x.Company,
+                Comment = x.Comment,
+                Premium = x.Premium,
+                Yrmo = x.Yrmo,
+                Cr8Date = x.Cr8Date,
+                Cr8Locn = x.Cr8Locn,
+                Del = x.Del,
+                AgentCommissions = x.AgentCommissions.Select(a => new AgentCommission
+                {
+                    Id = a.Id,
+                    CommissionId = a.CommissionId,
+                    AgentId = a.AgentId,
+                    Agent = a.Agent,
+                    Split = a.Split,
+                    AgentOrder = a.AgentOrder,
+                    Commission = a.Commission,
+                    CreatedBy = a.CreatedBy,
+                    CreatedDate = a.CreatedDate,
+                    IsDeleted = a.IsDeleted
+                })
+            });
 
-            if(criteria.Page.HasValue
+            var totalRecords = result.Count();
+            var totalAmount = result.AsEnumerable().Sum(x => x.Total);
+
+            if (criteria.Page.HasValue
                 && criteria.PageSize.HasValue)
             {
                 var skip = (criteria.Page.Value - 1) * criteria.PageSize.Value;
                 var pageSize = criteria.PageSize.Value;
-                queryable = queryable.Skip(skip);
-                queryable = queryable.Take(pageSize);
+                result = result.Skip(skip);
+                result = result.Take(pageSize);
             }
-
-            var result = queryable.ToList();
-            
 
             return new PagedQueryResult<Comm>()
             {
                 TotalAmount = Convert.ToDecimal(totalAmount),
-                Result = result,
+                Result = result.ToList(),
                 TotalRecords = totalRecords
             };
         }

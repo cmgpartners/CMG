@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System;
 using CMG.DataAccess.Query;
 using System.Windows.Input;
+using CMG.DataAccess.Domain;
+using System.Windows;
 
 namespace CMG.Application.ViewModel
 {
@@ -17,7 +19,6 @@ namespace CMG.Application.ViewModel
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private const int startYear = 1925;
-        private readonly int PageSize = 10;
         #endregion Member variables
 
         #region Constructor
@@ -25,8 +26,7 @@ namespace CMG.Application.ViewModel
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            LoadPagination();
-            GetCommissions();
+            LoadData();
         }
         #endregion Constructor
 
@@ -55,6 +55,7 @@ namespace CMG.Application.ViewModel
             set
             {
                 _selectedYear = value;
+                IsImportEnabled = false;
                 OnPropertyChanged("SelectedYear");
                 GetCommissions();
             }
@@ -67,6 +68,7 @@ namespace CMG.Application.ViewModel
             set
             {
                 _selectedMonth = value;
+                IsImportEnabled = false;
                 OnPropertyChanged("SelectedMonth");
                 GetCommissions();
             }
@@ -80,7 +82,6 @@ namespace CMG.Application.ViewModel
             {
                 _dataCollection = value;
                 OnPropertyChanged("DataCollection");
-                OnPropertyChanged("IsPaginationVisible");
                 OnPropertyChanged("IsNoRecordFound");
             }
         }
@@ -93,115 +94,138 @@ namespace CMG.Application.ViewModel
             }
         }
 
-        #region pagination properties
-        private int _totalRecords;
-        public int TotalRecords
+        public ICommand ImportCommand
         {
-            get { return _totalRecords; }
-            set
-            {
-                _totalRecords = value;
-                OnPropertyChanged("TotalRecords");
-                OnPropertyChanged("TotalPages");
-            }
+            get { return CreateCommand(Import); }
         }
-        private int _currentPage = 1;
-        public int CurrentPage
-        {
-            get { return _currentPage; }
-            set
-            {
-                _currentPage = value;
-                OnPropertyChanged("CurrentPage");
-            }
 
-        }
-        private List<int> _pages;
-        public List<int> Pages
+        public ICommand SaveCommand
         {
-            get { return _pages; }
+            get { return CreateCommand(Save); }
+        }
+        public ICommand DeleteCommand
+        {
+            get { return CreateCommand(Delete); }
+        }
+        private bool isImportEnabled;
+        public bool IsImportEnabled
+        {
+            get { return isImportEnabled; }
             set
             {
-                _pages = value;
-                OnPropertyChanged("Pages");
+                isImportEnabled = value;
+                OnPropertyChanged("IsImportEnabled");
             }
         }
-        public int TotalPages
-        {
-            get { return TotalRecords % PageSize == 0 ? (TotalRecords / PageSize) : (TotalRecords / PageSize) + 1; }
-        }
-        public bool IsPaginationVisible
-        {
-            get { return DataCollection != null && DataCollection.Count > 0; }
-        }
-        public ICommand FirstPageCommand
-        {
-            get { return CreateCommand(FirstPage); }
-        }
-        public ICommand LastPageCommand
-        {
-            get { return CreateCommand(LastPage); }
-        }
-        public ICommand NextPageCommand
-        {
-            get { return CreateCommand(NextPage); }
-        }
-        public ICommand PreviousPageCommand
-        {
-            get { return CreateCommand(PreviousPage); }
-        }
-        #endregion
 
         #endregion Properties
 
         #region Methods
         public void GetCommissions()
         {
-            SearchQuery searchQuery = BuildSearchQuery();
-            searchQuery.Page = CurrentPage;
-            searchQuery.PageSize = PageSize;
-            var dataSearchBy = _unitOfWork.CommissionSearch.Search(searchQuery);
+            int year;
+            if (IsImportEnabled)
+            {
+                year = SelectedYear - 1;
+            }
+            else
+            {
+                year = SelectedYear;
+            }
+            SearchQuery searchQuery = BuildSearchQuery(year, SelectedMonth);
+            var dataSearchBy = _unitOfWork.Commissions.Find(searchQuery);
             DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
-            TotalRecords = dataSearchBy.TotalRecords;
-        }
-
-        private void LoadPagination()
-        {
-            _pages = new List<int>();
-            Pages.AddRange(Enumerable.Range(1, TotalPages));
-        }
-
-        public void FirstPage()
-        {
-            CurrentPage = 1;
-            GetCommissions();
-        }
-        public void LastPage()
-        {
-            CurrentPage = TotalPages;
-            GetCommissions();
-        }
-        public void NextPage()
-        {
-            if (CurrentPage < TotalPages)
+            if (IsImportEnabled)
             {
-                CurrentPage += 1;
-                GetCommissions();
+                UpdateImportCollection();
             }
         }
-        public void PreviousPage()
+
+        public void Import()
         {
-            if (CurrentPage > 1)
+            IsImportEnabled = true;
+            GetCommissions();
+        }
+
+        public void Save()
+        {
+            if(DataCollection != null && DataCollection.Count > 0)
             {
-                CurrentPage -= 1;
-                GetCommissions();
+                if (isImportEnabled)
+                {
+                    try
+                    {
+                        foreach (ViewCommissionDto commission in DataCollection)
+                        {
+                            foreach (ViewAgentCommissionDto agentComm in commission.AgentCommissions)
+                            {
+                                agentComm.Agent = null;
+                                agentComm.CreatedDate = null;
+                                agentComm.CreatedBy = null;
+                            }
+                            commission.CommissionId = 0;
+                            var entityCommission = _mapper.Map<Comm>(commission);
+                            entityCommission.Yrmo = entityCommission.Paydate?.ToString("yyyyMM");
+                            var commissionId = _unitOfWork.Commissions.Add(entityCommission);
+                            _unitOfWork.Commit();
+                        }
+                        IsImportEnabled = false;
+                        //MessageBox.Show("Records saved successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        //MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+                else
+                {
+                    foreach (ViewCommissionDto commission in DataCollection)
+                    {
+                        var entity = _mapper.Map<Comm>(commission);
+                        entity.Yrmo = entity.Paydate?.ToString("yyyyMM");
+                        entity.RevDate = DateTime.Now;
+                        entity.RevLocn = $"{Environment.UserDomainName}\\{Environment.UserName}";
+                        foreach (AgentCommission agentComm in entity.AgentCommissions)
+                        {
+                            agentComm.ModifiedBy = $"{Environment.UserDomainName}\\{Environment.UserName}";
+                            agentComm.ModifiedDate = DateTime.Now;
+                            _unitOfWork.AgentCommissions.Save(agentComm);
+                        }
+                        var commissionId = _unitOfWork.Commissions.Save(entity);
+                        _unitOfWork.Commit();
+                    }
+                    
+                }
             }
         }
-        private SearchQuery BuildSearchQuery()
+
+        public void Delete(object commissionId)
+        {
+            if (IsImportEnabled)
+            {
+                DataCollection.Remove(DataCollection.Where(commission => commission.CommissionId == Convert.ToInt32(commissionId)).SingleOrDefault());
+            } 
+            else
+            {
+                if(commissionId != null && Convert.ToInt32(commissionId) > 0)
+                {
+                    var commission = _unitOfWork.Commissions.Find(Convert.ToInt32(commissionId));
+                    commission.Del = true;
+                    commission.AgentCommissions = commission.AgentCommissions.Select(agentComm => { agentComm.IsDeleted = true; return agentComm; }).AsEnumerable();
+                    _unitOfWork.Commit();
+                    GetCommissions();
+                }
+            }
+        }
+        private void LoadData()
+        {
+            GetCommissions();
+        }
+        private SearchQuery BuildSearchQuery(int year, string month)
         {
             SearchQuery searchQuery = new SearchQuery();
             List<FilterBy> searchBy = new List<FilterBy>();
-            var fromPayDate = new DateTime(SelectedYear, Array.IndexOf(Months.ToArray(),SelectedMonth) + 1, 1);
+            var fromPayDate = new DateTime(year, Array.IndexOf(Months.ToArray(),month) + 1, 1);
             var toPayDate = fromPayDate.AddMonths(1).AddDays(-1);
             FilterBy filterBy = new FilterBy();
             filterBy.Property = "PayDate";
@@ -210,6 +234,20 @@ namespace CMG.Application.ViewModel
             searchBy.Add(filterBy);
             searchQuery.FilterBy = searchBy;
             return searchQuery;
+        }
+
+        private void UpdateImportCollection()
+        {
+            if (DataCollection != null && DataCollection.Count > 0)
+            {
+                foreach(ViewCommissionDto commission in DataCollection)
+                {
+                    commission.CreatedDate = null;
+                    commission.CreatedBy = null;
+                    commission.TotalAmount = 0.0M;
+                    commission.AgentCommissions.Select(comm => { comm.Commission = 0.0M; return comm; }).ToList();
+                }
+            }
         }
         #endregion Methods
     }

@@ -36,9 +36,23 @@
             <ComboBox x:Name="cmbYears" ItemsSource="{Binding Years}" SelectedItem="{Binding SelectedYear}" Margin="0 10 0 0">
             </ComboBox>
         </StackPanel>
+        <StackPanel Grid.Column="3" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="125"/>
+                    <ColumnDefinition Width="125"/>
+                </Grid.ColumnDefinitions>
+                <Button Content="Import" Command="{Binding ImportCommand}" Width="100"></Button>
+                <Button Grid.Column="1" Content="Save" Command="{Binding SaveCommand}" Width="100"></Button>
+            </Grid>
+            
+        </StackPanel>
 
         <Grid Grid.Row="1" Grid.ColumnSpan="4">
-            <DataGrid AutoGenerateColumns="False" x:Name="renewals" IsReadOnly="True" ItemsSource="{Binding DataCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" SelectionUnit="FullRow" RowHeight="50">
+            <DataGrid AutoGenerateColumns="False" x:Name="renewals" IsReadOnly="False" ItemsSource="{Binding DataCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" CanUserAddRows="False" SelectionUnit="Cell" RowHeight="50">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
@@ -49,16 +63,23 @@
                                     </Menu.Background>
                                     <MenuItem Header="::" Style="{StaticResource MenuParentStyle}" ItemContainerStyle="{StaticResource MenuItemStyle}">
                                         <MenuItem Header="_Copy" />
-                                        <MenuItem Header="_Delete" />
+                                        <MenuItem Header="_Delete" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" CommandParameter="{Binding CommissionId}"/>
                                     </MenuItem>
                                 </Menu>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Pay Date" Width="105" SortMemberPath="PayDate" CanUserSort="True">
+                    <DataGridTemplateColumn Header="Pay Date" Width="90" SortMemberPath="PayDate" CanUserSort="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Path=PayDate,  StringFormat='{}{0: MMM d, yyyy}'}" />
+                                <DatePicker SelectedDate="{Binding Path=PayDate,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0: MMM d, yyyy}'}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="35">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text=""></TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -155,6 +176,20 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Total" HeaderStyle="{StaticResource TotalHeaderStyle}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox TextAlignment="Right" MinWidth="40"  Text="{Binding TotalAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="35">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text=""></TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="Commissions ($)" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -169,7 +204,7 @@
                                             <Border x:Name="border"
                                                     BorderBrush="{Binding Agent.Color}"
                                                     BorderThickness="0,0,0,3">
-                                                <Label Content="{Binding Commission}"></Label>
+                                                <TextBox Text="{Binding Commission, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="30" TextAlignment="Right"></TextBox>
                                             </Border>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
@@ -177,15 +212,9 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Total" Width="100" HeaderStyle="{StaticResource TotalHeaderStyle}">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock HorizontalAlignment="Right" Text="{Binding Path=TotalAmount, StringFormat='{}{0:#,#.0}'}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
+            
             <TextBlock Text="No records found" 
                        HorizontalAlignment="Center" 
                        VerticalAlignment="Center" 
@@ -194,15 +223,6 @@
         </Grid>
 
         <Grid Grid.Row="2" Background="#FFCEEAFF" Grid.ColumnSpan="4">
-            <StackPanel Orientation="Horizontal" Visibility="{Binding IsPaginationVisible, Converter={StaticResource VisibilityConverter}}" Grid.Column="0">
-                <Button Content="&lt;&lt;" Style="{StaticResource PaginationButton}" Command="{Binding FirstPageCommand}"/>
-                <Button Content="&lt;" Style="{StaticResource PaginationButton}" Command="{Binding PreviousPageCommand}"/>
-                <Label Content="{Binding CurrentPage}" VerticalAlignment="Center"/>
-                <Label Content="of" VerticalAlignment="Center"/>
-                <Label Content="{Binding TotalPages}" VerticalAlignment="Center"/>
-                <Button Content="&gt;" Style="{StaticResource PaginationButton}" Command="{Binding NextPageCommand}"/>
-                <Button Content="&gt;&gt;" Style="{StaticResource PaginationButton}" Command="{Binding LastPageCommand}"/>
-            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>

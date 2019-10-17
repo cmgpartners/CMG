@@ -273,7 +273,7 @@ namespace CMG.Application.ViewModel
             }
             searchQuery.Page = CurrentPage;
             searchQuery.PageSize = PageSize;
-            var dataSearchBy = _unitOfWork.CommissionSearch.Search(searchQuery);
+            var dataSearchBy = _unitOfWork.Commissions.Find(searchQuery);
             DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
             TotalRecords = dataSearchBy.TotalRecords;
             TotalAmount = dataSearchBy.TotalAmount;

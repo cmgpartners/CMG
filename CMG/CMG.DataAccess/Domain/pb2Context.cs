@@ -149,20 +149,29 @@ namespace CMG.DataAccess.Domain
                 entity.Property(e => e.CreatedBy)
                     .IsRequired()
                     .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("(suser_sname())");
 
-                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+                entity.Property(e => e.CreatedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.ModifiedBy)
                     .HasMaxLength(50)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("(suser_sname())");
 
-                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+                entity.Property(e => e.ModifiedDate)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
                 entity.HasOne(d => d.CommissionNavigation)
                     .WithMany(p => p.AgentCommissions)
                     .HasForeignKey(d => d.CommissionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Commission_AgentCommission");
+
+                entity.HasQueryFilter(x => x.IsDeleted == false);
             });
 
             modelBuilder.Entity<Business>(entity =>
@@ -1114,6 +1123,8 @@ namespace CMG.DataAccess.Domain
                     .HasForeignKey(d => d.Keynumo)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Policys_Commission");
+
+                entity.HasQueryFilter(x => x.Del == false);
             });
 
             modelBuilder.Entity<Grp>(entity =>
