@@ -64,7 +64,7 @@ namespace CMG.Application.ViewModel
             if (parameter != null)
             {
                 SearchViewModel searchViewModel = new SearchViewModel(_unitOfWork, _mapper);
-                searchViewModel.PolicyNumber = parameter.ToString();
+                searchViewModel.PolicyNumber = parameter.ToString().Trim();
                 searchViewModel.Search(false);
                 SelectedViewModel = searchViewModel;
                 SelectedIndexLeftNavigation = (int)LeftNavigation.Search; 
@@ -75,7 +75,7 @@ namespace CMG.Application.ViewModel
             if(parameter != null)
             {
                 SearchViewModel searchViewModel = new SearchViewModel(_unitOfWork, _mapper);
-                searchViewModel.Company = parameter.ToString();
+                searchViewModel.Company = parameter.ToString().Trim();
                 searchViewModel.Search(false);
                 SelectedViewModel = searchViewModel;
                 SelectedIndexLeftNavigation = (int)LeftNavigation.Search;
@@ -86,7 +86,7 @@ namespace CMG.Application.ViewModel
             if (parameter != null)
             {
                 SearchViewModel searchViewModel = new SearchViewModel(_unitOfWork, _mapper);
-                searchViewModel.Insured = parameter.ToString();
+                searchViewModel.Insured = parameter.ToString().Trim();
                 searchViewModel.Search(false);
                 SelectedViewModel = searchViewModel;
                 SelectedIndexLeftNavigation = (int)LeftNavigation.Search;
