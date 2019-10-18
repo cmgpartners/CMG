@@ -52,7 +52,11 @@
         </StackPanel>
 
         <Grid Grid.Row="1" Grid.ColumnSpan="4">
-            <DataGrid AutoGenerateColumns="False" x:Name="renewals" IsReadOnly="False" ItemsSource="{Binding DataCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" CanUserAddRows="False" SelectionUnit="Cell" RowHeight="50">
+            <DataGrid AutoGenerateColumns="False" 
+                      x:Name="renewals" IsReadOnly="False" 
+                      ItemsSource="{Binding DataCollection}" 
+                      ColumnHeaderStyle="{StaticResource HeaderStyle}" 
+                      CanUserAddRows="False" SelectionUnit="Cell" RowHeight="50">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
@@ -61,9 +65,14 @@
                                     <Menu.Background>
                                         <SolidColorBrush Color="Transparent"></SolidColorBrush>
                                     </Menu.Background>
-                                    <MenuItem Header="::" Style="{StaticResource MenuParentStyle}" ItemContainerStyle="{StaticResource MenuItemStyle}">
-                                        <MenuItem Header="_Copy" />
-                                        <MenuItem Header="_Delete" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" CommandParameter="{Binding CommissionId}"/>
+                                    <MenuItem Header="::" Style="{StaticResource MenuParentStyle}" ItemContainerStyle="{StaticResource MenuItemStyle}">                                        
+                                        <MenuItem Header="_Copy" Command="{Binding DataContext.SelectedViewModel.CopyCommissionCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" 
+                                                  CommandParameter="{Binding}"/>
+                                        <MenuItem Header="_Paste" Command="{Binding DataContext.SelectedViewModel.PasteCommissionCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" 
+                                                  CommandParameter="{Binding}" IsEnabled="{Binding Path=DataContext.SelectedViewModel.IsPasteEnabled, 
+                                                                                            RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" />
+                                        <MenuItem Header="_Delete" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" 
+                                                  CommandParameter="{Binding CommissionId}"/>
                                     </MenuItem>
                                 </Menu>
                             </DataTemplate>
