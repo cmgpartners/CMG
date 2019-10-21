@@ -8,5 +8,18 @@
         <Setter Property="Margin" Value="5,0,5,0"/>
         <Setter Property="Padding" Value="5,0,5,0"/>
     </Style>
+
+    <Style x:Key="AutoCompletePolicyButton" TargetType="Button">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="#FF2196F3"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Width" Value="20"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="ToolTip" Value="Select policy and click here to populate agent information"/>
+    </Style>
   
 </ResourceDictionary>

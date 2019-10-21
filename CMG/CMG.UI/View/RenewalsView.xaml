@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:CMG.UI.View"
+             xmlns:behaviors="clr-namespace:WPFTextBoxAutoComplete;assembly=WPFTextBoxAutoComplete"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -61,18 +62,18 @@
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Menu Name="menu1" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                                <Menu Name="menu1" HorizontalAlignment="Left" VerticalAlignment="Top" Tag="{Binding RelativeSource={RelativeSource Self}}">
                                     <Menu.Background>
                                         <SolidColorBrush Color="Transparent"></SolidColorBrush>
                                     </Menu.Background>
                                     <MenuItem Header="::" Style="{StaticResource MenuParentStyle}" ItemContainerStyle="{StaticResource MenuItemStyle}">                                        
-                                        <MenuItem Header="_Copy" Command="{Binding DataContext.SelectedViewModel.CopyCommissionCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" 
+                                       <MenuItem Header="_Copy" Command="{Binding DataContext.SelectedViewModel.CopyCommissionCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" 
                                                   CommandParameter="{Binding}"/>
                                         <MenuItem Header="_Paste" Command="{Binding DataContext.SelectedViewModel.PasteCommissionCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" 
                                                   CommandParameter="{Binding}" IsEnabled="{Binding Path=DataContext.SelectedViewModel.IsPasteEnabled, 
                                                                                             RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" />
-                                        <MenuItem Header="_Delete" Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" 
-                                                  CommandParameter="{Binding CommissionId}"/>
+					<MenuItem Header="_Delete" Command="{Binding DataContext.SelectedViewModel.DeleteCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" CommandParameter="{Binding CommissionId}"/>
+
                                     </MenuItem>
                                 </Menu>
                             </DataTemplate>
@@ -92,10 +93,11 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Policy #" Width="100" SortMemberPath="PolicyNumber" CanUserSort="True">
+                    <DataGridTemplateColumn Header="Policy #" Width="90" SortMemberPath="PolicyNumber" CanUserSort="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Path=PolicyNumber}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
+                                <Grid>
+                                <TextBlock Text="{Binding Path=PolicyNumber}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" Visibility="{Binding IsNotNew, Converter={StaticResource VisibilityConverter}}">
                                     <TextBlock.ContextMenu>
                                         <ContextMenu Style="{StaticResource ContextMenuItemStyle}" Tag="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
                                             <ContextMenu.Items>
@@ -106,13 +108,30 @@
                                         </ContextMenu>
                                     </TextBlock.ContextMenu>
                                 </TextBlock>
+                                <TextBox
+                                    Visibility="{Binding IsNew, Converter={StaticResource VisibilityConverter}}"
+		                            Width="90"
+		                            HorizontalAlignment="Left"
+		                            Text="{Binding Path=PolicyNumber, UpdateSourceTrigger=PropertyChanged}" 
+		                            behaviors:AutoCompleteBehavior.AutoCompleteItemsSource="{Binding DataContext.SelectedViewModel.Policies, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}}}" 
+                                    behaviors:AutoCompleteBehavior.AutoCompleteStringComparison="InvariantCultureIgnoreCase"
+	                            />
+                                <Button Style="{StaticResource AutoCompletePolicyButton}" Content=">>" Visibility="{Binding IsNew, Converter={StaticResource VisibilityConverter}}" Command="{Binding DataContext.SelectedViewModel.PolicyAgentCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" CommandParameter="{Binding}"></Button>
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="10">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text=""></TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="Company" Width="60" SortMemberPath="CompanyName" CanUserSort="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Path=CompanyName}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
+                                <TextBlock Text="{Binding Path=CompanyName, Mode=TwoWay}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
                                     <TextBlock.ContextMenu>
                                         <ContextMenu Style="{StaticResource ContextMenuItemStyle}" Tag="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
                                             <ContextMenu.Items>
@@ -129,7 +148,7 @@
                     <DataGridTemplateColumn Header="Insured" Width="200" SortMemberPath="InsuredName" CanUserSort="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Path=InsuredName}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
+                                <TextBlock Text="{Binding Path=InsuredName, Mode=TwoWay}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
                                     <TextBlock.ContextMenu>
                                         <ContextMenu Style="{StaticResource ContextMenuItemStyle}" Tag="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
                                             <ContextMenu.Items>
@@ -146,14 +165,18 @@
                     <DataGridTemplateColumn Header="RN" Width="50">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Path=Renewal}"></TextBlock>
+                                <Grid>
+                                    <TextBlock Text="{Binding Path=Renewal}" Visibility="{Binding IsNotNew, Converter={StaticResource VisibilityConverter}}"></TextBlock>
+                                    <TextBox Text="{Binding Path=Renewal}" Visibility="{Binding IsNew, Converter={StaticResource VisibilityConverter}}" Width="20" HorizontalAlignment="Left"></TextBox>
+                                </Grid>
+                                
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="Agents" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <ListView ItemsSource="{Binding AgentCommissions}" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled" >
+                                <ListView ItemsSource="{Binding AgentCommissions, Mode=OneWay}" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled" >
                                     <ListView.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <StackPanel Orientation="Horizontal"></StackPanel>
@@ -193,7 +216,7 @@
                     <DataGridTemplateColumn Header="Splits (%)" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <ListView ItemsSource="{Binding AgentCommissions}" DisplayMemberPath="Split" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                <ListView ItemsSource="{Binding AgentCommissions, Mode=OneWay}" DisplayMemberPath="Split" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                                     <ListView.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <StackPanel Orientation="Horizontal"></StackPanel>
@@ -236,7 +259,7 @@
                     <DataGridTemplateColumn Header="Commissions ($)" Width="auto">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <ListView ItemsSource="{Binding AgentCommissions}" DisplayMemberPath="Commission" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                <ListView ItemsSource="{Binding AgentCommissions, Mode=OneWay}" DisplayMemberPath="Commission" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                                     <ListView.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <StackPanel Orientation="Horizontal"></StackPanel>
@@ -266,6 +289,7 @@
         </Grid>
 
         <Grid Grid.Row="2" Background="#FFCEEAFF" Grid.ColumnSpan="4">
+            <Button x:Name="buttonAdd" Content="+" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding AddCommand}" Click="ButtonAdd_Click"></Button>
         </Grid>
     </Grid>
 </UserControl>

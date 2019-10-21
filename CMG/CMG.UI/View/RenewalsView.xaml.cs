@@ -25,5 +25,11 @@ namespace CMG.UI.View
         {
             InitializeComponent();
         }
+
+        private void ButtonAdd_Click(object sender, RoutedEventArgs e)
+        {
+            var lastRowItem = renewals.Items[renewals.Items.Count - 1];
+            renewals.ScrollIntoView(lastRowItem);
+        }
     }
 }

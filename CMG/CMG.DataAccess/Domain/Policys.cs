@@ -70,6 +70,6 @@ namespace CMG.DataAccess.Domain
 
         public virtual IEnumerable<Comm> Commissions { get; set; }
         public virtual ICollection<PolIll> PolIll { get; set; }
-        public virtual ICollection<PolicyAgent> PolicyAgent { get; set; }
+        public virtual IEnumerable<PolicyAgent> PolicyAgent { get; set; }
     }
 }
