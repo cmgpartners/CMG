@@ -6,5 +6,7 @@ namespace CMG.DataAccess.Interface
     public interface IPolicyRepository : IRepository<Policys>
     {
         ICollection<Policys> GetAllPolicyNumber();
+
+        IQueryResult<Policys> Find(ISearchCriteria criteria);
     }
 }
