@@ -97,12 +97,37 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("Policies");
             }
         }
+        
+         private ViewCommissionDto _copiedCommission;
+        public ViewCommissionDto CopiedCommission
+        {
+            get { return _copiedCommission; }
+            set
+            {
+                _copiedCommission = value;
+                OnPropertyChanged("CopiedCommission");
+            }
+        }
 
         public bool IsNoRecordFound
         {
             get
             {
                 return DataCollection != null && DataCollection.Count == 0;
+            }
+        }
+
+        private bool _isPasteEnables;
+        public bool IsPasteEnabled
+        {
+            get
+            {
+                return _isPasteEnables = CopiedCommission != null;
+            }
+            set
+            {
+                _isPasteEnables = CopiedCommission != null;
+                OnPropertyChanged("IsPasteEnabled");
             }
         }
 
@@ -119,7 +144,7 @@ namespace CMG.Application.ViewModel
         {
             get { return CreateCommand(Delete); }
         }
-        public ICommand AddCommand
+public ICommand AddCommand
         {
             get { return CreateCommand(Add); }
         }
@@ -127,7 +152,16 @@ namespace CMG.Application.ViewModel
         {
             get { return CreateCommand(PolicyAgent); }
         }
+        
+        public ICommand CopyCommissionCommand
+        {
+            get { return CreateCommand(CopyCommission); }
+        }
 
+        public ICommand PasteCommissionCommand
+        {
+            get { return CreateCommand(PasteCommission); }
+        }
         private bool isImportEnabled;
         public bool IsImportEnabled
         {
@@ -234,6 +268,10 @@ namespace CMG.Application.ViewModel
                     _unitOfWork.Commit();
                     GetCommissions();
                 }
+                else
+                {
+                    DataCollection.Remove(DataCollection.Where(commission => commission.CommissionId == Convert.ToInt32(commissionId)).SingleOrDefault());
+                }
             }
         }
 
@@ -276,6 +314,25 @@ namespace CMG.Application.ViewModel
             }
             
          
+        }
+         public void CopyCommission(object commissionInput)
+        {
+            CopiedCommission = commissionInput as ViewCommissionDto;
+            IsPasteEnabled = true;
+        }
+
+        public void PasteCommission(object dataInput)
+        {
+            ViewCommissionDto data = dataInput as ViewCommissionDto;
+            int index = DataCollection.IndexOf(data);
+            if(CopiedCommission != null)
+            {
+                CopiedCommission.CommissionId = 0;
+                CopiedCommission.AgentCommissions.ToList().ForEach(a => a.Id = 0);
+                DataCollection.Insert(index, CopiedCommission);
+                CopiedCommission = null;
+                IsPasteEnabled = false;
+            }
         }
         private void LoadData()
         {

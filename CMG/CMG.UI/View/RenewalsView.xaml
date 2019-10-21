@@ -53,7 +53,11 @@
         </StackPanel>
 
         <Grid Grid.Row="1" Grid.ColumnSpan="4">
-            <DataGrid AutoGenerateColumns="False" x:Name="renewals" IsReadOnly="False" ItemsSource="{Binding DataCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" CanUserAddRows="False" SelectionUnit="CellOrRowHeader" RowHeight="50">
+            <DataGrid AutoGenerateColumns="False" 
+                      x:Name="renewals" IsReadOnly="False" 
+                      ItemsSource="{Binding DataCollection}" 
+                      ColumnHeaderStyle="{StaticResource HeaderStyle}" 
+                      CanUserAddRows="False" SelectionUnit="Cell" RowHeight="50">
                 <DataGrid.Columns>
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
@@ -62,9 +66,14 @@
                                     <Menu.Background>
                                         <SolidColorBrush Color="Transparent"></SolidColorBrush>
                                     </Menu.Background>
-                                    <MenuItem Header="::" Style="{StaticResource MenuParentStyle}" ItemContainerStyle="{StaticResource MenuItemStyle}">
-                                        <MenuItem Header="_Copy" />
-                                        <MenuItem Header="_Delete" Command="{Binding DataContext.SelectedViewModel.DeleteCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" CommandParameter="{Binding CommissionId}"/>
+                                    <MenuItem Header="::" Style="{StaticResource MenuParentStyle}" ItemContainerStyle="{StaticResource MenuItemStyle}">                                        
+                                       <MenuItem Header="_Copy" Command="{Binding DataContext.SelectedViewModel.CopyCommissionCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" 
+                                                  CommandParameter="{Binding}"/>
+                                        <MenuItem Header="_Paste" Command="{Binding DataContext.SelectedViewModel.PasteCommissionCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" 
+                                                  CommandParameter="{Binding}" IsEnabled="{Binding Path=DataContext.SelectedViewModel.IsPasteEnabled, 
+                                                                                            RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" />
+					<MenuItem Header="_Delete" Command="{Binding DataContext.SelectedViewModel.DeleteCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" CommandParameter="{Binding CommissionId}"/>
+
                                     </MenuItem>
                                 </Menu>
                             </DataTemplate>
@@ -179,7 +188,17 @@
                                                 BorderBrush="{Binding Agent.Color}"
                                                 BorderThickness="1"
                                                 Background="{Binding Agent.Color}">
-                                                <Label Content="{Binding Agent.FirstName}"></Label>
+                                                <Label Content="{Binding Agent.FirstName}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
+                                                    <Label.ContextMenu>
+                                                        <ContextMenu Style="{StaticResource ContextMenuItemStyle}" Tag="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                                                            <ContextMenu.Items>
+                                                                <MenuItem Header="Search Similar" 
+                                                          Command="{Binding PlacementTarget.Tag.DataContext.SearchAgentCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" 
+                                                          CommandParameter="{Binding Agent}" />
+                                                            </ContextMenu.Items>
+                                                        </ContextMenu>
+                                                    </Label.ContextMenu>
+                                                </Label>
                                             </Border>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
