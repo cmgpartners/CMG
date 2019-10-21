@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using CMG.Application.DTO;
 using CMG.DataAccess.Interface;
 using System.Windows.Input;
 using static CMG.Common.Enums;
+using System.Linq;
 
 namespace CMG.Application.ViewModel
 {
@@ -52,6 +54,10 @@ namespace CMG.Application.ViewModel
                 return CreateCommand(SearchCompany);
             }
         }
+        public ICommand SearchAgentCommand
+        {
+            get { return CreateCommand(SearchAgent); }
+        }
         public ICommand SearchInsuredCommand
         {
             get
@@ -88,6 +94,18 @@ namespace CMG.Application.ViewModel
                 SearchViewModel searchViewModel = new SearchViewModel(_unitOfWork, _mapper);
                 searchViewModel.Insured = parameter.ToString().Trim();
                 searchViewModel.Search(false);
+                SelectedViewModel = searchViewModel;
+                SelectedIndexLeftNavigation = (int)LeftNavigation.Search;
+            }
+        }
+        public void SearchAgent(object parameter)
+        {
+            if (parameter != null)
+            {
+                SearchViewModel searchViewModel = new SearchViewModel(_unitOfWork, _mapper);
+                searchViewModel.Agent = parameter as ViewAgentDto;
+                searchViewModel.SelecteAgentIndex = searchViewModel.AgentList.IndexOf(searchViewModel.AgentList.Where(X => X.Id == searchViewModel.Agent.Id).FirstOrDefault());
+                searchViewModel.Search(true);
                 SelectedViewModel = searchViewModel;
                 SelectedIndexLeftNavigation = (int)LeftNavigation.Search;
             }
