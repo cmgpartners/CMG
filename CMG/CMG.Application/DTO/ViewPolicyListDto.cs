@@ -2,7 +2,7 @@
 {
     public class ViewPolicyListDto
     {
-        public int PolicyId { get; set; }
+      //  public int PolicyId { get; set; }
         public string PolicyNumber { get; set; }
     }
 }
