@@ -165,7 +165,17 @@
                                                 BorderBrush="{Binding Agent.Color}"
                                                 BorderThickness="1"
                                                 Background="{Binding Agent.Color}">
-                                                <Label Content="{Binding Agent.FirstName}"></Label>
+                                                <Label Content="{Binding Agent.FirstName}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
+                                                    <Label.ContextMenu>
+                                                        <ContextMenu Style="{StaticResource ContextMenuItemStyle}" Tag="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                                                            <ContextMenu.Items>
+                                                                <MenuItem Header="Search Similar" 
+                                                          Command="{Binding PlacementTarget.Tag.DataContext.SearchAgentCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" 
+                                                          CommandParameter="{Binding Agent}" />
+                                                            </ContextMenu.Items>
+                                                        </ContextMenu>
+                                                    </Label.ContextMenu>
+                                                </Label>
                                             </Border>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>

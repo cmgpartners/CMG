@@ -54,9 +54,18 @@ namespace CMG.Application.ViewModel
             }
         }
 
-        public string SelectedAgents
+        private int selecteAgentIndex;
+        public int SelecteAgentIndex
         {
-            get { return string.Join(",", AgentList.Where(a => a.IsChecked).Select(a => a.FirstName).ToList()); }
+            get
+            {
+                return selecteAgentIndex;
+            }
+            set
+            {
+                selecteAgentIndex = value;
+                OnPropertyChanged("SelecteAgentIndex");
+            }
         }
 
         private string _policyNumber;
