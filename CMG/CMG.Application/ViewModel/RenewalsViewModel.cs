@@ -187,7 +187,7 @@ public ICommand AddCommand
             {
                 year = SelectedYear;
             }
-            SearchQuery searchQuery = BuildRangeSearchQuery(year, SelectedMonth);
+            SearchQuery searchQuery = BuildRenewalSearchQuery(year, SelectedMonth);
             var dataSearchBy = _unitOfWork.Commissions.Find(searchQuery);
             DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
             if (IsImportEnabled)
@@ -282,7 +282,7 @@ public ICommand AddCommand
         public void PolicyAgent(object currentItem)
         {
 
-            SearchQuery searchQuery = BuildEqualSearchQuery("PolicyNumber", ((ViewCommissionDto)currentItem).PolicyNumber);
+            SearchQuery searchQuery = BuildPolicySearchQuery("PolicyNumber", ((ViewCommissionDto)currentItem).PolicyNumber);
             var policy = _unitOfWork.Policies.Find(searchQuery);
             ViewPolicyDto policyDto;
             if (policy != null)
@@ -367,7 +367,7 @@ public ICommand AddCommand
             GetCommissions();
             GetPolicies();
         }
-        private SearchQuery BuildRangeSearchQuery(int year, string month)
+        private SearchQuery BuildRenewalSearchQuery(int year, string month)
         {
             SearchQuery searchQuery = new SearchQuery();
             List<FilterBy> searchBy = new List<FilterBy>();
@@ -378,17 +378,21 @@ public ICommand AddCommand
             filterBy.GreaterThan = fromPayDate.ToShortDateString();
             filterBy.LessThan = toPayDate.ToShortDateString();
             searchBy.Add(filterBy);
+            filterBy = new FilterBy();
+            filterBy.Property = "Renewal";
+            filterBy.Equal = "R";
+            searchBy.Add(filterBy);
             searchQuery.FilterBy = searchBy;
             return searchQuery;
         }
 
-        private SearchQuery BuildEqualSearchQuery(string propertyName, string propertyValue)
+        private SearchQuery BuildPolicySearchQuery(string propertyName, string propertyValue)
         {
             SearchQuery searchQuery = new SearchQuery();
             List<FilterBy> searchBy = new List<FilterBy>();
             FilterBy filterBy = new FilterBy();
-            filterBy.Property = propertyName;//
-            filterBy.Equal = propertyValue;//
+            filterBy.Property = propertyName;
+            filterBy.Equal = propertyValue;
             searchBy.Add(filterBy);
             searchQuery.FilterBy = searchBy;
             return searchQuery;

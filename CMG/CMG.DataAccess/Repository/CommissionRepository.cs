@@ -171,6 +171,8 @@ namespace CMG.DataAccess.Repository
                     return RenewalOrFYCExpression(filterBy.Equal);
                 case "paydate":
                     return DateRangeExpression(filterBy.GreaterThan, filterBy.LessThan);
+                case "comment":
+                    return CommentExpession(filterBy.Contains);
                 default:
                     throw new InvalidOperationException($"Can not filter for criteria: filter by {filterBy.Property}");
             }
@@ -220,6 +222,10 @@ namespace CMG.DataAccess.Repository
         private static Expression<Func<Comm, bool>> RenewalOrFYCExpression(string equal)
         {
             return w => w.Commtype.Equals(equal.Trim());
+        }
+        private static Expression<Func<Comm, bool>> CommentExpession(string contains)
+        {
+            return w => (w.Comment ?? string.Empty).ToLowerInvariant().Contains(contains.ToLowerInvariant());
         }
 
     }

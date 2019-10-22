@@ -40,6 +40,16 @@ namespace CMG.UI
                 _mainViewModel.SelectedViewModel = renewalsViewModel;
                 DataContext = _mainViewModel;
             }
+            else if (lstNavigation.SelectedIndex == 1)
+            {
+                if (!(_mainViewModel.SelectedViewModel is FYCViewModel))
+                {
+                    _mainViewModel.SelectedIndexLeftNavigation = (int)LeftNavigation.FirstYearCommission;
+                    FYCViewModel fycViewModel = new FYCViewModel(_unitOfWork, _mapper);
+                    _mainViewModel.SelectedViewModel = fycViewModel;
+                    DataContext = _mainViewModel;
+                }
+            }
             else if (lstNavigation.SelectedIndex == 3)
             {
                 if (!(_mainViewModel.SelectedViewModel is SearchViewModel))
