@@ -315,40 +315,36 @@ public ICommand AddCommand
             
          
         }
-         public void CopyCommission(object commissionInput)
+        public void CopyCommission(object commissionInput)
         {
             ViewCommissionDto data = commissionInput as ViewCommissionDto;
             List<ViewAgentCommissionDto> agnetCommissions = new List<ViewAgentCommissionDto>();
             data.AgentCommissions.ToList().ForEach(a => { agnetCommissions.Add(new ViewAgentCommissionDto
                                                                                 {
                                                                                     Id = a.Id,
-                                                                                    CommissionId = a.CommissionId,
-                                                                                    Commission = 0,
+                                                                                    CommissionId = 0,
+                                                                                    Commission = a.Commission,
                                                                                     Split = a.Split,
                                                                                     AgentId = a.AgentId,
                                                                                     AgentOrder = a.AgentOrder,
-                                                                                    CreatedBy = a.CreatedBy,
+                                                                                    CreatedBy = a.CreatedBy.Trim(),
                                                                                     CreatedDate = a.CreatedDate,
                                                                                     IsDeleted = a.IsDeleted,
                                                                                     Agent = a.Agent });
                                                                                 });
             CopiedCommission = new ViewCommissionDto() {
-                CommissionId = 0,
-                CommissionType = data.CommissionType,
+                CommissionId = --newId,
+                CommissionType = data.CommissionType.Trim(),
                 PolicyId = data.PolicyId,
-                PolicyNumber = data.PolicyNumber,
+                PolicyNumber = data.PolicyNumber.Trim(),
                 PayDate = data.PayDate,
-                CompanyName = data.CompanyName,
-                InsuredName = data.InsuredName,
-                Renewal = data.Renewal,
+                CompanyName = data.CompanyName.Trim(),
+                InsuredName = data.InsuredName.Trim(),
+                Renewal = data.Renewal.Trim(),
                 AgentCommissions = agnetCommissions,
                 TotalAmount = data.TotalAmount,
-                CreatedDate = data.CreatedDate,
-                CreatedBy = data.CreatedBy,
-                ModifiedBy = data.ModifiedBy,
-                ModifiedDate = data.ModifiedDate,
                 YearMonth = data.YearMonth,
-                Comment = data.Comment
+                Comment = !string.IsNullOrEmpty(data.Comment) ? data.Comment.Trim() : null
             };
 
             IsPasteEnabled = true;
