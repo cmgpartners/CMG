@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CMG.DataAccess.Domain
 {
     public partial class Comm : EntityBase
     {
+        [Key]
         public int Keycomm { get; set; }
         public string Commtype { get; set; }
         public string Yrmo { get; set; }

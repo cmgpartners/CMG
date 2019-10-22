@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CMG.Application.DTO;
+using CMG.DataAccess.Domain;
 using CMG.DataAccess.Interface;
 using CMG.DataAccess.Query;
 using System;
@@ -8,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Windows.Input;
 
 namespace CMG.Application.ViewModel
 {
@@ -79,7 +81,30 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("IsNoRecordFound");
             }
         }
+        private IEnumerable<string> _policies;
+        public IEnumerable<string> Policies
+        {
+            get { return _policies; }
+            set
+            {
+                _policies = value;
+                OnPropertyChanged("Policies");
+            }
+        }
+        public ICommand SaveCommand
+        {
+            get { return CreateCommand(Save); }
+        }
+        public ICommand AddCommand
+        {
+            get { return CreateCommand(Add); }
+        }
+        public ICommand PolicyAgentCommand
+        {
+            get { return CreateCommand(PolicyAgent); }
+        }
         #endregion
+
         #region Methods
 
         public void GetCommissions()
@@ -88,9 +113,94 @@ namespace CMG.Application.ViewModel
             var dataSearchBy = _unitOfWork.Commissions.Find(searchQuery);
             DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
         }
+        public void Save()
+        {
+            if (DataCollection != null && DataCollection.Count > 0)
+            {
+                foreach (ViewCommissionDto commission in DataCollection)
+                {
+                    if (commission.CommissionId > 0)
+                    {
+                        var entity = _mapper.Map<Comm>(commission);
+                        entity.Yrmo = entity.Paydate?.ToString("yyyyMM");
+                        entity.RevDate = DateTime.Now;
+                        entity.RevLocn = $"{Environment.UserDomainName}\\{Environment.UserName}";
+                        foreach (AgentCommission agentComm in entity.AgentCommissions)
+                        {
+                            agentComm.ModifiedBy = $"{Environment.UserDomainName}\\{Environment.UserName}";
+                            agentComm.ModifiedDate = DateTime.Now;
+                            _unitOfWork.AgentCommissions.Save(agentComm);
+                        }
+                        var commissionId = _unitOfWork.Commissions.Save(entity);
+                        _unitOfWork.Commit();
+                    }
+                    else
+                    {
+                        foreach (ViewAgentCommissionDto agentComm in commission.AgentCommissions)
+                        {
+                            agentComm.Agent = null;
+                            agentComm.CreatedDate = null;
+                            agentComm.CreatedBy = null;
+                        }
+                        commission.CommissionId = 0;
+                        var entityCommission = _mapper.Map<Comm>(commission);
+                        entityCommission.Yrmo = entityCommission.Paydate?.ToString("yyyyMM");
+                        entityCommission.Commtype = "F";
+                        var commissionId = _unitOfWork.Commissions.Add(entityCommission);
+                        _unitOfWork.Commit();
+                    }
+                }
+                GetCommissions();
+            }
+        }
+        public void Add()
+        {
+            DataCollection.Add(new ViewCommissionDto() { IsNew = true, IsNotNew = false, CommissionId = --newId });
+        }
+
+        public void PolicyAgent(object currentItem)
+        {
+            if (string.IsNullOrEmpty(((ViewCommissionDto)currentItem).PolicyNumber)) { return; }
+
+            SearchQuery searchQuery = BuildPolicySearchQuery("PolicyNumber", ((ViewCommissionDto)currentItem).PolicyNumber);
+            var policy = _unitOfWork.Policies.Find(searchQuery);
+            ViewPolicyDto policyDto;
+            if (policy != null)
+            {
+                policyDto = policy.Result.Select(r => _mapper.Map<ViewPolicyDto>(r)).SingleOrDefault();
+                if (policyDto != null)
+                {
+                    List<ViewAgentCommissionDto> agnetCommissions = new List<ViewAgentCommissionDto>();
+                    var currentCommission = DataCollection.Where(comm => comm.CommissionId == ((ViewCommissionDto)currentItem).CommissionId).SingleOrDefault();
+                    if (currentCommission != null)
+                    {
+                        var mappedCurrrentItem = _mapper.Map(policyDto, currentCommission);
+                        agnetCommissions = mappedCurrrentItem.AgentCommissions.ToList();
+                        var index = DataCollection.IndexOf(currentCommission);
+                        DataCollection[index] = new ViewCommissionDto()
+                        {
+                            CompanyName = mappedCurrrentItem.CompanyName,
+                            InsuredName = mappedCurrrentItem.InsuredName,
+                            IsNew = true,
+                            PolicyId = mappedCurrrentItem.PolicyId,
+                            AgentCommissions = agnetCommissions,
+                            PayDate = currentCommission.PayDate,
+                            PolicyNumber = currentCommission.PolicyNumber,
+                            IsNotNew = false,
+                            Renewal = currentCommission.Renewal,
+                        };
+                    }
+                }
+            }
+
+
+        }
+
+        #region Helper Methods
         private void LoadData()
         {
             GetCommissions();
+            GetPolicies();
         }
 
         private SearchQuery BuildFYCSearchQuery(int year, string month)
@@ -102,6 +212,18 @@ namespace CMG.Application.ViewModel
             filterBy.Add(FilterByRange("PayDate", fromPayDate.ToShortDateString(), toPayDate.ToShortDateString()));
             filterBy.Add(FilterByEqual("FYC", "F"));
             searchQuery.FilterBy = filterBy;
+            return searchQuery;
+        }
+
+        private SearchQuery BuildPolicySearchQuery(string propertyName, string propertyValue)
+        {
+            SearchQuery searchQuery = new SearchQuery();
+            List<FilterBy> searchBy = new List<FilterBy>();
+            FilterBy filterBy = new FilterBy();
+            filterBy.Property = propertyName;
+            filterBy.Equal = propertyValue;
+            searchBy.Add(filterBy);
+            searchQuery.FilterBy = searchBy;
             return searchQuery;
         }
 
@@ -121,6 +243,15 @@ namespace CMG.Application.ViewModel
             filterBy.Equal = value;
             return filterBy;
         }
+
+        private void GetPolicies()
+        {
+            var policies = _unitOfWork.Policies.GetAllPolicyNumber();
+            var temppolicies = policies.Select(r => _mapper.Map<ViewPolicyListDto>(r)).ToList();
+            Policies = temppolicies.Select(r => r.PolicyNumber).AsEnumerable();
+        }
+        #endregion
+
         #endregion
     }
 }

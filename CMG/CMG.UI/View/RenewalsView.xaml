@@ -245,7 +245,7 @@
                     <DataGridTemplateColumn Header="Total" HeaderStyle="{StaticResource TotalHeaderStyle}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox TextAlignment="Right" MinWidth="40"  Text="{Binding TotalAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBox TextAlignment="Right" MinWidth="40"  Text="{Binding TotalAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -270,7 +270,7 @@
                                             <Border x:Name="border"
                                                     BorderBrush="{Binding Agent.Color}"
                                                     BorderThickness="0,0,0,3">
-                                                <TextBox Text="{Binding Commission, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="30" TextAlignment="Right"></TextBox>
+                                                <TextBox Text="{Binding Commission, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" MinWidth="30" TextAlignment="Right"></TextBox>
                                             </Border>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>

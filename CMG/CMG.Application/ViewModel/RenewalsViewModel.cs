@@ -144,7 +144,7 @@ namespace CMG.Application.ViewModel
         {
             get { return CreateCommand(Delete); }
         }
-public ICommand AddCommand
+        public ICommand AddCommand
         {
             get { return CreateCommand(Add); }
         }
@@ -234,6 +234,7 @@ public ICommand AddCommand
                             entity.RevLocn = $"{Environment.UserDomainName}\\{Environment.UserName}";
                             foreach (AgentCommission agentComm in entity.AgentCommissions)
                             {
+                                agentComm.Agent = null;
                                 agentComm.ModifiedBy = $"{Environment.UserDomainName}\\{Environment.UserName}";
                                 agentComm.ModifiedDate = DateTime.Now;
                                 _unitOfWork.AgentCommissions.Save(agentComm);
@@ -277,10 +278,11 @@ public ICommand AddCommand
 
         public void Add()
         {
-            DataCollection.Add(new ViewCommissionDto() { IsNew = true, IsNotNew = false, CommissionId = newId-- });
+            DataCollection.Add(new ViewCommissionDto() { IsNew = true, IsNotNew = false, CommissionId = --newId });
         }
         public void PolicyAgent(object currentItem)
         {
+            if (string.IsNullOrEmpty(((ViewCommissionDto)currentItem).PolicyNumber)) { return; }
 
             SearchQuery searchQuery = BuildPolicySearchQuery("PolicyNumber", ((ViewCommissionDto)currentItem).PolicyNumber);
             var policy = _unitOfWork.Policies.Find(searchQuery);

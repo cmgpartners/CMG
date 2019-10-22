@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace CMG.DataAccess.Repository
 {
@@ -34,14 +37,40 @@ namespace CMG.DataAccess.Repository
 
         public TEntity Save(TEntity entity)
         {
-            Context.Entry(entity).State = EntityState.Modified;
+            var entry = Context.Entry(entity);
+            var key = this.GetPrimaryKey(entry);
+
+            if (entry.State == EntityState.Detached)
+            {
+                var currentEntry = Context.Set<TEntity>().Find(key);
+                if (currentEntry != null)
+                {
+                    var attachedEntry = Context.Entry(currentEntry);
+                    attachedEntry.CurrentValues.SetValues(entity);
+                }
+                else
+                {
+                    Context.Set<TEntity>().Attach(entity);
+                    entry.State = EntityState.Modified;
+                }
+            }
             return entity;
         }
 
         public ICollection<TEntity> All()
         {
             return Context.Set<TEntity>().ToList();
-        }   
+        }
+
+        private int GetPrimaryKey(EntityEntry entry)
+        {
+            var myObject = entry.Entity;
+            var property =
+                myObject.GetType()
+                    .GetProperties()
+                    .FirstOrDefault(prop => Attribute.IsDefined(prop, typeof(KeyAttribute)));
+            return property != null ? (int)property.GetValue(myObject, null) : 0;
+        }
         #endregion Methods
     }
 }

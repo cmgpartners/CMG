@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace CMG.DataAccess.Domain
 {
     public partial class AgentCommission : EntityBase
     {
+        [Key]
         public int Id { get; set; }
         public int? AgentId { get; set; }
         public int CommissionId { get; set; }
