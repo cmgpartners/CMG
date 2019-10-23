@@ -70,6 +70,29 @@ namespace CMG.Application.ViewModel
                 GetCommissions();
             }
         }
+        private ViewCommissionDto _copiedCommission;
+        public ViewCommissionDto CopiedCommission
+        {
+            get { return _copiedCommission; }
+            set
+            {
+                _copiedCommission = value;
+                OnPropertyChanged("CopiedCommission");
+            }
+        }
+        private bool _isPasteEnables;
+        public bool IsPasteEnabled
+        {
+            get
+            {
+                return _isPasteEnables = CopiedCommission != null;
+            }
+            set
+            {
+                _isPasteEnables = CopiedCommission != null;
+                OnPropertyChanged("IsPasteEnabled");
+            }
+        }
         private ObservableCollection<ViewCommissionDto> _dataCollection;
         public ObservableCollection<ViewCommissionDto> DataCollection
         {
@@ -99,9 +122,22 @@ namespace CMG.Application.ViewModel
         {
             get { return CreateCommand(Add); }
         }
+        public ICommand DeleteCommand
+        {
+            get { return CreateCommand(Delete); }
+        }
         public ICommand PolicyAgentCommand
         {
             get { return CreateCommand(PolicyAgent); }
+        }
+        public ICommand CopyCommand
+        {
+            get { return CreateCommand(Copy); }
+        }
+
+        public ICommand PasteCommand
+        {
+            get { return CreateCommand(Paste); }
         }
         #endregion
 
@@ -157,6 +193,23 @@ namespace CMG.Application.ViewModel
         {
             DataCollection.Add(new ViewCommissionDto() { IsNew = true, IsNotNew = false, CommissionId = --newId });
         }
+        public void Delete(object commissionId)
+        {
+            if (commissionId != null && Convert.ToInt32(commissionId) > 0)
+            {
+                var commission = _unitOfWork.Commissions.Find(Convert.ToInt32(commissionId));
+                commission.Del = true;
+                commission.RevDate = DateTime.Now;
+                commission.RevLocn = $"{Environment.UserDomainName}\\{Environment.UserName}";
+                commission.AgentCommissions = commission.AgentCommissions.Select(agentComm => { agentComm.IsDeleted = true; return agentComm; }).AsEnumerable();
+                _unitOfWork.Commit();
+                GetCommissions();
+            }
+            else
+            {
+                DataCollection.Remove(DataCollection.Where(commission => commission.CommissionId == Convert.ToInt32(commissionId)).SingleOrDefault());
+            }
+        }
 
         public void PolicyAgent(object currentItem)
         {
@@ -192,8 +245,25 @@ namespace CMG.Application.ViewModel
                     }
                 }
             }
+        }
+        public void Copy(object commissionInput)
+        {
+            CopiedCommission = commissionInput as ViewCommissionDto;
+            IsPasteEnabled = true;
+        }
 
-
+        public void Paste(object dataInput)
+        {
+            ViewCommissionDto data = dataInput as ViewCommissionDto;
+            int index = DataCollection.IndexOf(data);
+            if (CopiedCommission != null)
+            {
+                CopiedCommission.CommissionId = 0;
+                CopiedCommission.AgentCommissions.ToList().ForEach(a => a.Id = 0);
+                DataCollection.Insert(index, CopiedCommission);
+                CopiedCommission = null;
+                IsPasteEnabled = false;
+            }
         }
 
         #region Helper Methods

@@ -98,7 +98,7 @@ namespace CMG.Application.ViewModel
             }
         }
         
-         private ViewCommissionDto _copiedCommission;
+        private ViewCommissionDto _copiedCommission;
         public ViewCommissionDto CopiedCommission
         {
             get { return _copiedCommission; }
@@ -153,14 +153,14 @@ namespace CMG.Application.ViewModel
             get { return CreateCommand(PolicyAgent); }
         }
         
-        public ICommand CopyCommissionCommand
+        public ICommand CopyCommand
         {
-            get { return CreateCommand(CopyCommission); }
+            get { return CreateCommand(Copy); }
         }
 
-        public ICommand PasteCommissionCommand
+        public ICommand PasteCommand
         {
-            get { return CreateCommand(PasteCommission); }
+            get { return CreateCommand(Paste); }
         }
         private bool isImportEnabled;
         public bool IsImportEnabled
@@ -265,6 +265,8 @@ namespace CMG.Application.ViewModel
                 {
                     var commission = _unitOfWork.Commissions.Find(Convert.ToInt32(commissionId));
                     commission.Del = true;
+                    commission.RevDate = DateTime.Now;
+                    commission.RevLocn = $"{Environment.UserDomainName}\\{Environment.UserName}"; 
                     commission.AgentCommissions = commission.AgentCommissions.Select(agentComm => { agentComm.IsDeleted = true; return agentComm; }).AsEnumerable();
                     _unitOfWork.Commit();
                     GetCommissions();
@@ -317,13 +319,13 @@ namespace CMG.Application.ViewModel
             
          
         }
-         public void CopyCommission(object commissionInput)
+        public void Copy(object commissionInput)
         {
             CopiedCommission = commissionInput as ViewCommissionDto;
             IsPasteEnabled = true;
         }
 
-        public void PasteCommission(object dataInput)
+        public void Paste(object dataInput)
         {
             ViewCommissionDto data = dataInput as ViewCommissionDto;
             int index = DataCollection.IndexOf(data);
