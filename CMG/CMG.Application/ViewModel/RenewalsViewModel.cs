@@ -321,7 +321,36 @@ namespace CMG.Application.ViewModel
         }
         public void Copy(object commissionInput)
         {
-            CopiedCommission = commissionInput as ViewCommissionDto;
+            ViewCommissionDto data = commissionInput as ViewCommissionDto;
+            List<ViewAgentCommissionDto> agnetCommissions = new List<ViewAgentCommissionDto>();
+            data.AgentCommissions.ToList().ForEach(a => { agnetCommissions.Add(new ViewAgentCommissionDto
+                                                                                {
+                                                                                    Id = a.Id,
+                                                                                    CommissionId = 0,
+                                                                                    Commission = a.Commission,
+                                                                                    Split = a.Split,
+                                                                                    AgentId = a.AgentId,
+                                                                                    AgentOrder = a.AgentOrder,
+                                                                                    CreatedBy = a.CreatedBy.Trim(),
+                                                                                    CreatedDate = a.CreatedDate,
+                                                                                    IsDeleted = a.IsDeleted,
+                                                                                    Agent = a.Agent });
+                                                                                });
+            CopiedCommission = new ViewCommissionDto() {
+                CommissionId = --newId,
+                CommissionType = data.CommissionType.Trim(),
+                PolicyId = data.PolicyId,
+                PolicyNumber = data.PolicyNumber.Trim(),
+                PayDate = data.PayDate,
+                CompanyName = data.CompanyName.Trim(),
+                InsuredName = data.InsuredName.Trim(),
+                Renewal = data.Renewal.Trim(),
+                AgentCommissions = agnetCommissions,
+                TotalAmount = data.TotalAmount,
+                YearMonth = data.YearMonth,
+                Comment = !string.IsNullOrEmpty(data.Comment) ? data.Comment.Trim() : null
+            };
+
             IsPasteEnabled = true;
         }
 
@@ -331,7 +360,6 @@ namespace CMG.Application.ViewModel
             int index = DataCollection.IndexOf(data);
             if(CopiedCommission != null)
             {
-                CopiedCommission.CommissionId = 0;
                 CopiedCommission.AgentCommissions.ToList().ForEach(a => a.Id = 0);
                 DataCollection.Insert(index, CopiedCommission);
                 CopiedCommission = null;
