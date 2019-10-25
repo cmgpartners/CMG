@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using CMG.DataAccess.Interface;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -3134,5 +3136,54 @@ namespace CMG.DataAccess.Domain
                     .IsUnicode(false);
             });
         }
+
+        public override int SaveChanges()
+        {
+            foreach (var entry in ChangeTracker.Entries())
+            {
+                var timeStamp = DateTime.Now;
+                var userName = $"{Environment.UserDomainName}\\{Environment.UserName}";
+
+                if (entry.Entity is IEntityBase entity)
+                {
+                    if (entry.State == EntityState.Deleted)
+                    {
+                        entry.State = EntityState.Modified;
+                        entity.Del = true;
+                    }
+                    if (entry.State == EntityState.Added || entry.State == EntityState.Modified)
+                    {
+                        entity.RevDate = timeStamp;
+                        entity.RevLocn = userName;
+                        if (entry.State == EntityState.Added)
+                        {
+                            entity.Cr8Date = timeStamp;
+                            entity.Cr8Locn = userName;
+                        }
+                    }
+                    
+                }
+                else if (entry.Entity is IEntityBaseNew entityNew)
+                {
+                    if (entry.State == EntityState.Deleted)
+                    {
+                        entry.State = EntityState.Modified;
+                        entityNew.IsDeleted = true;
+                    }
+                    if (entry.State == EntityState.Added || entry.State == EntityState.Modified)
+                    {
+                        entityNew.ModifiedDate = timeStamp;
+                        entityNew.ModifiedBy = userName;
+                        if (entry.State == EntityState.Added)
+                        {
+                            entityNew.CreatedDate = timeStamp;
+                            entityNew.CreatedBy = userName;
+                        }
+                    }
+                }
+            }
+            return base.SaveChanges();
+        }
+      
     }
 }

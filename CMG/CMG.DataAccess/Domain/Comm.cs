@@ -17,17 +17,11 @@ namespace CMG.DataAccess.Domain
         public decimal Premium { get; set; }
         public string Renewals { get; set; }
         public decimal Total { get; set; }
-        public bool? Del { get; set; }
-        public DateTime Cr8Date { get; set; }
-        public string Cr8Locn { get; set; }
-        public DateTime RevDate { get; set; }
-        public string RevLocn { get; set; }
         public string Insured { get; set; }
         public string Comment { get; set; }
         public string Policynum { get; set; }
         public string Company { get; set; }
         public int Keynump { get; set; }
-
         public virtual Policys Policy { get; set; }
         public virtual IEnumerable<AgentCommission> AgentCommissions { get; set; } = new List<AgentCommission>();
     }

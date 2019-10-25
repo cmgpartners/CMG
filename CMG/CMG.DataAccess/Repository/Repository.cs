@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CMG.DataAccess.Repository
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : EntityBase
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity
     {
         #region Constructor
         public Repository(pb2Context context)
@@ -46,7 +46,8 @@ namespace CMG.DataAccess.Repository
                 if (currentEntry != null)
                 {
                     var attachedEntry = Context.Entry(currentEntry);
-                    attachedEntry.CurrentValues.SetValues(entity);
+                    if(!currentEntry.Equals(entity))
+                        attachedEntry.CurrentValues.SetValues(entity);
                 }
                 else
                 {
