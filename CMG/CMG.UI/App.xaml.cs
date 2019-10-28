@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using CMG.DataAccess;
 using AutoMapper;
 using CMG.Application.Mapper;
+using System.Diagnostics;
+using System.Linq;
 
 namespace CMG.UI
 {
@@ -20,19 +22,26 @@ namespace CMG.UI
         public IServiceProvider ServiceProvider { get; private set; }
 
         protected void OnStartUp(object sernder, StartupEventArgs e)
-        {        
-            var configurationBuilder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json");
+        {            
+            Process proc = Process.GetCurrentProcess();
+            int count = Process.GetProcesses().Where(p=> 
+                p.ProcessName == proc.ProcessName).Count();
 
-            IConfiguration configuration = configurationBuilder.Build();
-            ServiceCollection serviceCollection = new ServiceCollection();
+            if (count <= 1)
+            {
+                var configurationBuilder = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json");
 
-            ConfigureServices(serviceCollection, configuration);
-            ServiceProvider = serviceCollection.BuildServiceProvider();
+                IConfiguration configuration = configurationBuilder.Build();
+                ServiceCollection serviceCollection = new ServiceCollection();
 
-            var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
-            mainWindow.Show();
+                ConfigureServices(serviceCollection, configuration);
+                ServiceProvider = serviceCollection.BuildServiceProvider();
+
+                var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+                mainWindow.Show();
+            }
         }
 
         private void ConfigureServices(IServiceCollection services, IConfiguration configuration)
