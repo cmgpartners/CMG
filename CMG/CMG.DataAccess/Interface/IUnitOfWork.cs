@@ -8,6 +8,8 @@ namespace CMG.DataAccess.Interface
         IAgentRepository Agents { get; }
         IPolicyRepository Policies { get; }
         IAgentCommissionRepository AgentCommissions { get; }
+        IWithdrawalsRepository Withdrawals { get; }
+        IAgentWithdrawalsRepository AgentWithdrawals { get; }
 
         void Commit();
         void SaveChanges();

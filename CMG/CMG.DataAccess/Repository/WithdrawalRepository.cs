@@ -1,27 +1,27 @@
 ﻿using CMG.DataAccess.Domain;
 using CMG.DataAccess.Interface;
 using LinqKit;
+using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
 namespace CMG.DataAccess.Repository
 {
-    public class AgentRepository : Repository<Agent>, IAgentRepository
+    public class WithdrawalRepository : Repository<Withd>, IWithdrawalsRepository
     {
         private readonly pb2Context _context;
 
-        public AgentRepository(pb2Context context) : base(context)
+        public WithdrawalRepository(pb2Context context) : base(context)
         {
             _context = context;
         }
 
-        public IQueryResult<Agent> Find(ISearchCriteria criteria)
+        public IQueryResult<Withd> Find(ISearchCriteria criteria)
         {
-            var query = Context.Agent.AsQueryable();
+            var query = Context.Withd.AsQueryable().Include(x => x.AgentWithdrawal).ThenInclude(x => x.Agent);
 
-            IQueryable<Agent> queryable = query;
+            IQueryable<Withd> queryable = query;
 
             if ((criteria.FilterBy?.Count() ?? 0) > 0)
             {
@@ -39,7 +39,7 @@ namespace CMG.DataAccess.Repository
                 queryable = queryable.Take(pageSize);
             }
 
-            return new PagedQueryResult<Agent>()
+            return new PagedQueryResult<Withd>()
             {
                 TotalAmount = 0,
                 Result = queryable.ToList(),
@@ -47,9 +47,9 @@ namespace CMG.DataAccess.Repository
             };
         }
 
-        private static Expression<Func<Agent, bool>> GetPredicate(ISearchCriteria criteria)
+        private static Expression<Func<Withd, bool>> GetPredicate(ISearchCriteria criteria)
         {
-            Expression<Func<Agent, bool>> predicate = null;
+            Expression<Func<Withd, bool>> predicate = null;
 
             foreach (var filterBy in criteria.FilterBy)
             {
@@ -66,20 +66,27 @@ namespace CMG.DataAccess.Repository
         }
 
 
-        private static Expression<Func<Agent, bool>> FilterByClausure(FilterBy filterBy)
+        private static Expression<Func<Withd, bool>> FilterByClausure(FilterBy filterBy)
         {
             switch (filterBy.Property.ToLower())
             {
-                case "isexternal":
-                    return IsExternalExpression(filterBy.Equal);
+                case "dtype":
+                    return DTypeExpression(filterBy.Equal);
+                case "yrmo":
+                    return YearMonthExpression(filterBy.Equal);
                 default:
                     throw new InvalidOperationException($"Can not filter for criteria: filter by {filterBy.Property}");
             }
         }
 
-        private static Expression<Func<Agent, bool>> IsExternalExpression(string equal)
+        private static Expression<Func<Withd, bool>> DTypeExpression(string equal)
         {
-            return w => w.IsExternal.Equals(Convert.ToBoolean(equal.Trim()));
+            return w => w.Dtype.Equals(equal.Trim());
+        }
+
+        private static Expression<Func<Withd, bool>> YearMonthExpression(string equal)
+        {
+            return w => w.Yrmo.Equals(equal.Trim());
         }
     }
 }
