@@ -67,9 +67,9 @@
                                         <SolidColorBrush Color="Transparent"></SolidColorBrush>
                                     </Menu.Background>
                                     <MenuItem Header="::" Style="{StaticResource MenuParentStyle}" ItemContainerStyle="{StaticResource MenuItemStyle}">                                        
-                                       <MenuItem Header="_Copy" Command="{Binding DataContext.SelectedViewModel.CopyCommissionCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" 
+                                       <MenuItem Header="_Copy" Command="{Binding DataContext.SelectedViewModel.CopyCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" 
                                                   CommandParameter="{Binding}"/>
-                                        <MenuItem Header="_Paste" Command="{Binding DataContext.SelectedViewModel.PasteCommissionCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" 
+                                        <MenuItem Header="_Paste" Command="{Binding DataContext.SelectedViewModel.PasteCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" 
                                                   CommandParameter="{Binding}" IsEnabled="{Binding Path=DataContext.SelectedViewModel.IsPasteEnabled, 
                                                                                             RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" />
 					<MenuItem Header="_Delete" Command="{Binding DataContext.SelectedViewModel.DeleteCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" CommandParameter="{Binding CommissionId}"/>

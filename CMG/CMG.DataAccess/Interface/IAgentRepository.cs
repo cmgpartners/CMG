@@ -1,10 +1,10 @@
 ﻿using CMG.DataAccess.Domain;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace CMG.DataAccess.Interface
 {
     public interface IAgentRepository : IRepository<Agent>
     {
-        Agent Find(long id);
+        IQueryResult<Agent> Find(ISearchCriteria criteria);
     }
 }

@@ -52,6 +52,8 @@ namespace CMG.DataAccess.Repository
                 Cr8Date = x.Cr8Date,
                 Cr8Locn = x.Cr8Locn,
                 Del = x.Del,
+                RevDate = x.RevDate,
+                RevLocn = x.RevLocn,
                 AgentCommissions = x.AgentCommissions.Select(a => new AgentCommission
                 {
                     Id = a.Id,
@@ -63,6 +65,8 @@ namespace CMG.DataAccess.Repository
                     Commission = a.Commission,
                     CreatedBy = a.CreatedBy,
                     CreatedDate = a.CreatedDate,
+                    ModifiedDate = a.ModifiedDate,
+                    ModifiedBy = a.ModifiedBy,
                     IsDeleted = a.IsDeleted
                 })
             });

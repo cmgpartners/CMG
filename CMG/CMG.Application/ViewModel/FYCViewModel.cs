@@ -70,6 +70,29 @@ namespace CMG.Application.ViewModel
                 GetCommissions();
             }
         }
+        private ViewCommissionDto _copiedCommission;
+        public ViewCommissionDto CopiedCommission
+        {
+            get { return _copiedCommission; }
+            set
+            {
+                _copiedCommission = value;
+                OnPropertyChanged("CopiedCommission");
+            }
+        }
+        private bool _isPasteEnables;
+        public bool IsPasteEnabled
+        {
+            get
+            {
+                return _isPasteEnables = CopiedCommission != null;
+            }
+            set
+            {
+                _isPasteEnables = CopiedCommission != null;
+                OnPropertyChanged("IsPasteEnabled");
+            }
+        }
         private ObservableCollection<ViewCommissionDto> _dataCollection;
         public ObservableCollection<ViewCommissionDto> DataCollection
         {
@@ -99,9 +122,22 @@ namespace CMG.Application.ViewModel
         {
             get { return CreateCommand(Add); }
         }
+        public ICommand DeleteCommand
+        {
+            get { return CreateCommand(Delete); }
+        }
         public ICommand PolicyAgentCommand
         {
             get { return CreateCommand(PolicyAgent); }
+        }
+        public ICommand CopyCommand
+        {
+            get { return CreateCommand(Copy); }
+        }
+
+        public ICommand PasteCommand
+        {
+            get { return CreateCommand(Paste); }
         }
         #endregion
 
@@ -117,18 +153,16 @@ namespace CMG.Application.ViewModel
         {
             if (DataCollection != null && DataCollection.Count > 0)
             {
+                if (DataCollection.Any(comm => string.IsNullOrEmpty(comm.PolicyNumber))) return;
                 foreach (ViewCommissionDto commission in DataCollection)
                 {
                     if (commission.CommissionId > 0)
                     {
                         var entity = _mapper.Map<Comm>(commission);
                         entity.Yrmo = entity.Paydate?.ToString("yyyyMM");
-                        entity.RevDate = DateTime.Now;
-                        entity.RevLocn = $"{Environment.UserDomainName}\\{Environment.UserName}";
                         foreach (AgentCommission agentComm in entity.AgentCommissions)
                         {
-                            agentComm.ModifiedBy = $"{Environment.UserDomainName}\\{Environment.UserName}";
-                            agentComm.ModifiedDate = DateTime.Now;
+                            agentComm.Agent = null;
                             _unitOfWork.AgentCommissions.Save(agentComm);
                         }
                         var commissionId = _unitOfWork.Commissions.Save(entity);
@@ -136,12 +170,7 @@ namespace CMG.Application.ViewModel
                     }
                     else
                     {
-                        foreach (ViewAgentCommissionDto agentComm in commission.AgentCommissions)
-                        {
-                            agentComm.Agent = null;
-                            agentComm.CreatedDate = null;
-                            agentComm.CreatedBy = null;
-                        }
+                        commission.AgentCommissions = commission.AgentCommissions.Select(agentComm => { agentComm.Agent = null; return agentComm; }).ToList();
                         commission.CommissionId = 0;
                         var entityCommission = _mapper.Map<Comm>(commission);
                         entityCommission.Yrmo = entityCommission.Paydate?.ToString("yyyyMM");
@@ -156,6 +185,24 @@ namespace CMG.Application.ViewModel
         public void Add()
         {
             DataCollection.Add(new ViewCommissionDto() { IsNew = true, IsNotNew = false, CommissionId = --newId });
+        }
+        public void Delete(object commissionId)
+        {
+            if (commissionId != null && Convert.ToInt32(commissionId) > 0)
+            {
+                var commission = _unitOfWork.Commissions.Find(Convert.ToInt32(commissionId));
+                foreach (var agentComm in commission.AgentCommissions)
+                {
+                    _unitOfWork.AgentCommissions.Delete(agentComm);
+                }
+                _unitOfWork.Commissions.Delete(commission);
+                _unitOfWork.Commit();
+                GetCommissions();
+            }
+            else
+            {
+                DataCollection.Remove(DataCollection.Where(commission => commission.CommissionId == Convert.ToInt32(commissionId)).SingleOrDefault());
+            }
         }
 
         public void PolicyAgent(object currentItem)
@@ -192,8 +239,56 @@ namespace CMG.Application.ViewModel
                     }
                 }
             }
+        }
+        public void Copy(object commissionInput)
+        {
+            ViewCommissionDto data = commissionInput as ViewCommissionDto;
+            List<ViewAgentCommissionDto> agnetCommissions = new List<ViewAgentCommissionDto>();
+            data.AgentCommissions.ToList().ForEach(a => {
+                agnetCommissions.Add(new ViewAgentCommissionDto
+                {
+                    Id = a.Id,
+                    CommissionId = 0,
+                    Commission = a.Commission,
+                    Split = a.Split,
+                    AgentId = a.AgentId,
+                    AgentOrder = a.AgentOrder,
+                    CreatedBy = a.CreatedBy.Trim(),
+                    CreatedDate = a.CreatedDate,
+                    IsDeleted = a.IsDeleted,
+                    Agent = a.Agent
+                });
+            });
+            CopiedCommission = new ViewCommissionDto()
+            {
+                CommissionId = --newId,
+                CommissionType = data.CommissionType.Trim(),
+                PolicyId = data.PolicyId,
+                PolicyNumber = data.PolicyNumber.Trim(),
+                PayDate = data.PayDate,
+                CompanyName = data.CompanyName.Trim(),
+                InsuredName = data.InsuredName.Trim(),
+                Renewal = data.Renewal.Trim(),
+                AgentCommissions = agnetCommissions,
+                TotalAmount = data.TotalAmount,
+                YearMonth = data.YearMonth,
+                Comment = !string.IsNullOrEmpty(data.Comment) ? data.Comment.Trim() : null
+            };
 
+            IsPasteEnabled = true;
+        }
 
+        public void Paste(object dataInput)
+        {
+            ViewCommissionDto data = dataInput as ViewCommissionDto;
+            int index = DataCollection.IndexOf(data);
+            if (CopiedCommission != null)
+            {
+                CopiedCommission.AgentCommissions.ToList().ForEach(a => a.Id = 0);
+                DataCollection.Insert(index, CopiedCommission);
+                CopiedCommission = null;
+                IsPasteEnabled = false;
+            }
         }
 
         #region Helper Methods

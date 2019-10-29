@@ -23,15 +23,14 @@ namespace CMG.Application.Mapper
                .ForMember(des => des.Cr8Date, mo => mo.MapFrom(src => src.CreatedDate))
                .ForMember(des => des.Cr8Locn, mo => mo.MapFrom(src => src.CreatedBy))
                .ForMember(des => des.Del, mo => mo.MapFrom(src => src.IsDeleted))
+               .ForMember(des => des.RevDate, mo => mo.MapFrom(src => src.ModifiedDate))
+               .ForMember(des => des.RevLocn, mo => mo.MapFrom(src => src.ModifiedBy))
                .ForMember(des => des.AgentCommissions, mo => mo.MapFrom(src => src.AgentCommissions))
                .ReverseMap();
                 
             CreateMap<AgentCommission, ViewAgentCommissionDto>()
                 .ForMember(des => des.Commission, mo => mo.MapFrom(src => src.Commission.HasValue ? (decimal)src.Commission.Value : 0))
                 .ForMember(des => des.Split, mo => mo.MapFrom(src => src.Split.HasValue ? (decimal)src.Split.Value : 0))
-                .ForMember(des => des.CreatedBy, mo => mo.MapFrom(src => src.CreatedBy))
-                .ForMember(des => des.CreatedDate, mo => mo.MapFrom(src => src.CreatedDate))
-                .ForMember(des => des.IsDeleted, mo => mo.MapFrom(src => src.IsDeleted))
                 .ReverseMap();
         }
     }

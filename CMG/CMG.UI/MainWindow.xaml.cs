@@ -90,11 +90,5 @@ namespace CMG.UI
             };
             Process.Start(psi);
         }
-
-        private void Button_SettingsClick(object sender, RoutedEventArgs e)
-        {
-            DataContext = new AgentViewModel(_unitOfWork, _mapper);
-            lstNavItems.SelectedItem = null;
-        }
     }
 }

@@ -56,12 +56,7 @@ namespace CMG.DataAccess.Domain
         public string Picpath { get; set; }
         public decimal CaseStage { get; set; }
         public decimal Networth { get; set; }
-        public string RevLocn { get; set; }
-        public DateTime RevDate { get; set; }
-        public string Cr8Locn { get; set; }
-        public DateTime Cr8Date { get; set; }
         public string Srccat { get; set; }
-        public bool Del { get; set; }
         public DateTime? Tdate { get; set; }
         public string Cnotes { get; set; }
         public DateTime? Weddate { get; set; }
