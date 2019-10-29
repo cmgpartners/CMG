@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using CMG.DataAccess.Interface;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -18,6 +20,7 @@ namespace CMG.DataAccess.Domain
         public virtual DbSet<AccTable> AccTable { get; set; }
         public virtual DbSet<Agent> Agent { get; set; }
         public virtual DbSet<AgentCommission> AgentCommission { get; set; }
+        public virtual DbSet<AgentWithdrawal> AgentWithdrawal { get; set; }
         public virtual DbSet<Business> Business { get; set; }
         public virtual DbSet<BusinessPolicys> BusinessPolicys { get; set; }
         public virtual DbSet<Calls> Calls { get; set; }
@@ -46,6 +49,7 @@ namespace CMG.DataAccess.Domain
         // Unable to generate entity type for table 'dbo.COMBO'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.ERRLOG'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.SF_Map'. Please see the warning messages.
+        // Unable to generate entity type for table 'dbo.WITHD_BACKUP'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.POLICYS_BACKUP'. Please see the warning messages.
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -172,6 +176,28 @@ namespace CMG.DataAccess.Domain
                     .HasConstraintName("FK_Commission_AgentCommission");
 
                 entity.HasQueryFilter(x => x.IsDeleted == false);
+            });
+
+            modelBuilder.Entity<AgentWithdrawal>(entity =>
+            {
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Withdrawal)
+                    .WithMany(p => p.AgentWithdrawal)
+                    .HasForeignKey(d => d.WithdrawalId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_WITHD_AgentWithdrawal");
             });
 
             modelBuilder.Entity<Business>(entity =>
@@ -1119,8 +1145,8 @@ namespace CMG.DataAccess.Domain
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.Policy)
-                    .WithMany(p => p.Commissions)
-                    .HasForeignKey(d => d.Keynumo)
+                 .WithMany(p => p.Commissions)
+                 .HasForeignKey(d => d.Keynumo)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Policys_Commission");
 
@@ -3057,10 +3083,6 @@ namespace CMG.DataAccess.Domain
                     .HasColumnName("KEYWITH")
                     .ValueGeneratedNever();
 
-                entity.Property(e => e.Bob)
-                    .HasColumnName("BOB")
-                    .HasColumnType("numeric(9, 0)");
-
                 entity.Property(e => e.Cr8Date)
                     .HasColumnName("CR8_DATE")
                     .HasColumnType("datetime")
@@ -3095,26 +3117,6 @@ namespace CMG.DataAccess.Domain
                     .HasMaxLength(1)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Frank)
-                    .HasColumnName("FRANK")
-                    .HasColumnType("numeric(9, 0)");
-
-                entity.Property(e => e.Marty)
-                    .HasColumnName("MARTY")
-                    .HasColumnType("numeric(9, 0)");
-
-                entity.Property(e => e.Mary)
-                    .HasColumnName("MARY")
-                    .HasColumnType("numeric(9, 0)");
-
-                entity.Property(e => e.Other)
-                    .HasColumnName("OTHER")
-                    .HasColumnType("numeric(9, 0)");
-
-                entity.Property(e => e.Peter)
-                    .HasColumnName("PETER")
-                    .HasColumnType("numeric(9, 0)");
-
                 entity.Property(e => e.RevDate)
                     .HasColumnName("REV_DATE")
                     .HasColumnType("datetime")
@@ -3134,5 +3136,54 @@ namespace CMG.DataAccess.Domain
                     .IsUnicode(false);
             });
         }
+
+        public override int SaveChanges()
+        {
+            foreach (var entry in ChangeTracker.Entries())
+            {
+                var timeStamp = DateTime.Now;
+                var userName = $"{Environment.UserDomainName}\\{Environment.UserName}";
+
+                if (entry.Entity is IEntityBase entity)
+                {
+                    if (entry.State == EntityState.Deleted)
+                    {
+                        entry.State = EntityState.Modified;
+                        entity.Del = true;
+                    }
+                    if (entry.State == EntityState.Added || entry.State == EntityState.Modified)
+                    {
+                        entity.RevDate = timeStamp;
+                        entity.RevLocn = userName;
+                        if (entry.State == EntityState.Added)
+                        {
+                            entity.Cr8Date = timeStamp;
+                            entity.Cr8Locn = userName;
+                        }
+                    }
+
+                }
+                else if (entry.Entity is IEntityBaseNew entityNew)
+                {
+                    if (entry.State == EntityState.Deleted)
+                    {
+                        entry.State = EntityState.Modified;
+                        entityNew.IsDeleted = true;
+                    }
+                    if (entry.State == EntityState.Added || entry.State == EntityState.Modified)
+                    {
+                        entityNew.ModifiedDate = timeStamp;
+                        entityNew.ModifiedBy = userName;
+                        if (entry.State == EntityState.Added)
+                        {
+                            entityNew.CreatedDate = timeStamp;
+                            entityNew.CreatedBy = userName;
+                        }
+                    }
+                }
+            }
+            return base.SaveChanges();
+        }
+
     }
 }

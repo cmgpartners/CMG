@@ -5,8 +5,7 @@ using System.Text;
 
 namespace CMG.DataAccess.Domain
 {
-    public class EntityBase : IEntity
+    public class Entity : IEntity
     {
-        //public long Id { get; set; }
     }
 }

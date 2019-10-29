@@ -37,17 +37,12 @@ namespace CMG.DataAccess.Domain
         public int Rpr { get; set; }
         public string Comment { get; set; }
         public int Moamt { get; set; }
-        public string RevLocn { get; set; }
         public DateTime? Cmsnexport { get; set; }
         public decimal Cr8Grp { get; set; }
-        public DateTime RevDate { get; set; }
-        public DateTime Cr8Date { get; set; }
-        public string Cr8Locn { get; set; }
         public bool? Acc1 { get; set; }
         public bool? Acc0 { get; set; }
         public bool? Acc2 { get; set; }
         public string Callres { get; set; }
-        public bool Del { get; set; }
         public bool? SubPols { get; set; }
         public string Filename { get; set; }
         public decimal? Annprem { get; set; }

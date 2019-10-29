@@ -98,7 +98,7 @@ namespace CMG.Application.ViewModel
             }
         }
         
-         private ViewCommissionDto _copiedCommission;
+        private ViewCommissionDto _copiedCommission;
         public ViewCommissionDto CopiedCommission
         {
             get { return _copiedCommission; }
@@ -153,14 +153,14 @@ namespace CMG.Application.ViewModel
             get { return CreateCommand(PolicyAgent); }
         }
         
-        public ICommand CopyCommissionCommand
+        public ICommand CopyCommand
         {
-            get { return CreateCommand(CopyCommission); }
+            get { return CreateCommand(Copy); }
         }
 
-        public ICommand PasteCommissionCommand
+        public ICommand PasteCommand
         {
-            get { return CreateCommand(PasteCommission); }
+            get { return CreateCommand(Paste); }
         }
         private bool isImportEnabled;
         public bool IsImportEnabled
@@ -206,6 +206,7 @@ namespace CMG.Application.ViewModel
         {
             if(DataCollection != null && DataCollection.Count > 0)
             {
+                if (DataCollection.Any(comm => string.IsNullOrEmpty(comm.PolicyNumber))) return;
                 if (isImportEnabled)
                 {
                     try
@@ -230,13 +231,9 @@ namespace CMG.Application.ViewModel
                         {
                             var entity = _mapper.Map<Comm>(commission);
                             entity.Yrmo = entity.Paydate?.ToString("yyyyMM");
-                            entity.RevDate = DateTime.Now;
-                            entity.RevLocn = $"{Environment.UserDomainName}\\{Environment.UserName}";
                             foreach (AgentCommission agentComm in entity.AgentCommissions)
                             {
                                 agentComm.Agent = null;
-                                agentComm.ModifiedBy = $"{Environment.UserDomainName}\\{Environment.UserName}";
-                                agentComm.ModifiedDate = DateTime.Now;
                                 _unitOfWork.AgentCommissions.Save(agentComm);
                             }
                             var commissionId = _unitOfWork.Commissions.Save(entity);
@@ -264,8 +261,11 @@ namespace CMG.Application.ViewModel
                 if(commissionId != null && Convert.ToInt32(commissionId) > 0)
                 {
                     var commission = _unitOfWork.Commissions.Find(Convert.ToInt32(commissionId));
-                    commission.Del = true;
-                    commission.AgentCommissions = commission.AgentCommissions.Select(agentComm => { agentComm.IsDeleted = true; return agentComm; }).AsEnumerable();
+                    foreach (var agentComm in commission.AgentCommissions)
+                    {
+                        _unitOfWork.AgentCommissions.Delete(agentComm);
+                    }
+                    _unitOfWork.Commissions.Delete(commission);
                     _unitOfWork.Commit();
                     GetCommissions();
                 }
@@ -317,7 +317,7 @@ namespace CMG.Application.ViewModel
             
          
         }
-        public void CopyCommission(object commissionInput)
+        public void Copy(object commissionInput)
         {
             ViewCommissionDto data = commissionInput as ViewCommissionDto;
             List<ViewAgentCommissionDto> agnetCommissions = new List<ViewAgentCommissionDto>();
@@ -352,7 +352,7 @@ namespace CMG.Application.ViewModel
             IsPasteEnabled = true;
         }
 
-        public void PasteCommission(object dataInput)
+        public void Paste(object dataInput)
         {
             ViewCommissionDto data = dataInput as ViewCommissionDto;
             int index = DataCollection.IndexOf(data);
@@ -422,12 +422,7 @@ namespace CMG.Application.ViewModel
 
         private void AddCommission(ViewCommissionDto commission)
         {
-            foreach (ViewAgentCommissionDto agentComm in commission.AgentCommissions)
-            {
-                agentComm.Agent = null;
-                agentComm.CreatedDate = null;
-                agentComm.CreatedBy = null;
-            }
+            commission.AgentCommissions = commission.AgentCommissions.Select(agentComm => { agentComm.Agent = null; return agentComm; }).ToList();
             commission.CommissionId = 0;
             var entityCommission = _mapper.Map<Comm>(commission);
             entityCommission.Yrmo = entityCommission.Paydate?.ToString("yyyyMM");
