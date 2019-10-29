@@ -50,6 +50,17 @@ namespace CMG.UI
                     DataContext = _mainViewModel;
                 }
             }
+            else if (lstNavigation.SelectedIndex == 2)
+            {
+                if (!(_mainViewModel.SelectedViewModel is FinanceSummaryViewModel))
+                {
+                    _mainViewModel.SelectedIndexLeftNavigation = (int)LeftNavigation.FirstYearCommission;
+                    FinanceSummaryViewModel financeSummaryViewModel = new FinanceSummaryViewModel(_unitOfWork, _mapper);
+                    _mainViewModel.SelectedViewModel = financeSummaryViewModel;
+                    DataContext = _mainViewModel;
+                    lstNavItems.SelectedItem = lstNavItems.Items[2];
+                }
+            }
             else if (lstNavigation.SelectedIndex == 3)
             {
                 if (!(_mainViewModel.SelectedViewModel is SearchViewModel))
