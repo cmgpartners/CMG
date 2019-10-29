@@ -5,6 +5,5 @@ namespace CMG.DataAccess.Interface
 {
     public interface IAgentRepository : IRepository<Agent>
     {
-        Agent Find(long id);
     }
 }

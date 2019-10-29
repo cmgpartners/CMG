@@ -13,15 +13,5 @@ namespace CMG.DataAccess.Repository
         {
             _context = context;
         }
-        public override Agent Add(Agent entity)
-        {
-            var result = Context.Entry(entity).State = EntityState.Detached;
-            return entity;
-        }
-        public Agent Find(long id)
-        {
-            return Context.Agent
-                .SingleOrDefault(x => x.Id == id);
-        }
     }
 }

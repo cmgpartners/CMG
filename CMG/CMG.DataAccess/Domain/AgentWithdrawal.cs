@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace CMG.DataAccess.Domain
 {
     public partial class AgentWithdrawal : EntityBaseNew
     {
+        [Key]
         public int Id { get; set; }
         public int WithdrawalId { get; set; }
         public int? AgentId { get; set; }
