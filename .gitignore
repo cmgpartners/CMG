@@ -303,3 +303,9 @@
 /CMG Package
 /CMG Package2
 /CMG/CMG.UI/bin
+/CMG/CMG.Application/obj/Debug/netcoreapp3.0/CMG.Application.designer.deps.json
+/CMG/CMG.Application/obj/Debug/netcoreapp3.0/CMG.Application.designer.runtimeconfig.json
+/CMG/CMG.Common/obj/Debug/netcoreapp3.0/CMG.Common.designer.deps.json
+/CMG/CMG.Common/obj/Debug/netcoreapp3.0/CMG.Common.designer.runtimeconfig.json
+/CMG/CMG.DataAccess/obj/Debug/netcoreapp3.0/CMG.DataAccess.designer.deps.json
+/CMG/CMG.DataAccess/obj/Debug/netcoreapp3.0/CMG.DataAccess.designer.runtimeconfig.json
