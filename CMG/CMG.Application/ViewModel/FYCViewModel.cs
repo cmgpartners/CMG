@@ -31,6 +31,7 @@ namespace CMG.Application.ViewModel
             LoadData();
         }
         #endregion Constructor
+
         #region Properties
         public ICollection<string> Months
         {

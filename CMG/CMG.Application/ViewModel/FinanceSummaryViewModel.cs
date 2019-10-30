@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using CMG.Application.DTO;
 using CMG.DataAccess.Interface;
+using CMG.DataAccess.Query;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,7 +12,6 @@ namespace CMG.Application.ViewModel
 {
     public class FinanceSummaryViewModel : MainViewModel
     {
-
         #region Member variables
         private readonly IUnitOfWork _unitOfWork; 
         private readonly IMapper _mapper;
@@ -23,7 +24,7 @@ namespace CMG.Application.ViewModel
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            GetUsers();            
+            GetDueToPartners();            
         }
         #endregion Constructor
 
@@ -52,47 +53,68 @@ namespace CMG.Application.ViewModel
             {
                 _selectedYear = value;
                 OnPropertyChanged("SelectedYear");
-                //GetCommissions();
+                GetDataCollections();
             }
         }
 
-        private ObservableCollection<User> _dataCollection;
-        public ObservableCollection<User> DataCollection
+        private string _selectedMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1).ToString("MMM", CultureInfo.InvariantCulture);
+        public string SelectedMonth
         {
-            get { return _dataCollection; }
+            get { return _selectedMonth; }
             set
             {
-                _dataCollection = value;
-                OnPropertyChanged("DataCollection");
+                _selectedMonth = value;
+                OnPropertyChanged("SelectedMonth");
+                GetDataCollections();
+            }
+        }
+
+        private ObservableCollection<ViewWithdrawalDto> _dueToPartnersCollection;
+        public ObservableCollection<ViewWithdrawalDto> DueToPartnersCollection
+        {
+            get { return _dueToPartnersCollection; }
+            set
+            {
+                _dueToPartnersCollection = value;
+                OnPropertyChanged("DueToPartnersCollection");
                 OnPropertyChanged("IsNoRecordFound");
             }
         }
         #endregion Properties
-
-
+        
         #region Methods
-        public void GetUsers()
-        {
-            List<User> users = new List<User>();
-            users.Add(new User() { Id = 1, Name = "John Doe", Birthday = new DateTime(1971, 7, 23) });
-            users.Add(new User() { Id = 2, Name = "Max Doe", Birthday = new DateTime(1974, 1, 17) });
-            users.Add(new User() { Id = 3, Name = "Sammy Doe", Birthday = new DateTime(1991, 9, 2) });
-            users.Add(new User() { Id = 4, Name = "Next Doe", Birthday = new DateTime(1991, 9, 2) });
 
-            DataCollection = new ObservableCollection<User>();
-            foreach (var user in users)
-                DataCollection.Add(user);
+        public void GetDataCollections()
+        {
+            // GetAgentExpenses();
+            GetDueToPartners();
+            //GetBankPositiosn();
+            //GetPersonalCommissions();
+        }
+        public void GetDueToPartners()
+        {
+            SearchQuery searchQuery = BuildDueToPartnersSearchQuery();
+            var dataSearchBy = _unitOfWork.Withdrawals.Find(searchQuery);
+            DueToPartnersCollection = new ObservableCollection<ViewWithdrawalDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewWithdrawalDto>(r)).ToList());
+        }
+        private SearchQuery BuildDueToPartnersSearchQuery()
+        {
+            int month = DateTime.ParseExact(SelectedMonth, "MMM", null).Month;
+            SearchQuery searchQuery = new SearchQuery();
+            List<FilterBy> filterBy = new List<FilterBy>();
+            filterBy.Add(FilterByEqual("yrmo", SelectedYear.ToString() + month.ToString("D2")));
+            filterBy.Add(FilterByEqual("dtype", "L"));
+            searchQuery.FilterBy = filterBy;
+            return searchQuery;
         }
 
+        private FilterBy FilterByEqual(string propertyName, string value)
+        {
+            FilterBy filterBy = new FilterBy();
+            filterBy.Property = propertyName;
+            filterBy.Equal = value;
+            return filterBy;
+        }
         #endregion Methods
-    }
-
-    public class User
-    {
-        public int Id { get; set; }
-
-        public string Name { get; set; }
-
-        public DateTime Birthday { get; set; }
     }
 }
