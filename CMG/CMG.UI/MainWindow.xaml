@@ -21,6 +21,9 @@
             <DataTemplate DataType="{x:Type viewModels:FYCViewModel}" >
                 <views:FYCView DataContext="{Binding }"></views:FYCView>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:FinanceSummaryViewModel}" >
+                <views:FinanceSummaryView DataContext="{Binding }"></views:FinanceSummaryView>
+            </DataTemplate>
         </ResourceDictionary>
     </Window.Resources>
     <Grid>
