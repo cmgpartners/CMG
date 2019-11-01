@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Windows.Input;
 
 namespace CMG.Application.ViewModel
 {
@@ -24,7 +25,7 @@ namespace CMG.Application.ViewModel
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            GetDueToPartners();            
+            LoadData();            
         }
         #endregion Constructor
 
@@ -53,7 +54,7 @@ namespace CMG.Application.ViewModel
             {
                 _selectedYear = value;
                 OnPropertyChanged("SelectedYear");
-                GetDataCollections();
+                LoadData();
             }
         }
 
@@ -65,7 +66,7 @@ namespace CMG.Application.ViewModel
             {
                 _selectedMonth = value;
                 OnPropertyChanged("SelectedMonth");
-                GetDataCollections();
+                LoadData();
             }
         }
 
@@ -80,30 +81,60 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("IsNoRecordFound");
             }
         }
+        private ObservableCollection<ViewWithdrawalDto> _agentExpensesCollection;
+        public ObservableCollection<ViewWithdrawalDto> AgentExpensesCollection
+        {
+            get { return _agentExpensesCollection; }
+            set
+            {
+                _agentExpensesCollection = value;
+                OnPropertyChanged("AgentExpensesCollection");
+            }
+        }
+        public ICommand RemoveAgentCommand
+        {
+            get { return CreateCommand(RemoveAgent); }
+        }
+
         #endregion Properties
-        
+
         #region Methods
 
-        public void GetDataCollections()
+        public void LoadData()
         {
-            // GetAgentExpenses();
+            GetAgentExpenses();
             GetDueToPartners();
             //GetBankPositiosn();
             //GetPersonalCommissions();
         }
         public void GetDueToPartners()
         {
-            SearchQuery searchQuery = BuildDueToPartnersSearchQuery();
+            SearchQuery searchQuery = BuildSearchQuery();
             var dataSearchBy = _unitOfWork.Withdrawals.Find(searchQuery);
             DueToPartnersCollection = new ObservableCollection<ViewWithdrawalDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewWithdrawalDto>(r)).ToList());
         }
-        private SearchQuery BuildDueToPartnersSearchQuery()
+        public void GetAgentExpenses()
+        {
+            SearchQuery searchQuery = BuildSearchQuery("W");
+            var dataSearchBy = _unitOfWork.Withdrawals.Find(searchQuery);
+            AgentExpensesCollection = new ObservableCollection<ViewWithdrawalDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewWithdrawalDto>(r)).ToList());
+        }
+        public void RemoveAgent(object selectedAgentWithdrawal)
+        {
+            var _selectedAgentWithdrawal = (ViewAgentWithdrawalDto)selectedAgentWithdrawal;
+            _selectedAgentWithdrawal.IsVisible = false;
+            var currentAgentWithdrawal = AgentExpensesCollection.Where(expense => expense.WithdrawalId == _selectedAgentWithdrawal.WithdrawalId).SingleOrDefault();
+            var index = AgentExpensesCollection.IndexOf(currentAgentWithdrawal);
+            AgentExpensesCollection.Remove(currentAgentWithdrawal);
+            AgentExpensesCollection.Insert(index, currentAgentWithdrawal);
+        }
+        private SearchQuery BuildSearchQuery(string dType = "L")
         {
             int month = DateTime.ParseExact(SelectedMonth, "MMM", null).Month;
             SearchQuery searchQuery = new SearchQuery();
             List<FilterBy> filterBy = new List<FilterBy>();
             filterBy.Add(FilterByEqual("yrmo", SelectedYear.ToString() + month.ToString("D2")));
-            filterBy.Add(FilterByEqual("dtype", "L"));
+            filterBy.Add(FilterByEqual("dtype", dType));
             searchQuery.FilterBy = filterBy;
             return searchQuery;
         }

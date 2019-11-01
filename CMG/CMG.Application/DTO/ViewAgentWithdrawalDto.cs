@@ -10,6 +10,7 @@ namespace CMG.Application.DTO
         public int WithdrawalId { get; set; }
         public int? AgentId { get; set; }
         public double? Amount { get; set; }
+        public bool IsVisible { get; set; } = true;
         public ViewAgentDto Agent { get; set; } = new ViewAgentDto();
     }
 }

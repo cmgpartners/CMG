@@ -58,28 +58,92 @@
         <Grid Grid.Row="1" Grid.ColumnSpan="4" Width="1000">
             <StackPanel>
                 <Label x:Name="lblAgentExpenses" Content="AGENT EXPENSES" />
-                <DataGrid AutoGenerateColumns="False" MaxHeight="200" VerticalScrollBarVisibility="Visible"
-                          ItemsSource="{Binding DataCollection}"
-                          x:Name="agentExpenses" IsReadOnly="False" 
-                          ColumnHeaderStyle="{StaticResource HeaderStyle}" 
-                          CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50">
-                <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="Id" Width="90" >
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Path=Id}"></TextBlock>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Name" Width="90" >
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Path=Name}"></TextBlock>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
+        <DataGrid AutoGenerateColumns="False" MaxHeight="200" VerticalScrollBarVisibility="Visible"
+                              ItemsSource="{Binding AgentExpensesCollection}"
+                              x:Name="AgentExpenses" IsReadOnly="False" 
+                              ColumnHeaderStyle="{StaticResource HeaderStyle}" 
+                              CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Description" Width="Auto" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Desc}"></TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text=""></TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Agents" Width="Auto" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ListView ItemsSource="{Binding AgentWithdrawals, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                        ItemContainerStyle="{StaticResource ItemStyle}" 
+                                        ScrollViewer.VerticalScrollBarVisibility="Disabled" >
+                                <ListView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"></StackPanel>
+                                    </ItemsPanelTemplate>
+                                </ListView.ItemsPanel>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border CornerRadius="15"
+                                        BorderBrush="{Binding Agent.Color}"
+                                        BorderThickness="1"
+                                        Visibility="{Binding IsVisible, Converter={StaticResource VisibilityConverter}}"
+                                        Background="{Binding Agent.Color}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Label Content="{Binding Agent.FirstName}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"></Label>
+                                                        <Button  Style="{StaticResource RemoveButton}" Command="{Binding DataContext.SelectedViewModel.RemoveAgentCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" CommandParameter="{Binding}">
+                                                            <materialDesign:PackIcon Kind="CloseCircleOutline" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 5 0"></materialDesign:PackIcon>
+                                                        </Button>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text=""></TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Amount" Width="Auto" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ListView ItemsSource="{Binding AgentWithdrawals, Mode=OneWay}"
+                                              DisplayMemberPath="Amount"
+                                              ItemContainerStyle="{StaticResource ItemStyle}" 
+                                              ScrollViewer.VerticalScrollBarVisibility="Disabled" >
+                                <ListView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"></StackPanel>
+                                    </ItemsPanelTemplate>
+                                </ListView.ItemsPanel>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border x:Name="border"
+                                                        BorderBrush="{Binding Agent.Color}"
+                                                        BorderThickness="0,0,0,3"
+                                                        Visibility="{Binding IsVisible, Converter={StaticResource VisibilityConverter}}">
+                                            <Label Content="{Binding Amount}"></Label>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
             </StackPanel>
         </Grid>
 
