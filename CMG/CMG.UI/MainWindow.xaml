@@ -8,7 +8,7 @@
         xmlns:views="clr-namespace:CMG.UI.View"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         mc:Ignorable="d"
-        MinHeight="600" MinWidth="1400" ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen"
+        MinHeight="600" MinWidth="1400" ResizeMode="CanResizeWithGrip" WindowStartupLocation="CenterScreen" WindowState="Maximized"
         Icon="Asset/ApplicationIcon.ico">
     <Window.Resources>
         <ResourceDictionary>
