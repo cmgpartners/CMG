@@ -23,12 +23,12 @@ namespace CMG.UI
 
         protected void OnStartUp(object sernder, StartupEventArgs e)
         {            
-            Process proc = Process.GetCurrentProcess();
-            int count = Process.GetProcesses().Where(p=> 
-                p.ProcessName == proc.ProcessName).Count();
+            //Process proc = Process.GetCurrentProcess();
+            //int count = Process.GetProcesses().Where(p=> 
+            //    p.ProcessName == proc.ProcessName).Count();
 
-            if (count <= 1)
-            {
+            //if (count <= 1)
+            //{
                 var configurationBuilder = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile("appsettings.json");
@@ -41,7 +41,7 @@ namespace CMG.UI
 
                 var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
                 mainWindow.Show();
-            }
+          //  }
         }
 
         private void ConfigureServices(IServiceCollection services, IConfiguration configuration)

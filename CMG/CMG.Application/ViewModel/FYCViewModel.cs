@@ -152,35 +152,42 @@ namespace CMG.Application.ViewModel
         }
         public void Save()
         {
-            if (DataCollection != null && DataCollection.Count > 0)
+            try
             {
-                if (DataCollection.Any(comm => string.IsNullOrEmpty(comm.PolicyNumber))) return;
-                foreach (ViewCommissionDto commission in DataCollection)
+                if (DataCollection != null && DataCollection.Count > 0)
                 {
-                    if (commission.CommissionId > 0)
+                    if (DataCollection.Any(comm => string.IsNullOrEmpty(comm.PolicyNumber))) return;
+                    foreach (ViewCommissionDto commission in DataCollection)
                     {
-                        var entity = _mapper.Map<Comm>(commission);
-                        entity.Yrmo = entity.Paydate?.ToString("yyyyMM");
-                        foreach (AgentCommission agentComm in entity.AgentCommissions)
+                        if (commission.CommissionId > 0)
                         {
-                            agentComm.Agent = null;
-                            _unitOfWork.AgentCommissions.Save(agentComm);
+                            var entity = _mapper.Map<Comm>(commission);
+                            entity.Yrmo = entity.Paydate?.ToString("yyyyMM");
+                            foreach (AgentCommission agentComm in entity.AgentCommissions)
+                            {
+                                agentComm.Agent = null;
+                                _unitOfWork.AgentCommissions.Save(agentComm);
+                            }
+                            var commissionId = _unitOfWork.Commissions.Save(entity);
+                            _unitOfWork.Commit();
                         }
-                        var commissionId = _unitOfWork.Commissions.Save(entity);
-                        _unitOfWork.Commit();
+                        else
+                        {
+                            commission.AgentCommissions = commission.AgentCommissions.Select(agentComm => { agentComm.Agent = null; return agentComm; }).ToList();
+                            commission.CommissionId = 0;
+                            var entityCommission = _mapper.Map<Comm>(commission);
+                            entityCommission.Yrmo = entityCommission.Paydate?.ToString("yyyyMM");
+                            entityCommission.Commtype = "F";
+                            var commissionId = _unitOfWork.Commissions.Add(entityCommission);
+                            _unitOfWork.Commit();
+                        }
                     }
-                    else
-                    {
-                        commission.AgentCommissions = commission.AgentCommissions.Select(agentComm => { agentComm.Agent = null; return agentComm; }).ToList();
-                        commission.CommissionId = 0;
-                        var entityCommission = _mapper.Map<Comm>(commission);
-                        entityCommission.Yrmo = entityCommission.Paydate?.ToString("yyyyMM");
-                        entityCommission.Commtype = "F";
-                        var commissionId = _unitOfWork.Commissions.Add(entityCommission);
-                        _unitOfWork.Commit();
-                    }
+                    GetCommissions();
                 }
-                GetCommissions();
+            }
+            catch(Exception ex)
+            {
+                //MessageBox.Show("Records saved successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
         public void Add()
@@ -189,20 +196,27 @@ namespace CMG.Application.ViewModel
         }
         public void Delete(object commissionId)
         {
-            if (commissionId != null && Convert.ToInt32(commissionId) > 0)
+            try
             {
-                var commission = _unitOfWork.Commissions.Find(Convert.ToInt32(commissionId));
-                foreach (var agentComm in commission.AgentCommissions)
+                if (commissionId != null && Convert.ToInt32(commissionId) > 0)
                 {
-                    _unitOfWork.AgentCommissions.Delete(agentComm);
+                    var commission = _unitOfWork.Commissions.Find(Convert.ToInt32(commissionId));
+                    foreach (var agentComm in commission.AgentCommissions)
+                    {
+                        _unitOfWork.AgentCommissions.Delete(agentComm);
+                    }
+                    _unitOfWork.Commissions.Delete(commission);
+                    _unitOfWork.Commit();
+                    GetCommissions();
                 }
-                _unitOfWork.Commissions.Delete(commission);
-                _unitOfWork.Commit();
-                GetCommissions();
+                else
+                {
+                    DataCollection.Remove(DataCollection.Where(commission => commission.CommissionId == Convert.ToInt32(commissionId)).SingleOrDefault());
+                }
             }
-            else
+            catch(Exception ex)
             {
-                DataCollection.Remove(DataCollection.Where(commission => commission.CommissionId == Convert.ToInt32(commissionId)).SingleOrDefault());
+                //MessageBox.Show("Records saved successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
