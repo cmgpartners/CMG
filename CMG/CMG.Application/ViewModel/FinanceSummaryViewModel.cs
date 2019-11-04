@@ -155,9 +155,11 @@ namespace CMG.Application.ViewModel
             var dataSearchBy = _unitOfWork.Withdrawals.Find(searchQuery);
             AgentExpensesCollection = new ObservableCollection<ViewWithdrawalDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewWithdrawalDto>(r)).ToList());
         }
-        public void RemoveAgent(object selectedAgentWithdrawal)
+        public void RemoveAgent(object[] selectedAgentWithdrawal)
         {
-            var _selectedAgentWithdrawal = (ViewAgentWithdrawalDto)selectedAgentWithdrawal;
+            
+            var _selectedAgentWithdrawal = (ViewAgentWithdrawalDto)selectedAgentWithdrawal[0];
+            var _currentGrid = selectedAgentWithdrawal[1].ToString();
             _selectedAgentWithdrawal.IsVisible = false;
             var currentAgentWithdrawal = AgentExpensesCollection.Where(expense => expense.WithdrawalId == _selectedAgentWithdrawal.WithdrawalId).SingleOrDefault();
             var index = AgentExpensesCollection.IndexOf(currentAgentWithdrawal);
