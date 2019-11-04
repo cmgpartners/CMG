@@ -70,6 +70,17 @@ namespace CMG.Application.ViewModel
             }
         }
 
+        private ViewWithdrawalDto selectedRow;
+        public ViewWithdrawalDto SelectedRow
+        {
+            get { return selectedRow; }
+            set
+            {
+                selectedRow = value;
+                OnPropertyChanged("IsNoRecordFound");
+            }
+        }
+
         private ObservableCollection<ViewWithdrawalDto> _dueToPartnersCollection;
         public ObservableCollection<ViewWithdrawalDto> DueToPartnersCollection
         {
@@ -79,6 +90,17 @@ namespace CMG.Application.ViewModel
                 _dueToPartnersCollection = value;
                 OnPropertyChanged("DueToPartnersCollection");
                 OnPropertyChanged("IsNoRecordFound");
+            }
+        }
+
+        private ObservableCollection<ViewAgentDto> _agentList;
+        public ObservableCollection<ViewAgentDto> AgentList
+        {
+            get { return _agentList; }
+            set
+            {
+                _agentList = value;
+                OnPropertyChanged("AgentList");
             }
         }
         private ObservableCollection<ViewWithdrawalDto> _agentExpensesCollection;
@@ -96,12 +118,26 @@ namespace CMG.Application.ViewModel
             get { return CreateCommand(RemoveAgent); }
         }
 
+        private bool isAddAgentVisible;
+        public bool IsAddAgentVisible
+        {
+            get { return isAddAgentVisible; }
+            set
+            {
+                isAddAgentVisible = value;
+                OnPropertyChanged("IsAddAgentVisible");
+            }
+        }
+        public ICommand AddAgentCommand
+        {
+            get { return CreateCommand(AddWithdrawalAgent); }
+        }
         #endregion Properties
 
         #region Methods
-
         public void LoadData()
         {
+            GetAgents();
             GetAgentExpenses();
             GetDueToPartners();
             //GetBankPositiosn();
@@ -145,6 +181,37 @@ namespace CMG.Application.ViewModel
             filterBy.Property = propertyName;
             filterBy.Equal = value;
             return filterBy;
+        }
+
+        private void GetAgents()
+        {
+            var agents = _unitOfWork.Agents.All().ToList().Where(x => x.IsExternal == false);
+            AgentList = new ObservableCollection<ViewAgentDto>(agents.Select(r => _mapper.Map<ViewAgentDto>(r)).ToList());
+        }
+
+        public void AddWithdrawalAgent(object dataInput)
+        {
+            ViewAgentDto agent = (ViewAgentDto)dataInput;
+            bool agentExists = SelectedRow.AgentWithdrawals.Any(a => a.AgentId == agent.Id);
+            if (SelectedRow != null
+                && dataInput != null
+                && !agentExists)
+            {
+                ViewAgentWithdrawalDto viewAgentWithdrawalDto = new ViewAgentWithdrawalDto();
+                viewAgentWithdrawalDto.AgentId = agent.Id;
+                viewAgentWithdrawalDto.Id = 0;
+                viewAgentWithdrawalDto.Amount = 0;
+                viewAgentWithdrawalDto.WithdrawalId = SelectedRow.WithdrawalId;
+                viewAgentWithdrawalDto.Agent = agent;
+
+                SelectedRow.AgentWithdrawals.Add(viewAgentWithdrawalDto);
+                var selectedWithdrawal = DueToPartnersCollection.Where(x => x.WithdrawalId == SelectedRow.WithdrawalId).SingleOrDefault();
+                int index = DueToPartnersCollection.IndexOf(selectedWithdrawal);
+                IsAddAgentVisible = SelectedRow.AgentWithdrawals.Count < AgentList.Count;
+
+                DueToPartnersCollection.Remove(selectedWithdrawal);
+                DueToPartnersCollection.Insert(index, selectedWithdrawal);
+            }
         }
         #endregion Methods
     }
