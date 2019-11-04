@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Windows.Input;
 
 namespace CMG.Application.ViewModel
 {
@@ -24,7 +25,8 @@ namespace CMG.Application.ViewModel
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            GetDueToPartners();            
+            GetDueToPartners();
+            GetAgents();
         }
         #endregion Constructor
 
@@ -45,7 +47,7 @@ namespace CMG.Application.ViewModel
             }
         }
 
-        private int _selectedYear = DateTime.Now.Year;
+        private int _selectedYear = DateTime.Now.Year-1;
         public int SelectedYear
         {
             get { return _selectedYear; }
@@ -69,6 +71,17 @@ namespace CMG.Application.ViewModel
             }
         }
 
+        private ViewWithdrawalDto selectedRow;
+        public ViewWithdrawalDto SelectedRow
+        {
+            get { return selectedRow; }
+            set
+            {
+                selectedRow = value;
+                OnPropertyChanged("IsNoRecordFound");
+            }
+        }
+
         private ObservableCollection<ViewWithdrawalDto> _dueToPartnersCollection;
         public ObservableCollection<ViewWithdrawalDto> DueToPartnersCollection
         {
@@ -80,10 +93,35 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("IsNoRecordFound");
             }
         }
-        #endregion Properties
-        
-        #region Methods
 
+        private ObservableCollection<ViewAgentDto> _agentList;
+        public ObservableCollection<ViewAgentDto> AgentList
+        {
+            get { return _agentList; }
+            set
+            {
+                _agentList = value;
+                OnPropertyChanged("AgentList");
+            }
+        }
+
+        private bool isAddAgentVisible;
+        public bool IsAddAgentVisible
+        {
+            get { return isAddAgentVisible; }
+            set
+            {
+                isAddAgentVisible = value;
+                OnPropertyChanged("IsAddAgentVisible");
+            }
+        }
+        public ICommand AddAgentCommand
+        {
+            get { return CreateCommand(AddWithdrawalAgent); }
+        }
+        #endregion Properties
+
+        #region Methods
         public void GetDataCollections()
         {
             // GetAgentExpenses();
@@ -114,6 +152,37 @@ namespace CMG.Application.ViewModel
             filterBy.Property = propertyName;
             filterBy.Equal = value;
             return filterBy;
+        }
+
+        private void GetAgents()
+        {
+            var agents = _unitOfWork.Agents.All().ToList().Where(x => x.IsExternal == false);
+            AgentList = new ObservableCollection<ViewAgentDto>(agents.Select(r => _mapper.Map<ViewAgentDto>(r)).ToList());
+        }
+
+        public void AddWithdrawalAgent(object dataInput)
+        {
+            ViewAgentDto agent = (ViewAgentDto)dataInput;
+            bool agentExists = SelectedRow.AgentWithdrawals.Any(a => a.AgentId == agent.Id);
+            if (SelectedRow != null
+                && dataInput != null
+                && !agentExists)
+            {
+                ViewAgentWithdrawalDto viewAgentWithdrawalDto = new ViewAgentWithdrawalDto();
+                viewAgentWithdrawalDto.AgentId = agent.Id;
+                viewAgentWithdrawalDto.Id = 0;
+                viewAgentWithdrawalDto.Amount = 0;
+                viewAgentWithdrawalDto.WithdrawalId = SelectedRow.WithdrawalId;
+                viewAgentWithdrawalDto.Agent = agent;
+
+                SelectedRow.AgentWithdrawals.Add(viewAgentWithdrawalDto);
+                var selectedWithdrawal = DueToPartnersCollection.Where(x => x.WithdrawalId == SelectedRow.WithdrawalId).SingleOrDefault();
+                int index = DueToPartnersCollection.IndexOf(selectedWithdrawal);
+                IsAddAgentVisible = SelectedRow.AgentWithdrawals.Count < AgentList.Count;
+
+                DueToPartnersCollection.Remove(selectedWithdrawal);
+                DueToPartnersCollection.Insert(index, selectedWithdrawal);
+            }
         }
         #endregion Methods
     }

@@ -243,7 +243,7 @@ namespace CMG.Application.ViewModel
         {
             get { return CreateCommand(PreviousPage); }
         }
-        #endregion
+        #endregion command properties
         #endregion Properties
 
         #region Methods

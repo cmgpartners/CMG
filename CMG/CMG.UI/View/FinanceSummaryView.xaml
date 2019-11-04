@@ -11,7 +11,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"></RowDefinition>
-            <RowDefinition Height="230"></RowDefinition>
+            <RowDefinition Height="150"></RowDefinition>
             <RowDefinition Height="230"></RowDefinition>
             <RowDefinition Height="230"></RowDefinition>
             <RowDefinition Height="230"></RowDefinition>
@@ -88,25 +88,105 @@
             <StackPanel>
                 <Label x:Name="lblDueToPartners" Content="DUE TO PARTNERS" />
                 <DataGrid AutoGenerateColumns="False" MaxHeight="200" VerticalScrollBarVisibility="Visible"
-                              ItemsSource="{Binding DueToPartnersCollection}"
+                              ItemsSource="{Binding DueToPartnersCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               x:Name="DueToPartners" IsReadOnly="False" 
                               ColumnHeaderStyle="{StaticResource HeaderStyle}" 
-                              CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50">
+                              CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="70"
+                              SelectedItem="{Binding Path=SelectedRow, Mode=TwoWay}" >
                 <DataGrid.Columns>
-                        <DataGridTemplateColumn Header="Description" Width="90" >
+                    <DataGridTemplateColumn Header="Description" Width="Auto" >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Path=Desc}"></TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                        <DataGridTemplateColumn Header="Amount" Width="90" >
+                    <DataGridTemplateColumn Width="50">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                    <TextBlock Text="{Binding Path=AgentWithdrawals.Amount}"></TextBlock>
+                                <TextBlock Text=""></TextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Agents" Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                    <ListView ItemsSource="{Binding AgentWithdrawals, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                        ItemContainerStyle="{StaticResource ItemStyle}" 
+                                        ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                                        <ListView.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal"></StackPanel>
+                                            </ItemsPanelTemplate>
+                                        </ListView.ItemsPanel>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border CornerRadius="15"
+                                                        BorderBrush="{Binding Agent.Color}"
+                                                        BorderThickness="1"
+                                                        Background="{Binding Agent.Color}">
+                                                    <Label Content="{Binding Agent.FirstName}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
+                                                    </Label>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="50">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Menu Name="menu1" HorizontalAlignment="Left" VerticalAlignment="Top" Tag="{Binding RelativeSource={RelativeSource Self}}">
+                                        <Menu.Background>
+                                            <SolidColorBrush Color="Transparent"></SolidColorBrush>
+                                        </Menu.Background>
+                                        <MenuItem Header="+" Style="{StaticResource MenuParentStyle}" ItemContainerStyle="{StaticResource MenuItemStyle}" 
+                                                    ItemsSource="{Binding DataContext.SelectedViewModel.AgentList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
+                                            <MenuItem.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Button Content="{Binding FirstName}" BorderBrush="Transparent" Background="Transparent" Foreground="Gray" FontWeight="Regular"
+                                                            Command="{Binding DataContext.SelectedViewModel.AddAgentCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                                            CommandParameter="{Binding }"/>
+                                                </DataTemplate>
+                                            </MenuItem.ItemTemplate>
+                                        </MenuItem>
+                                    </Menu>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="50">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text=""></TextBlock>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Amount" Width="Auto" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ListView ItemsSource="{Binding AgentWithdrawals, Mode=OneWay}"
+                                              DisplayMemberPath="Amount"
+                                              ItemContainerStyle="{StaticResource ItemStyle}" 
+                                              ScrollViewer.VerticalScrollBarVisibility="Disabled" >
+                                        <ListView.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal"></StackPanel>
+                                            </ItemsPanelTemplate>
+                                        </ListView.ItemsPanel>
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border x:Name="border"
+                                                        BorderBrush="{Binding Agent.Color}"
+                                                        BorderThickness="0,0,0,3">
+                                                    <Label Content="{Binding Amount}"></Label>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
             </StackPanel>
