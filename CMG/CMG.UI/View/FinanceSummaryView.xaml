@@ -5,9 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:converters="clr-namespace:CMG.UI.Converters" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:local="clr-namespace:CMG.UI.View"
              xmlns:behaviors="clr-namespace:WPFTextBoxAutoComplete;assembly=WPFTextBoxAutoComplete"
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -101,8 +99,17 @@
                                                 Background="{Binding Agent.Color}">
                                                     <StackPanel Orientation="Horizontal">
                                                         <Label Content="{Binding Agent.FirstName}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"></Label>
-                                                                <Button  Style="{StaticResource RemoveButton}" Command="{Binding DataContext.SelectedViewModel.RemoveAgentCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" CommandParameter="{Binding}">
+                                                        <Button  Style="{StaticResource RemoveButton}" Command="{Binding DataContext.SelectedViewModel.RemoveAgentCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" >
                                                                     <materialDesign:PackIcon Kind="CloseCircleOutline" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 5 0"></materialDesign:PackIcon>
+                                                            <Button.CommandParameter>
+                                                                <MultiBinding>
+                                                                    <MultiBinding.Converter>
+                                                                        <converters:MultipleParametersConverter/>
+                                                                    </MultiBinding.Converter>
+                                                                    <Binding Path="."></Binding>
+                                                                    <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Window}" Path="DataContext.SelectedViewModel.LabelAgentExpenses"/>
+                                                                </MultiBinding>
+                                                            </Button.CommandParameter>
                                                                 </Button>
                                                     </StackPanel>
                                                 </Border>
@@ -209,11 +216,25 @@
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
                                                 <Border CornerRadius="15"
-                                                        BorderBrush="{Binding Agent.Color}"
-                                                        BorderThickness="1"
-                                                        Background="{Binding Agent.Color}">
-                                                    <Label Content="{Binding Agent.FirstName}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
-                                                    </Label>
+                                                BorderBrush="{Binding Agent.Color}"
+                                                BorderThickness="1"
+                                                Visibility="{Binding IsVisible, Converter={StaticResource VisibilityConverter}}"
+                                                Background="{Binding Agent.Color}"> 
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Label Content="{Binding Agent.FirstName}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"></Label>
+                                                        <Button  Style="{StaticResource RemoveButton}" Command="{Binding DataContext.SelectedViewModel.RemoveAgentCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" >
+                                                            <materialDesign:PackIcon Kind="CloseCircleOutline" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 5 0"></materialDesign:PackIcon>
+                                                            <Button.CommandParameter>
+                                                                <MultiBinding>
+                                                                    <MultiBinding.Converter>
+                                                                        <converters:MultipleParametersConverter/>
+                                                                    </MultiBinding.Converter>
+                                                                    <Binding Path="."></Binding>
+                                                                    <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Window}" Path="DataContext.SelectedViewModel.LabelDueToPartners"/>
+                                                                </MultiBinding>
+                                                            </Button.CommandParameter>
+                                                        </Button>
+                                                    </StackPanel>
                                                 </Border>
                                             </DataTemplate>
                                         </ListView.ItemTemplate>

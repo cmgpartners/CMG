@@ -109,25 +109,10 @@
                           ItemsSource="{Binding DataCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" 
                           SelectionUnit="FullRow" RowHeight="50">
                     <DataGrid.Columns>
-                    <DataGridTemplateColumn>
-                        <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Menu Name="menu1" HorizontalAlignment="Left" VerticalAlignment="Top">
-                                        <Menu.Background>
-                                            <SolidColorBrush Color="Transparent"></SolidColorBrush>
-                                        </Menu.Background>
-                                        <MenuItem Header="::" Style="{StaticResource MenuParentStyle}" ItemContainerStyle="{StaticResource MenuItemStyle}">
-                                            <MenuItem Header="_Copy" />
-                                            <MenuItem Header="_Delete" />
-                                        </MenuItem>
-                                    </Menu>
-                                </DataTemplate>        
-                        </DataGridTemplateColumn.CellTemplate>        
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Pay Date" Width="105" SortMemberPath="PayDate" CanUserSort="True">
+                        <DataGridTemplateColumn Header="Pay Date" Width="105" SortMemberPath="PayDate" CanUserSort="True" HeaderStyle="{StaticResource FirstColumnHeaderStyle }">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                    <TextBlock Text="{Binding Path=PayDate,  StringFormat='{}{0: MMM d, yyyy}'}" />
+                                    <TextBlock Text="{Binding Path=PayDate,  StringFormat='{}{0: MMM d, yyyy}'}" Margin="10 0 10 0" />
                                 </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

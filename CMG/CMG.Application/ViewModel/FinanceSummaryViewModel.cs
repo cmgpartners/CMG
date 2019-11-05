@@ -19,7 +19,7 @@ namespace CMG.Application.ViewModel
         private readonly IMapper _mapper;
         private const int startYear = 1925;
         private const string AgentExpenses = "Agent Expenses";
-        private const string DueToPartners = "Dut To Partners";
+        private const string DueToPartners = "Due To Partners";
         #endregion Member variables
 
         #region Constructor
@@ -84,16 +84,6 @@ namespace CMG.Application.ViewModel
             }
         }
 
-        public string LabelAgentExpenses
-        {
-            get { return AgentExpenses; }
-        }
-
-        public string LabelDueToPartners
-        {
-            get { return DueToPartners; }
-        }
-
         private ObservableCollection<ViewWithdrawalDto> _dueToPartnersCollection;
         public ObservableCollection<ViewWithdrawalDto> DueToPartnersCollection
         {
@@ -145,6 +135,17 @@ namespace CMG.Application.ViewModel
         {
             get { return CreateCommand(AddWithdrawalAgent); }
         }
+
+        public string LabelAgentExpenses
+        {
+            get
+            { return AgentExpenses; }
+        }
+        public string LabelDueToPartners
+        {
+            get { return DueToPartners;  }
+        }
+
         #endregion Properties
 
         #region Methods
@@ -170,12 +171,18 @@ namespace CMG.Application.ViewModel
         }
         public void RemoveAgent(object selectedAgentWithdrawal)
         {
-            var _selectedAgentWithdrawal = (ViewAgentWithdrawalDto)selectedAgentWithdrawal;
+            object[] selectedObject = selectedAgentWithdrawal as object[];
+            var _selectedAgentWithdrawal = (ViewAgentWithdrawalDto)selectedObject[0];
+            var _currentGrid = selectedObject[1].ToString();
             _selectedAgentWithdrawal.IsVisible = false;
-            var currentAgentWithdrawal = AgentExpensesCollection.Where(expense => expense.WithdrawalId == _selectedAgentWithdrawal.WithdrawalId).SingleOrDefault();
-            var index = AgentExpensesCollection.IndexOf(currentAgentWithdrawal);
-            AgentExpensesCollection.Remove(currentAgentWithdrawal);
-            AgentExpensesCollection.Insert(index, currentAgentWithdrawal);
+            if(_currentGrid == AgentExpenses)
+            {
+                RemoveAgentFromCollection(AgentExpensesCollection, _selectedAgentWithdrawal);
+            } 
+            else if(_currentGrid == DueToPartners)
+            {
+                RemoveAgentFromCollection(DueToPartnersCollection, _selectedAgentWithdrawal);
+            }
         }
         private SearchQuery BuildSearchQuery(string dType = "L")
         {
@@ -200,6 +207,13 @@ namespace CMG.Application.ViewModel
         {
             var agents = _unitOfWork.Agents.All().ToList().Where(x => x.IsExternal == false);
             AgentList = new ObservableCollection<ViewAgentDto>(agents.Select(r => _mapper.Map<ViewAgentDto>(r)).ToList());
+        }
+        private void RemoveAgentFromCollection(ObservableCollection<ViewWithdrawalDto> collection, ViewAgentWithdrawalDto selectedAgent)
+        {
+            var currentAgentWithdrawal = collection.Where(expense => expense.WithdrawalId == selectedAgent.WithdrawalId).SingleOrDefault();
+            var index = collection.IndexOf(currentAgentWithdrawal);
+            collection.Remove(currentAgentWithdrawal);
+            collection.Insert(index, currentAgentWithdrawal);
         }
 
         public void AddWithdrawalAgent(object dataInput)
