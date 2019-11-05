@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:converters="clr-namespace:CMG.UI.Converters" 
+             xmlns:converters="clr-namespace:CMG.UI.Converter" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:behaviors="clr-namespace:WPFTextBoxAutoComplete;assembly=WPFTextBoxAutoComplete"
              mc:Ignorable="d" 
@@ -133,7 +133,10 @@
                                                     <Button x:Name="btnAgentExpenses" Content="{Binding FirstName}" BorderBrush="Transparent" Background="Transparent" Foreground="Gray" FontWeight="Regular"
                                                             Command="{Binding DataContext.SelectedViewModel.AddAgentCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
                                                         <Button.CommandParameter>
-                                                            <MultiBinding Converter="{converters:MultipleCommandParameters}">                                                                
+                                                            <MultiBinding>
+                                                                <MultiBinding.Converter>
+                                                                    <converters:MultipleParametersConverter/>
+                                                                </MultiBinding.Converter>
                                                                 <Binding />
                                                                 <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Window}" Path="DataContext.SelectedViewModel.LabelAgentExpenses"/>
                                                             </MultiBinding>
@@ -256,7 +259,10 @@
                                                     <Button x:Name="btnAgentExpenses" Content="{Binding FirstName}" BorderBrush="Transparent" Background="Transparent" Foreground="Gray" FontWeight="Regular"
                                                             Command="{Binding DataContext.SelectedViewModel.AddAgentCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
                                                         <Button.CommandParameter>
-                                                            <MultiBinding Converter="{converters:MultipleCommandParameters}">
+                                                            <MultiBinding>
+                                                                <MultiBinding.Converter>
+                                                                    <converters:MultipleParametersConverter/>
+                                                                </MultiBinding.Converter>
                                                                 <Binding />
                                                                 <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Window}" Path="DataContext.SelectedViewModel.LabelDueToPartners"/>
                                                             </MultiBinding>
@@ -285,7 +291,8 @@
                                             <DataTemplate>
                                                 <Border x:Name="border"
                                                         BorderBrush="{Binding Agent.Color}"
-                                                        BorderThickness="0,0,0,3">
+                                                        BorderThickness="0,0,0,3"
+                                                        Visibility="{Binding IsVisible, Converter={StaticResource VisibilityConverter}}">
                                                     <Label Content="{Binding Amount}"></Label>
                                                 </Border>
                                             </DataTemplate>
