@@ -60,7 +60,7 @@ namespace CMG.DataAccess.Repository
 
         public ICollection<TEntity> All()
         {
-            return Context.Set<TEntity>().ToList();
+            return Context.Set<TEntity>().AsNoTracking().ToList();
         }
 
         private int GetPrimaryKey(EntityEntry entry)
