@@ -19,6 +19,7 @@
                 <ResourceDictionary Source="/Resources/ImageStyle.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="/Resources/HyperLinkStyle.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="/Resources/ContextMenu.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="/Resources/LabelStyle.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="VisibilityConverter" />
         </ResourceDictionary>
