@@ -277,6 +277,7 @@ namespace CMG.Application.ViewModel
             if (dataInput != null)
             {
                 IList objList = (IList)dataInput;
+                List<ViewAgentWithdrawalDto> temp = (List<ViewAgentWithdrawalDto>)objList[2];
                 if (SelectedRow != null)
                 {
                     ViewAgentDto agent = (ViewAgentDto)objList[0];
