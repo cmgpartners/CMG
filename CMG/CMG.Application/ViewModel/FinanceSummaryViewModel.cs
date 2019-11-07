@@ -277,14 +277,12 @@ namespace CMG.Application.ViewModel
             if (dataInput != null)
             {
                 IList objList = (IList)dataInput;
-                if (objList.Count == 2)
+                if (SelectedRow != null)
                 {
-
                     ViewAgentDto agent = (ViewAgentDto)objList[0];
-                    bool agentExists = SelectedRow.AgentWithdrawals.Any(a => a.AgentId == agent.Id);
-                    if (SelectedRow != null
-                        && dataInput != null
-                        && !agentExists)
+
+                    ViewAgentWithdrawalDto agentWithdrawalExists = SelectedRow.AgentWithdrawals.Where(a => a.AgentId == agent.Id).FirstOrDefault();
+                    if (dataInput != null)
                     {
                         ViewAgentWithdrawalDto viewAgentWithdrawalDto = new ViewAgentWithdrawalDto();
                         viewAgentWithdrawalDto.AgentId = agent.Id;
@@ -293,8 +291,11 @@ namespace CMG.Application.ViewModel
                         viewAgentWithdrawalDto.WithdrawalId = SelectedRow.WithdrawalId;
                         viewAgentWithdrawalDto.Agent = agent;
 
-                        SelectedRow.AgentWithdrawals.Add(viewAgentWithdrawalDto);                        
-                        IsAddAgentVisible = SelectedRow.AgentWithdrawals.Count < AgentList.Count;
+                        if(agentWithdrawalExists != null)
+                        {
+                            SelectedRow.AgentWithdrawals.Remove(agentWithdrawalExists);
+                        }
+                        SelectedRow.AgentWithdrawals.Add(viewAgentWithdrawalDto);
 
                         switch (objList[1])
                         {
@@ -310,7 +311,6 @@ namespace CMG.Application.ViewModel
                                 DueToPartnersCollection.Remove(selectedDueToPartner);
                                 DueToPartnersCollection.Insert(indexDueToPartner, selectedDueToPartner);
                                 break;
-
                         }
                     }
                 }
