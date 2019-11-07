@@ -56,7 +56,12 @@
 
         <!--Agent expenses-->
         <Grid Grid.Row="1" Grid.ColumnSpan="4" Width="1000">
-            <StackPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="35"/>
+                </Grid.RowDefinitions>
+            
                 <Label x:Name="lblAgentExpenses" Content="{Binding LabelAgentExpenses}" />
                 <DataGrid AutoGenerateColumns="False" MaxHeight="230" VerticalScrollBarVisibility="Visible"
                               ItemsSource="{Binding AgentExpensesCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -68,7 +73,7 @@
                         <DataGridTemplateColumn Header="Description" Width="Auto" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Path=Desc}"></TextBlock>
+                                    <TextBox Text="{Binding Path=Desc, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -167,7 +172,7 @@
                                                         BorderBrush="{Binding Agent.Color}"
                                                         BorderThickness="0,0,0,3"
                                                         Visibility="{Binding IsVisible, Converter={StaticResource VisibilityConverter}}">
-                                            <Label Content="{Binding Amount}"></Label>
+                                                    <TextBox Text="{Binding Amount}" MinWidth="50"></TextBox>
                                         </Border>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
@@ -177,12 +182,19 @@
                 </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-            </StackPanel>
+                <Grid Grid.Row="1" Background="#FFCEEAFF" Grid.ColumnSpan="4">
+                    <Button x:Name="buttonAdd" Content="+" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding AddCommand}" CommandParameter="{Binding LabelAgentExpenses}"></Button>
+                </Grid>
+            </Grid>
         </Grid>
 
         <!--Due to partners-->
         <Grid Grid.Row="2" Grid.ColumnSpan="4" Width="1000">
-            <StackPanel>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="35"/>
+                </Grid.RowDefinitions>
                 <Label x:Name="lblDueToPartners" Content="{Binding LabelDueToPartners}" />
                 <DataGrid AutoGenerateColumns="False" MaxHeight="200" VerticalScrollBarVisibility="Visible"
                               ItemsSource="{Binding DueToPartnersCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -190,24 +202,24 @@
                               ColumnHeaderStyle="{StaticResource HeaderStyle}" 
                               CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50"
                               SelectedItem="{Binding Path=SelectedRow, Mode=TwoWay}" >
-                <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="Description" Width="Auto" >
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Path=Desc}"></TextBlock>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Width="50">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text=""></TextBlock>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Agents" Width="Auto">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="Description" Width="Auto" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding Path=Desc, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="50">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text=""></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Agents" Width="Auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
                                     <ListView ItemsSource="{Binding AgentWithdrawals, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                                         ItemContainerStyle="{StaticResource ItemStyle}" 
                                         ScrollViewer.VerticalScrollBarVisibility="Disabled">
@@ -222,7 +234,7 @@
                                                 BorderBrush="{Binding Agent.Color}"
                                                 BorderThickness="1"
                                                 Visibility="{Binding IsVisible, Converter={StaticResource VisibilityConverter}}"
-                                                Background="{Binding Agent.Color}"> 
+                                                Background="{Binding Agent.Color}">
                                                     <StackPanel Orientation="Horizontal">
                                                         <Label Content="{Binding Agent.FirstName}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"></Label>
                                                         <Button  Style="{StaticResource RemoveButton}" Command="{Binding DataContext.SelectedViewModel.RemoveAgentCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" >
@@ -243,9 +255,9 @@
                                         </ListView.ItemTemplate>
                                     </ListView>
                                 </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Width="50">
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="50">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Menu Name="menu1" HorizontalAlignment="Left" VerticalAlignment="Top" Tag="{Binding RelativeSource={RelativeSource Self}}">
@@ -275,7 +287,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Amount" Width="Auto" >
+                        <DataGridTemplateColumn Header="Amount" Width="Auto" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <ListView ItemsSource="{Binding AgentWithdrawals, Mode=OneWay}"
@@ -293,7 +305,7 @@
                                                         BorderBrush="{Binding Agent.Color}"
                                                         BorderThickness="0,0,0,3"
                                                         Visibility="{Binding IsVisible, Converter={StaticResource VisibilityConverter}}">
-                                                    <Label Content="{Binding Amount}"></Label>
+                                                    <TextBox Text="{Binding Amount}" MinWidth="50"></TextBox>
                                                 </Border>
                                             </DataTemplate>
                                         </ListView.ItemTemplate>
@@ -301,9 +313,12 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-            </StackPanel>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Grid Grid.Row="1" Background="#FFCEEAFF" Grid.ColumnSpan="4">
+                    <Button x:Name="buttonAddToDueToPartners" Content="+" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding AddCommand}" CommandParameter="{Binding LabelDueToPartners}"></Button>
+                </Grid>
+            </Grid>
         </Grid>
 
         <!--Bank positions-->

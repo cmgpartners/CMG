@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CMG.Application.DTO;
+using CMG.DataAccess.Domain;
 using CMG.DataAccess.Interface;
 using CMG.DataAccess.Query;
 using System;
@@ -18,6 +19,7 @@ namespace CMG.Application.ViewModel
         private readonly IUnitOfWork _unitOfWork; 
         private readonly IMapper _mapper;
         private const int startYear = 1925;
+        private int newId;
         private const string AgentExpenses = "Agent Expenses";
         private const string DueToPartners = "Due To Partners";
         #endregion Member variables
@@ -135,7 +137,15 @@ namespace CMG.Application.ViewModel
         {
             get { return CreateCommand(AddWithdrawalAgent); }
         }
-
+        public ICommand AddCommand
+        {
+            get
+            { return CreateCommand(AddWithdrawal); }
+        }
+        public ICommand SaveCommand
+        {
+            get { return CreateCommand(SaveWithdrawals); }
+        }
         public string LabelAgentExpenses
         {
             get
@@ -169,6 +179,18 @@ namespace CMG.Application.ViewModel
             var dataSearchBy = _unitOfWork.Withdrawals.Find(searchQuery);
             AgentExpensesCollection = new ObservableCollection<ViewWithdrawalDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewWithdrawalDto>(r)).ToList());
         }
+        public void AddWithdrawal(object currentGrid)
+        {
+            string month = DateTime.ParseExact(SelectedMonth, "MMM", null).Month.ToString("00");
+            if (Convert.ToString(currentGrid) == AgentExpenses)
+            {
+                AgentExpensesCollection.Add(new ViewWithdrawalDto() { WithdrawalId = newId--, Dtype = "W", Yrmo = $"{SelectedYear}{month}", Ctype = "" });
+            }
+            else if (Convert.ToString(currentGrid) == DueToPartners)
+            {
+                DueToPartnersCollection.Add(new ViewWithdrawalDto() { WithdrawalId = newId--, Dtype = "L", Yrmo = $"{SelectedYear}{month}", Ctype = "" });
+            }
+        }
         public void RemoveAgent(object selectedAgentWithdrawal)
         {
             object[] selectedObject = selectedAgentWithdrawal as object[];
@@ -182,6 +204,40 @@ namespace CMG.Application.ViewModel
             else if(_currentGrid == DueToPartners)
             {
                 RemoveAgentFromCollection(DueToPartnersCollection, _selectedAgentWithdrawal);
+            }
+        }
+        public void SaveWithdrawals()
+        {
+            if(AgentExpensesCollection != null && AgentExpensesCollection.Count > 0)
+            {
+                foreach(ViewWithdrawalDto agentExpense in AgentExpensesCollection)
+                {
+                    if(agentExpense.WithdrawalId > 0)
+                    {
+                        var entity = _mapper.Map<Withd>(agentExpense);
+                        foreach (AgentWithdrawal agentWithdrawal in entity.AgentWithdrawal)
+                        {
+                            agentWithdrawal.Agent = null;
+                            if (agentWithdrawal.Id > 0)
+                            {
+                                _unitOfWork.AgentWithdrawals.Save(agentWithdrawal);
+                            }
+                            else
+                            {
+                                _unitOfWork.AgentWithdrawals.Add(agentWithdrawal);
+                            }
+                        }
+                        _unitOfWork.Withdrawals.Save(entity);
+                    }
+                    else
+                    {
+                        agentExpense.AgentWithdrawals = agentExpense.AgentWithdrawals.Select(agentWithd => { agentWithd.Agent = null; return agentWithd; }).ToList();
+                        agentExpense.WithdrawalId = 0;
+                        var entityWithdrawal = _mapper.Map<Withd>(agentExpense);
+                        _unitOfWork.Withdrawals.Add(entityWithdrawal);
+                    }
+                }
+                _unitOfWork.Commit();
             }
         }
         private SearchQuery BuildSearchQuery(string dType = "L")
