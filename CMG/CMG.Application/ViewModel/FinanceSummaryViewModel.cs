@@ -210,35 +210,13 @@ namespace CMG.Application.ViewModel
         {
             if(AgentExpensesCollection != null && AgentExpensesCollection.Count > 0)
             {
-                foreach(ViewWithdrawalDto agentExpense in AgentExpensesCollection)
-                {
-                    if(agentExpense.WithdrawalId > 0)
-                    {
-                        var entity = _mapper.Map<Withd>(agentExpense);
-                        foreach (AgentWithdrawal agentWithdrawal in entity.AgentWithdrawal)
-                        {
-                            agentWithdrawal.Agent = null;
-                            if (agentWithdrawal.Id > 0)
-                            {
-                                _unitOfWork.AgentWithdrawals.Save(agentWithdrawal);
-                            }
-                            else
-                            {
-                                _unitOfWork.AgentWithdrawals.Add(agentWithdrawal);
-                            }
-                        }
-                        _unitOfWork.Withdrawals.Save(entity);
-                    }
-                    else
-                    {
-                        agentExpense.AgentWithdrawals = agentExpense.AgentWithdrawals.Select(agentWithd => { agentWithd.Agent = null; return agentWithd; }).ToList();
-                        agentExpense.WithdrawalId = 0;
-                        var entityWithdrawal = _mapper.Map<Withd>(agentExpense);
-                        _unitOfWork.Withdrawals.Add(entityWithdrawal);
-                    }
-                }
-                _unitOfWork.Commit();
+                AddOrUpdateWithdrawalCollection(AgentExpensesCollection);
             }
+            if(DueToPartnersCollection != null && DueToPartnersCollection.Count > 0)
+            {
+                AddOrUpdateWithdrawalCollection(DueToPartnersCollection);
+            }
+            _unitOfWork.Commit();
         }
         private SearchQuery BuildSearchQuery(string dType = "L")
         {
@@ -271,7 +249,39 @@ namespace CMG.Application.ViewModel
             collection.Remove(currentAgentWithdrawal);
             collection.Insert(index, currentAgentWithdrawal);
         }
-
+        private void AddOrUpdateWithdrawalCollection(ObservableCollection<ViewWithdrawalDto> collection)
+        {
+            if (collection != null && collection.Count > 0)
+            {
+                foreach (ViewWithdrawalDto withdrawal in collection)
+                {
+                    if (withdrawal.WithdrawalId > 0)
+                    {
+                        var entity = _mapper.Map<Withd>(withdrawal);
+                        foreach (AgentWithdrawal agentWithdrawal in entity.AgentWithdrawal)
+                        {
+                            agentWithdrawal.Agent = null;
+                            if (agentWithdrawal.Id > 0)
+                            {
+                                _unitOfWork.AgentWithdrawals.Save(agentWithdrawal);
+                            }
+                            else
+                            {
+                                _unitOfWork.AgentWithdrawals.Add(agentWithdrawal);
+                            }
+                        }
+                        _unitOfWork.Withdrawals.Save(entity);
+                    }
+                    else
+                    {
+                        withdrawal.AgentWithdrawals = withdrawal.AgentWithdrawals.Select(agentWithd => { agentWithd.Agent = null; return agentWithd; }).ToList();
+                        withdrawal.WithdrawalId = 0;
+                        var entityWithdrawal = _mapper.Map<Withd>(withdrawal);
+                        _unitOfWork.Withdrawals.Add(entityWithdrawal);
+                    }
+                }
+            }
+        }
         public void AddWithdrawalAgent(object dataInput)
         {
             if (dataInput != null)
