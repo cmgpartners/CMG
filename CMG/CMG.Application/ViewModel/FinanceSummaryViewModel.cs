@@ -181,14 +181,18 @@ namespace CMG.Application.ViewModel
         }
         public void AddWithdrawal(object currentGrid)
         {
+            var id = --newId;
             string month = DateTime.ParseExact(SelectedMonth, "MMM", null).Month.ToString("00");
+            List<ViewAgentWithdrawalDto> listViewAgentWithdrawal = new List<ViewAgentWithdrawalDto>();
+            ViewAgentWithdrawalDto viewAgentWithdrawal = new ViewAgentWithdrawalDto() { WithdrawalId = id, IsVisible = false };
+            listViewAgentWithdrawal.Add(viewAgentWithdrawal);
             if (Convert.ToString(currentGrid) == AgentExpenses)
             {
-                AgentExpensesCollection.Add(new ViewWithdrawalDto() { WithdrawalId = newId--, Dtype = "W", Yrmo = $"{SelectedYear}{month}", Ctype = "" });
+                AgentExpensesCollection.Add(new ViewWithdrawalDto() { WithdrawalId = id, Dtype = "W", Yrmo = $"{SelectedYear}{month}", Ctype = "", AgentWithdrawals = listViewAgentWithdrawal });
             }
             else if (Convert.ToString(currentGrid) == DueToPartners)
             {
-                DueToPartnersCollection.Add(new ViewWithdrawalDto() { WithdrawalId = newId--, Dtype = "L", Yrmo = $"{SelectedYear}{month}", Ctype = "" });
+                DueToPartnersCollection.Add(new ViewWithdrawalDto() { WithdrawalId = id, Dtype = "L", Yrmo = $"{SelectedYear}{month}", Ctype = "", AgentWithdrawals = listViewAgentWithdrawal });
             }
         }
         public void RemoveAgent(object selectedAgentWithdrawal)
@@ -272,47 +276,52 @@ namespace CMG.Application.ViewModel
             collection.Insert(index, currentAgentWithdrawal);
         }
 
+        private void AddAgentFromCollection(ObservableCollection<ViewWithdrawalDto> collection, List<ViewAgentWithdrawalDto> agentWithdrawals, ViewAgentDto agent)
+        {
+            if (collection.Count > 0)
+            {
+                ViewWithdrawalDto selectedWithdrawal = new ViewWithdrawalDto();
+                selectedWithdrawal = collection.Where(x => x.WithdrawalId == agentWithdrawals[0].WithdrawalId).FirstOrDefault();
+
+                ViewAgentWithdrawalDto agentWithdrawalExists = selectedWithdrawal.AgentWithdrawals.Where(a => a.AgentId == agent.Id).FirstOrDefault();
+                ViewAgentWithdrawalDto viewAgentWithdrawalDto = new ViewAgentWithdrawalDto();
+                viewAgentWithdrawalDto.AgentId = agent.Id;
+                viewAgentWithdrawalDto.Id = 0;
+                viewAgentWithdrawalDto.Amount = 0;
+                viewAgentWithdrawalDto.WithdrawalId = selectedWithdrawal.WithdrawalId;
+                viewAgentWithdrawalDto.Agent = agent;
+
+                if (agentWithdrawalExists != null
+                    && agentWithdrawalExists.IsVisible)
+                {
+                    return;
+                }
+
+                selectedWithdrawal.AgentWithdrawals.Remove(agentWithdrawalExists);
+                selectedWithdrawal.AgentWithdrawals.Add(viewAgentWithdrawalDto);
+                int index = collection.IndexOf(selectedWithdrawal);
+                collection.Remove(selectedWithdrawal);
+                collection.Insert(index, selectedWithdrawal);                
+            }
+        }
+
         public void AddWithdrawalAgent(object dataInput)
         {
             if (dataInput != null)
             {
                 IList objList = (IList)dataInput;
-                List<ViewAgentWithdrawalDto> temp = (List<ViewAgentWithdrawalDto>)objList[2];
-                if (SelectedRow != null)
+                if (objList != null
+                    && objList.Count == 3)
                 {
                     ViewAgentDto agent = (ViewAgentDto)objList[0];
-
-                    ViewAgentWithdrawalDto agentWithdrawalExists = SelectedRow.AgentWithdrawals.Where(a => a.AgentId == agent.Id).FirstOrDefault();
-                    if (dataInput != null)
+                    switch (objList[1])
                     {
-                        ViewAgentWithdrawalDto viewAgentWithdrawalDto = new ViewAgentWithdrawalDto();
-                        viewAgentWithdrawalDto.AgentId = agent.Id;
-                        viewAgentWithdrawalDto.Id = 0;
-                        viewAgentWithdrawalDto.Amount = 0;
-                        viewAgentWithdrawalDto.WithdrawalId = SelectedRow.WithdrawalId;
-                        viewAgentWithdrawalDto.Agent = agent;
-
-                        if(agentWithdrawalExists != null)
-                        {
-                            SelectedRow.AgentWithdrawals.Remove(agentWithdrawalExists);
-                        }
-                        SelectedRow.AgentWithdrawals.Add(viewAgentWithdrawalDto);
-
-                        switch (objList[1])
-                        {
-                            case AgentExpenses:
-                                var selectedAgentExpense = AgentExpensesCollection.Where(x => x.WithdrawalId == SelectedRow.WithdrawalId).SingleOrDefault();
-                                int index = AgentExpensesCollection.IndexOf(selectedAgentExpense);
-                                AgentExpensesCollection.Remove(selectedAgentExpense);
-                                AgentExpensesCollection.Insert(index, selectedAgentExpense);
-                                break;
-                            case DueToPartners:
-                                var selectedDueToPartner = DueToPartnersCollection.Where(x => x.WithdrawalId == SelectedRow.WithdrawalId).SingleOrDefault();
-                                int indexDueToPartner = DueToPartnersCollection.IndexOf(selectedDueToPartner);
-                                DueToPartnersCollection.Remove(selectedDueToPartner);
-                                DueToPartnersCollection.Insert(indexDueToPartner, selectedDueToPartner);
-                                break;
-                        }
+                        case AgentExpenses:
+                            AddAgentFromCollection(AgentExpensesCollection, (List<ViewAgentWithdrawalDto>)objList[2], agent);
+                            break;
+                        case DueToPartners:
+                            AddAgentFromCollection(DueToPartnersCollection, (List<ViewAgentWithdrawalDto>)objList[2], agent);
+                            break;
                     }
                 }
             }
