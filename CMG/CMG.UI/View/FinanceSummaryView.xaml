@@ -74,7 +74,7 @@
                               ItemsSource="{Binding AgentExpensesCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               x:Name="AgentExpenses" IsReadOnly="False" 
                               ColumnHeaderStyle="{StaticResource HeaderStyle}" 
-                              CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50"
+                              CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50" MaxHeight="250"
                               SelectedItem="{Binding Path=SelectedRow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="Description" Width="150" HeaderStyle="{StaticResource FirstColumnHeaderStyle }">
@@ -208,7 +208,7 @@
                               ItemsSource="{Binding DueToPartnersCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               x:Name="DueToPartners" IsReadOnly="False" 
                               ColumnHeaderStyle="{StaticResource HeaderStyle}" 
-                              CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50"
+                              CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50" MaxHeight="250"
                               SelectedItem="{Binding Path=SelectedRow, Mode=TwoWay}" >
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="Description" Width="Auto" HeaderStyle="{StaticResource FirstColumnHeaderStyle }">
@@ -268,7 +268,7 @@
                             <DataGridTemplateColumn Width="50">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Menu Name="menu1" HorizontalAlignment="Left" VerticalAlignment="Top" Tag="{Binding RelativeSource={RelativeSource Self}}">
+                                        <Menu Name="menu1" HorizontalAlignment="Left" VerticalAlignment="Top" Tag="{Binding RelativeSource={RelativeSource Self}}" DataContext="{Binding AgentWithdrawals}">
                                             <Menu.Background>
                                                 <SolidColorBrush Color="Transparent"></SolidColorBrush>
                                             </Menu.Background>
@@ -285,6 +285,7 @@
                                                                     </MultiBinding.Converter>
                                                                     <Binding />
                                                                     <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Window}" Path="DataContext.SelectedViewModel.LabelDueToPartners"/>
+                                                                    <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Menu}}" Path="DataContext"></Binding>
                                                                 </MultiBinding>
                                                             </Button.CommandParameter>
                                                         </Button>
