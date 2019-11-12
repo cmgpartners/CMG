@@ -180,7 +180,7 @@
                                                         BorderBrush="{Binding Agent.Color}"
                                                         BorderThickness="0,0,0,3"
                                                         Visibility="{Binding IsVisible, Converter={StaticResource VisibilityConverter}}">
-                                                        <TextBox Text="{Binding Amount}" MinWidth="50"></TextBox>
+                                                        <TextBox Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" MinWidth="50"></TextBox>
                                                     </Border>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>
@@ -214,7 +214,7 @@
                             <DataGridTemplateColumn Header="Description" Width="Auto" HeaderStyle="{StaticResource FirstColumnHeaderStyle }">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBox Text="{Binding Path=Desc, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                        <TextBox Text="{Binding Path=Desc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -314,7 +314,7 @@
                                                         BorderBrush="{Binding Agent.Color}"
                                                         BorderThickness="0,0,0,3"
                                                         Visibility="{Binding IsVisible, Converter={StaticResource VisibilityConverter}}">
-                                                        <TextBox Text="{Binding Amount}" MinWidth="50"></TextBox>
+                                                        <TextBox Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" MinWidth="50"></TextBox>
                                                     </Border>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>
@@ -330,35 +330,106 @@
                 </Grid>
             </StackPanel>
             <StackPanel Grid.Row="1" Grid.Column="0"  Margin="10 10 10 0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+                </Grid>
                 <StackPanel>
-                    <Label x:Name="lblBankPositions" Content="BANK POSITIONS" Style="{StaticResource LabelStyle}" />
+                    <Label x:Name="lblBankPositions" Content="{Binding LabelBankPositions}" Style="{StaticResource LabelStyle}" />
                     <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible"
-                              ItemsSource="{Binding DataCollection}"
-                              x:Name="bankPositions" IsReadOnly="False" 
+                              ItemsSource="{Binding BankPositionTable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              x:Name="BankPositions" IsReadOnly="False" 
                               ColumnHeaderStyle="{StaticResource HeaderStyle}" 
-                              CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50">
+                              CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50" MaxHeight="250">
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="Id" Width="90" HeaderStyle="{StaticResource FirstColumnHeaderStyle }">
+                            <DataGridTemplateColumn Width="5">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Id}" Margin="10 0 10 0"></TextBlock>
+                                        <TextBlock Text=""></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Name" Width="90" >
+                            <DataGridTemplateColumn Header="Description" Width="150">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Name}"></TextBlock>
+                                        <TextBox Text="{Binding Path=Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="40">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text=" "></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Type" Width="100">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Path=Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="40">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text=" "></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="CMG" Width="100"  HeaderStyle="{StaticResource TotalHeaderStyle}" MaxWidth="100">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Path=CMG, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" HorizontalAlignment="Right"></TextBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="40">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text=""></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>                            
+                            <DataGridTemplateColumn Header="SC" Width="100"  HeaderStyle="{StaticResource TotalHeaderStyle}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Path=SC, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" HorizontalAlignment="Right"></TextBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="40">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text=""></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="TD" Width="100"  HeaderStyle="{StaticResource TotalHeaderStyle}">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Path=TD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" HorizontalAlignment="Right"></TextBox>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>
+                <Grid Grid.Row="1" Background="#FFCEEAFF" Grid.ColumnSpan="4">
+                    <Button x:Name="buttonAddBankPositions" Content="+" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding AddCommand}" CommandParameter="{Binding LabelBankPositions}"></Button>
+                </Grid>
             </StackPanel>
             <StackPanel Grid.Row="1" Grid.Column="1"  Margin="10 10 10 0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+                </Grid>
                 <StackPanel>
-                    <Label x:Name="lblPersonalCommissions" Content="PERSONAL COMMISSIONS" Style="{StaticResource LabelStyle}" />
+                    <Label x:Name="lblPersonalCommissions" Content="{Binding LabelPersonalCommissions}" Style="{StaticResource LabelStyle}" />
                     <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible"
                               ItemsSource="{Binding DataCollection}"
                               x:Name="PersonalCommissions" IsReadOnly="False" 
@@ -382,6 +453,9 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>
+                <Grid Grid.Row="1" Background="#FFCEEAFF" Grid.ColumnSpan="4">
+                    <Button x:Name="buttonAddPersonalCommissions" Content="+" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding AddCommand}" CommandParameter="{Binding LabelPersonalCommissions}"></Button>
+                </Grid>
             </StackPanel>
         </Grid>
         <Grid Grid.Row="2" Background="#FFCEEAFF" Grid.ColumnSpan="4">            
