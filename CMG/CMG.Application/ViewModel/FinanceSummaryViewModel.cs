@@ -7,9 +7,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Input;
+using static CMG.Common.Enums;
 
 namespace CMG.Application.ViewModel
 {
@@ -22,6 +24,14 @@ namespace CMG.Application.ViewModel
         private int newId;
         private const string AgentExpenses = "Agent Expenses";
         private const string DueToPartners = "Due To Partners";
+        private const string BankPositions = "Bank Positions";
+        private const string PersonalCommissions = "Personal Commissions";
+
+        private const string DescriptionCoulmnName = "Description";
+        private const string TypeCoulmnName = "Type";
+        private const string CmgCoulmnName = "CMG";
+        private const string ScCoulmnName = "SC";
+        private const string TdCoulmnName = "TD";
         #endregion Member variables
 
         #region Constructor
@@ -118,6 +128,29 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("AgentExpensesCollection");
             }
         }
+
+        private ObservableCollection<ViewWithdrawalDto> _bankPositionsCollection;
+        public ObservableCollection<ViewWithdrawalDto> BankPositionsCollection
+        {
+            get { return _bankPositionsCollection; }
+            set
+            {
+                _bankPositionsCollection = value;
+                OnPropertyChanged("BankPositionsCollection");
+            }
+        }
+
+        private DataTable _bankPositionsTable;
+        public DataTable BankPositionTable
+        {
+            get { return _bankPositionsTable; }
+            set
+            {
+                _bankPositionsTable = value;
+                OnPropertyChanged("BankPositionTable");
+            }
+        }
+
         public ICommand RemoveAgentCommand
         {
             get { return CreateCommand(RemoveAgent); }
@@ -156,6 +189,16 @@ namespace CMG.Application.ViewModel
             get { return DueToPartners;  }
         }
 
+        public string LabelBankPositions
+        {
+            get { return BankPositions; }
+        }
+
+        public string LabelPersonalCommissions
+        {
+            get { return PersonalCommissions; }
+        }
+
         #endregion Properties
 
         #region Methods
@@ -164,7 +207,7 @@ namespace CMG.Application.ViewModel
             GetAgents();
             GetAgentExpenses();
             GetDueToPartners();
-            //GetBankPositiosn();
+            GetBankPositions();
             //GetPersonalCommissions();
         }
         public void GetDueToPartners()
@@ -178,6 +221,34 @@ namespace CMG.Application.ViewModel
             SearchQuery searchQuery = BuildSearchQuery("W");
             var dataSearchBy = _unitOfWork.Withdrawals.Find(searchQuery);
             AgentExpensesCollection = new ObservableCollection<ViewWithdrawalDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewWithdrawalDto>(r)).ToList());
+        }
+
+        public void GetBankPositions()
+        {
+            SearchQuery searchQuery = BuildSearchQuery("B");
+            var dataSearchBy = _unitOfWork.Withdrawals.Find(searchQuery);
+            BankPositionsCollection = new ObservableCollection<ViewWithdrawalDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewWithdrawalDto>(r)).ToList());
+
+            BankPositionTable = new DataTable();
+            BankPositionTable.TableName = "BankPositions";
+
+            BankPositionTable.Columns.Add(DescriptionCoulmnName, typeof(string));
+            BankPositionTable.Columns.Add(TypeCoulmnName, typeof(string));
+            BankPositionTable.Columns.Add(CmgCoulmnName, typeof(decimal));
+            BankPositionTable.Columns.Add(ScCoulmnName, typeof(decimal));
+            BankPositionTable.Columns.Add(TdCoulmnName, typeof(decimal));
+
+            DataRow row;
+            for (int i = 0; i < BankPositionsCollection.Count; i++)
+            {
+                row = BankPositionTable.NewRow();
+                row[DescriptionCoulmnName] = BankPositionsCollection[i].Desc.Trim();
+                row[TypeCoulmnName] = BankPositionsCollection[i].Ctype.Trim();
+                row[CmgCoulmnName] = BankPositionsCollection[i].AgentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Marty).FirstOrDefault() != null ? BankPositionsCollection[i].AgentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Marty).FirstOrDefault().Amount : 0;
+                row[ScCoulmnName] = BankPositionsCollection[i].AgentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Peter).FirstOrDefault() != null ? BankPositionsCollection[i].AgentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Peter).FirstOrDefault().Amount : 0;
+                row[TdCoulmnName] = BankPositionsCollection[i].AgentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Frank).FirstOrDefault() != null ? BankPositionsCollection[i].AgentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Frank).FirstOrDefault().Amount : 0;
+                BankPositionTable.Rows.Add(row);
+            }
         }
         public void AddWithdrawal(object currentGrid)
         {
@@ -193,6 +264,14 @@ namespace CMG.Application.ViewModel
             else if (Convert.ToString(currentGrid) == DueToPartners)
             {
                 DueToPartnersCollection.Add(new ViewWithdrawalDto() { WithdrawalId = id, Dtype = "L", Yrmo = $"{SelectedYear}{month}", Ctype = "", AgentWithdrawals = listViewAgentWithdrawal });
+            }
+            else if(Convert.ToString(currentGrid) == BankPositions)
+            {
+                DataRow row = BankPositionTable.NewRow();
+                row[CmgCoulmnName] = 0;
+                row[ScCoulmnName] = 0;
+                row[TdCoulmnName] = 0;
+                BankPositionTable.Rows.Add(row);
             }
         }
         public void RemoveAgent(object selectedAgentWithdrawal)
