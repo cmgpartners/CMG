@@ -52,7 +52,6 @@ namespace CMG.Application.ViewModel
                 return DateTimeFormatInfo.CurrentInfo.MonthNames.Where(t => t.Length > 0).Select(m => m.Substring(0, 3)).ToList();
             }
         }
-
         public ICollection<int> Years
         {
             get
@@ -150,7 +149,6 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("BankPositionTable");
             }
         }
-
         public ICommand RemoveAgentCommand
         {
             get { return CreateCommand(RemoveAgent); }
@@ -188,17 +186,14 @@ namespace CMG.Application.ViewModel
         {
             get { return DueToPartners;  }
         }
-
         public string LabelBankPositions
         {
             get { return BankPositions; }
         }
-
         public string LabelPersonalCommissions
         {
             get { return PersonalCommissions; }
         }
-
         #endregion Properties
 
         #region Methods
@@ -222,7 +217,6 @@ namespace CMG.Application.ViewModel
             var dataSearchBy = _unitOfWork.Withdrawals.Find(searchQuery);
             AgentExpensesCollection = new ObservableCollection<ViewWithdrawalDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewWithdrawalDto>(r)).ToList());
         }
-
         public void GetBankPositions()
         {
             SearchQuery searchQuery = BuildSearchQuery("B");
@@ -301,6 +295,27 @@ namespace CMG.Application.ViewModel
             }
             _unitOfWork.Commit();
         }
+        public void AddWithdrawalAgent(object dataInput)
+        {
+            if (dataInput != null)
+            {
+                IList objList = (IList)dataInput;
+                if (objList != null
+                    && objList.Count == 3)
+                {
+                    ViewAgentDto agent = (ViewAgentDto)objList[0];
+                    switch (objList[1])
+                    {
+                        case AgentExpenses:
+                            AddAgentFromCollection(AgentExpensesCollection, (List<ViewAgentWithdrawalDto>)objList[2], agent);
+                            break;
+                        case DueToPartners:
+                            AddAgentFromCollection(DueToPartnersCollection, (List<ViewAgentWithdrawalDto>)objList[2], agent);
+                            break;
+                    }
+                }
+            }
+        }
         private SearchQuery BuildSearchQuery(string dType = "L")
         {
             int month = DateTime.ParseExact(SelectedMonth, "MMM", null).Month;
@@ -311,7 +326,6 @@ namespace CMG.Application.ViewModel
             searchQuery.FilterBy = filterBy;
             return searchQuery;
         }
-
         private FilterBy FilterByEqual(string propertyName, string value)
         {
             FilterBy filterBy = new FilterBy();
@@ -319,7 +333,6 @@ namespace CMG.Application.ViewModel
             filterBy.Equal = value;
             return filterBy;
         }
-
         private void GetAgents()
         {
             var agents = _unitOfWork.Agents.All().ToList().Where(x => x.IsExternal == false);
@@ -365,7 +378,7 @@ namespace CMG.Application.ViewModel
                 }
             }
         }
-	private void AddAgentFromCollection(ObservableCollection<ViewWithdrawalDto> collection, List<ViewAgentWithdrawalDto> agentWithdrawals, ViewAgentDto agent)
+	    private void AddAgentFromCollection(ObservableCollection<ViewWithdrawalDto> collection, List<ViewAgentWithdrawalDto> agentWithdrawals, ViewAgentDto agent)
         {
             if (collection.Count > 0)
             {
@@ -391,28 +404,6 @@ namespace CMG.Application.ViewModel
                 int index = collection.IndexOf(selectedWithdrawal);
                 collection.Remove(selectedWithdrawal);
                 collection.Insert(index, selectedWithdrawal);                
-            }
-        }
-
-        public void AddWithdrawalAgent(object dataInput)
-        {
-            if (dataInput != null)
-            {
-                IList objList = (IList)dataInput;
-                if (objList != null
-                    && objList.Count == 3)
-                {
-                    ViewAgentDto agent = (ViewAgentDto)objList[0];
-                    switch (objList[1])
-                    {
-                        case AgentExpenses:
-                            AddAgentFromCollection(AgentExpensesCollection, (List<ViewAgentWithdrawalDto>)objList[2], agent);
-                            break;
-                        case DueToPartners:
-                            AddAgentFromCollection(DueToPartnersCollection, (List<ViewAgentWithdrawalDto>)objList[2], agent);
-                            break;
-                    }
-                }
             }
         }
         #endregion Methods
