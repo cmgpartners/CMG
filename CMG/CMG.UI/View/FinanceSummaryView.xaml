@@ -339,7 +339,7 @@
                 <StackPanel>
                     <Label x:Name="lblBankPositions" Content="{Binding LabelBankPositions}" Style="{StaticResource LabelStyle}" />
                     <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible"
-                              ItemsSource="{Binding BankPositionTable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              ItemsSource="{Binding BankPositionsTable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               x:Name="BankPositions" IsReadOnly="False" 
                               ColumnHeaderStyle="{StaticResource HeaderStyle}" 
                               CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50" MaxHeight="250">

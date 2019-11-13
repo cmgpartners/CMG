@@ -22,11 +22,14 @@ namespace CMG.Application.ViewModel
         private readonly IMapper _mapper;
         private const int startYear = 1925;
         private int newId;
+        private int maxWithdrawalId;
         private const string AgentExpenses = "Agent Expenses";
         private const string DueToPartners = "Due To Partners";
         private const string BankPositions = "Bank Positions";
         private const string PersonalCommissions = "Personal Commissions";
+        private const string BankPositionCode = "B";
 
+        private const string WithdrawalIdCoulmnName = "WithdrawalId";
         private const string DescriptionCoulmnName = "Description";
         private const string TypeCoulmnName = "Type";
         private const string CmgCoulmnName = "CMG";
@@ -40,6 +43,7 @@ namespace CMG.Application.ViewModel
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            maxWithdrawalId = _unitOfWork.Withdrawals.All().OrderByDescending(x => x.Keywith).First().Keywith;
             LoadData();            
         }
         #endregion Constructor
@@ -140,13 +144,13 @@ namespace CMG.Application.ViewModel
         }
 
         private DataTable _bankPositionsTable;
-        public DataTable BankPositionTable
+        public DataTable BankPositionsTable
         {
             get { return _bankPositionsTable; }
             set
             {
                 _bankPositionsTable = value;
-                OnPropertyChanged("BankPositionTable");
+                OnPropertyChanged("BankPositionsTable");
             }
         }
         public ICommand RemoveAgentCommand
@@ -223,25 +227,27 @@ namespace CMG.Application.ViewModel
             var dataSearchBy = _unitOfWork.Withdrawals.Find(searchQuery);
             BankPositionsCollection = new ObservableCollection<ViewWithdrawalDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewWithdrawalDto>(r)).ToList());
 
-            BankPositionTable = new DataTable();
-            BankPositionTable.TableName = "BankPositions";
+            BankPositionsTable = new DataTable();
+            BankPositionsTable.TableName = "BankPositions";
 
-            BankPositionTable.Columns.Add(DescriptionCoulmnName, typeof(string));
-            BankPositionTable.Columns.Add(TypeCoulmnName, typeof(string));
-            BankPositionTable.Columns.Add(CmgCoulmnName, typeof(decimal));
-            BankPositionTable.Columns.Add(ScCoulmnName, typeof(decimal));
-            BankPositionTable.Columns.Add(TdCoulmnName, typeof(decimal));
+            BankPositionsTable.Columns.Add(WithdrawalIdCoulmnName, typeof(int));
+            BankPositionsTable.Columns.Add(DescriptionCoulmnName, typeof(string));
+            BankPositionsTable.Columns.Add(TypeCoulmnName, typeof(string));
+            BankPositionsTable.Columns.Add(CmgCoulmnName, typeof(decimal));
+            BankPositionsTable.Columns.Add(ScCoulmnName, typeof(decimal));
+            BankPositionsTable.Columns.Add(TdCoulmnName, typeof(decimal));
 
             DataRow row;
             for (int i = 0; i < BankPositionsCollection.Count; i++)
             {
-                row = BankPositionTable.NewRow();
+                row = BankPositionsTable.NewRow();
+                row[WithdrawalIdCoulmnName] = BankPositionsCollection[i].WithdrawalId;
                 row[DescriptionCoulmnName] = BankPositionsCollection[i].Desc.Trim();
                 row[TypeCoulmnName] = BankPositionsCollection[i].Ctype.Trim();
                 row[CmgCoulmnName] = BankPositionsCollection[i].AgentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Marty).FirstOrDefault() != null ? BankPositionsCollection[i].AgentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Marty).FirstOrDefault().Amount : 0;
                 row[ScCoulmnName] = BankPositionsCollection[i].AgentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Peter).FirstOrDefault() != null ? BankPositionsCollection[i].AgentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Peter).FirstOrDefault().Amount : 0;
                 row[TdCoulmnName] = BankPositionsCollection[i].AgentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Frank).FirstOrDefault() != null ? BankPositionsCollection[i].AgentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Frank).FirstOrDefault().Amount : 0;
-                BankPositionTable.Rows.Add(row);
+                BankPositionsTable.Rows.Add(row);
             }
         }
         public void AddWithdrawal(object currentGrid)
@@ -261,11 +267,12 @@ namespace CMG.Application.ViewModel
             }
             else if(Convert.ToString(currentGrid) == BankPositions)
             {
-                DataRow row = BankPositionTable.NewRow();
+                DataRow row = BankPositionsTable.NewRow();
+                row[WithdrawalIdCoulmnName] = id;
                 row[CmgCoulmnName] = 0;
                 row[ScCoulmnName] = 0;
                 row[TdCoulmnName] = 0;
-                BankPositionTable.Rows.Add(row);
+                BankPositionsTable.Rows.Add(row);
             }
         }
         public void RemoveAgent(object selectedAgentWithdrawal)
@@ -293,7 +300,12 @@ namespace CMG.Application.ViewModel
             {
                 AddOrUpdateWithdrawalCollection(DueToPartnersCollection);
             }
+            if(BankPositionsTable.Rows.Count > 0)
+            {
+                AddOrUpdateBankPositionCollection();
+            }
             _unitOfWork.Commit();
+              LoadData();
         }
         public void AddWithdrawalAgent(object dataInput)
         {
@@ -351,11 +363,18 @@ namespace CMG.Application.ViewModel
             {
                 foreach (ViewWithdrawalDto withdrawal in collection)
                 {
+                    withdrawal.AgentWithdrawals.Remove(withdrawal.AgentWithdrawals.Where(x => x.AgentId == null).FirstOrDefault());
+
                     if (withdrawal.WithdrawalId > 0)
                     {
                         var entity = _mapper.Map<Withd>(withdrawal);
                         foreach (AgentWithdrawal agentWithdrawal in entity.AgentWithdrawal)
                         {
+                            var obj = withdrawal.AgentWithdrawals.Where(x => x.Id == agentWithdrawal.Id).FirstOrDefault();
+                            if (obj.IsVisible == false)
+                            {
+                                agentWithdrawal.IsDeleted = true;
+                            }
                             agentWithdrawal.Agent = null;
                             if (agentWithdrawal.Id > 0)
                             {
@@ -363,22 +382,114 @@ namespace CMG.Application.ViewModel
                             }
                             else
                             {
-                                _unitOfWork.AgentWithdrawals.Add(agentWithdrawal);
+                                if(!agentWithdrawal.IsDeleted)
+                                {
+                                    _unitOfWork.AgentWithdrawals.Add(agentWithdrawal);
+                                }
                             }
                         }
                         _unitOfWork.Withdrawals.Save(entity);
                     }
                     else
                     {
-                        withdrawal.AgentWithdrawals = withdrawal.AgentWithdrawals.Select(agentWithd => { agentWithd.Agent = null; return agentWithd; }).ToList();
-                        withdrawal.WithdrawalId = 0;
+                        withdrawal.AgentWithdrawals = withdrawal.AgentWithdrawals.Where(x => x.IsVisible == true).Select(agentWithd => { agentWithd.Agent = null; return agentWithd; }).ToList();
+                        withdrawal.WithdrawalId = ++maxWithdrawalId;
                         var entityWithdrawal = _mapper.Map<Withd>(withdrawal);
                         _unitOfWork.Withdrawals.Add(entityWithdrawal);
                     }
                 }
             }
         }
-	    private void AddAgentFromCollection(ObservableCollection<ViewWithdrawalDto> collection, List<ViewAgentWithdrawalDto> agentWithdrawals, ViewAgentDto agent)
+        private void AddOrUpdateBankPositionCollection()
+        {
+            if(BankPositionsTable.Rows.Count > 0)
+            {
+                foreach(DataRow row in BankPositionsTable.Rows) // Rishita
+                {
+                    int month = DateTime.ParseExact(SelectedMonth, "MMM", null).Month;
+                    ViewWithdrawalDto withdrawal = new ViewWithdrawalDto();
+                    List<ViewAgentWithdrawalDto> agentWithdrawals = new List<ViewAgentWithdrawalDto>();
+                    ViewAgentWithdrawalDto agentWithdrawal = new ViewAgentWithdrawalDto();
+                    int withdrawalId = (int)row[WithdrawalIdCoulmnName];
+                    withdrawal.WithdrawalId = withdrawalId;
+                    withdrawal.Yrmo = SelectedYear.ToString() + month.ToString("D2");
+                    withdrawal.Desc = row[DescriptionCoulmnName].ToString().Trim();
+                    withdrawal.Dtype = BankPositionCode;
+                    withdrawal.Ctype = row[TypeCoulmnName].ToString().Trim();
+                    if (withdrawalId > 0)
+                    {
+                        withdrawal = BankPositionsCollection.Where(x => x.WithdrawalId == withdrawalId).FirstOrDefault();
+                        agentWithdrawals = withdrawal.AgentWithdrawals.ToList();
+                        if (agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Marty).FirstOrDefault() != null)
+                        {
+                            agentWithdrawal = agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Marty).FirstOrDefault();
+                            agentWithdrawal.Amount = Convert.ToDouble(row[CmgCoulmnName]);
+                        }
+                        else if(Convert.ToDouble(row[CmgCoulmnName]) > 0)
+                        {
+                            withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Marty, withdrawalId, Convert.ToDouble(row[CmgCoulmnName])));
+                        }
+
+                        if (agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Peter).FirstOrDefault() != null)
+                        {
+                            agentWithdrawal = agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Peter).FirstOrDefault();
+                            agentWithdrawal.Amount = Convert.ToDouble(row[ScCoulmnName]);
+                        }
+                        else if(Convert.ToDouble(row[ScCoulmnName]) > 0)
+                        {
+                            withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Peter, withdrawalId, Convert.ToDouble(row[ScCoulmnName])));
+                        }
+                        
+                        if (agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Frank).FirstOrDefault() != null)
+                        {
+                            agentWithdrawal = agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Frank).FirstOrDefault();
+                            agentWithdrawal.Amount = Convert.ToDouble(row[TdCoulmnName]);
+                        }
+                        else if(Convert.ToDouble(row[TdCoulmnName]) > 0)
+                        {
+                            withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Frank, withdrawalId, Convert.ToDouble(row[TdCoulmnName])));
+                        }
+                    }
+                    else if (withdrawalId < 0)
+                    {
+                        agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Marty, withdrawalId, Convert.ToDouble(row[CmgCoulmnName]));
+                        if (agentWithdrawal != null)
+                        {
+                            agentWithdrawals.Add(agentWithdrawal);
+                        }
+                        agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Peter, withdrawalId, Convert.ToDouble(row[ScCoulmnName]));
+                        if (agentWithdrawal != null)
+                        {
+                            agentWithdrawals.Add(agentWithdrawal);
+                        }
+                        agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Frank, withdrawalId, Convert.ToDouble(row[TdCoulmnName]));
+                        if (agentWithdrawal != null)
+                        {
+                            agentWithdrawals.Add(agentWithdrawal);
+                        }
+
+                        withdrawal.AgentWithdrawals = agentWithdrawals;
+                        BankPositionsCollection.Add(withdrawal);
+                    }
+                }
+                AddOrUpdateWithdrawalCollection(BankPositionsCollection);
+            }
+        }
+
+        private ViewAgentWithdrawalDto AddViewAgentWithdrawalDto(int agentId, int withdrawalId, double amount)
+        {
+            ViewAgentWithdrawalDto agentWithdrawal = null;
+            if (amount > 0)
+            {
+                agentWithdrawal = new ViewAgentWithdrawalDto();
+                agentWithdrawal.Agent = AgentList.Where(x => x.Id == agentId).FirstOrDefault();
+                agentWithdrawal.WithdrawalId = withdrawalId;
+                agentWithdrawal.AgentId = agentId;
+                agentWithdrawal.Amount = amount;
+            }
+            return agentWithdrawal;
+        }
+        private void AddAgentFromCollection(ObservableCollection<ViewWithdrawalDto> collection, List<ViewAgentWithdrawalDto> agentWithdrawals, ViewAgentDto agent)
         {
             if (collection.Count > 0)
             {
