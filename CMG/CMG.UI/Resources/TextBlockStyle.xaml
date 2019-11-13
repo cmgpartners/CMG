@@ -19,4 +19,9 @@
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="Foreground" Value="White" />
     </Style>
+
+    <Style x:Key="SearchHeaderStyle" TargetType="TextBlock">
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="Black" />
+    </Style>
 </ResourceDictionary>
