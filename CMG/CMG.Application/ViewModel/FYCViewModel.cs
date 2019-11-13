@@ -10,6 +10,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Input;
+using ToastNotifications;
+using ToastNotifications.Messages;
 
 namespace CMG.Application.ViewModel
 {
@@ -18,16 +20,18 @@ namespace CMG.Application.ViewModel
         #region Member variables
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly Notifier _notifier;
         private const int startYear = 1925;
         private int newId;
         #endregion Member variables
 
         #region Constructor
-        public FYCViewModel(IUnitOfWork unitOfWork, IMapper mapper)
+        public FYCViewModel(IUnitOfWork unitOfWork, IMapper mapper, Notifier notifier)
             : base(unitOfWork, mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _notifier = notifier;
             LoadData();
         }
         #endregion Constructor
@@ -48,6 +52,7 @@ namespace CMG.Application.ViewModel
                 return Enumerable.Range(startYear, DateTime.Now.Year + 1 - startYear).ToList();
             }
         }
+
         private int _selectedYear = DateTime.Now.Year;
         public int SelectedYear
         {
@@ -71,6 +76,7 @@ namespace CMG.Application.ViewModel
                 GetCommissions();
             }
         }
+
         private ViewCommissionDto _copiedCommission;
         public ViewCommissionDto CopiedCommission
         {
@@ -81,6 +87,7 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("CopiedCommission");
             }
         }
+
         private bool _isPasteEnables;
         public bool IsPasteEnabled
         {
@@ -94,6 +101,7 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("IsPasteEnabled");
             }
         }
+
         private ObservableCollection<ViewCommissionDto> _dataCollection;
         public ObservableCollection<ViewCommissionDto> DataCollection
         {
@@ -105,6 +113,7 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("IsNoRecordFound");
             }
         }
+
         private IEnumerable<string> _policies;
         public IEnumerable<string> Policies
         {
@@ -115,6 +124,7 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("Policies");
             }
         }
+
         public ICommand SaveCommand
         {
             get { return CreateCommand(Save); }
@@ -127,19 +137,19 @@ namespace CMG.Application.ViewModel
         {
             get { return CreateCommand(Delete); }
         }
-        public ICommand PolicyAgentCommand
+        public ICommand PolicyDetailsCommand
         {
-            get { return CreateCommand(PolicyAgent); }
+            get { return CreateCommand(PolicyDetails); }
         }
         public ICommand CopyCommand
         {
             get { return CreateCommand(Copy); }
         }
-
         public ICommand PasteCommand
         {
             get { return CreateCommand(Paste); }
         }
+
         #endregion
 
         #region Methods
@@ -157,6 +167,12 @@ namespace CMG.Application.ViewModel
                 if (DataCollection != null && DataCollection.Count > 0)
                 {
                     if (DataCollection.Any(comm => string.IsNullOrEmpty(comm.PolicyNumber))) return;
+                    var notExistPolicyNumber = DataCollection.Where(comm => !Policies.Contains(comm.PolicyNumber)).Select(x => x.PolicyNumber).FirstOrDefault();
+                    if (notExistPolicyNumber != null)
+                    {
+                        _notifier.ShowError($@"Policy number ""{notExistPolicyNumber}"" does not exist");
+                        return;
+                    }
                     foreach (ViewCommissionDto commission in DataCollection)
                     {
                         if (commission.CommissionId > 0)
@@ -183,11 +199,12 @@ namespace CMG.Application.ViewModel
                         }
                     }
                     GetCommissions();
+                    _notifier.ShowSuccess("Record added/updated successfully");
                 }
             }
-            catch(Exception ex)
+            catch
             {
-                //MessageBox.Show("Records saved successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                _notifier.ShowError("Error occured while adding/updating record");
             }
         }
         public void Add()
@@ -213,23 +230,26 @@ namespace CMG.Application.ViewModel
                 {
                     DataCollection.Remove(DataCollection.Where(commission => commission.CommissionId == Convert.ToInt32(commissionId)).SingleOrDefault());
                 }
+                _notifier.ShowSuccess("Record deleted successfully");
             }
-            catch(Exception ex)
+            catch
             {
-                //MessageBox.Show("Records saved successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                _notifier.ShowError("Error occured while deleting record");
             }
         }
-
-        public void PolicyAgent(object currentItem)
+        public void PolicyDetails(object currentItem)
         {
-            if (string.IsNullOrEmpty(((ViewCommissionDto)currentItem).PolicyNumber)) { return; }
-
-            SearchQuery searchQuery = BuildPolicySearchQuery("PolicyNumber", ((ViewCommissionDto)currentItem).PolicyNumber);
-            var policy = _unitOfWork.Policies.Find(searchQuery);
+            if (string.IsNullOrEmpty(((ViewCommissionDto)currentItem).PolicyNumber)) 
+            { 
+                _notifier.ShowError("Please enter policy number"); 
+                return; 
+            }
+            var policyNumber = ((ViewCommissionDto)currentItem).PolicyNumber;
+            var policy = _unitOfWork.Policies.FindByPolicyNumber(policyNumber);
             ViewPolicyDto policyDto;
             if (policy != null)
             {
-                policyDto = policy.Result.Select(r => _mapper.Map<ViewPolicyDto>(r)).SingleOrDefault();
+                policyDto = _mapper.Map<ViewPolicyDto>(policy);
                 if (policyDto != null)
                 {
                     List<ViewAgentCommissionDto> agnetCommissions = new List<ViewAgentCommissionDto>();
@@ -253,6 +273,10 @@ namespace CMG.Application.ViewModel
                         };
                     }
                 }
+            }
+            else
+            {
+                _notifier.ShowError($@"Policy number ""{policyNumber}"" does not exist");
             }
         }
         public void Copy(object commissionInput)
@@ -292,7 +316,6 @@ namespace CMG.Application.ViewModel
 
             IsPasteEnabled = true;
         }
-
         public void Paste(object dataInput)
         {
             ViewCommissionDto data = dataInput as ViewCommissionDto;
@@ -312,7 +335,6 @@ namespace CMG.Application.ViewModel
             GetCommissions();
             GetPolicies();
         }
-
         private SearchQuery BuildFYCSearchQuery(int year, string month)
         {
             SearchQuery searchQuery = new SearchQuery();
@@ -324,19 +346,6 @@ namespace CMG.Application.ViewModel
             searchQuery.FilterBy = filterBy;
             return searchQuery;
         }
-
-        private SearchQuery BuildPolicySearchQuery(string propertyName, string propertyValue)
-        {
-            SearchQuery searchQuery = new SearchQuery();
-            List<FilterBy> searchBy = new List<FilterBy>();
-            FilterBy filterBy = new FilterBy();
-            filterBy.Property = propertyName;
-            filterBy.Equal = propertyValue;
-            searchBy.Add(filterBy);
-            searchQuery.FilterBy = searchBy;
-            return searchQuery;
-        }
-
         private FilterBy FilterByRange(string propertyName, string greaterThan, string lessThan)
         {
             FilterBy filterBy = new FilterBy();
@@ -353,7 +362,6 @@ namespace CMG.Application.ViewModel
             filterBy.Equal = value;
             return filterBy;
         }
-
         private void GetPolicies()
         {
             var policies = _unitOfWork.Policies.GetAllPolicyNumber();

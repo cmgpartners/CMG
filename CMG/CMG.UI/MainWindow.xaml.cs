@@ -7,6 +7,10 @@ using AutoMapper;
 using System.Windows.Navigation;
 using System.Diagnostics;
 using static CMG.Common.Enums;
+using ToastNotifications;
+using ToastNotifications.Position;
+using ToastNotifications.Lifetime;
+using System;
 
 namespace CMG.UI
 {
@@ -19,12 +23,14 @@ namespace CMG.UI
         public readonly IUnitOfWork _unitOfWork;
         public string _navigateURL = "https://cmgpartners.my.salesforce.com/";
         private MainViewModel _mainViewModel;
+        private Notifier _notifier;
 
         public int[] years { get; set; }
         public MainWindow(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _notifier = InitializeNotifier();
             InitializeComponent();
             _mainViewModel = new MainViewModel(_unitOfWork, _mapper);
             lstNavItems.SelectedItem = lstNavItems.Items[0];
@@ -36,7 +42,7 @@ namespace CMG.UI
             if (lstNavigation.SelectedIndex == 0)
             {
                 _mainViewModel.SelectedIndexLeftNavigation = (int)LeftNavigation.Renewals;
-                RenewalsViewModel renewalsViewModel = new RenewalsViewModel(_unitOfWork, _mapper);
+                RenewalsViewModel renewalsViewModel = new RenewalsViewModel(_unitOfWork, _mapper, _notifier);
                 _mainViewModel.SelectedViewModel = renewalsViewModel;
                 DataContext = _mainViewModel;
             }
@@ -45,7 +51,7 @@ namespace CMG.UI
                 if (!(_mainViewModel.SelectedViewModel is FYCViewModel))
                 {
                     _mainViewModel.SelectedIndexLeftNavigation = (int)LeftNavigation.FirstYearCommission;
-                    FYCViewModel fycViewModel = new FYCViewModel(_unitOfWork, _mapper);
+                    FYCViewModel fycViewModel = new FYCViewModel(_unitOfWork, _mapper, _notifier);
                     _mainViewModel.SelectedViewModel = fycViewModel;
                     DataContext = _mainViewModel;
                 }
@@ -89,6 +95,23 @@ namespace CMG.UI
                 UseShellExecute = true
             };
             Process.Start(psi);
+        }
+        private Notifier InitializeNotifier()
+        {
+            return new Notifier(cfg =>
+            {
+                cfg.PositionProvider = new WindowPositionProvider(
+                    parentWindow: System.Windows.Application.Current.MainWindow,
+                    corner: Corner.TopRight,
+                    offsetX: 10,
+                    offsetY: 10);
+
+                cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
+                    notificationLifetime: TimeSpan.FromSeconds(3),
+                    maximumNotificationCount: MaximumNotificationCount.FromCount(5));
+
+                cfg.Dispatcher = System.Windows.Application.Current.Dispatcher;
+            });
         }
     }
 }

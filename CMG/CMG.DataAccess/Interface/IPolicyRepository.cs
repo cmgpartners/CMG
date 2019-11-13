@@ -7,6 +7,6 @@ namespace CMG.DataAccess.Interface
     {
         ICollection<Policys> GetAllPolicyNumber();
 
-        IQueryResult<Policys> Find(ISearchCriteria criteria);
+        Policys FindByPolicyNumber(string policyNumber);
     }
 }
