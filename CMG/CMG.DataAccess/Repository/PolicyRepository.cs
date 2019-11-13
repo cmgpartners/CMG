@@ -29,18 +29,10 @@ namespace CMG.DataAccess.Repository
             return result;
         }
 
-        public IQueryResult<Policys> Find(ISearchCriteria criteria)
+        public Policys FindByPolicyNumber(string policyNumber)
         {
-            var query = Context.Policys.AsQueryable().Include(x => x.PolicyAgent).ThenInclude(x => x.Agent);
-
-            IQueryable<Policys> queryable = query;
-
-            if ((criteria.FilterBy?.Count() ?? 0) > 0)
-            {
-                queryable = queryable.Where(GetPredicate(criteria));
-            }
-
-            var result = queryable.Select(x => new Policys
+            var query = Context.Policys.Where(p => p.Policynum == policyNumber).AsQueryable().Include(x => x.PolicyAgent).ThenInclude(x => x.Agent);
+            return query.Select(x => new Policys
             {
                 Keynumo = x.Keynumo,
                 Policynum = x.Policynum,
@@ -55,56 +47,7 @@ namespace CMG.DataAccess.Repository
                     Split = a.Split,
                     AgentOrder = a.AgentOrder
                 })
-            });
-
-            var totalRecords = result.Count();
-
-            if (criteria.Page.HasValue
-                && criteria.PageSize.HasValue)
-            {
-                var skip = (criteria.Page.Value - 1) * criteria.PageSize.Value;
-                var pageSize = criteria.PageSize.Value;
-                result = result.Skip(skip);
-                result = result.Take(pageSize);
-            }
-
-            return new PagedQueryResult<Policys>()
-            {
-                TotalAmount = 0.0M,
-                Result = result.ToList(),
-                TotalRecords = totalRecords
-            };
-        }
-        private static Expression<Func<Policys, bool>> GetPredicate(ISearchCriteria criteria)
-        {
-            Expression<Func<Policys, bool>> predicate = null;
-
-            foreach (var filterBy in criteria.FilterBy)
-            {
-                if (predicate == null)
-                {
-                    predicate = FilterByClausure(filterBy);
-                }
-                else
-                {
-                    predicate = predicate.And(FilterByClausure(filterBy));
-                }
-            }
-            return predicate;
-        }
-        private static Expression<Func<Policys, bool>> FilterByClausure(FilterBy filterBy)
-        {
-            switch (filterBy.Property.ToLower())
-            {
-                case "policynumber":
-                    return PolicyNumberExpression(filterBy.Equal);
-                default:
-                    throw new InvalidOperationException($"Can not filter for criteria: filter by {filterBy.Property}");
-            }
-        }
-        private static Expression<Func<Policys, bool>> PolicyNumberExpression(string equal)
-        {
-            return w => w.Policynum.ToLowerInvariant().Equals(equal.ToLowerInvariant());
+            }).FirstOrDefault();
         }
     }
 }

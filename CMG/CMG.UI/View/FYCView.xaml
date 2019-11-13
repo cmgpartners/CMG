@@ -105,7 +105,7 @@
 		                            behaviors:AutoCompleteBehavior.AutoCompleteItemsSource="{Binding DataContext.SelectedViewModel.Policies, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}}}" 
                                     behaviors:AutoCompleteBehavior.AutoCompleteStringComparison="InvariantCultureIgnoreCase"
 	                            />
-                                    <Button Style="{StaticResource AutoCompletePolicyButton}" Content=">>" Visibility="{Binding IsNew, Converter={StaticResource VisibilityConverter}}" Command="{Binding DataContext.SelectedViewModel.PolicyAgentCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" CommandParameter="{Binding}"></Button>
+                                    <Button Style="{StaticResource AutoCompletePolicyButton}" Content=">>" Visibility="{Binding IsNew, Converter={StaticResource VisibilityConverter}}" Command="{Binding DataContext.SelectedViewModel.PolicyDetailsCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" CommandParameter="{Binding}"></Button>
                                 </Grid>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
