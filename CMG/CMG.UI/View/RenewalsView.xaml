@@ -34,7 +34,7 @@
             </ListView>
         </StackPanel>
         <StackPanel Grid.Column="2" Grid.Row="0">
-            <ComboBox x:Name="cmbYears" ItemsSource="{Binding Years}" SelectedItem="{Binding SelectedYear}" Margin="0 10 0 0">
+            <ComboBox x:Name="cmbYears" ItemsSource="{Binding Years}" SelectedItem="{Binding SelectedYear}" Margin="0 10 0 0" FontWeight="Bold">
             </ComboBox>
         </StackPanel>
         <StackPanel Grid.Column="3" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -188,7 +188,7 @@
                                                 BorderBrush="{Binding Agent.Color}"
                                                 BorderThickness="1"
                                                 Background="{Binding Agent.Color}">
-                                                <Label Content="{Binding Agent.FirstName}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
+                                                <Label Content="{Binding Agent.FirstName}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" Foreground="Black">
                                                     <Label.ContextMenu>
                                                         <ContextMenu Style="{StaticResource ContextMenuItemStyle}" Tag="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
                                                             <ContextMenu.Items>
@@ -227,7 +227,7 @@
                                             <Border x:Name="border"
                                                     BorderBrush="{Binding Agent.Color}"
                                                     BorderThickness="0,0,0,3">
-                                                <Label Content="{Binding Split}"></Label>
+                                                <Label Content="{Binding Split}" Foreground="Black"></Label>
                                             </Border>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
@@ -270,7 +270,7 @@
                                             <Border x:Name="border"
                                                     BorderBrush="{Binding Agent.Color}"
                                                     BorderThickness="0,0,0,3">
-                                                <TextBox Text="{Binding Commission, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" MinWidth="30" TextAlignment="Right"></TextBox>
+                                                <TextBox Text="{Binding Commission, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" MinWidth="30" TextAlignment="Right" Foreground="Black"></TextBox>
                                             </Border>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
