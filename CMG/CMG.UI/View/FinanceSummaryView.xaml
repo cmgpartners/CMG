@@ -8,457 +8,457 @@
              xmlns:behaviors="clr-namespace:WPFTextBoxAutoComplete;assembly=WPFTextBoxAutoComplete"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="35"></RowDefinition>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="30"></ColumnDefinition>
-            <ColumnDefinition Width="500"></ColumnDefinition>
-            <ColumnDefinition Width="60"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-
-        <StackPanel Grid.Column="0" Grid.Row="0">
-            <materialDesign:PackIcon Kind="Calendar" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10 22 0 0"></materialDesign:PackIcon>
-        </StackPanel>
-        <StackPanel Grid.Column="1" Grid.Row="0">
-            <ListView x:Name="menu" ItemsSource="{Binding Months}" ItemContainerStyle="{StaticResource MonthListView}" SelectedItem="{Binding SelectedMonth, Mode=TwoWay}">
-                <ListView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" Margin="10 10"></StackPanel>
-                    </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
-            </ListView>
-        </StackPanel>
-        <StackPanel Grid.Column="2" Grid.Row="0">
-            <ComboBox x:Name="cmbYears" ItemsSource="{Binding Years}" SelectedItem="{Binding SelectedYear}" Margin="0 10 0 0" FontWeight="Bold">
-            </ComboBox>
-        </StackPanel>
-        <StackPanel Grid.Column="3" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="center">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="125"/>
-                    <ColumnDefinition Width="125"/>
-                </Grid.ColumnDefinitions>
-                <Button Content="Import" Command="{Binding ImportCommand}" Width="100"></Button>
-                <Button Grid.Column="1" Content="Save" Command="{Binding SaveCommand}" Width="100"></Button>
-            </Grid>           
-        </StackPanel>
-
-        <Grid Grid.Row="1" Grid.ColumnSpan="4">
+        <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="35"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="30"></ColumnDefinition>
+                <ColumnDefinition Width="500"></ColumnDefinition>
+                <ColumnDefinition Width="60"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Row="0" Grid.Column="0" Margin="10 10 10 0">
+            <StackPanel Grid.Column="0" Grid.Row="0">
+                <materialDesign:PackIcon Kind="Calendar" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10 22 0 0"></materialDesign:PackIcon>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Grid.Row="0">
+                <ListView x:Name="menu" ItemsSource="{Binding Months}" ItemContainerStyle="{StaticResource MonthListView}" SelectedItem="{Binding SelectedMonth, Mode=TwoWay}">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="10 10"></StackPanel>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                </ListView>
+            </StackPanel>
+            <StackPanel Grid.Column="2" Grid.Row="0">
+                <ComboBox x:Name="cmbYears" ItemsSource="{Binding Years}" SelectedItem="{Binding SelectedYear}" Margin="0 10 0 0" FontWeight="Bold">
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Grid.Column="3" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="center">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="50"/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="125"/>
+                        <ColumnDefinition Width="125"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Content="Import" Command="{Binding ImportCommand}" Width="100"></Button>
+                    <Button Grid.Column="1" Content="Save" Command="{Binding SaveCommand}" Width="100"></Button>
                 </Grid>
-                <StackPanel>
-                    <Label x:Name="lblAgentExpenses" Content="{Binding LabelAgentExpenses}" Style="{StaticResource LabelStyle}" />
-                    <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible"
+            </StackPanel>
+
+            <Grid Grid.Row="1" Grid.ColumnSpan="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Row="0" Grid.Column="0" Margin="10 10 10 0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+                    </Grid>
+                    <StackPanel>
+                        <Label x:Name="lblAgentExpenses" Content="{Binding LabelAgentExpenses}" Style="{StaticResource LabelStyle}" />
+                        <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible"
                               ItemsSource="{Binding AgentExpensesCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               x:Name="AgentExpenses" IsReadOnly="False" 
                               ColumnHeaderStyle="{StaticResource HeaderStyle}" 
                               CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50" MaxHeight="250"
                               SelectedItem="{Binding Path=SelectedRow, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="Description" Width="150" HeaderStyle="{StaticResource FirstColumnHeaderStyle }">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBox Text="{Binding Path=Desc, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="50">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text=""></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Agents" Width="Auto" >
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <ListView ItemsSource="{Binding AgentWithdrawals, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="Description" Width="150" HeaderStyle="{StaticResource FirstColumnHeaderStyle }">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding Path=Desc, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="50">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text=""></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Agents" Width="Auto" >
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ListView ItemsSource="{Binding AgentWithdrawals, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                                                 ItemContainerStyle="{StaticResource ItemStyle}" 
                                                 ScrollViewer.VerticalScrollBarVisibility="Disabled" >
-                                            <ListView.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <StackPanel Orientation="Horizontal"></StackPanel>
-                                                </ItemsPanelTemplate>
-                                            </ListView.ItemsPanel>
-                                            <ListView.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Border CornerRadius="15"
+                                                <ListView.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal"></StackPanel>
+                                                    </ItemsPanelTemplate>
+                                                </ListView.ItemsPanel>
+                                                <ListView.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border CornerRadius="15"
                                                 BorderBrush="{Binding Agent.Color}"
                                                 BorderThickness="1"
                                                 Visibility="{Binding IsVisible, Converter={StaticResource VisibilityConverter}}"
                                                 Background="{Binding Agent.Color}">
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <Label Content="{Binding Agent.FirstName}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"></Label>
-                                                            <Button  Style="{StaticResource RemoveButton}" Command="{Binding DataContext.SelectedViewModel.RemoveAgentCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" >
-                                                                <materialDesign:PackIcon Kind="CloseCircleOutline" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 5 0"></materialDesign:PackIcon>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <Label Content="{Binding Agent.FirstName}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"></Label>
+                                                                <Button  Style="{StaticResource RemoveButton}" Command="{Binding DataContext.SelectedViewModel.RemoveAgentCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" >
+                                                                    <materialDesign:PackIcon Kind="CloseCircleOutline" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 5 0"></materialDesign:PackIcon>
+                                                                    <Button.CommandParameter>
+                                                                        <MultiBinding>
+                                                                            <MultiBinding.Converter>
+                                                                                <converters:MultipleParametersConverter/>
+                                                                            </MultiBinding.Converter>
+                                                                            <Binding Path="."></Binding>
+                                                                            <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Window}" Path="DataContext.SelectedViewModel.LabelAgentExpenses"/>
+                                                                        </MultiBinding>
+                                                                    </Button.CommandParameter>
+                                                                </Button>
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ListView.ItemTemplate>
+                                            </ListView>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="50">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Menu Name="menu1" HorizontalAlignment="Left" VerticalAlignment="Top" Tag="{Binding RelativeSource={RelativeSource Self}}" DataContext="{Binding AgentWithdrawals}">
+                                                <Menu.Background>
+                                                    <SolidColorBrush Color="Transparent"></SolidColorBrush>
+                                                </Menu.Background>
+                                                <MenuItem Header="+" Style="{StaticResource MenuParentStyle}" ItemContainerStyle="{StaticResource MenuItemStyle}" 
+                                                    ItemsSource="{Binding DataContext.SelectedViewModel.AgentList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
+                                                    <MenuItem.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Button x:Name="btnAgentExpenses" Content="{Binding FirstName}" BorderBrush="Transparent" Background="Transparent" Foreground="Gray" FontWeight="Regular"
+                                                            Command="{Binding DataContext.SelectedViewModel.AddAgentCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
                                                                 <Button.CommandParameter>
                                                                     <MultiBinding>
                                                                         <MultiBinding.Converter>
                                                                             <converters:MultipleParametersConverter/>
                                                                         </MultiBinding.Converter>
-                                                                        <Binding Path="."></Binding>
+                                                                        <Binding />
                                                                         <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Window}" Path="DataContext.SelectedViewModel.LabelAgentExpenses"/>
+                                                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Menu}}" Path="DataContext"></Binding>
                                                                     </MultiBinding>
                                                                 </Button.CommandParameter>
                                                             </Button>
-                                                        </StackPanel>
-                                                    </Border>
-                                                </DataTemplate>
-                                            </ListView.ItemTemplate>
-                                        </ListView>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="50">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Menu Name="menu1" HorizontalAlignment="Left" VerticalAlignment="Top" Tag="{Binding RelativeSource={RelativeSource Self}}" DataContext="{Binding AgentWithdrawals}">
-                                            <Menu.Background>
-                                                <SolidColorBrush Color="Transparent"></SolidColorBrush>
-                                            </Menu.Background>
-                                            <MenuItem Header="+" Style="{StaticResource MenuParentStyle}" ItemContainerStyle="{StaticResource MenuItemStyle}" 
-                                                    ItemsSource="{Binding DataContext.SelectedViewModel.AgentList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
-                                                <MenuItem.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Button x:Name="btnAgentExpenses" Content="{Binding FirstName}" BorderBrush="Transparent" Background="Transparent" Foreground="Gray" FontWeight="Regular"
-                                                            Command="{Binding DataContext.SelectedViewModel.AddAgentCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
-                                                            <Button.CommandParameter>
-                                                                <MultiBinding>
-                                                                    <MultiBinding.Converter>
-                                                                        <converters:MultipleParametersConverter/>
-                                                                    </MultiBinding.Converter>
-                                                                    <Binding />
-                                                                    <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Window}" Path="DataContext.SelectedViewModel.LabelAgentExpenses"/>
-                                                                    <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Menu}}" Path="DataContext"></Binding>
-                                                                </MultiBinding>
-                                                            </Button.CommandParameter>
-                                                        </Button>
-                                                    </DataTemplate>
-                                                </MenuItem.ItemTemplate>
-                                            </MenuItem>
-                                        </Menu>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Amount" Width="Auto" >
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <ListView ItemsSource="{Binding AgentWithdrawals, Mode=OneWay}"
+                                                        </DataTemplate>
+                                                    </MenuItem.ItemTemplate>
+                                                </MenuItem>
+                                            </Menu>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Amount" Width="Auto" >
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ListView ItemsSource="{Binding AgentWithdrawals, Mode=OneWay}"
                                               DisplayMemberPath="Amount"
                                               ItemContainerStyle="{StaticResource ItemStyle}" 
                                               ScrollViewer.VerticalScrollBarVisibility="Disabled" >
-                                            <ListView.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <StackPanel Orientation="Horizontal"></StackPanel>
-                                                </ItemsPanelTemplate>
-                                            </ListView.ItemsPanel>
-                                            <ListView.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Border x:Name="border"
+                                                <ListView.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal"></StackPanel>
+                                                    </ItemsPanelTemplate>
+                                                </ListView.ItemsPanel>
+                                                <ListView.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border x:Name="border"
                                                         BorderBrush="{Binding Agent.Color}"
                                                         BorderThickness="0,0,0,3"
                                                         Visibility="{Binding IsVisible, Converter={StaticResource VisibilityConverter}}">
-                                                        <TextBox Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" MinWidth="50"></TextBox>
-                                                    </Border>
-                                                </DataTemplate>
-                                            </ListView.ItemTemplate>
-                                        </ListView>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                                                            <TextBox Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" MinWidth="50"></TextBox>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ListView.ItemTemplate>
+                                            </ListView>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                    <Grid Grid.Row="1" Background="#FFCEEAFF">
+                        <Button x:Name="buttonAdd" Content="+" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding AddCommand}" CommandParameter="{Binding LabelAgentExpenses}"></Button>
+                    </Grid>
                 </StackPanel>
-                <Grid Grid.Row="1" Background="#FFCEEAFF">
-                    <Button x:Name="buttonAdd" Content="+" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding AddCommand}" CommandParameter="{Binding LabelAgentExpenses}"></Button>
-                </Grid>
-            </StackPanel>
-            <StackPanel Grid.Row="0" Grid.Column="1" Margin="10 10 10 0">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="50"/>
-                    </Grid.RowDefinitions>
-                </Grid>
-                <StackPanel>
-                    <Label x:Name="lblDueToPartners" Content="{Binding LabelDueToPartners}" Style="{StaticResource LabelStyle}" />
-                    <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible"
+                <StackPanel Grid.Row="0" Grid.Column="1" Margin="10 10 10 0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+                    </Grid>
+                    <StackPanel>
+                        <Label x:Name="lblDueToPartners" Content="{Binding LabelDueToPartners}" Style="{StaticResource LabelStyle}" />
+                        <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible"
                               ItemsSource="{Binding DueToPartnersCollection, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               x:Name="DueToPartners" IsReadOnly="False" 
                               ColumnHeaderStyle="{StaticResource HeaderStyle}" 
                               CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50" MaxHeight="250"
                               SelectedItem="{Binding Path=SelectedRow, Mode=TwoWay}" >
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="Description" Width="Auto" HeaderStyle="{StaticResource FirstColumnHeaderStyle }">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBox Text="{Binding Path=Desc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="50">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text=""></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Agents" Width="Auto">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <ListView ItemsSource="{Binding AgentWithdrawals, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="Description" Width="Auto" HeaderStyle="{StaticResource FirstColumnHeaderStyle }">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding Path=Desc, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="50">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text=""></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Agents" Width="Auto">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ListView ItemsSource="{Binding AgentWithdrawals, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                                         ItemContainerStyle="{StaticResource ItemStyle}" 
                                         ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                                            <ListView.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <StackPanel Orientation="Horizontal"></StackPanel>
-                                                </ItemsPanelTemplate>
-                                            </ListView.ItemsPanel>
-                                            <ListView.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Border CornerRadius="15"
+                                                <ListView.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal"></StackPanel>
+                                                    </ItemsPanelTemplate>
+                                                </ListView.ItemsPanel>
+                                                <ListView.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border CornerRadius="15"
                                                 BorderBrush="{Binding Agent.Color}"
                                                 BorderThickness="1"
                                                 Visibility="{Binding IsVisible, Converter={StaticResource VisibilityConverter}}"
                                                 Background="{Binding Agent.Color}">
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <Label Content="{Binding Agent.FirstName}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"></Label>
-                                                            <Button  Style="{StaticResource RemoveButton}" Command="{Binding DataContext.SelectedViewModel.RemoveAgentCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" >
-                                                                <materialDesign:PackIcon Kind="CloseCircleOutline" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 5 0"></materialDesign:PackIcon>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <Label Content="{Binding Agent.FirstName}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"></Label>
+                                                                <Button  Style="{StaticResource RemoveButton}" Command="{Binding DataContext.SelectedViewModel.RemoveAgentCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" >
+                                                                    <materialDesign:PackIcon Kind="CloseCircleOutline" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 5 0"></materialDesign:PackIcon>
+                                                                    <Button.CommandParameter>
+                                                                        <MultiBinding>
+                                                                            <MultiBinding.Converter>
+                                                                                <converters:MultipleParametersConverter/>
+                                                                            </MultiBinding.Converter>
+                                                                            <Binding Path="."></Binding>
+                                                                            <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Window}" Path="DataContext.SelectedViewModel.LabelDueToPartners"/>
+                                                                        </MultiBinding>
+                                                                    </Button.CommandParameter>
+                                                                </Button>
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ListView.ItemTemplate>
+                                            </ListView>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="50">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Menu Name="menu1" HorizontalAlignment="Left" VerticalAlignment="Top" Tag="{Binding RelativeSource={RelativeSource Self}}" DataContext="{Binding AgentWithdrawals}">
+                                                <Menu.Background>
+                                                    <SolidColorBrush Color="Transparent"></SolidColorBrush>
+                                                </Menu.Background>
+                                                <MenuItem Header="+" Style="{StaticResource MenuParentStyle}" ItemContainerStyle="{StaticResource MenuItemStyle}" 
+                                                    ItemsSource="{Binding DataContext.SelectedViewModel.AgentList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
+                                                    <MenuItem.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Button x:Name="btnAgentExpenses" Content="{Binding FirstName}" BorderBrush="Transparent" Background="Transparent" Foreground="Gray" FontWeight="Regular"
+                                                            Command="{Binding DataContext.SelectedViewModel.AddAgentCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
                                                                 <Button.CommandParameter>
                                                                     <MultiBinding>
                                                                         <MultiBinding.Converter>
                                                                             <converters:MultipleParametersConverter/>
                                                                         </MultiBinding.Converter>
-                                                                        <Binding Path="."></Binding>
+                                                                        <Binding />
                                                                         <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Window}" Path="DataContext.SelectedViewModel.LabelDueToPartners"/>
+                                                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Menu}}" Path="DataContext"></Binding>
                                                                     </MultiBinding>
                                                                 </Button.CommandParameter>
                                                             </Button>
-                                                        </StackPanel>
-                                                    </Border>
-                                                </DataTemplate>
-                                            </ListView.ItemTemplate>
-                                        </ListView>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="50">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Menu Name="menu1" HorizontalAlignment="Left" VerticalAlignment="Top" Tag="{Binding RelativeSource={RelativeSource Self}}" DataContext="{Binding AgentWithdrawals}">
-                                            <Menu.Background>
-                                                <SolidColorBrush Color="Transparent"></SolidColorBrush>
-                                            </Menu.Background>
-                                            <MenuItem Header="+" Style="{StaticResource MenuParentStyle}" ItemContainerStyle="{StaticResource MenuItemStyle}" 
-                                                    ItemsSource="{Binding DataContext.SelectedViewModel.AgentList, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
-                                                <MenuItem.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Button x:Name="btnAgentExpenses" Content="{Binding FirstName}" BorderBrush="Transparent" Background="Transparent" Foreground="Gray" FontWeight="Regular"
-                                                            Command="{Binding DataContext.SelectedViewModel.AddAgentCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
-                                                            <Button.CommandParameter>
-                                                                <MultiBinding>
-                                                                    <MultiBinding.Converter>
-                                                                        <converters:MultipleParametersConverter/>
-                                                                    </MultiBinding.Converter>
-                                                                    <Binding />
-                                                                    <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Window}" Path="DataContext.SelectedViewModel.LabelDueToPartners"/>
-                                                                    <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Menu}}" Path="DataContext"></Binding>
-                                                                </MultiBinding>
-                                                            </Button.CommandParameter>
-                                                        </Button>
-                                                    </DataTemplate>
-                                                </MenuItem.ItemTemplate>
-                                            </MenuItem>
-                                        </Menu>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Amount" Width="Auto" >
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <ListView ItemsSource="{Binding AgentWithdrawals, Mode=OneWay}"
+                                                        </DataTemplate>
+                                                    </MenuItem.ItemTemplate>
+                                                </MenuItem>
+                                            </Menu>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Amount" Width="Auto" >
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ListView ItemsSource="{Binding AgentWithdrawals, Mode=OneWay}"
                                               DisplayMemberPath="Amount"
                                               ItemContainerStyle="{StaticResource ItemStyle}" 
                                               ScrollViewer.VerticalScrollBarVisibility="Disabled" >
-                                            <ListView.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <StackPanel Orientation="Horizontal"></StackPanel>
-                                                </ItemsPanelTemplate>
-                                            </ListView.ItemsPanel>
-                                            <ListView.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Border x:Name="border"
+                                                <ListView.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal"></StackPanel>
+                                                    </ItemsPanelTemplate>
+                                                </ListView.ItemsPanel>
+                                                <ListView.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border x:Name="border"
                                                         BorderBrush="{Binding Agent.Color}"
                                                         BorderThickness="0,0,0,3"
                                                         Visibility="{Binding IsVisible, Converter={StaticResource VisibilityConverter}}">
-                                                        <TextBox Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" MinWidth="50"></TextBox>
-                                                    </Border>
-                                                </DataTemplate>
-                                            </ListView.ItemTemplate>
-                                        </ListView>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                                                            <TextBox Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" MinWidth="50"></TextBox>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ListView.ItemTemplate>
+                                            </ListView>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                    <Grid Grid.Row="1" Background="#FFCEEAFF" Grid.ColumnSpan="4">
+                        <Button x:Name="buttonAddToDueToPartners" Content="+" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding AddCommand}" CommandParameter="{Binding LabelDueToPartners}"></Button>
+                    </Grid>
                 </StackPanel>
-                <Grid Grid.Row="1" Background="#FFCEEAFF" Grid.ColumnSpan="4">
-                    <Button x:Name="buttonAddToDueToPartners" Content="+" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding AddCommand}" CommandParameter="{Binding LabelDueToPartners}"></Button>
-                </Grid>
-            </StackPanel>
-            <StackPanel Grid.Row="1" Grid.Column="0"  Margin="10 10 10 0">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="50"/>
-                    </Grid.RowDefinitions>
-                </Grid>
-                <StackPanel>
-                    <Label x:Name="lblBankPositions" Content="{Binding LabelBankPositions}" Style="{StaticResource LabelStyle}" />
-                    <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible"
+                <StackPanel Grid.Row="1" Grid.Column="0"  Margin="10 10 10 0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+                    </Grid>
+                    <StackPanel>
+                        <Label x:Name="lblBankPositions" Content="{Binding LabelBankPositions}" Style="{StaticResource LabelStyle}" />
+                        <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible"
                               ItemsSource="{Binding BankPositionsTable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               x:Name="BankPositions" IsReadOnly="False" 
                               ColumnHeaderStyle="{StaticResource HeaderStyle}" 
                               CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50" MaxHeight="250">
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn Width="5">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text=""></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Description" Width="150">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBox Text="{Binding Path=Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="40">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text=" "></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Type" Width="100">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBox Text="{Binding Path=Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="40">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text=" "></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="CMG" Width="100"  HeaderStyle="{StaticResource TotalHeaderStyle}" MaxWidth="100">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBox Text="{Binding Path=CMG, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" HorizontalAlignment="Right"></TextBox>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="40">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text=""></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>                            
-                            <DataGridTemplateColumn Header="SC" Width="100"  HeaderStyle="{StaticResource TotalHeaderStyle}">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBox Text="{Binding Path=SC, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" HorizontalAlignment="Right"></TextBox>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="40">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text=""></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="TD" Width="100"  HeaderStyle="{StaticResource TotalHeaderStyle}">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBox Text="{Binding Path=TD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" HorizontalAlignment="Right"></TextBox>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Width="5">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text=""></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Description" Width="150">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding Path=Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="40">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text=" "></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Type" Width="100">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding Path=Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="40">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text=" "></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="CMG" Width="100"  HeaderStyle="{StaticResource TotalHeaderStyle}" MaxWidth="100">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding Path=CMG, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" HorizontalAlignment="Right"></TextBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="40">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text=""></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="SC" Width="100"  HeaderStyle="{StaticResource TotalHeaderStyle}">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding Path=SC, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" HorizontalAlignment="Right"></TextBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="40">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text=""></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="TD" Width="100"  HeaderStyle="{StaticResource TotalHeaderStyle}">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding Path=TD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" HorizontalAlignment="Right"></TextBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                    <Grid Grid.Row="1" Background="#FFCEEAFF" Grid.ColumnSpan="4">
+                        <Button x:Name="buttonAddBankPositions" Content="+" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding AddCommand}" CommandParameter="{Binding LabelBankPositions}"></Button>
+                    </Grid>
                 </StackPanel>
-                <Grid Grid.Row="1" Background="#FFCEEAFF" Grid.ColumnSpan="4">
-                    <Button x:Name="buttonAddBankPositions" Content="+" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding AddCommand}" CommandParameter="{Binding LabelBankPositions}"></Button>
-                </Grid>
-            </StackPanel>
-            <StackPanel Grid.Row="1" Grid.Column="1"  Margin="10 10 10 0">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="50"/>
-                    </Grid.RowDefinitions>
-                </Grid>
-                <StackPanel>
-                    <Label x:Name="lblPersonalCommissions" Content="{Binding LabelPersonalCommissions}" Style="{StaticResource LabelStyle}" />
-                    <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible"
+                <StackPanel Grid.Row="1" Grid.Column="1"  Margin="10 10 10 0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+                    </Grid>
+                    <StackPanel>
+                        <Label x:Name="lblPersonalCommissions" Content="{Binding LabelPersonalCommissions}" Style="{StaticResource LabelStyle}" />
+                        <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible"
                               ItemsSource="{Binding DataCollection}"
                               x:Name="PersonalCommissions" IsReadOnly="False" 
                               ColumnHeaderStyle="{StaticResource HeaderStyle}" 
                               CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50">
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="Id" Width="90" HeaderStyle="{StaticResource FirstColumnHeaderStyle }">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Id}" Margin="10 0 10 0"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Name" Width="90" >
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Name}"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="Id" Width="90" HeaderStyle="{StaticResource FirstColumnHeaderStyle }">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=Id}" Margin="10 0 10 0"></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Name" Width="90" >
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=Name}"></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                    <Grid Grid.Row="1" Background="#FFCEEAFF" Grid.ColumnSpan="4">
+                        <Button x:Name="buttonAddPersonalCommissions" Content="+" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding AddCommand}" CommandParameter="{Binding LabelPersonalCommissions}"></Button>
+                    </Grid>
                 </StackPanel>
-                <Grid Grid.Row="1" Background="#FFCEEAFF" Grid.ColumnSpan="4">
-                    <Button x:Name="buttonAddPersonalCommissions" Content="+" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding AddCommand}" CommandParameter="{Binding LabelPersonalCommissions}"></Button>
-                </Grid>
-            </StackPanel>
+            </Grid>
+            <Grid Grid.Row="2" Background="#FFCEEAFF" Grid.ColumnSpan="4">
+            </Grid>
         </Grid>
-        <Grid Grid.Row="2" Background="#FFCEEAFF" Grid.ColumnSpan="4">            
-        </Grid>
-    </Grid>
 </UserControl>
