@@ -143,6 +143,17 @@ namespace CMG.Application.ViewModel
             }
         }
 
+        private ObservableCollection<ViewWithdrawalDto> _personalCommissionsCollection;
+        public ObservableCollection<ViewWithdrawalDto> PersonalCommissionsCollection
+        {
+            get { return _personalCommissionsCollection; }
+            set
+            {
+                _personalCommissionsCollection = value;
+                OnPropertyChanged("PersonalCommissionsCollection");
+            }
+        }
+
         private DataTable _bankPositionsTable;
         public DataTable BankPositionsTable
         {
@@ -220,6 +231,12 @@ namespace CMG.Application.ViewModel
             SearchQuery searchQuery = BuildSearchQuery("W");
             var dataSearchBy = _unitOfWork.Withdrawals.Find(searchQuery);
             AgentExpensesCollection = new ObservableCollection<ViewWithdrawalDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewWithdrawalDto>(r)).ToList());
+        }
+        public void GetPersonalCommissions()
+        {
+            SearchQuery searchQuery = BuildSearchQuery("P");
+            var dataSearchBy = _unitOfWork.Withdrawals.Find(searchQuery);
+            PersonalCommissionsCollection = new ObservableCollection<ViewWithdrawalDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewWithdrawalDto>(r)).ToList());
         }
         public void GetBankPositions()
         {
