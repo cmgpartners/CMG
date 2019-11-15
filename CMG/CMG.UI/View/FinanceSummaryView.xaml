@@ -407,13 +407,6 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="TD" Width="100"  HeaderStyle="{StaticResource TotalHeaderStyle}">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBox Text="{Binding Path=TD, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" HorizontalAlignment="Right"></TextBox>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>
