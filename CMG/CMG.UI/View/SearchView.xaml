@@ -117,7 +117,7 @@
                                             <SolidColorBrush Color="Transparent"></SolidColorBrush>
                                         </Menu.Background>
                                         <MenuItem Header="::" Style="{StaticResource MenuParentStyle}" ItemContainerStyle="{StaticResource MenuItemStyle}">
-                                            <MenuItem Header="_Copy" Command="{Binding DataContext.SelectedViewModel.CopyCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" 
+                                            <MenuItem Header="_Copy" Command="{Binding DataContext.CopySearchedRecordCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" 
                                                   CommandParameter="{Binding}"/>
                                         </MenuItem>
                                     </Menu>

@@ -45,6 +45,10 @@ namespace CMG.UI
                 RenewalsViewModel renewalsViewModel = new RenewalsViewModel(_unitOfWork, _mapper, _notifier);
                 _mainViewModel.SelectedViewModel = renewalsViewModel;
                 DataContext = _mainViewModel;
+                if(_mainViewModel.CopiedCommission != null)
+                {
+                    renewalsViewModel.CopiedCommission = _mainViewModel.CopiedCommission;
+                }
             }
             else if (lstNavigation.SelectedIndex == 1)
             {

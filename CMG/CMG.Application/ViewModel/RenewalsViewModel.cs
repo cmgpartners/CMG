@@ -26,7 +26,7 @@ namespace CMG.Application.ViewModel
         #endregion Member variables
 
         #region Constructor
-        public RenewalsViewModel(IUnitOfWork unitOfWork, IMapper mapper, Notifier notifier)
+        public RenewalsViewModel(IUnitOfWork unitOfWork, IMapper mapper, Notifier notifier = null)
             : base(unitOfWork, mapper)
         {
             _unitOfWork = unitOfWork;

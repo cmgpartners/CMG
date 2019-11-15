@@ -37,6 +37,18 @@ namespace CMG.Application.ViewModel
             get { return selectedIndexLeftNavigation; }
             set { selectedIndexLeftNavigation = value; OnPropertyChanged("SelectedIndexLeftNavigation"); }
         }
+
+        private ViewCommissionDto _copiedCommission;
+        public ViewCommissionDto CopiedCommission
+        {
+            get { return _copiedCommission; }
+            set
+            {
+                _copiedCommission = value;
+                OnPropertyChanged("CopiedCommission");
+            }
+        }
+
         #endregion Properties
 
         #region Methods
@@ -64,6 +76,11 @@ namespace CMG.Application.ViewModel
             {
                 return CreateCommand(SearchInsured);
             }
+        }
+
+        public ICommand CopySearchedRecordCommand
+        {
+            get { return CreateCommand(CopySearchedRecord); }
         }
         public void SearchPolicy(object parameter)
         {
@@ -108,6 +125,16 @@ namespace CMG.Application.ViewModel
                 searchViewModel.Search(true);
                 SelectedViewModel = searchViewModel;
                 SelectedIndexLeftNavigation = (int)LeftNavigation.Search;
+            }
+        }
+
+        public void CopySearchedRecord(object parameter)
+        {
+            if(parameter != null)
+            {
+                RenewalsViewModel renewalsViewModel = new RenewalsViewModel(_unitOfWork, _mapper);
+                renewalsViewModel.Copy(parameter);
+                CopiedCommission = renewalsViewModel.CopiedCommission;
             }
         }
         #endregion Methods
