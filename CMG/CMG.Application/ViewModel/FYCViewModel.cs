@@ -125,6 +125,20 @@ namespace CMG.Application.ViewModel
             }
         }
 
+        private List<ViewComboDto> _combo;
+        public List<ViewComboDto> Combo
+        {
+            get { return _combo; }
+            set { _combo = value; }
+        }
+
+        private List<ViewComboDto> _companies;
+        public List<ViewComboDto> Companies
+        {
+            get { return _companies; }
+            set { _companies = value; OnPropertyChanged("Companies"); }
+        }
+
         public ICommand SaveCommand
         {
             get { return CreateCommand(Save); }
@@ -158,7 +172,8 @@ namespace CMG.Application.ViewModel
         {
             SearchQuery searchQuery = BuildFYCSearchQuery(SelectedYear, SelectedMonth);
             var dataSearchBy = _unitOfWork.Commissions.Find(searchQuery);
-            DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
+            var dataCollection = dataSearchBy.Result.Select(x => { x.Company = x.Company.Trim() == "" ? "" : Companies.Where(c => c.FieldCode == x.Company.Trim()).FirstOrDefault().Description; return x; });
+            DataCollection = new ObservableCollection<ViewCommissionDto>(dataCollection.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
         }
         public void Save()
         {
@@ -261,8 +276,9 @@ namespace CMG.Application.ViewModel
                         var index = DataCollection.IndexOf(currentCommission);
                         DataCollection[index] = new ViewCommissionDto()
                         {
-                            CompanyName = mappedCurrrentItem.CompanyName,
+                            CompanyName = mappedCurrrentItem.CompanyName.Trim() == "" ? "" : Companies.Where(c => c.FieldCode == mappedCurrrentItem.CompanyName.Trim()).FirstOrDefault().Description,
                             InsuredName = mappedCurrrentItem.InsuredName,
+                            CommissionId = mappedCurrrentItem.CommissionId,
                             IsNew = true,
                             PolicyId = mappedCurrrentItem.PolicyId,
                             AgentCommissions = agnetCommissions,
@@ -332,6 +348,8 @@ namespace CMG.Application.ViewModel
         #region Helper Methods
         private void LoadData()
         {
+            GetComboData();
+            GetCompanies();
             GetCommissions();
             GetPolicies();
         }
@@ -367,6 +385,15 @@ namespace CMG.Application.ViewModel
             var policies = _unitOfWork.Policies.GetAllPolicyNumber();
             var temppolicies = policies.Select(r => _mapper.Map<ViewPolicyListDto>(r)).ToList();
             Policies = temppolicies.Select(r => r.PolicyNumber).AsEnumerable();
+        }
+        private void GetComboData()
+        {
+            var combo = _unitOfWork.Combo.All();
+            Combo = combo.Select(r => _mapper.Map<ViewComboDto>(r)).ToList();
+        }
+        private void GetCompanies()
+        {
+            Companies = Combo.Where(x => x.FieldName.Trim() == "COMPANY").ToList();
         }
         #endregion
 

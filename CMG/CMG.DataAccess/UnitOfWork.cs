@@ -29,6 +29,7 @@ namespace CMG.DataAccess
         private IAgentCommissionRepository _agentCommissionRepository;
         private IWithdrawalsRepository _withdrawalsRepository;
         private IAgentWithdrawalsRepository _agentWithdrawalsRepository;
+        private IComboRepository _comboRepository;
 
         public ICommissionRepository Commissions => _commissionRepository ?? (_commissionRepository = new CommissionRepository(_context));
         public IAgentRepository Agents => _agentRepository ?? (_agentRepository = new AgentRepository(_context));
@@ -36,6 +37,7 @@ namespace CMG.DataAccess
         public IAgentCommissionRepository AgentCommissions => _agentCommissionRepository ?? (_agentCommissionRepository = new AgentCommissionRepository(_context));
         public IWithdrawalsRepository Withdrawals => _withdrawalsRepository ?? (_withdrawalsRepository = new WithdrawalRepository(_context));
         public IAgentWithdrawalsRepository AgentWithdrawals => _agentWithdrawalsRepository ?? (_agentWithdrawalsRepository = new AgentWithdrawalsRepository(_context));
+        public IComboRepository Combo => _comboRepository ?? (_comboRepository = new ComboRepository(_context));
 
         public void Commit()
         {
