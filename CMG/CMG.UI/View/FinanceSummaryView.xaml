@@ -8,77 +8,77 @@
              xmlns:behaviors="clr-namespace:WPFTextBoxAutoComplete;assembly=WPFTextBoxAutoComplete"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="35"></RowDefinition>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="30"></ColumnDefinition>
-            <ColumnDefinition Width="500"></ColumnDefinition>
-            <ColumnDefinition Width="60"></ColumnDefinition>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-
-        <StackPanel Grid.Column="0" Grid.Row="0">
-            <materialDesign:PackIcon Kind="Calendar" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10 22 0 0"></materialDesign:PackIcon>
-        </StackPanel>
-        <StackPanel Grid.Column="1" Grid.Row="0">
-            <ListView x:Name="menu" ItemsSource="{Binding Months}" ItemContainerStyle="{StaticResource MonthListView}" SelectedItem="{Binding SelectedMonth, Mode=TwoWay}">
-                <ListView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" Margin="10 10"></StackPanel>
-                    </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
-            </ListView>
-        </StackPanel>
-        <StackPanel Grid.Column="2" Grid.Row="0">
-            <ComboBox x:Name="cmbYears" ItemsSource="{Binding Years}" SelectedItem="{Binding SelectedYear}" Margin="0 10 0 0" FontWeight="Bold">
-            </ComboBox>
-        </StackPanel>
-        <StackPanel Grid.Column="3" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="center">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="125"/>
-                    <ColumnDefinition Width="125"/>
-                </Grid.ColumnDefinitions>
-                <Button Content="Import" Command="{Binding ImportCommand}" Width="100"></Button>
-                <Button Grid.Column="1" Content="Save" Command="{Binding SaveCommand}" Width="100"></Button>
-            </Grid>           
-        </StackPanel>
-
-        <Grid Grid.Row="1" Grid.ColumnSpan="4">
+        <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="35"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="30"></ColumnDefinition>
+                <ColumnDefinition Width="500"></ColumnDefinition>
+                <ColumnDefinition Width="60"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Row="0" Grid.Column="0" Margin="10 10 10 0">
+            <StackPanel Grid.Column="0" Grid.Row="0">
+                <materialDesign:PackIcon Kind="Calendar" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10 22 0 0"></materialDesign:PackIcon>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Grid.Row="0">
+                <ListView x:Name="menu" ItemsSource="{Binding Months}" ItemContainerStyle="{StaticResource MonthListView}" SelectedItem="{Binding SelectedMonth, Mode=TwoWay}">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="10 10"></StackPanel>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                </ListView>
+            </StackPanel>
+            <StackPanel Grid.Column="2" Grid.Row="0">
+                <ComboBox x:Name="cmbYears" ItemsSource="{Binding Years}" SelectedItem="{Binding SelectedYear}" Margin="0 10 0 0" FontWeight="Bold">
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Grid.Column="3" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="center">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="50"/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="125"/>
+                        <ColumnDefinition Width="125"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Content="Import" Command="{Binding ImportCommand}" Width="100"></Button>
+                    <Button Grid.Column="1" Content="Save" Command="{Binding SaveCommand}" Width="100"></Button>
                 </Grid>
-                <StackPanel>
-                    <Label x:Name="lblAgentExpenses" Content="{Binding LabelAgentExpenses}" Style="{StaticResource LabelStyle}" />
-                    <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible"
+            </StackPanel>
+
+            <Grid Grid.Row="1" Grid.ColumnSpan="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Row="0" Grid.Column="0" Margin="10 10 10 0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+                    </Grid>
+                    <StackPanel>
+                        <Label x:Name="lblAgentExpenses" Content="{Binding LabelAgentExpenses}" Style="{StaticResource LabelStyle}" />
+                        <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible"
                               ItemsSource="{Binding AgentExpensesTable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               x:Name="AgentExpenses" IsReadOnly="False" 
                               ColumnHeaderStyle="{StaticResource HeaderStyle}" 
                               CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50" MaxHeight="250">
-                        <DataGrid.Columns>
+                            <DataGrid.Columns>
                             <DataGridTemplateColumn Width="5">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
                                         <TextBlock Text=""></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -87,19 +87,19 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBox Text="{Binding Path=Description, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" MaxLength="20"></TextBox>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="50">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text=""></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="50">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text=""></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="Marty" Width="Auto" >
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
                                         <TextBox Text="{Binding Path=Marty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}"></TextBox>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>

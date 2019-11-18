@@ -32,7 +32,7 @@ namespace CMG.UI
             _mapper = mapper;
             _notifier = InitializeNotifier();
             InitializeComponent();
-            _mainViewModel = new MainViewModel(_unitOfWork, _mapper);
+            _mainViewModel = new MainViewModel(_unitOfWork, _mapper, _notifier);
             lstNavItems.SelectedItem = lstNavItems.Items[0];
         }
 
@@ -76,7 +76,7 @@ namespace CMG.UI
                 if (!(_mainViewModel.SelectedViewModel is SearchViewModel))
                 {
                     _mainViewModel.SelectedIndexLeftNavigation = (int)LeftNavigation.Search;
-                    SearchViewModel searchViewModel = new SearchViewModel(_unitOfWork, _mapper);
+                    SearchViewModel searchViewModel = new SearchViewModel(_unitOfWork, _mapper, _notifier);
                     _mainViewModel.SelectedViewModel = searchViewModel;
                     DataContext = _mainViewModel;
                 }

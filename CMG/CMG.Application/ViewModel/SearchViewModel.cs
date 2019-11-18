@@ -7,6 +7,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Input;
+using ToastNotifications;
+using ToastNotifications.Messages;
 
 namespace CMG.Application.ViewModel
 {
@@ -15,15 +17,17 @@ namespace CMG.Application.ViewModel
         #region Member variables
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly Notifier _notifier;
         private readonly int PageSize = 10;
         #endregion Member variables
 
         #region Constructor
-        public SearchViewModel(IUnitOfWork unitOfWork, IMapper mapper)
+        public SearchViewModel(IUnitOfWork unitOfWork, IMapper mapper, Notifier notifier)
             : base(unitOfWork, mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _notifier = notifier;
             LoadData();
         }
         #endregion Constructor
@@ -52,6 +56,27 @@ namespace CMG.Application.ViewModel
                 _agentList = value;
                 OnPropertyChanged("AgentList");
             }
+        }
+
+        private List<ViewComboDto> _combo;
+        public List<ViewComboDto> Combo
+        {
+            get { return _combo; }
+            set { _combo = value; }
+        }
+
+        private List<ViewComboDto> _companies;
+        public List<ViewComboDto> Companies
+        {
+            get { return _companies; }
+            set { _companies = value; OnPropertyChanged("Companies"); }
+        }
+
+        private List<string> _companyNames;
+        public List<string> CompanyNames
+        {
+            get { return _companyNames; }
+            set { _companyNames = value; OnPropertyChanged("CompanyNames"); }
         }
 
         private int selecteAgentIndex;
@@ -277,17 +302,25 @@ namespace CMG.Application.ViewModel
         public void Search(object isPageReset)
         {
             SearchQuery searchQuery = BuildSearchQuery();
-            if (Convert.ToBoolean(isPageReset))
+            if (searchQuery != null)
             {
-                CurrentPage = 1;
+                if (Convert.ToBoolean(isPageReset))
+                {
+                    CurrentPage = 1;
+                }
+                searchQuery.Page = CurrentPage;
+                searchQuery.PageSize = PageSize;
+                var dataSearchBy = _unitOfWork.Commissions.Find(searchQuery);
+                var dataCollection = dataSearchBy.Result.Select(x => { x.Company = x.Company.Trim() == "" ? "" : Companies.Where(c => c.FieldCode == x.Company.Trim()).FirstOrDefault().Description; return x; });
+                DataCollection = new ObservableCollection<ViewCommissionDto>(dataCollection.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
+                TotalRecords = dataSearchBy.TotalRecords;
+                TotalAmount = dataSearchBy.TotalAmount;
+                LoadPagination();
             }
-            searchQuery.Page = CurrentPage;
-            searchQuery.PageSize = PageSize;
-            var dataSearchBy = _unitOfWork.Commissions.Find(searchQuery);
-            DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
-            TotalRecords = dataSearchBy.TotalRecords;
-            TotalAmount = dataSearchBy.TotalAmount;
-            LoadPagination();
+            else
+            {
+                _notifier.ShowError("Error occured in search criteria");
+            }
         }
 
         private SearchQuery BuildSearchQuery()
@@ -304,7 +337,13 @@ namespace CMG.Application.ViewModel
             }
             if (!string.IsNullOrEmpty(Company))
             {
-                BuildFilterByContains("Company", Company, searchBy);
+                if (!(Companies.Any(x => x.Description.ToLower() == Company.ToLower()))) 
+                {
+                    _notifier.ShowError($@"Company name ""{Company}"" does not exist");
+                    return null;
+                }
+                var companyCode = string.IsNullOrEmpty(Company) ? string.Empty : Companies.Where(x => x.Description.ToLower() == Company.ToLower()).FirstOrDefault().FieldCode;
+                BuildFilterByContains("Company", companyCode, searchBy);
             }
             if (FromPayDate != null && ToPayDate != null)
             {
@@ -370,11 +409,23 @@ namespace CMG.Application.ViewModel
         {
             var agents = _unitOfWork.Agents.All();
             AgentList = new ObservableCollection<ViewAgentDto>(agents.Select(r => _mapper.Map<ViewAgentDto>(r)).ToList());
+            GetComboData();
+            GetCompanies();
         }
         private void LoadPagination()
         {
             _pages = new List<int>();
             Pages.AddRange(Enumerable.Range(1, TotalPages));
+        }
+        private void GetComboData()
+        {
+            var combo = _unitOfWork.Combo.All();
+            Combo = combo.Select(r => _mapper.Map<ViewComboDto>(r)).ToList();
+        }
+        private void GetCompanies()
+        {
+            Companies = Combo.Where(x => x.FieldName.Trim() == "COMPANY").ToList();
+            CompanyNames = Companies.Select(x => x.Description).ToList();
         }
 
         #endregion Methods

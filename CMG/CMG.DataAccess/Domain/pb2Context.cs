@@ -25,6 +25,7 @@ namespace CMG.DataAccess.Domain
         public virtual DbSet<BusinessPolicys> BusinessPolicys { get; set; }
         public virtual DbSet<Calls> Calls { get; set; }
         public virtual DbSet<Cases> Cases { get; set; }
+        public virtual DbSet<Combo> Combo { get; set; }
         public virtual DbSet<Comm> Comm { get; set; }
         public virtual DbSet<Grp> Grp { get; set; }
         public virtual DbSet<Grpitem> Grpitem { get; set; }
@@ -1044,6 +1045,12 @@ namespace CMG.DataAccess.Domain
                     .HasMaxLength(20)
                     .IsUnicode(false)
                     .HasDefaultValueSql("('')");
+            });
+
+            modelBuilder.Entity<Combo>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                    .ForSqlServerIsClustered(false);
             });
 
             modelBuilder.Entity<Comm>(entity =>
