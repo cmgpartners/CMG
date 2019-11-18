@@ -4,6 +4,7 @@ using CMG.DataAccess.Interface;
 using System.Windows.Input;
 using static CMG.Common.Enums;
 using System.Linq;
+using ToastNotifications;
 
 namespace CMG.Application.ViewModel
 {
@@ -12,13 +13,15 @@ namespace CMG.Application.ViewModel
         #region MemberVariables
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly Notifier _notifier;
         #endregion MemberVariables
 
         #region Constructor
-        public MainViewModel(IUnitOfWork unitOfWork, IMapper mapper)
+        public MainViewModel(IUnitOfWork unitOfWork, IMapper mapper, Notifier notifier = null)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _notifier = notifier;
         }
         #endregion Constructor
 
@@ -86,7 +89,7 @@ namespace CMG.Application.ViewModel
         {
             if (parameter != null)
             {
-                SearchViewModel searchViewModel = new SearchViewModel(_unitOfWork, _mapper);
+                SearchViewModel searchViewModel = new SearchViewModel(_unitOfWork, _mapper, _notifier);
                 searchViewModel.PolicyNumber = parameter.ToString().Trim();
                 searchViewModel.Search(false);
                 SelectedViewModel = searchViewModel;
@@ -97,7 +100,7 @@ namespace CMG.Application.ViewModel
         {
             if(parameter != null)
             {
-                SearchViewModel searchViewModel = new SearchViewModel(_unitOfWork, _mapper);
+                SearchViewModel searchViewModel = new SearchViewModel(_unitOfWork, _mapper, _notifier);
                 searchViewModel.Company = parameter.ToString().Trim();
                 searchViewModel.Search(false);
                 SelectedViewModel = searchViewModel;
@@ -108,7 +111,7 @@ namespace CMG.Application.ViewModel
         {
             if (parameter != null)
             {
-                SearchViewModel searchViewModel = new SearchViewModel(_unitOfWork, _mapper);
+                SearchViewModel searchViewModel = new SearchViewModel(_unitOfWork, _mapper, _notifier);
                 searchViewModel.Insured = parameter.ToString().Trim();
                 searchViewModel.Search(false);
                 SelectedViewModel = searchViewModel;
@@ -119,7 +122,7 @@ namespace CMG.Application.ViewModel
         {
             if (parameter != null)
             {
-                SearchViewModel searchViewModel = new SearchViewModel(_unitOfWork, _mapper);
+                SearchViewModel searchViewModel = new SearchViewModel(_unitOfWork, _mapper, _notifier);
                 searchViewModel.Agent = parameter as ViewAgentDto;
                 searchViewModel.SelecteAgentIndex = searchViewModel.AgentList.IndexOf(searchViewModel.AgentList.Where(X => X.Id == searchViewModel.Agent.Id).FirstOrDefault());
                 searchViewModel.Search(true);
