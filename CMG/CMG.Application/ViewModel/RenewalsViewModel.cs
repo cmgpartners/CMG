@@ -203,10 +203,9 @@ namespace CMG.Application.ViewModel
             {
                 year = SelectedYear;
             }
-            SearchQuery searchQuery = BuildRenewalSearchQuery(year, SelectedMonth);
-            var dataSearchBy = _unitOfWork.Commissions.Find(searchQuery);
-            var dataCollection = dataSearchBy.Result.Select(x => { x.Company = x.Company.Trim() == "" ?  "" : Companies.Where(c => c.FieldCode == x.Company.Trim()).FirstOrDefault().Description; return x; });
-            DataCollection = new ObservableCollection<ViewCommissionDto>(dataCollection.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
+            string month = DateTime.ParseExact(SelectedMonth, "MMM", null).Month.ToString("00");
+            var dataSearchBy = _unitOfWork.Commissions.GetRenewals($"{SelectedYear.ToString()}{month}");
+            DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList().Select(x => { x.CompanyName = x.CompanyName.Trim() == "" ? "" : Companies.Where(c => c.FieldCode == x.CompanyName.Trim()).FirstOrDefault().Description; return x; }).ToList());
             if (IsImportEnabled)
             {
                 UpdateImportCollection();
@@ -231,6 +230,7 @@ namespace CMG.Application.ViewModel
                         _notifier.ShowError($@"Policy number ""{notExistPolicyNumber}"" does not exist");
                         return;
                     }
+                    DataCollection = new ObservableCollection<ViewCommissionDto>(DataCollection.Select(x => { x.CompanyName = x.CompanyName.Trim() == string.Empty ? string.Empty : Companies.Where(c => c.Description == x.CompanyName.Trim()).FirstOrDefault().FieldCode; return x; }));
                     if (isImportEnabled)
                     {
                         foreach (ViewCommissionDto commission in DataCollection)
@@ -403,24 +403,6 @@ namespace CMG.Application.ViewModel
             GetCompanies();
             GetCommissions();
             GetPolicies();
-        }
-        private SearchQuery BuildRenewalSearchQuery(int year, string month)
-        {
-            SearchQuery searchQuery = new SearchQuery();
-            List<FilterBy> searchBy = new List<FilterBy>();
-            var fromPayDate = new DateTime(year, Array.IndexOf(Months.ToArray(),month) + 1, 1);
-            var toPayDate = fromPayDate.AddMonths(1).AddDays(-1);
-            FilterBy filterBy = new FilterBy();
-            filterBy.Property = "PayDate";
-            filterBy.GreaterThan = fromPayDate.ToShortDateString();
-            filterBy.LessThan = toPayDate.ToShortDateString();
-            searchBy.Add(filterBy);
-            filterBy = new FilterBy();
-            filterBy.Property = "Renewal";
-            filterBy.Equal = "R";
-            searchBy.Add(filterBy);
-            searchQuery.FilterBy = searchBy;
-            return searchQuery;
         }
         private void UpdateImportCollection()
         {

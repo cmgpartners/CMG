@@ -172,8 +172,7 @@ namespace CMG.Application.ViewModel
         {
             SearchQuery searchQuery = BuildFYCSearchQuery(SelectedYear, SelectedMonth);
             var dataSearchBy = _unitOfWork.Commissions.Find(searchQuery);
-            var dataCollection = dataSearchBy.Result.Select(x => { x.Company = x.Company.Trim() == "" ? "" : Companies.Where(c => c.FieldCode == x.Company.Trim()).FirstOrDefault().Description; return x; });
-            DataCollection = new ObservableCollection<ViewCommissionDto>(dataCollection.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
+            DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList().Select(x => { x.CompanyName = x.CompanyName.Trim() == "" ? "" : Companies.Where(c => c.FieldCode == x.CompanyName.Trim()).FirstOrDefault().Description; return x; }).ToList());
         }
         public void Save()
         {
@@ -188,6 +187,7 @@ namespace CMG.Application.ViewModel
                         _notifier.ShowError($@"Policy number ""{notExistPolicyNumber}"" does not exist");
                         return;
                     }
+                    DataCollection = new ObservableCollection<ViewCommissionDto>(DataCollection.Select(x => { x.CompanyName = x.CompanyName.Trim() == string.Empty ? string.Empty : Companies.Where(c => c.Description == x.CompanyName.Trim()).FirstOrDefault().FieldCode; return x; }));
                     foreach (ViewCommissionDto commission in DataCollection)
                     {
                         if (commission.CommissionId > 0)
