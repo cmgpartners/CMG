@@ -204,7 +204,7 @@ namespace CMG.Application.ViewModel
                 year = SelectedYear;
             }
             string month = DateTime.ParseExact(SelectedMonth, "MMM", null).Month.ToString("00");
-            var dataSearchBy = _unitOfWork.Commissions.GetRenewals($"{SelectedYear.ToString()}{month}");
+            var dataSearchBy = _unitOfWork.Commissions.GetRenewals($"{year.ToString()}{month}");
             DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList().Select(x => { x.CompanyName = x.CompanyName.Trim() == "" ? "" : Companies.Where(c => c.FieldCode == x.CompanyName.Trim()).FirstOrDefault().Description; return x; }).ToList());
             if (IsImportEnabled)
             {
@@ -413,7 +413,9 @@ namespace CMG.Application.ViewModel
                     commission.CreatedDate = null;
                     commission.CreatedBy = null;
                     commission.TotalAmount = 0.0M;
-                    commission.AgentCommissions.Select(comm => { comm.Commission = 0.0M; return comm; }).ToList();
+                    commission.CommissionId = --newId;
+                    commission.AgentCommissions.Select(comm => { comm.Commission = 0.0M; comm.CommissionId = commission.CommissionId; comm.Id = 0;  return comm; }).ToList();
+                    commission.PayDate = new DateTime(SelectedYear, DateTime.ParseExact(SelectedMonth, "MMM", null).Month, commission.PayDate.Day);
                 }
             }
         }
