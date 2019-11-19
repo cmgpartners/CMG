@@ -317,10 +317,6 @@ namespace CMG.Application.ViewModel
                 TotalAmount = dataSearchBy.TotalAmount;
                 LoadPagination();
             }
-            else
-            {
-                _notifier.ShowError("Error occured in search criteria");
-            }
         }
 
         private SearchQuery BuildSearchQuery()

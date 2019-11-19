@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using LinqKit;
+using System.Collections.Generic;
 
 namespace CMG.DataAccess.Repository
 {
@@ -15,6 +16,10 @@ namespace CMG.DataAccess.Repository
         public CommissionRepository(pb2Context context) : base(context)
         {
             _context = context;
+        }
+        public List<Comm> GetRenewals(string yrmo)
+        {
+            return Context.Comm.Where(x => x.Yrmo == yrmo && x.Commtype == "R").Include(x => x.AgentCommissions).ThenInclude(x => x.Agent).ToList();
         }
         public Comm Find(long? id)
         {
