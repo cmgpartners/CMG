@@ -205,7 +205,8 @@ namespace CMG.Application.ViewModel
             }
             string month = DateTime.ParseExact(SelectedMonth, "MMM", null).Month.ToString("00");
             var dataSearchBy = _unitOfWork.Commissions.GetRenewals($"{year.ToString()}{month}");
-            DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList().Select(x => { x.CompanyName = x.CompanyName.Trim() == "" ? "" : Companies.Where(c => c.FieldCode == x.CompanyName.Trim()).FirstOrDefault().Description; return x; }).ToList());
+            DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList()
+                            .Select(x => { x.CompanyName = x.CompanyName.Trim() == "" ? "" : Companies.Where(c => c.FieldCode == x.CompanyName.Trim()).FirstOrDefault().Description; return x; }).ToList());
             if (IsImportEnabled)
             {
                 UpdateImportCollection();

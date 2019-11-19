@@ -172,7 +172,8 @@ namespace CMG.Application.ViewModel
         {
             SearchQuery searchQuery = BuildFYCSearchQuery(SelectedYear, SelectedMonth);
             var dataSearchBy = _unitOfWork.Commissions.Find(searchQuery);
-            DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList().Select(x => { x.CompanyName = x.CompanyName.Trim() == "" ? "" : Companies.Where(c => c.FieldCode == x.CompanyName.Trim()).FirstOrDefault().Description; return x; }).ToList());
+            DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList()
+                            .Select(x => { x.CompanyName = x.CompanyName.Trim() == "" ? "" : Companies.Where(c => c.FieldCode == x.CompanyName.Trim()).FirstOrDefault().Description; return x; }).ToList());
         }
         public void Save()
         {
