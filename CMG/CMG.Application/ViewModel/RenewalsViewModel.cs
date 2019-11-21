@@ -12,6 +12,8 @@ using CMG.DataAccess.Domain;
 using System.Windows;
 using ToastNotifications;
 using ToastNotifications.Messages;
+using CMG.Service.Interface;
+using CMG.Service;
 
 namespace CMG.Application.ViewModel
 {
@@ -20,18 +22,20 @@ namespace CMG.Application.ViewModel
         #region Member variables
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        public readonly IDialogService _dialogService;
         private const int startYear = 1925;
         private int newId;
         private readonly Notifier _notifier;
         #endregion Member variables
 
         #region Constructor
-        public RenewalsViewModel(IUnitOfWork unitOfWork, IMapper mapper, Notifier notifier = null)
+        public RenewalsViewModel(IUnitOfWork unitOfWork, IMapper mapper, IDialogService dialogService = null, Notifier notifier = null)
             : base(unitOfWork, mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _notifier = notifier;
+            _dialogService = dialogService;
             LoadData();
         }
         #endregion Constructor
@@ -205,18 +209,30 @@ namespace CMG.Application.ViewModel
             }
             string month = DateTime.ParseExact(SelectedMonth, "MMM", null).Month.ToString("00");
             var dataSearchBy = _unitOfWork.Commissions.GetRenewals($"{year.ToString()}{month}");
-            DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList()
-                            .Select(x => { x.CompanyName = x.CompanyName.Trim() == "" ? "" : Companies.Where(c => c.FieldCode == x.CompanyName.Trim()).FirstOrDefault().Description; return x; }).ToList());
+           
             if (IsImportEnabled)
             {
+                var importedData = dataSearchBy.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList()
+                                  .Select(x => { x.CompanyName = x.CompanyName.Trim() == "" ? "" : Companies.Where(c => c.FieldCode == x.CompanyName.Trim()).FirstOrDefault().Description; return x; }).ToList();
+                importedData.ForEach(x => DataCollection.Add(x));
                 UpdateImportCollection();
             }
+            else
+            {
+                DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList()
+                .Select(x => { x.CompanyName = x.CompanyName.Trim() == "" ? "" : Companies.Where(c => c.FieldCode == x.CompanyName.Trim()).FirstOrDefault().Description; return x; }).ToList());
+            }
+
         }
         public void Import()
         {
-            IsImportEnabled = true;
-            GetCommissions();
-            _notifier.ShowSuccess("Records imported successfully");
+            var result = _dialogService.ShowMessageBox("Records already exist for this month. Are you sure you want to import?");
+            if (result == DialogServiceLibrary.MessageBoxResult.Yes)
+            {
+                IsImportEnabled = true;
+                GetCommissions();
+                _notifier.ShowSuccess("Records imported successfully");
+            }
         }
         public void Save()
         {

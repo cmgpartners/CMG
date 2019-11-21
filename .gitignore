@@ -310,3 +310,6 @@
 /CMG/CMG.DataAccess/obj/Debug/netcoreapp3.0/CMG.DataAccess.designer.deps.json
 /CMG/CMG.DataAccess/obj/Debug/netcoreapp3.0/CMG.DataAccess.designer.runtimeconfig.json
 /CMG/CMG.DataAccess/CMG.DataAccess.csproj.user
+/CMG/CMG.Application/bin/Debug/netcoreapp3.0
+/CMG/CMG.Service/bin/Debug/netcoreapp3.0
+/CMG/CMG.Service/obj
