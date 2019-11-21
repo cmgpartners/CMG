@@ -3,6 +3,8 @@ using CMG.Application.DTO;
 using CMG.DataAccess.Domain;
 using CMG.DataAccess.Interface;
 using CMG.DataAccess.Query;
+using CMG.Service;
+using CMG.Service.Interface;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,6 +22,7 @@ namespace CMG.Application.ViewModel
         #region Member variables
         private readonly IUnitOfWork _unitOfWork; 
         private readonly IMapper _mapper;
+        public readonly IDialogService _dialogService;
         private const int startYear = 1925;
         private int newId;
         private int maxWithdrawalId;
@@ -48,12 +51,13 @@ namespace CMG.Application.ViewModel
         #endregion Member variables
 
         #region Constructor
-        public FinanceSummaryViewModel(IUnitOfWork unitOfWork, IMapper mapper)
+        public FinanceSummaryViewModel(IUnitOfWork unitOfWork, IMapper mapper, IDialogService dialogService = null)
             : base(unitOfWork, mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             maxWithdrawalId = _unitOfWork.Withdrawals.All().OrderByDescending(x => x.Keywith).First().Keywith;
+            _dialogService = dialogService;
             LoadData();            
         }
         #endregion Constructor
@@ -434,74 +438,78 @@ namespace CMG.Application.ViewModel
 
         public void RemoveWithdrawal(object selectedAgentWithdrawal)
         {
-            if(selectedAgentWithdrawal != null)
+            var result = _dialogService.ShowMessageBox("Are you sure you want to delete the record?");
+            if (result == DialogServiceLibrary.MessageBoxResult.Yes)
             {
-                ViewWithdrawalDto withdrawal = new ViewWithdrawalDto();
-                ObservableCollection<ViewWithdrawalDto> collection = new ObservableCollection<ViewWithdrawalDto>();
-                DataTable table = new DataTable();
-                IList objList = (IList)selectedAgentWithdrawal;
-                string tableName = string.Empty;
-                string withdrawalType = string.Empty;
-                if (objList.Count > 1)
+                if (selectedAgentWithdrawal != null)
                 {
-                    DataRow row = ((DataRowView)objList[0]).Row;
-                    switch (objList[1])
+                    ViewWithdrawalDto withdrawal = new ViewWithdrawalDto();
+                    ObservableCollection<ViewWithdrawalDto> collection = new ObservableCollection<ViewWithdrawalDto>();
+                    DataTable table = new DataTable();
+                    IList objList = (IList)selectedAgentWithdrawal;
+                    string tableName = string.Empty;
+                    string withdrawalType = string.Empty;
+                    if (objList.Count > 1)
                     {
-                        case AgentExpenses:
-                            withdrawal = AgentExpensesCollection.Where(x => x.WithdrawalId == (int)row[WithdrawalIdColumnName]).FirstOrDefault();
-                            collection = AgentExpensesCollection;
-                            tableName = AgentExpenses;
-                            table = AgentExpensesTable;
-                            withdrawalType = AgentExpenseCode;
-                            AddOrUpdateWithdrawalTableToCollection(table, collection, withdrawalType);
-                            break;
-                        case DueToPartners:
-                            withdrawal = DueToPartnersCollection.Where(x => x.WithdrawalId == (int)row[WithdrawalIdColumnName]).FirstOrDefault();
-                            collection = DueToPartnersCollection;
-                            tableName = DueToPartners;
-                            table = DueToPartnersTable;
-                            withdrawalType = DueToPartnerCode;
-                            AddOrUpdateWithdrawalTableToCollection(DueToPartnersTable, collection, withdrawalType);
-                            break;
-                        case BankPositions:
-                            withdrawal = BankPositionsCollection.Where(x => x.WithdrawalId == (int)row[WithdrawalIdColumnName]).FirstOrDefault();
-                            collection = BankPositionsCollection;
-                            tableName = BankPositions;
-                            table = BankPositionsTable;
-                            AddOrUpdateBankPositionCollection();
-                            break;
-                        case PersonalCommissions:
-                            withdrawal = PersonalCommissionsCollection.Where(x => x.WithdrawalId == (int)row[WithdrawalIdColumnName]).FirstOrDefault();
-                            collection = PersonalCommissionsCollection;
-                            tableName = PersonalCommissions;
-                            table = PersonalcommissionsTable;
-                            AddOrUpdatePersonalCommissionCollection();
-                            break;
-                    }
-                    if ((int)row[WithdrawalIdColumnName] > 0)
-                    {
-                        withdrawal.IsDeleted = true;
-                        withdrawal.AgentWithdrawals.ToList().ForEach(x => x.IsDeleted = true);
+                        DataRow row = ((DataRowView)objList[0]).Row;
+                        switch (objList[1])
+                        {
+                            case AgentExpenses:
+                                withdrawal = AgentExpensesCollection.Where(x => x.WithdrawalId == (int)row[WithdrawalIdColumnName]).FirstOrDefault();
+                                collection = AgentExpensesCollection;
+                                tableName = AgentExpenses;
+                                table = AgentExpensesTable;
+                                withdrawalType = AgentExpenseCode;
+                                AddOrUpdateWithdrawalTableToCollection(table, collection, withdrawalType);
+                                break;
+                            case DueToPartners:
+                                withdrawal = DueToPartnersCollection.Where(x => x.WithdrawalId == (int)row[WithdrawalIdColumnName]).FirstOrDefault();
+                                collection = DueToPartnersCollection;
+                                tableName = DueToPartners;
+                                table = DueToPartnersTable;
+                                withdrawalType = DueToPartnerCode;
+                                AddOrUpdateWithdrawalTableToCollection(DueToPartnersTable, collection, withdrawalType);
+                                break;
+                            case BankPositions:
+                                withdrawal = BankPositionsCollection.Where(x => x.WithdrawalId == (int)row[WithdrawalIdColumnName]).FirstOrDefault();
+                                collection = BankPositionsCollection;
+                                tableName = BankPositions;
+                                table = BankPositionsTable;
+                                AddOrUpdateBankPositionCollection();
+                                break;
+                            case PersonalCommissions:
+                                withdrawal = PersonalCommissionsCollection.Where(x => x.WithdrawalId == (int)row[WithdrawalIdColumnName]).FirstOrDefault();
+                                collection = PersonalCommissionsCollection;
+                                tableName = PersonalCommissions;
+                                table = PersonalcommissionsTable;
+                                AddOrUpdatePersonalCommissionCollection();
+                                break;
+                        }
+                        if ((int)row[WithdrawalIdColumnName] > 0)
+                        {
+                            withdrawal.IsDeleted = true;
+                            withdrawal.AgentWithdrawals.ToList().ForEach(x => x.IsDeleted = true);
 
-                        AddOrUpdateWithdrawalCollection(new ObservableCollection<ViewWithdrawalDto>(collection.Where(x => x.WithdrawalId == withdrawal.WithdrawalId).ToList()));
-                        _unitOfWork.Commit();
-                    }
-                    collection.Remove(collection.Where(x => x.WithdrawalId == (int)row[WithdrawalIdColumnName]).FirstOrDefault());
-                    if (objList[1].ToString() == AgentExpenses)
-                    {
-                        AgentExpensesTable = CollectionToDataTable(collection, tableName);
-                    }
-                    else if(objList[1].ToString() == DueToPartners)
-                    {
-                        DueToPartnersTable = CollectionToDataTable(collection, tableName);
-                    }
-                    else if (objList[1].ToString() == BankPositions)
-                    {
-                        GetBankPositions(collection);
-                    }
-                    else if (objList[1].ToString() == PersonalCommissions)
-                    {
-                        GetPersonalCommissions(collection);
+                            AddOrUpdateWithdrawalCollection(new ObservableCollection<ViewWithdrawalDto>(collection.Where(x => x.WithdrawalId == withdrawal.WithdrawalId).ToList()));
+                            _unitOfWork.Commit();
+                        }
+                        collection.Remove(collection.Where(x => x.WithdrawalId == (int)row[WithdrawalIdColumnName]).FirstOrDefault());
+                        if (objList[1].ToString() == AgentExpenses)
+                        {
+                            AgentExpensesTable = CollectionToDataTable(collection, tableName);
+                        }
+                        else if (objList[1].ToString() == DueToPartners)
+                        {
+                            DueToPartnersTable = CollectionToDataTable(collection, tableName);
+                        }
+                        else if (objList[1].ToString() == BankPositions)
+                        {
+                            GetBankPositions(collection);
+                        }
+                        else if (objList[1].ToString() == PersonalCommissions)
+                        {
+                            GetPersonalCommissions(collection);
+                        }
                     }
                 }
             }
