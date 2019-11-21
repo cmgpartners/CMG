@@ -18,9 +18,36 @@ namespace CMG.UI.View
     /// </summary>
     public partial class FinanceSummaryView : UserControl
     {
+        #region MemberVariables
+        private const string NotEntered = "Not Entered";
+        private const string Entered = " Entered";
+        #endregion MemberVariables
+
         public FinanceSummaryView()
         {
             InitializeComponent();
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBox chk = (CheckBox)sender;
+            Label lbl = (Label)chk.Content;
+            lbl.Content = NotEntered;
+            if (chk.IsChecked ?? false)
+            {
+                lbl.Content = Entered;
+            }
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            CheckBox chk = (CheckBox)sender;
+            Label lbl = (Label)chk.Content;
+            lbl.Content = Entered;
+            if (!chk.IsChecked ?? false)
+            {
+                lbl.Content = NotEntered;
+            }
         }
     }
 }
