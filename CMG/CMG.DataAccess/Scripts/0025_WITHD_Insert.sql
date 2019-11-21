@@ -58,7 +58,7 @@ BEGIN
 	)
 END
 
-IF NOT EXISTS(SELECT TOP 1 * FROM COMBO WHERE DESC_ LIKE 'Personal Commission')
+IF NOT EXISTS(SELECT TOP 1 * FROM COMBO WHERE DESC_ LIKE 'Personal Commission Entered')
 BEGIN
 	INSERT INTO COMBO
 	(
@@ -72,7 +72,27 @@ BEGIN
 	(
 		'DTYPE',
 		'P',
-		'Personal Commission',
+		'Personal Commission Entered',
+		'CM\Rishita',
+		GETDATE()
+	)
+END
+
+IF NOT EXISTS(SELECT TOP 1 * FROM COMBO WHERE DESC_ LIKE 'Personal Commission Not Entered')
+BEGIN
+	INSERT INTO COMBO
+	(
+		FIELDNAME,
+		FLDCODE,
+		DESC_,
+		REV_LOCN,
+		REV_DATE
+	)
+	VALUES
+	(
+		'DTYPE',
+		'N',
+		'Personal Commission Not Entered',
 		'CM\Rishita',
 		GETDATE()
 	)

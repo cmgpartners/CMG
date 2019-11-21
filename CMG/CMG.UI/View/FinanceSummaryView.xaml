@@ -6,7 +6,7 @@
              xmlns:converters="clr-namespace:CMG.UI.Converter" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:behaviors="clr-namespace:WPFTextBoxAutoComplete;assembly=WPFTextBoxAutoComplete"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"  
              d:DesignHeight="450" d:DesignWidth="800">
         <Grid>
             <Grid.RowDefinitions>
@@ -83,20 +83,38 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="Auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Style="{StaticResource RemoveButton}" Margin="0 0 10 0" Command="{Binding DataContext.SelectedViewModel.RemoveWithdrawalCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" >
+                                            <materialDesign:PackIcon Kind="Delete" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 5 0"></materialDesign:PackIcon>
+                                            <Button.CommandParameter>
+                                                <MultiBinding>
+                                                    <MultiBinding.Converter>
+                                                        <converters:MultipleParametersConverter/>
+                                                    </MultiBinding.Converter>
+                                                    <Binding Path="."></Binding>
+                                                    <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Window}" Path="DataContext.SelectedViewModel.LabelAgentExpenses"/>
+                                                </MultiBinding>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="Description" Width="150">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBox Text="{Binding Path=Description, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" MaxLength="20"></TextBox>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Width="50">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text=""></TextBlock>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="50">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text=""></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="Marty" Width="Auto" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
@@ -189,7 +207,25 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Description" Width="Auto" >
+                            <DataGridTemplateColumn Width="Auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Style="{StaticResource RemoveButton}" Margin="0 0 10 0" Command="{Binding DataContext.SelectedViewModel.RemoveWithdrawalCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" >
+                                            <materialDesign:PackIcon Kind="Delete" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 5 0"></materialDesign:PackIcon>
+                                            <Button.CommandParameter>
+                                                <MultiBinding>
+                                                    <MultiBinding.Converter>
+                                                        <converters:MultipleParametersConverter/>
+                                                    </MultiBinding.Converter>
+                                                    <Binding Path="."></Binding>
+                                                    <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Window}" Path="DataContext.SelectedViewModel.LabelDueToPartners"/>
+                                                </MultiBinding>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Description" Width="150" >
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBox Text="{Binding Path=Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="20"></TextBox>
@@ -295,6 +331,24 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="Auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Style="{StaticResource RemoveButton}" Margin="0 0 10 0" Command="{Binding DataContext.SelectedViewModel.RemoveWithdrawalCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" >
+                                            <materialDesign:PackIcon Kind="Delete" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 5 0"></materialDesign:PackIcon>
+                                            <Button.CommandParameter>
+                                                <MultiBinding>
+                                                    <MultiBinding.Converter>
+                                                        <converters:MultipleParametersConverter/>
+                                                    </MultiBinding.Converter>
+                                                    <Binding Path="."></Binding>
+                                                    <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Window}" Path="DataContext.SelectedViewModel.LabelBankPositions"/>
+                                                </MultiBinding>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="Description" Width="150">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -368,22 +422,106 @@
                 <StackPanel>
                     <Label x:Name="lblPersonalCommissions" Content="{Binding LabelPersonalCommissions}" Style="{StaticResource LabelStyle}" />
                     <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible"
-                              ItemsSource="{Binding DataCollection}"
+                              ItemsSource="{Binding PersonalcommissionsTable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               x:Name="PersonalCommissions" IsReadOnly="False" 
                               ColumnHeaderStyle="{StaticResource HeaderStyle}" 
-                              CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50">
+                              CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50" MaxHeight="250">
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="Id" Width="90" HeaderStyle="{StaticResource FirstColumnHeaderStyle }">
+                            <DataGridTemplateColumn Width="5">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Id}" Margin="10 0 10 0"></TextBlock>
+                                        <TextBlock Text=""></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Name" Width="90" >
+                            <DataGridTemplateColumn Width="Auto">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Name}"></TextBlock>
+                                        <Button Style="{StaticResource RemoveButton}" Margin="0 0 10 0" Command="{Binding DataContext.SelectedViewModel.RemoveWithdrawalCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" >
+                                            <materialDesign:PackIcon Kind="Delete" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0 0 5 0"></materialDesign:PackIcon>
+                                            <Button.CommandParameter>
+                                                <MultiBinding>
+                                                    <MultiBinding.Converter>
+                                                        <converters:MultipleParametersConverter/>
+                                                    </MultiBinding.Converter>
+                                                    <Binding Path="."></Binding>
+                                                    <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType=Window}" Path="DataContext.SelectedViewModel.LabelPersonalCommissions"/>
+                                                </MultiBinding>
+                                            </Button.CommandParameter>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Status">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <!--<TextBox Text="{Binding Path=Status, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" MaxLength="20"></TextBox>-->
+                                        <CheckBox Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" IsChecked="{Binding IsPcEntered, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                            <Label Name="lblDisplay" Content="Not Entered" ></Label>
+                                        </CheckBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="40">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text=""></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Marty" Width="Auto" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Path=Marty, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}"></TextBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="40">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text=" "></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Peter" Width="Auto" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Path=Peter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}"></TextBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="40">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text=" "></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Frank" Width="Auto" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Path=Frank, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}"></TextBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="40">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text=" "></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Bob" Width="Auto" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Path=Bob, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}"></TextBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Width="40">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text=" "></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

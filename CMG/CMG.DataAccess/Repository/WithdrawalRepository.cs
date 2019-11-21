@@ -71,7 +71,7 @@ namespace CMG.DataAccess.Repository
             switch (filterBy.Property.ToLower())
             {
                 case "dtype":
-                    return DTypeExpression(filterBy.Equal);
+                    return DTypeExpression(filterBy.In);
                 case "yrmo":
                     return YearMonthExpression(filterBy.Equal);
                 default:
@@ -79,9 +79,10 @@ namespace CMG.DataAccess.Repository
             }
         }
 
-        private static Expression<Func<Withd, bool>> DTypeExpression(string equal)
+        private static Expression<Func<Withd, bool>> DTypeExpression(string filterIn)
         {
-            return w => w.Dtype.Equals(equal.Trim());
+            var dTypeList = filterIn.Split(',').Select(x => x.Trim()).ToList();
+            return w => dTypeList.Contains(w.Dtype.Trim());
         }
 
         private static Expression<Func<Withd, bool>> YearMonthExpression(string equal)
