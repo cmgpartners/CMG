@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CMG.Common\CMG.Common.csproj" />
     <ProjectReference Include="..\CMG.DataAccess\CMG.DataAccess.csproj" />
+    <ProjectReference Include="..\CMG.Service\CMG.Service.csproj" />
   </ItemGroup>
 
 </Project>

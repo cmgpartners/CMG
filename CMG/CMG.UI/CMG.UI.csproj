@@ -43,6 +43,7 @@
   <ItemGroup>
     <ProjectReference Include="..\CMG.Application\CMG.Application.csproj" />
     <ProjectReference Include="..\CMG.Common\CMG.Common.csproj" />
+    <ProjectReference Include="..\CMG.Service\CMG.Service.csproj" />
   </ItemGroup>
 
   <ItemGroup>
