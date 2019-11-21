@@ -478,12 +478,15 @@ namespace CMG.Application.ViewModel
                             AddOrUpdatePersonalCommissionCollection();
                             break;
                     }
-                    withdrawal.IsDeleted = true;
-                    withdrawal.AgentWithdrawals.ToList().ForEach(x => x.IsDeleted = true);
+                    if ((int)row[WithdrawalIdColumnName] > 0)
+                    {
+                        withdrawal.IsDeleted = true;
+                        withdrawal.AgentWithdrawals.ToList().ForEach(x => x.IsDeleted = true);
 
-                    AddOrUpdateWithdrawalCollection(new ObservableCollection<ViewWithdrawalDto>(collection.Where(x => x.WithdrawalId == withdrawal.WithdrawalId).ToList()));
-                    _unitOfWork.Commit();
-                    collection.Remove(collection.Where(x => x.WithdrawalId == withdrawal.WithdrawalId).FirstOrDefault());
+                        AddOrUpdateWithdrawalCollection(new ObservableCollection<ViewWithdrawalDto>(collection.Where(x => x.WithdrawalId == withdrawal.WithdrawalId).ToList()));
+                        _unitOfWork.Commit();
+                    }
+                    collection.Remove(collection.Where(x => x.WithdrawalId == (int)row[WithdrawalIdColumnName]).FirstOrDefault());
                     if (objList[1].ToString() == AgentExpenses)
                     {
                         AgentExpensesTable = CollectionToDataTable(collection, tableName);

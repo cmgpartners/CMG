@@ -6,7 +6,7 @@
              xmlns:converters="clr-namespace:CMG.UI.Converter" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:behaviors="clr-namespace:WPFTextBoxAutoComplete;assembly=WPFTextBoxAutoComplete"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"  
              d:DesignHeight="450" d:DesignWidth="800">
         <Grid>
             <Grid.RowDefinitions>
@@ -225,7 +225,7 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Description" Width="Auto" >
+                            <DataGridTemplateColumn Header="Description" Width="150" >
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBox Text="{Binding Path=Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxLength="20"></TextBox>
