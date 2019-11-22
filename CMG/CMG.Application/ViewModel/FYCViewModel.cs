@@ -77,6 +77,14 @@ namespace CMG.Application.ViewModel
             }
         }
 
+        public string SelectedMonthNumber
+        {
+            get
+            {
+                return DateTime.ParseExact(SelectedMonth, "MMM", null).Month.ToString("00");
+            }
+        }
+
         private ViewCommissionDto _copiedCommission;
         public ViewCommissionDto CopiedCommission
         {
@@ -194,26 +202,25 @@ namespace CMG.Application.ViewModel
                         if (commission.CommissionId > 0)
                         {
                             var entity = _mapper.Map<Comm>(commission);
-                            entity.Yrmo = entity.Paydate?.ToString("yyyyMM");
+                            entity.Yrmo = $"{SelectedYear.ToString()}{SelectedMonthNumber}";
                             foreach (AgentCommission agentComm in entity.AgentCommissions)
                             {
                                 agentComm.Agent = null;
                                 _unitOfWork.AgentCommissions.Save(agentComm);
                             }
                             var commissionId = _unitOfWork.Commissions.Save(entity);
-                            _unitOfWork.Commit();
                         }
                         else
                         {
                             commission.AgentCommissions = commission.AgentCommissions.Select(agentComm => { agentComm.Agent = null; return agentComm; }).ToList();
                             commission.CommissionId = 0;
                             var entityCommission = _mapper.Map<Comm>(commission);
-                            entityCommission.Yrmo = entityCommission.Paydate?.ToString("yyyyMM");
+                            entityCommission.Yrmo = $"{SelectedYear.ToString()}{SelectedMonthNumber}";
                             entityCommission.Commtype = "F";
                             var commissionId = _unitOfWork.Commissions.Add(entityCommission);
-                            _unitOfWork.Commit();
                         }
                     }
+                    _unitOfWork.Commit();
                     GetCommissions();
                     _notifier.ShowSuccess("Record added/updated successfully");
                 }

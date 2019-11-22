@@ -83,6 +83,13 @@ namespace CMG.Application.ViewModel
                 GetCommissions();
             }
         }
+        public string SelectedMonthNumber
+        {
+            get
+            {
+                return DateTime.ParseExact(SelectedMonth, "MMM", null).Month.ToString("00");
+            }
+        }
         private ObservableCollection<ViewCommissionDto> _dataCollection;
         public ObservableCollection<ViewCommissionDto> DataCollection
         {
@@ -207,8 +214,7 @@ namespace CMG.Application.ViewModel
             {
                 year = SelectedYear;
             }
-            string month = DateTime.ParseExact(SelectedMonth, "MMM", null).Month.ToString("00");
-            var dataSearchBy = _unitOfWork.Commissions.GetRenewals($"{year.ToString()}{month}");
+            var dataSearchBy = _unitOfWork.Commissions.GetRenewals($"{year.ToString()}{SelectedMonthNumber}");
            
             if (IsImportEnabled)
             {
@@ -248,36 +254,29 @@ namespace CMG.Application.ViewModel
                         return;
                     }
                     DataCollection = new ObservableCollection<ViewCommissionDto>(DataCollection.Select(x => { x.CompanyName = x.CompanyName.Trim() == string.Empty ? string.Empty : Companies.Where(c => c.Description == x.CompanyName.Trim()).FirstOrDefault().FieldCode; return x; }));
-                    if (isImportEnabled)
+                    foreach (ViewCommissionDto commission in DataCollection)
                     {
-                        foreach (ViewCommissionDto commission in DataCollection)
+                        if (commission.CommissionId > 0)
+                        {
+                            var entity = _mapper.Map<Comm>(commission);
+                            entity.Yrmo = $"{SelectedYear.ToString()}{SelectedMonthNumber}";
+                            foreach (AgentCommission agentComm in entity.AgentCommissions)
+                            {
+                                agentComm.Agent = null;
+                                _unitOfWork.AgentCommissions.Save(agentComm);
+                            }
+                            var commissionId = _unitOfWork.Commissions.Save(entity);
+                        }
+                        else
                         {
                             AddCommission(commission);
                         }
-                        IsImportEnabled = false;
-                    }
-                    else
-                    {
-                        foreach (ViewCommissionDto commission in DataCollection)
-                        {
-                            if (commission.CommissionId > 0)
-                            {
-                                var entity = _mapper.Map<Comm>(commission);
-                                entity.Yrmo = entity.Paydate?.ToString("yyyyMM");
-                                foreach (AgentCommission agentComm in entity.AgentCommissions)
-                                {
-                                    agentComm.Agent = null;
-                                    _unitOfWork.AgentCommissions.Save(agentComm);
-                                }
-                                var commissionId = _unitOfWork.Commissions.Save(entity);
-                                _unitOfWork.Commit();
-                            }
-                            else
-                            {
-                                AddCommission(commission);
-                            }
-                        }
 
+                    }
+                    _unitOfWork.Commit();
+                    if (isImportEnabled)
+                    {
+                        IsImportEnabled = false;
                     }
                     GetCommissions();
                     _notifier.ShowSuccess("Record added/updated successfully");
@@ -323,7 +322,7 @@ namespace CMG.Application.ViewModel
         }
         public void Add()
         {
-            DataCollection.Add(new ViewCommissionDto() { IsNew = true, IsNotNew = false, CommissionId = --newId });
+            DataCollection.Add(new ViewCommissionDto() { IsNew = true, IsNotNew = false, YearMonth = $"{SelectedYear.ToString()}{SelectedMonthNumber}",  CommissionId = --newId });
         }
         public void PolicyDetails(object currentItem)
         {
@@ -427,12 +426,15 @@ namespace CMG.Application.ViewModel
             {
                 foreach(ViewCommissionDto commission in DataCollection)
                 {
-                    commission.CreatedDate = null;
-                    commission.CreatedBy = null;
-                    commission.TotalAmount = 0.0M;
-                    commission.CommissionId = --newId;
-                    commission.AgentCommissions.Select(comm => { comm.Commission = 0.0M; comm.CommissionId = commission.CommissionId; comm.Id = 0;  return comm; }).ToList();
-                    commission.PayDate = new DateTime(SelectedYear, DateTime.ParseExact(SelectedMonth, "MMM", null).Month, commission.PayDate.Day);
+                    if (commission.YearMonth != $"{SelectedYear.ToString()}{SelectedMonthNumber}")
+                    {
+                        commission.CreatedDate = null;
+                        commission.CreatedBy = null;
+                        commission.TotalAmount = 0.0M;
+                        commission.CommissionId = --newId;
+                        commission.AgentCommissions.Select(comm => { comm.Commission = 0.0M; comm.CommissionId = commission.CommissionId; comm.Id = 0; return comm; }).ToList();
+                        commission.PayDate = new DateTime(SelectedYear, DateTime.ParseExact(SelectedMonth, "MMM", null).Month, commission.PayDate.Day);
+                    }
                 }
             }
         }
@@ -456,9 +458,8 @@ namespace CMG.Application.ViewModel
             commission.AgentCommissions = commission.AgentCommissions.Select(agentComm => { agentComm.Agent = null; return agentComm; }).ToList();
             commission.CommissionId = 0;
             var entityCommission = _mapper.Map<Comm>(commission);
-            entityCommission.Yrmo = entityCommission.Paydate?.ToString("yyyyMM");
+            entityCommission.Yrmo = $"{SelectedYear.ToString()}{SelectedMonthNumber}";
             var commissionId = _unitOfWork.Commissions.Add(entityCommission);
-            _unitOfWork.Commit();
         }
         #endregion Methods
     }
