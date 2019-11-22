@@ -247,12 +247,8 @@ namespace CMG.Application.ViewModel
                     }
                     _unitOfWork.Commissions.Delete(commission);
                     _unitOfWork.Commit();
-                    GetCommissions();
                 }
-                else
-                {
-                    DataCollection.Remove(DataCollection.Where(commission => commission.CommissionId == Convert.ToInt32(commissionId)).SingleOrDefault());
-                }
+                DataCollection.Remove(DataCollection.Where(commission => commission.CommissionId == Convert.ToInt32(commissionId)).SingleOrDefault());
                 _notifier.ShowSuccess("Record deleted successfully");
             }
             catch

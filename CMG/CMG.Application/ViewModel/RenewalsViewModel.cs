@@ -291,11 +291,8 @@ namespace CMG.Application.ViewModel
         {
             try
             {
-                if (IsImportEnabled)
-                {
-                    DataCollection.Remove(DataCollection.Where(commission => commission.CommissionId == Convert.ToInt32(commissionId)).SingleOrDefault());
-                }
-                else
+                var result = _dialogService.ShowMessageBox("Do you really want to delete the record?");
+                if (result == DialogServiceLibrary.MessageBoxResult.Yes)
                 {
                     if (commissionId != null && Convert.ToInt32(commissionId) > 0)
                     {
@@ -306,14 +303,10 @@ namespace CMG.Application.ViewModel
                         }
                         _unitOfWork.Commissions.Delete(commission);
                         _unitOfWork.Commit();
-                        GetCommissions();
                     }
-                    else
-                    {
-                        DataCollection.Remove(DataCollection.Where(commission => commission.CommissionId == Convert.ToInt32(commissionId)).SingleOrDefault());
-                    }
+                    DataCollection.Remove(DataCollection.Where(commission => commission.CommissionId == Convert.ToInt32(commissionId)).SingleOrDefault());
+                    _notifier.ShowSuccess("Record deleted successfully");
                 }
-                _notifier.ShowSuccess("Record deleted successfully");
             }
             catch
             {
