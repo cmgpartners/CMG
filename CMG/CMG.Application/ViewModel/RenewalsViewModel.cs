@@ -404,6 +404,7 @@ namespace CMG.Application.ViewModel
                 DataCollection.Insert(index, CopiedCommission);
                 CopiedCommission = null;
                 IsPasteEnabled = false;
+                _notifier.ShowSuccess("Record pasted successfully");
             }
         }
         private void LoadData()

@@ -13,6 +13,8 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Input;
+using ToastNotifications;
+using ToastNotifications.Messages;
 using static CMG.Common.Enums;
 
 namespace CMG.Application.ViewModel
@@ -23,9 +25,11 @@ namespace CMG.Application.ViewModel
         private readonly IUnitOfWork _unitOfWork; 
         private readonly IMapper _mapper;
         public readonly IDialogService _dialogService;
+        private readonly Notifier _notifier;
         private const int startYear = 1925;
         private int newId;
         private int maxWithdrawalId;
+        private bool isValidRecord;
         private const string AgentExpenses = "Agent Expenses";
         private const string DueToPartners = "Due To Partners";
         private const string BankPositions = "Bank Positions";
@@ -51,13 +55,14 @@ namespace CMG.Application.ViewModel
         #endregion Member variables
 
         #region Constructor
-        public FinanceSummaryViewModel(IUnitOfWork unitOfWork, IMapper mapper, IDialogService dialogService = null)
+        public FinanceSummaryViewModel(IUnitOfWork unitOfWork, IMapper mapper, IDialogService dialogService = null, Notifier notifier = null)
             : base(unitOfWork, mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-            maxWithdrawalId = _unitOfWork.Withdrawals.All().OrderByDescending(x => x.Keywith).First().Keywith;
+            _notifier = notifier;
             _dialogService = dialogService;
+            maxWithdrawalId = _unitOfWork.Withdrawals.All().OrderByDescending(x => x.Keywith).First().Keywith;
             LoadData();            
         }
         #endregion Constructor
@@ -460,7 +465,7 @@ namespace CMG.Application.ViewModel
                                 tableName = AgentExpenses;
                                 table = AgentExpensesTable;
                                 withdrawalType = AgentExpenseCode;
-                                AddOrUpdateWithdrawalTableToCollection(table, collection, withdrawalType);
+                                AddOrUpdateWithdrawalTableToCollection(table, collection, withdrawalType, AgentExpenses);
                                 break;
                             case DueToPartners:
                                 withdrawal = DueToPartnersCollection.Where(x => x.WithdrawalId == (int)row[WithdrawalIdColumnName]).FirstOrDefault();
@@ -468,7 +473,7 @@ namespace CMG.Application.ViewModel
                                 tableName = DueToPartners;
                                 table = DueToPartnersTable;
                                 withdrawalType = DueToPartnerCode;
-                                AddOrUpdateWithdrawalTableToCollection(DueToPartnersTable, collection, withdrawalType);
+                                AddOrUpdateWithdrawalTableToCollection(DueToPartnersTable, collection, withdrawalType, DueToPartners);
                                 break;
                             case BankPositions:
                                 withdrawal = BankPositionsCollection.Where(x => x.WithdrawalId == (int)row[WithdrawalIdColumnName]).FirstOrDefault();
@@ -531,28 +536,50 @@ namespace CMG.Application.ViewModel
         }
         public void SaveWithdrawals()
         {
-            if(AgentExpensesTable.Rows.Count > 0)
+            isValidRecord = true;
+            if (AgentExpensesTable.Rows.Count > 0)
             {
-                AddOrUpdateWithdrawalTableToCollection(AgentExpensesTable, AgentExpensesCollection, AgentExpenseCode);
-                AddOrUpdateWithdrawalCollection(AgentExpensesCollection);
+                AddOrUpdateWithdrawalTableToCollection(AgentExpensesTable, AgentExpensesCollection, AgentExpenseCode, AgentExpenses);
+                if (isValidRecord)
+                {
+                    AddOrUpdateWithdrawalCollection(AgentExpensesCollection);
+                }
             }
             if(DueToPartnersTable.Rows.Count > 0)
             {
-                AddOrUpdateWithdrawalTableToCollection(DueToPartnersTable, DueToPartnersCollection, DueToPartnerCode);
-                AddOrUpdateWithdrawalCollection(DueToPartnersCollection);
+                AddOrUpdateWithdrawalTableToCollection(DueToPartnersTable, DueToPartnersCollection, DueToPartnerCode, DueToPartners);
+                if (isValidRecord)
+                {
+                    AddOrUpdateWithdrawalCollection(DueToPartnersCollection);
+                }
             }
             if (BankPositionsTable.Rows.Count > 0)
             {
                 AddOrUpdateBankPositionCollection();
-                AddOrUpdateWithdrawalCollection(BankPositionsCollection);
+                if (isValidRecord)
+                {
+                    AddOrUpdateWithdrawalCollection(BankPositionsCollection);
+                }
             }
             if(PersonalcommissionsTable.Rows.Count > 0)
             {
                 AddOrUpdatePersonalCommissionCollection();
-                AddOrUpdateWithdrawalCollection(PersonalCommissionsCollection);
+                if (isValidRecord)
+                {
+                    AddOrUpdateWithdrawalCollection(PersonalCommissionsCollection);
+                }
             }
-            _unitOfWork.Commit();
-            LoadData();
+            if (isValidRecord)
+            {
+                _unitOfWork.Commit();
+                LoadData();
+                _notifier.ShowSuccess("Records updated successfully");
+            }
+            else
+            {
+                _notifier.ShowError("Enter valid description and amount");
+                return;
+            }
         }
         public void AddWithdrawalAgent(object dataInput)
         {
@@ -621,7 +648,8 @@ namespace CMG.Application.ViewModel
             withdrawal.WithdrawalId = withdrawalId;
             withdrawal.Yrmo = SelectedYear.ToString() + month.ToString("D2").Trim();
             if (positionCode == BankPositionCode
-                || positionCode == AgentExpenseCode)
+                || positionCode == AgentExpenseCode
+                || positionCode == DueToPartnerCode)
             {
                 withdrawal.Desc = row[DescriptionColumnName].ToString().Trim();
             }
@@ -629,103 +657,155 @@ namespace CMG.Application.ViewModel
 
             return withdrawal;
         }
-        private void AddOrUpdateWithdrawalTableToCollection(DataTable tableInput, ObservableCollection<ViewWithdrawalDto> collection, string positionCode)
+
+        private bool IsValidRecord(DataRow rowInput, string financeType)
+        {
+            bool isValid = true;
+            switch(financeType)
+            {
+                case AgentExpenses:
+                case DueToPartners:
+                    if (string.IsNullOrEmpty(rowInput[DescriptionColumnName].ToString().Trim())
+                        && Convert.ToDouble(rowInput[MartyColumnName]) == 0
+                        && Convert.ToDouble(rowInput[PeterColumnName]) == 0
+                        && Convert.ToDouble(rowInput[FrankColumnName]) == 0
+                        && Convert.ToDouble(rowInput[BobColumnName]) == 0
+                        && Convert.ToDouble(rowInput[OtherColumnName]) == 0)
+                    {
+                        isValid = false;
+                        isValidRecord = false;
+                    }
+                    break;
+
+                case BankPositions:
+                    if(string.IsNullOrEmpty(rowInput[DescriptionColumnName].ToString().Trim())
+                        &&string.IsNullOrEmpty(rowInput[TypeColumnName].ToString())
+                        && Convert.ToDouble(rowInput[CmgColumnName]) == 0
+                        && Convert.ToDouble(rowInput[ScColumnName]) == 0)
+                    {
+                        isValid = false;
+                        isValidRecord = false;
+                    }
+                    break;
+
+                case PersonalCommissions:
+                    if (Convert.ToDouble(rowInput[MartyColumnName]) == 0
+                        && Convert.ToDouble(rowInput[PeterColumnName]) == 0
+                        && Convert.ToDouble(rowInput[FrankColumnName]) == 0
+                        && Convert.ToDouble(rowInput[BobColumnName]) == 0)
+                    {
+                        isValid = false;
+                        isValidRecord = false;
+                    }
+                    break;
+            }
+            return isValid;
+        }
+
+        private void AddOrUpdateWithdrawalTableToCollection (DataTable tableInput, ObservableCollection<ViewWithdrawalDto> collection, string positionCode, string financeType)
         {
             foreach (DataRow row in tableInput.Rows)
             {
-                int withdrawalId = (int)row[WithdrawalIdColumnName];
-                ViewWithdrawalDto withdrawal = GetNewWithdrawal(row, positionCode);
-                List<ViewAgentWithdrawalDto> agentWithdrawals = new List<ViewAgentWithdrawalDto>();
-                ViewAgentWithdrawalDto agentWithdrawal = new ViewAgentWithdrawalDto();
-                
-                if (withdrawalId > 0)
-                {
-                    withdrawal = collection.Where(x => x.WithdrawalId == withdrawalId).FirstOrDefault();
-                    withdrawal.Desc = row[DescriptionColumnName].ToString().Trim();
-                    agentWithdrawals = withdrawal.AgentWithdrawals.ToList();
-                    if (agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Marty).FirstOrDefault() != null)
-                    {
-                        agentWithdrawal = agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Marty).FirstOrDefault();
-                        agentWithdrawal.Amount = Convert.ToDouble(row[MartyColumnName]);
-                    }
-                    else if (Convert.ToDouble(row[MartyColumnName]) > 0)
-                    {
-                        withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Marty, withdrawalId, Convert.ToDouble(row[MartyColumnName])));
-                    }
+                if (IsValidRecord(row, financeType))
+                { 
+                    int withdrawalId = (int)row[WithdrawalIdColumnName];
+                    ViewWithdrawalDto withdrawal = GetNewWithdrawal(row, positionCode);
+                    List<ViewAgentWithdrawalDto> agentWithdrawals = new List<ViewAgentWithdrawalDto>();
+                    ViewAgentWithdrawalDto agentWithdrawal = new ViewAgentWithdrawalDto();
 
-                    if (agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Peter).FirstOrDefault() != null)
+                    if (withdrawalId > 0)
                     {
-                        agentWithdrawal = agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Peter).FirstOrDefault();
-                        agentWithdrawal.Amount = Convert.ToDouble(row[PeterColumnName]);
-                    }
-                    else if (Convert.ToDouble(row[PeterColumnName]) > 0)
-                    {
-                        withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Peter, withdrawalId, Convert.ToDouble(row[PeterColumnName])));
-                    }
+                        withdrawal = collection.Where(x => x.WithdrawalId == withdrawalId).FirstOrDefault();
+                        withdrawal.Desc = row[DescriptionColumnName].ToString().Trim();
+                        agentWithdrawals = withdrawal.AgentWithdrawals.ToList();
+                        if (agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Marty).FirstOrDefault() != null)
+                        {
+                            agentWithdrawal = agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Marty).FirstOrDefault();
+                            agentWithdrawal.Amount = Convert.ToDouble(row[MartyColumnName]);
+                        }
+                        else if (Convert.ToDouble(row[MartyColumnName]) > 0)
+                        {
+                            withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Marty, withdrawalId, Convert.ToDouble(row[MartyColumnName])));
+                        }
 
-                    if (agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Frank).FirstOrDefault() != null)
-                    {
-                        agentWithdrawal = agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Frank).FirstOrDefault();
-                        agentWithdrawal.Amount = Convert.ToDouble(row[FrankColumnName]);
-                    }
-                    else if (Convert.ToDouble(row[FrankColumnName]) > 0)
-                    {
-                        withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Frank, withdrawalId, Convert.ToDouble(row[FrankColumnName])));
-                    }
+                        if (agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Peter).FirstOrDefault() != null)
+                        {
+                            agentWithdrawal = agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Peter).FirstOrDefault();
+                            agentWithdrawal.Amount = Convert.ToDouble(row[PeterColumnName]);
+                        }
+                        else if (Convert.ToDouble(row[PeterColumnName]) > 0)
+                        {
+                            withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Peter, withdrawalId, Convert.ToDouble(row[PeterColumnName])));
+                        }
 
-                    if (agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Bob).FirstOrDefault() != null)
-                    {
-                        agentWithdrawal = agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Bob).FirstOrDefault();
-                        agentWithdrawal.Amount = Convert.ToDouble(row[BobColumnName]);
-                    }
-                    else if (Convert.ToDouble(row[BobColumnName]) > 0)
-                    {
-                        withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Bob, withdrawalId, Convert.ToDouble(row[BobColumnName])));
-                    }
+                        if (agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Frank).FirstOrDefault() != null)
+                        {
+                            agentWithdrawal = agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Frank).FirstOrDefault();
+                            agentWithdrawal.Amount = Convert.ToDouble(row[FrankColumnName]);
+                        }
+                        else if (Convert.ToDouble(row[FrankColumnName]) > 0)
+                        {
+                            withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Frank, withdrawalId, Convert.ToDouble(row[FrankColumnName])));
+                        }
 
-                    if (agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Others).FirstOrDefault() != null)
-                    {
-                        agentWithdrawal = agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Others).FirstOrDefault();
-                        agentWithdrawal.Amount = Convert.ToDouble(row[OtherColumnName]);
+                        if (agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Bob).FirstOrDefault() != null)
+                        {
+                            agentWithdrawal = agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Bob).FirstOrDefault();
+                            agentWithdrawal.Amount = Convert.ToDouble(row[BobColumnName]);
+                        }
+                        else if (Convert.ToDouble(row[BobColumnName]) > 0)
+                        {
+                            withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Bob, withdrawalId, Convert.ToDouble(row[BobColumnName])));
+                        }
+
+                        if (agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Others).FirstOrDefault() != null)
+                        {
+                            agentWithdrawal = agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Others).FirstOrDefault();
+                            agentWithdrawal.Amount = Convert.ToDouble(row[OtherColumnName]);
+                        }
+                        else if (Convert.ToDouble(row[OtherColumnName]) > 0)
+                        {
+                            withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Others, withdrawalId, Convert.ToDouble(row[OtherColumnName])));
+                        }
                     }
-                    else if (Convert.ToDouble(row[OtherColumnName]) > 0)
+                    else if (withdrawalId < 0)
                     {
-                        withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Others, withdrawalId, Convert.ToDouble(row[OtherColumnName])));
+                        agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Marty, withdrawalId, Convert.ToDouble(row[MartyColumnName]));
+                        if (agentWithdrawal != null)
+                        {
+                            agentWithdrawals.Add(agentWithdrawal);
+                        }
+                        agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Peter, withdrawalId, Convert.ToDouble(row[PeterColumnName]));
+                        if (agentWithdrawal != null)
+                        {
+                            agentWithdrawals.Add(agentWithdrawal);
+                        }
+                        agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Frank, withdrawalId, Convert.ToDouble(row[FrankColumnName]));
+                        if (agentWithdrawal != null)
+                        {
+                            agentWithdrawals.Add(agentWithdrawal);
+                        }
+                        agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Bob, withdrawalId, Convert.ToDouble(row[BobColumnName]));
+                        if (agentWithdrawal != null)
+                        {
+                            agentWithdrawals.Add(agentWithdrawal);
+                        }
+                        agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Others, withdrawalId, Convert.ToDouble(row[OtherColumnName]));
+                        if (agentWithdrawal != null)
+                        {
+                            agentWithdrawals.Add(agentWithdrawal);
+                        }
+
+                        withdrawal.AgentWithdrawals = agentWithdrawals;
+                        if (collection.Where(x => x.WithdrawalId == withdrawalId).Count() == 0)
+                        {
+                            collection.Add(withdrawal);
+                        }
                     }
                 }
-                else if (withdrawalId < 0)
+                else
                 {
-                    agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Marty, withdrawalId, Convert.ToDouble(row[MartyColumnName]));
-                    if (agentWithdrawal != null)
-                    {
-                        agentWithdrawals.Add(agentWithdrawal);
-                    }
-                    agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Peter, withdrawalId, Convert.ToDouble(row[PeterColumnName]));
-                    if (agentWithdrawal != null)
-                    {
-                        agentWithdrawals.Add(agentWithdrawal);
-                    }
-                    agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Frank, withdrawalId, Convert.ToDouble(row[FrankColumnName]));
-                    if (agentWithdrawal != null)
-                    {
-                        agentWithdrawals.Add(agentWithdrawal);
-                    }
-                    agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Bob, withdrawalId, Convert.ToDouble(row[BobColumnName]));
-                    if (agentWithdrawal != null)
-                    {
-                        agentWithdrawals.Add(agentWithdrawal);
-                    }
-                    agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Others, withdrawalId, Convert.ToDouble(row[OtherColumnName]));
-                    if (agentWithdrawal != null)
-                    {
-                        agentWithdrawals.Add(agentWithdrawal);
-                    }
-
-                    withdrawal.AgentWithdrawals = agentWithdrawals;
-                    if (collection.Where(x => x.WithdrawalId == withdrawalId).Count() == 0)
-                    {
-                        collection.Add(withdrawal);
-                    }
+                    break;
                 }
             }
         }
@@ -777,160 +857,174 @@ namespace CMG.Application.ViewModel
             string withdrawalType = string.Empty;
             foreach (DataRow row in PersonalcommissionsTable.Rows)
             {
-                int withdrawalId = (int)row[WithdrawalIdColumnName];
-                if (row[IsPcEnteredColumnName].ToString() == string.Empty)
-                    row[IsPcEnteredColumnName] = false;
-                withdrawalType = Convert.ToBoolean(row[IsPcEnteredColumnName]) ? PersonalCommissionEnteredCode : PersonalCommissionNotEnteredCode;
-                ViewWithdrawalDto withdrawal = GetNewWithdrawal(row, withdrawalType);
-                List<ViewAgentWithdrawalDto> agentWithdrawals = new List<ViewAgentWithdrawalDto>();
-                ViewAgentWithdrawalDto agentWithdrawal = new ViewAgentWithdrawalDto();
-
-                if(withdrawalId > 0)
-                {
-                    withdrawal = PersonalCommissionsCollection.Where(x => x.WithdrawalId == withdrawalId).FirstOrDefault();
-                    withdrawal.Dtype = withdrawalType;
-                    agentWithdrawals = withdrawal.AgentWithdrawals.ToList();
-
-                    if (agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Marty).FirstOrDefault() != null)
-                    {
-                        agentWithdrawal = agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Marty).FirstOrDefault();
-                        agentWithdrawal.Amount = Convert.ToDouble(row[MartyColumnName]);
-                    }
-                    else if (Convert.ToDouble(row[MartyColumnName]) > 0)
-                    {
-                        withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Marty, withdrawalId, Convert.ToDouble(row[MartyColumnName])));
-                    }
-
-                    if (agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Peter).FirstOrDefault() != null)
-                    {
-                        agentWithdrawal = agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Peter).FirstOrDefault();
-                        agentWithdrawal.Amount = Convert.ToDouble(row[PeterColumnName]);
-                    }
-                    else if (Convert.ToDouble(row[PeterColumnName]) > 0)
-                    {
-                        withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Peter, withdrawalId, Convert.ToDouble(row[PeterColumnName])));
-                    }
-
-                    if (agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Frank).FirstOrDefault() != null)
-                    {
-                        agentWithdrawal = agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Frank).FirstOrDefault();
-                        agentWithdrawal.Amount = Convert.ToDouble(row[FrankColumnName]);
-                    }
-                    else if (Convert.ToDouble(row[FrankColumnName]) > 0)
-                    {
-                        withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Frank, withdrawalId, Convert.ToDouble(row[FrankColumnName])));
-                    }
-
-                    if (agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Bob).FirstOrDefault() != null)
-                    {
-                        agentWithdrawal = agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Bob).FirstOrDefault();
-                        agentWithdrawal.Amount = Convert.ToDouble(row[BobColumnName]);
-                    }
-                    else if (Convert.ToDouble(row[BobColumnName]) > 0)
-                    {
-                        withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Bob, withdrawalId, Convert.ToDouble(row[BobColumnName])));
-                    }
-                }
-                else if(withdrawalId < 0)
-                {
-                    agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Marty, withdrawalId, Convert.ToDouble(row[MartyColumnName]));
-                    if (agentWithdrawal != null)
-                    {
-                        agentWithdrawals.Add(agentWithdrawal);
-                    }
-                    agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Peter, withdrawalId, Convert.ToDouble(row[PeterColumnName]));
-                    if (agentWithdrawal != null)
-                    {
-                        agentWithdrawals.Add(agentWithdrawal);
-                    }
-                    agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Frank, withdrawalId, Convert.ToDouble(row[FrankColumnName]));
-                    if (agentWithdrawal != null)
-                    {
-                        agentWithdrawals.Add(agentWithdrawal);
-                    }
-                    agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Bob, withdrawalId, Convert.ToDouble(row[BobColumnName]));
-                    if (agentWithdrawal != null)
-                    {
-                        agentWithdrawals.Add(agentWithdrawal);
-                    }
-                    withdrawal.AgentWithdrawals = agentWithdrawals;
-                    if (PersonalCommissionsCollection.Where(x => x.WithdrawalId == withdrawalId).Count() == 0)
-                    {
-                        PersonalCommissionsCollection.Add(withdrawal);
-                    }
-                }
-            }
-        }
-        private void AddOrUpdateBankPositionCollection()
-        {
-            if(BankPositionsTable.Rows.Count > 0)
-            {
-                foreach(DataRow row in BankPositionsTable.Rows)
-                {
+                if(IsValidRecord(row, PersonalCommissions))
+                { 
                     int withdrawalId = (int)row[WithdrawalIdColumnName];
-                    ViewWithdrawalDto withdrawal = GetNewWithdrawal(row, BankPositionCode);
+                    if (row[IsPcEnteredColumnName].ToString() == string.Empty)
+                        row[IsPcEnteredColumnName] = false;
+                    withdrawalType = Convert.ToBoolean(row[IsPcEnteredColumnName]) ? PersonalCommissionEnteredCode : PersonalCommissionNotEnteredCode;
+                    ViewWithdrawalDto withdrawal = GetNewWithdrawal(row, withdrawalType);
                     List<ViewAgentWithdrawalDto> agentWithdrawals = new List<ViewAgentWithdrawalDto>();
                     ViewAgentWithdrawalDto agentWithdrawal = new ViewAgentWithdrawalDto();
-                    withdrawal.Ctype = row[TypeColumnName].ToString().Trim();
-                    if (withdrawalId > 0)
+
+                    if(withdrawalId > 0)
                     {
-                        withdrawal = BankPositionsCollection.Where(x => x.WithdrawalId == withdrawalId).FirstOrDefault();
-                        withdrawal.Desc = row[DescriptionColumnName].ToString().Trim();
-                        withdrawal.Ctype = row[TypeColumnName].ToString().Trim();
+                        withdrawal = PersonalCommissionsCollection.Where(x => x.WithdrawalId == withdrawalId).FirstOrDefault();
+                        withdrawal.Dtype = withdrawalType;
                         agentWithdrawals = withdrawal.AgentWithdrawals.ToList();
+
                         if (agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Marty).FirstOrDefault() != null)
                         {
                             agentWithdrawal = agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Marty).FirstOrDefault();
-                            agentWithdrawal.Amount = Convert.ToDouble(row[CmgColumnName]);
+                            agentWithdrawal.Amount = Convert.ToDouble(row[MartyColumnName]);
                         }
-                        else if(Convert.ToDouble(row[CmgColumnName]) > 0)
+                        else if (Convert.ToDouble(row[MartyColumnName]) > 0)
                         {
-                            withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Marty, withdrawalId, Convert.ToDouble(row[CmgColumnName])));
+                            withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Marty, withdrawalId, Convert.ToDouble(row[MartyColumnName])));
                         }
 
                         if (agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Peter).FirstOrDefault() != null)
                         {
                             agentWithdrawal = agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Peter).FirstOrDefault();
-                            agentWithdrawal.Amount = Convert.ToDouble(row[ScColumnName]);
+                            agentWithdrawal.Amount = Convert.ToDouble(row[PeterColumnName]);
                         }
-                        else if(Convert.ToDouble(row[ScColumnName]) > 0)
+                        else if (Convert.ToDouble(row[PeterColumnName]) > 0)
                         {
-                            withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Peter, withdrawalId, Convert.ToDouble(row[ScColumnName])));
+                            withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Peter, withdrawalId, Convert.ToDouble(row[PeterColumnName])));
                         }
-                        
+
                         if (agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Frank).FirstOrDefault() != null)
                         {
                             agentWithdrawal = agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Frank).FirstOrDefault();
-                            agentWithdrawal.Amount = Convert.ToDouble(row[TdColumnName]);
+                            agentWithdrawal.Amount = Convert.ToDouble(row[FrankColumnName]);
                         }
-                        else if(Convert.ToDouble(row[TdColumnName]) > 0)
+                        else if (Convert.ToDouble(row[FrankColumnName]) > 0)
                         {
-                            withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Frank, withdrawalId, Convert.ToDouble(row[TdColumnName])));
-                        }
-                    }
-                    else if (withdrawalId < 0)
-                    {
-                        agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Marty, withdrawalId, Convert.ToDouble(row[CmgColumnName]));
-                        if (agentWithdrawal != null)
-                        {
-                            agentWithdrawals.Add(agentWithdrawal);
-                        }
-                        agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Peter, withdrawalId, Convert.ToDouble(row[ScColumnName]));
-                        if (agentWithdrawal != null)
-                        {
-                            agentWithdrawals.Add(agentWithdrawal);
-                        }
-                        agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Frank, withdrawalId, Convert.ToDouble(row[TdColumnName]));
-                        if (agentWithdrawal != null)
-                        {
-                            agentWithdrawals.Add(agentWithdrawal);
+                            withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Frank, withdrawalId, Convert.ToDouble(row[FrankColumnName])));
                         }
 
-                        withdrawal.AgentWithdrawals = agentWithdrawals;
-                        if (BankPositionsCollection.Where(x => x.WithdrawalId == withdrawalId).Count() == 0)
+                        if (agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Bob).FirstOrDefault() != null)
                         {
-                            BankPositionsCollection.Add(withdrawal);
+                            agentWithdrawal = agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Bob).FirstOrDefault();
+                            agentWithdrawal.Amount = Convert.ToDouble(row[BobColumnName]);
                         }
+                        else if (Convert.ToDouble(row[BobColumnName]) > 0)
+                        {
+                            withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Bob, withdrawalId, Convert.ToDouble(row[BobColumnName])));
+                        }
+                    }
+                    else if(withdrawalId < 0)
+                    {
+                        agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Marty, withdrawalId, Convert.ToDouble(row[MartyColumnName]));
+                        if (agentWithdrawal != null)
+                        {
+                            agentWithdrawals.Add(agentWithdrawal);
+                        }
+                        agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Peter, withdrawalId, Convert.ToDouble(row[PeterColumnName]));
+                        if (agentWithdrawal != null)
+                        {
+                            agentWithdrawals.Add(agentWithdrawal);
+                        }
+                        agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Frank, withdrawalId, Convert.ToDouble(row[FrankColumnName]));
+                        if (agentWithdrawal != null)
+                        {
+                            agentWithdrawals.Add(agentWithdrawal);
+                        }
+                        agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Bob, withdrawalId, Convert.ToDouble(row[BobColumnName]));
+                        if (agentWithdrawal != null)
+                        {
+                            agentWithdrawals.Add(agentWithdrawal);
+                        }
+                        withdrawal.AgentWithdrawals = agentWithdrawals;
+                        if (PersonalCommissionsCollection.Where(x => x.WithdrawalId == withdrawalId).Count() == 0)
+                        {
+                            PersonalCommissionsCollection.Add(withdrawal);
+                        }
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+        private void AddOrUpdateBankPositionCollection()
+        {
+            if (BankPositionsTable.Rows.Count > 0)
+            {
+                foreach (DataRow row in BankPositionsTable.Rows)
+                {
+                    if(IsValidRecord(row, BankPositions))
+                    { 
+                        int withdrawalId = (int)row[WithdrawalIdColumnName];
+                        ViewWithdrawalDto withdrawal = GetNewWithdrawal(row, BankPositionCode);
+                        List<ViewAgentWithdrawalDto> agentWithdrawals = new List<ViewAgentWithdrawalDto>();
+                        ViewAgentWithdrawalDto agentWithdrawal = new ViewAgentWithdrawalDto();
+                        withdrawal.Ctype = row[TypeColumnName].ToString().Trim();
+                        if (withdrawalId > 0)
+                        {
+                            withdrawal = BankPositionsCollection.Where(x => x.WithdrawalId == withdrawalId).FirstOrDefault();
+                            withdrawal.Desc = row[DescriptionColumnName].ToString().Trim();
+                            withdrawal.Ctype = row[TypeColumnName].ToString().Trim();
+                            agentWithdrawals = withdrawal.AgentWithdrawals.ToList();
+                            if (agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Marty).FirstOrDefault() != null)
+                            {
+                                agentWithdrawal = agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Marty).FirstOrDefault();
+                                agentWithdrawal.Amount = Convert.ToDouble(row[CmgColumnName]);
+                            }
+                            else if (Convert.ToDouble(row[CmgColumnName]) > 0)
+                            {
+                                withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Marty, withdrawalId, Convert.ToDouble(row[CmgColumnName])));
+                            }
+
+                            if (agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Peter).FirstOrDefault() != null)
+                            {
+                                agentWithdrawal = agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Peter).FirstOrDefault();
+                                agentWithdrawal.Amount = Convert.ToDouble(row[ScColumnName]);
+                            }
+                            else if (Convert.ToDouble(row[ScColumnName]) > 0)
+                            {
+                                withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Peter, withdrawalId, Convert.ToDouble(row[ScColumnName])));
+                            }
+
+                            if (agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Frank).FirstOrDefault() != null)
+                            {
+                                agentWithdrawal = agentWithdrawals.Where(x => x.AgentId == (int)AgentEnum.Frank).FirstOrDefault();
+                                agentWithdrawal.Amount = Convert.ToDouble(row[TdColumnName]);
+                            }
+                            else if (Convert.ToDouble(row[TdColumnName]) > 0)
+                            {
+                                withdrawal.AgentWithdrawals.Add(AddViewAgentWithdrawalDto((int)AgentEnum.Frank, withdrawalId, Convert.ToDouble(row[TdColumnName])));
+                            }
+                        }
+                        else if (withdrawalId < 0)
+                        {
+                            agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Marty, withdrawalId, Convert.ToDouble(row[CmgColumnName]));
+                            if (agentWithdrawal != null)
+                            {
+                                agentWithdrawals.Add(agentWithdrawal);
+                            }
+                            agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Peter, withdrawalId, Convert.ToDouble(row[ScColumnName]));
+                            if (agentWithdrawal != null)
+                            {
+                                agentWithdrawals.Add(agentWithdrawal);
+                            }
+                            agentWithdrawal = AddViewAgentWithdrawalDto((int)AgentEnum.Frank, withdrawalId, Convert.ToDouble(row[TdColumnName]));
+                            if (agentWithdrawal != null)
+                            {
+                                agentWithdrawals.Add(agentWithdrawal);
+                            }
+
+                            withdrawal.AgentWithdrawals = agentWithdrawals;
+                            if (BankPositionsCollection.Where(x => x.WithdrawalId == withdrawalId).Count() == 0)
+                            {
+                                BankPositionsCollection.Add(withdrawal);
+                            }
+                        }
+                    }
+                    else
+                    {                        
+                        break;
                     }
                 }
             }
