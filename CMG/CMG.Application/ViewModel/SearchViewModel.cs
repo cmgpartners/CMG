@@ -18,7 +18,7 @@ namespace CMG.Application.ViewModel
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly Notifier _notifier;
-        private readonly int PageSize = 10;
+        private readonly int PageSize = 15;
         #endregion Member variables
 
         #region Constructor
