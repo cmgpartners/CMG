@@ -13,6 +13,8 @@ using System.Diagnostics;
 using System.Linq;
 using CMG.Service.Interface;
 using CMG.Service;
+using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace CMG.UI
 {
@@ -24,14 +26,22 @@ namespace CMG.UI
         public IServiceProvider ServiceProvider { get; private set; }
 
         protected void OnStartUp(object sernder, StartupEventArgs e)
-        {            
+        {
+            Mutex myMutex;
             //Process proc = Process.GetCurrentProcess();
             //int count = Process.GetProcesses().Where(p=> 
             //    p.ProcessName == proc.ProcessName).Count();
 
             //if (count <= 1)
             //{
-                var configurationBuilder = new ConfigurationBuilder()
+            bool aIsNewInstance;
+            myMutex = new Mutex(true, "CMG.UI", out aIsNewInstance);
+            if (!aIsNewInstance)
+            {
+                App.Current.Shutdown();
+            }
+
+            var configurationBuilder = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile("appsettings.json");
 
@@ -43,7 +53,7 @@ namespace CMG.UI
 
                 var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
                 mainWindow.Show();
-          //  }
+            //  }
         }
 
         private void ConfigureServices(IServiceCollection services, IConfiguration configuration)

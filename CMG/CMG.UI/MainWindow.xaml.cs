@@ -68,7 +68,7 @@ namespace CMG.UI
                 if (!(_mainViewModel.SelectedViewModel is FinanceSummaryViewModel))
                 {
                     _mainViewModel.SelectedIndexLeftNavigation = (int)LeftNavigation.FirstYearCommission;
-                    FinanceSummaryViewModel financeSummaryViewModel = new FinanceSummaryViewModel(_unitOfWork, _mapper);
+                    FinanceSummaryViewModel financeSummaryViewModel = new FinanceSummaryViewModel(_unitOfWork, _mapper, _dialogService, _notifier);
                     _mainViewModel.SelectedViewModel = financeSummaryViewModel;
                     DataContext = _mainViewModel;
                     lstNavItems.SelectedItem = lstNavItems.Items[2];
