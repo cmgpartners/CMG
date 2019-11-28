@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CMG.Application.DTO
 {
-    public class ViewCommissionDto
+    public class ViewCommissionDto 
     {
         public int CommissionId { get; set; }
         public DateTime PayDate { get; set; } = DateTime.Today;

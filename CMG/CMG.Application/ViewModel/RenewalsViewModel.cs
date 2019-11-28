@@ -14,6 +14,7 @@ using ToastNotifications;
 using ToastNotifications.Messages;
 using CMG.Service.Interface;
 using CMG.Service;
+using System.Collections;
 
 namespace CMG.Application.ViewModel
 {
@@ -99,6 +100,16 @@ namespace CMG.Application.ViewModel
                 _dataCollection = value;
                 OnPropertyChanged("DataCollection");
                 OnPropertyChanged("IsNoRecordFound");
+            }
+        }
+
+        private ObservableCollection<ViewCommissionDto> _originalCollection;
+        public ObservableCollection<ViewCommissionDto> OriginalCollection
+        {
+            get { return _originalCollection; }
+            set
+            {
+                _originalCollection = value;
             }
         }
 
@@ -221,18 +232,25 @@ namespace CMG.Application.ViewModel
                 var importedData = dataSearchBy.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList()
                                   .Select(x => { x.CompanyName = x.CompanyName.Trim() == "" ? "" : Companies.Where(c => c.FieldCode == x.CompanyName.Trim()).FirstOrDefault().Description; return x; }).ToList();
                 importedData.ForEach(x => DataCollection.Add(x));
+                DataCollection = DataCollection;
                 UpdateImportCollection();
+                OriginalCollection = null;
             }
             else
             {
                 DataCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList()
                 .Select(x => { x.CompanyName = x.CompanyName.Trim() == "" ? "" : Companies.Where(c => c.FieldCode == x.CompanyName.Trim()).FirstOrDefault().Description; return x; }).ToList());
+                OriginalCollection = new ObservableCollection<ViewCommissionDto>(dataSearchBy.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList()
+                    .Select(x => { x.CompanyName = x.CompanyName.Trim(); return x; }));
             }
-
         }
         public void Import()
         {
-            var result = _dialogService.ShowMessageBox("Records already exist for this month. Are you sure you want to import?");
+            var result = DialogServiceLibrary.MessageBoxResult.Yes;
+            if (DataCollection.Count > 0)
+            {
+                result = _dialogService.ShowMessageBox("Records already exist for this month. Are you sure you want to import?");
+            }
             if (result == DialogServiceLibrary.MessageBoxResult.Yes)
             {
                 IsImportEnabled = true;
@@ -256,16 +274,20 @@ namespace CMG.Application.ViewModel
                     DataCollection = new ObservableCollection<ViewCommissionDto>(DataCollection.Select(x => { x.CompanyName = x.CompanyName.Trim() == string.Empty ? string.Empty : Companies.Where(c => c.Description == x.CompanyName.Trim()).FirstOrDefault().FieldCode; return x; }));
                     foreach (ViewCommissionDto commission in DataCollection)
                     {
+                        var originalCommission = OriginalCollection?.Where(comm => comm.CommissionId == commission.CommissionId).FirstOrDefault();
                         if (commission.CommissionId > 0)
                         {
-                            var entity = _mapper.Map<Comm>(commission);
-                            entity.Yrmo = $"{SelectedYear.ToString()}{SelectedMonthNumber}";
-                            foreach (AgentCommission agentComm in entity.AgentCommissions)
+                            if (originalCommission == null || !Compare(commission,originalCommission))
                             {
-                                agentComm.Agent = null;
-                                _unitOfWork.AgentCommissions.Save(agentComm);
+                                var entity = _mapper.Map<Comm>(commission);
+                                entity.Yrmo = $"{SelectedYear.ToString()}{SelectedMonthNumber}";
+                                foreach (AgentCommission agentComm in entity.AgentCommissions)
+                                {
+                                    agentComm.Agent = null;
+                                    _unitOfWork.AgentCommissions.Save(agentComm);
+                                }
+                                var commissionId = _unitOfWork.Commissions.Save(entity);
                             }
-                            var commissionId = _unitOfWork.Commissions.Save(entity);
                         }
                         else
                         {
@@ -453,6 +475,19 @@ namespace CMG.Application.ViewModel
             var entityCommission = _mapper.Map<Comm>(commission);
             entityCommission.Yrmo = $"{SelectedYear.ToString()}{SelectedMonthNumber}";
             var commissionId = _unitOfWork.Commissions.Add(entityCommission);
+        }
+
+        public bool Compare(ViewCommissionDto modified, ViewCommissionDto original)
+        {
+            if (modified.PayDate != original.PayDate) return false;
+            if (modified.TotalAmount != original.TotalAmount) return false;
+            if (modified.Comment != original.Comment) return false;
+            foreach (ViewAgentCommissionDto agentCommission in modified.AgentCommissions)
+            {
+                var originalAgentCommission = original.AgentCommissions.Where(x => x.Id == agentCommission.Id).FirstOrDefault();
+                if (agentCommission.Commission != originalAgentCommission.Commission) return false;
+            } 
+            return true;
         }
         #endregion Methods
     }
