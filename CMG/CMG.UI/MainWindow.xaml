@@ -24,11 +24,31 @@
             <DataTemplate DataType="{x:Type viewModels:FinanceSummaryViewModel}" >
                 <views:FinanceSummaryView DataContext="{Binding }"></views:FinanceSummaryView>
             </DataTemplate>
+            <Storyboard x:Key="MenuOpen">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="GridMenu">
+                    <EasingDoubleKeyFrame KeyTime="0" Value="0"></EasingDoubleKeyFrame>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="230"></EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
+            <Storyboard x:Key="MenuClose">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="GridMenu">
+                    <EasingDoubleKeyFrame KeyTime="0" Value="230"></EasingDoubleKeyFrame>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"></EasingDoubleKeyFrame>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
         </ResourceDictionary>
     </Window.Resources>
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonMenuOpen">
+            <BeginStoryboard Storyboard="{StaticResource MenuOpen}"></BeginStoryboard>
+        </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonMenuClose">
+            <BeginStoryboard Storyboard="{StaticResource MenuClose}"></BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"></ColumnDefinition>
+            <ColumnDefinition Width="145"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -43,75 +63,82 @@
 
         <Grid Grid.Row="1" Grid.Column="0" Background="{StaticResource GridBackGround}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="70"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="100"></RowDefinition>
+                <RowDefinition Height="230" x:Name="CollapsibleRow"></RowDefinition>
                 <RowDefinition Height="40"></RowDefinition>
+                <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <TextBlock Text="cmg" Style="{StaticResource LogoTextBlock}"></TextBlock>
             </Grid>
-            <StackPanel Grid.Row="1">
-                <ListView x:Name="lstNavItems" SelectedIndex="{Binding SelectedIndexLeftNavigation}" SelectionChanged="LstNavItems_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource LeftNavigationListView}">
-                    <ListViewItem Height="60">
-                        <Grid Width="100">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"></RowDefinition>
-                                <RowDefinition Height="30"></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <Image Source="/Asset/Renewals.png" Style="{StaticResource ImageIconStyle}"></Image>
-                            <TextBlock Grid.Row="1" Style="{StaticResource TextBlockStyle}" Text="Renewals"></TextBlock>
-                        </Grid>
-                    </ListViewItem>
-                    <ListViewItem Height="60">
-                        <Grid Width="100">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"></RowDefinition>
-                                <RowDefinition Height="30"></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <Image Source="/Asset/FYC.png" Style="{StaticResource ImageIconStyle}"></Image>
-                            <TextBlock Grid.Row="1" Style="{StaticResource TextBlockStyle}" Text="FYC"></TextBlock>
-                        </Grid>
-                    </ListViewItem>
-                    <ListViewItem Height="60">
-                        <Grid Width="100">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"></RowDefinition>
-                                <RowDefinition Height="30"></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <Image Source="/Asset/Financial Summary.png" Style="{StaticResource ImageIconStyle}"></Image>
-                            <TextBlock Grid.Row="1" Style="{StaticResource TextBlockStyle}" Text="Summary"></TextBlock>
-                        </Grid>
-                    </ListViewItem>
-                    <ListViewItem Height="60">
-                        <Grid Width="100">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"></RowDefinition>
-                                <RowDefinition Height="30"></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <Image Source="/Asset/Search.png" Style="{StaticResource ImageIconStyle}"></Image>
-                            <TextBlock Grid.Row="1" Style="{StaticResource TextBlockStyle}" Text="Search"></TextBlock>
-                        </Grid>
-                    </ListViewItem>
-                    <ListViewItem Height="60">
-                        <Grid Width="100">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"></RowDefinition>
-                                <RowDefinition Height="30"></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <Button Click="Button_NavigationClick" Background="Transparent" BorderThickness="0">
-                                <Image Source="/Asset/Salesforce.png" Style="{StaticResource ImageIconStyle}"></Image>    
-                            </Button>
-                            <TextBlock Grid.Row="1" Style="{StaticResource TextBlockStyle}">
-                                 <Hyperlink  NavigateUri="http://www.google.com" RequestNavigate="Hyperlink_RequestNavigate"  Style="{StaticResource HyperLinkStyle}">
-                                     Salesforce
-                                </Hyperlink>
-                            </TextBlock>
-                        </Grid>
-                    </ListViewItem>
-                </ListView>
-            </StackPanel>
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="*"/>
+                    
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0 0 0 10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                    <TextBlock Background="#00A3FF"></TextBlock>
+                    <TextBlock Text="Commissions" Margin="10 10 0 10" VerticalAlignment="Center" Foreground="White" FontSize="14" FontWeight="Bold"></TextBlock>
+                    <Button Background="Transparent" BorderThickness="0" x:Name="ButtonMenuOpen" Visibility="Collapsed" Click="ButtonMenuOpen_Click">
+                        <materialDesign:PackIcon Kind="ArrowBottom" VerticalAlignment="Center"></materialDesign:PackIcon>
+                    </Button>
+                    <Button Background="Transparent" BorderThickness="0" x:Name="ButtonMenuClose" Click="ButtonMenuClose_Click">
+                        <materialDesign:PackIcon Kind="ArrowUp" VerticalAlignment="Center"></materialDesign:PackIcon>
+                    </Button>
+                </StackPanel>
+                <Grid Grid.Row="1" x:Name="GridMenu">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Background="#00A3FF"></TextBlock>
+                    <StackPanel Grid.Column="1">
+                        <ListView x:Name="lstNavItems" SelectedIndex="{Binding SelectedIndexLeftNavigation}" SelectionChanged="LstNavItems_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource LeftNavigationListView}">
+                            <ListViewItem Height="45">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Asset/Renewals.png" Style="{StaticResource ImageIconStyle}" Margin="10"></Image>
+                                    <TextBlock Style="{StaticResource TextBlockStyle}" VerticalAlignment="Center" Text="Renewals" Foreground="#00A3FF"></TextBlock>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem Height="45">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Asset/FYC.png" Style="{StaticResource ImageIconStyle}" Margin="10"></Image>
+                                    <TextBlock Style="{StaticResource TextBlockStyle}" Text="FYC" VerticalAlignment="Center" Foreground="#00A3FF"></TextBlock>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem Height="45">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Asset/Financial Summary.png" Style="{StaticResource ImageIconStyle}" Margin="10"></Image>
+                                    <TextBlock Style="{StaticResource TextBlockStyle}" Text="Summary" VerticalAlignment="Center" Foreground="#00A3FF"></TextBlock>
+                                </StackPanel>
+                            </ListViewItem>
+                            <ListViewItem Height="45">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Asset/Search.png" Style="{StaticResource ImageIconStyle}" Margin="10"></Image>
+                                    <TextBlock Style="{StaticResource TextBlockStyle}" Text="Search" VerticalAlignment="Center" Foreground="#00A3FF"></TextBlock>
+                                </StackPanel>
+                            </ListViewItem>
+                        </ListView>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+
+            <Button  Grid.Row="2" Content="Policies" Style="{StaticResource LeftNavMenuButton}" x:Name="PolicyMenu" Width="145"  Click="PolicyMenu_Click"></Button>
+
+            <Button Grid.Row="3" Style="{StaticResource LeftNavMenuButton}" Width="145">
+                <Hyperlink  NavigateUri="http://www.google.com" RequestNavigate="Hyperlink_RequestNavigate"  Style="{StaticResource HyperLinkStyle}">
+                    Salesforce
+                </Hyperlink>
+            </Button>
         </Grid>
-        
+       
         <Grid Grid.Row="1" Grid.Column="1" Style="{StaticResource PageHeader}">
             <ContentPresenter  Content="{Binding SelectedViewModel}" ></ContentPresenter>
         </Grid>
