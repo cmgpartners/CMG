@@ -12,6 +12,8 @@ using ToastNotifications.Position;
 using ToastNotifications.Lifetime;
 using System;
 using CMG.Service.Interface;
+using System.Windows.Threading;
+using System.Windows.Media;
 
 namespace CMG.UI
 {
@@ -127,6 +129,38 @@ namespace CMG.UI
 
                 cfg.Dispatcher = System.Windows.Application.Current.Dispatcher;
             });
+        }
+
+        private void ButtonMenuOpen_Click(object sender, RoutedEventArgs e)
+        {
+            ButtonMenuOpen.Visibility = Visibility.Collapsed;
+            ButtonMenuClose.Visibility = Visibility.Visible;
+            PolicyMenu.Background = null;
+            CollapsibleRow.Height = new GridLength(230);
+        }
+
+        private void ButtonMenuClose_Click(object sender, RoutedEventArgs e)
+        {
+            CloseCommissionMenu();
+        }
+
+        private void PolicyMenu_Click(object sender, RoutedEventArgs e)
+        {
+            PolicyMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
+            CloseCommissionMenu();
+        }
+
+        private void CloseCommissionMenu()
+        {
+            ButtonMenuOpen.Visibility = Visibility.Visible;
+            ButtonMenuClose.Visibility = Visibility.Collapsed;
+            var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(450) };
+            timer.Start();
+            timer.Tick += (sender, args) =>
+            {
+                timer.Stop();
+                CollapsibleRow.Height = new GridLength(40);
+            };
         }
     }
 }
