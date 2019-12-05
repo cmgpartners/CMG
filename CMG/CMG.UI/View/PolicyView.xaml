@@ -78,7 +78,7 @@
                         </StackPanel>
                         <StackPanel Grid.Row="0" Grid.Column="3">
                             <TextBlock Text="Entity Type" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <ComboBox ItemsSource="{Binding ClientType}" DisplayMemberPath="Description" Foreground="White" Margin="0 0 15 0" Style="{StaticResource EntityTypeStyle}">
+                            <ComboBox ItemsSource="{Binding ClientTypeCollection}" DisplayMemberPath="Description" Foreground="White" Margin="0 0 15 0" Style="{StaticResource EntityTypeStyle}">
                             </ComboBox>
                             
                         </StackPanel>

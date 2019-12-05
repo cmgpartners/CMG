@@ -9,7 +9,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using ToastNotifications;
-using System.Linq;
 
 namespace CMG.Application.ViewModel
 {
@@ -49,17 +48,6 @@ namespace CMG.Application.ViewModel
             }
         }
 
-        private ObservableCollection<ViewComboDto> _comboCollection;
-        public ObservableCollection<ViewComboDto> ComboClientTypeCollection
-        {
-            get { return _comboCollection; }
-            set
-            {
-                _comboCollection = value;
-                OnPropertyChanged("ComboCollection");
-            }
-        }
-
         private ObservableCollection<ViewPolicyListDto> _policyCollection;
         public ObservableCollection<ViewPolicyListDto> PolicyCollection
         {
@@ -68,6 +56,24 @@ namespace CMG.Application.ViewModel
             {
                 _policyCollection = value;
                 OnPropertyChanged("PolicyCollection");
+            }
+        }
+
+        private List<ViewComboDto> _combo;
+        public List<ViewComboDto> Combo
+        {
+            get { return _combo; }
+            set { _combo = value; }
+        }
+
+        private ObservableCollection<ViewComboDto> _clientTypeCollection;
+        public ObservableCollection<ViewComboDto> ClientTypeCollection
+        {
+            get { return _clientTypeCollection; }
+            set
+            {
+                _clientTypeCollection = value;
+                OnPropertyChanged("ClientTypeCollection");
             }
         }
         
@@ -178,19 +184,25 @@ namespace CMG.Application.ViewModel
         #region Methods
         private void GetComboData()
         {
-            var comboData = _unitOfWork.Combo.All().Where(x => x.FIELDNAME.Trim() == comboFieldNameClentType);
-            ComboClientTypeCollection = new ObservableCollection<ViewComboDto>(comboData.Select(r => _mapper.Map<ViewComboDto>(r)).ToList());
+            var combo = _unitOfWork.Combo.All();
+            Combo = combo.Select(r => _mapper.Map<ViewComboDto>(r)).ToList();
+        }
+        private void GetClientType()
+        {
+            ClientTypeCollection = new ObservableCollection<ViewComboDto>(Combo.Where(x => x.FieldName.Trim() == comboFieldNameClentType).ToList());
         }
         private void LoadData()
         {
             GetComboData();
+            GetClientType();
+            GetPolicies();
         }
         private void Search()
         {
             FirstName = "peter";
             SearchQuery searchQuery = BuildSearchQuery();
             var dataSearchBy = _unitOfWork.People.Find(searchQuery);
-            var dataCollection = dataSearchBy.Result.Select(x => { x.Clienttyp = string.IsNullOrEmpty(x.Clienttyp.Trim()) ? "" : ComboClientTypeCollection.Where(c => c.FieldCode == x.Clienttyp.Trim()).FirstOrDefault().Description; return x; });
+            var dataCollection = dataSearchBy.Result.Select(x => { x.Clienttyp = string.IsNullOrEmpty(x.Clienttyp.Trim()) ? "" : ClientTypeCollection.Where(c => c.FieldCode == x.Clienttyp.Trim()).FirstOrDefault().Description; return x; });
             ClientCollection = new ObservableCollection<ViewClientSearchDto>(dataCollection.Select(r => _mapper.Map<ViewClientSearchDto>(r)).ToList());
         }
         private SearchQuery BuildSearchQuery()
