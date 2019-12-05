@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CMG.DataAccess.Domain
 {
-    public partial class PolIll
+    public partial class PolIll : EntityBase
     {
         public int Keynumo { get; set; }
         public byte? Year { get; set; }

@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace CMG.DataAccess.Domain
 {
-    public partial class PeoplePolicys
+    public partial class PeoplePolicys : EntityBase
     {
         public int Keynuml { get; set; }
         public int Keynumo { get; set; }

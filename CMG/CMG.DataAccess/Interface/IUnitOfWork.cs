@@ -11,6 +11,13 @@ namespace CMG.DataAccess.Interface
         IWithdrawalsRepository Withdrawals { get; }
         IAgentWithdrawalsRepository AgentWithdrawals { get; }
         IComboRepository Combo { get; }
+        IPeoplePolicyRepository PeoplePolicy { get; }
+        IPeopleRepository People { get; }
+        IBusinessRelationRepository BusinessRelation { get; }
+        IPeopleRelationRepository PeopleRelation { get; }
+        IBusinessRepository Business { get; }
+        IBusinessPolicyRepository BusinessPolicy { get; }
+        IPolicyIllustrationRepository PolicyIllustration { get; }
 
         void Commit();
         void SaveChanges();

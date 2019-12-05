@@ -36,9 +36,8 @@ namespace CMG.UI
             _notifier = InitializeNotifier();
             InitializeComponent();
             _mainViewModel = new MainViewModel(_unitOfWork, _mapper, _notifier);
-            lstNavItems.SelectedItem = lstNavItems.Items[0];
+            //lstNavItems.SelectedItem = lstNavItems.Items[0];
         }
-
         private void LstNavItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ListView lstNavigation = (ListView)sender;
@@ -71,7 +70,7 @@ namespace CMG.UI
                     FinanceSummaryViewModel financeSummaryViewModel = new FinanceSummaryViewModel(_unitOfWork, _mapper, _dialogService, _notifier);
                     _mainViewModel.SelectedViewModel = financeSummaryViewModel;
                     DataContext = _mainViewModel;
-                    lstNavItems.SelectedItem = lstNavItems.Items[2];
+                    //lstNavItems.SelectedItem = lstNavItems.Items[2];
                 }
             }
             else if (lstNavigation.SelectedIndex == 3)
@@ -84,12 +83,21 @@ namespace CMG.UI
                     DataContext = _mainViewModel;
                 }
             }
+            else if (lstNavigation.SelectedIndex == 5)
+            {
+                if (!(_mainViewModel.SelectedViewModel is PolicyViewModel))
+                {
+                    _mainViewModel.SelectedIndexLeftNavigation = (int)LeftNavigation.Search;
+                    PolicyViewModel policyViewModel = new PolicyViewModel(_unitOfWork, _mapper);
+                    _mainViewModel.SelectedViewModel = policyViewModel;
+                    DataContext = _mainViewModel;
+                }
+            }
         }
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             NavigateToSalesforce();
         }
-
         private void Button_NavigationClick(object sender, RoutedEventArgs e)
         {
             NavigateToSalesforce();

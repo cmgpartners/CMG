@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CMG.DataAccess.Domain
 {
-    public partial class Business
+    public partial class Business : EntityBase
     {
         public Business()
         {

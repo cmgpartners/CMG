@@ -31,6 +31,14 @@ namespace CMG.DataAccess
         private IAgentWithdrawalsRepository _agentWithdrawalsRepository;
         private IComboRepository _comboRepository;
 
+        private IPeoplePolicyRepository _peoplePolicyRepository;
+        private IPeopleRepository _peopleRepository;
+        private IBusinessRelationRepository _businessRelationRepository;
+        private IPeopleRelationRepository _peopleRelationRepository;
+        private IBusinessRepository _businessRepository;
+        private IBusinessPolicyRepository _businessPolicyRepository;
+        private IPolicyIllustrationRepository _policyIllustrationRepository;
+
         public ICommissionRepository Commissions => _commissionRepository ?? (_commissionRepository = new CommissionRepository(_context));
         public IAgentRepository Agents => _agentRepository ?? (_agentRepository = new AgentRepository(_context));
         public IPolicyRepository Policies => _policyRepository ?? (_policyRepository = new PolicyRepository(_context));
@@ -38,6 +46,13 @@ namespace CMG.DataAccess
         public IWithdrawalsRepository Withdrawals => _withdrawalsRepository ?? (_withdrawalsRepository = new WithdrawalRepository(_context));
         public IAgentWithdrawalsRepository AgentWithdrawals => _agentWithdrawalsRepository ?? (_agentWithdrawalsRepository = new AgentWithdrawalsRepository(_context));
         public IComboRepository Combo => _comboRepository ?? (_comboRepository = new ComboRepository(_context));
+        public IPeoplePolicyRepository PeoplePolicy => _peoplePolicyRepository ?? (_peoplePolicyRepository = new PeoplePolicyRepository(_context));
+        public IPeopleRepository People => _peopleRepository ?? (_peopleRepository = new PeopleRepository(_context));
+        public IBusinessRelationRepository BusinessRelation => _businessRelationRepository ?? (_businessRelationRepository = new BusinessRelationRepository(_context));
+        public IPeopleRelationRepository PeopleRelation => _peopleRelationRepository ?? (_peopleRelationRepository = new PeopleRelationRepository(_context));
+        public IBusinessRepository Business => _businessRepository ?? (_businessRepository = new BusinessRepository(_context));
+        public IBusinessPolicyRepository BusinessPolicy => _businessPolicyRepository ?? (_businessPolicyRepository = new BusinessPolicyRepository(_context));
+        public IPolicyIllustrationRepository PolicyIllustration => _policyIllustrationRepository ?? (_policyIllustrationRepository = new PolicyIllustrationRepository(_context));
 
         public void Commit()
         {
