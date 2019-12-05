@@ -290,7 +290,12 @@
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-            </Grid>
+                <TextBlock Text="No records found" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center" 
+                    Visibility="{Binding IsNoRecordFound, Converter={StaticResource VisibilityConverter}}" 
+                    Style="{StaticResource NoRecordsTextBlock}" />
+        </Grid>
             <Grid Grid.Row="2" Background="#FFCEEAFF" Grid.ColumnSpan="4">
                 <Button x:Name="buttonAdd" Content="+" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding AddCommand}"></Button>
             </Grid>

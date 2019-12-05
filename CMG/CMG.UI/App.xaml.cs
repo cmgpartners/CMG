@@ -9,12 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using CMG.DataAccess;
 using AutoMapper;
 using CMG.Application.Mapper;
-using System.Diagnostics;
-using System.Linq;
 using CMG.Service.Interface;
 using CMG.Service;
 using System.Threading;
-using System.Runtime.InteropServices;
 
 namespace CMG.UI
 {
@@ -70,6 +67,7 @@ namespace CMG.UI
                 mc.AddProfile(new PolicyMapperProfile());
                 mc.AddProfile(new WithdrawalMapperProfile());
                 mc.AddProfile(new ComboMapperProfile());
+                mc.AddProfile(new ClientSearchProfiler());
             });
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);

@@ -121,6 +121,13 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("IsNoRecordFound");
             }
         }
+        public bool IsNoRecordFound
+        {
+            get
+            {
+                return DataCollection != null && DataCollection.Count == 0;
+            }
+        }
 
         private IEnumerable<string> _policies;
         public IEnumerable<string> Policies

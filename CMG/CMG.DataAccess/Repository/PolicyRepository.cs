@@ -49,5 +49,10 @@ namespace CMG.DataAccess.Repository
                 })
             }).FirstOrDefault();
         }
+
+        //public IQueryable<Policys> Find(ISearchCriteria criteria)
+        //{
+        //    var query = Context.Business.Include(x => x.BusinessPolicys)
+        //}
     }
 }

@@ -314,3 +314,5 @@
 /CMG/CMG.Application/bin/Debug/netcoreapp3.0
 /CMG/CMG.Service/bin/Debug/netcoreapp3.0
 /CMG/CMG.Service/obj
+/CMG/CMG.Service/bin/Release/netcoreapp3.0
+/CMG/CMG.Application/bin/Release/netcoreapp3.0

@@ -114,7 +114,6 @@ namespace CMG.Application.ViewModel
             set
             {
                 selectedRow = value;
-                OnPropertyChanged("IsNoRecordFound");
             }
         }
 
@@ -126,7 +125,6 @@ namespace CMG.Application.ViewModel
             {
                 _dueToPartnersCollection = value;
                 OnPropertyChanged("DueToPartnersCollection");
-                OnPropertyChanged("IsNoRecordFound");
             }
         }
 
