@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CMG.DataAccess.Domain
 {
-    public partial class RelBp
+    public partial class RelBp : EntityBase
     {
         public int Keyrelb { get; set; }
         public int Keynump { get; set; }
