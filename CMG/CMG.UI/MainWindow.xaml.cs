@@ -140,6 +140,9 @@ namespace CMG.UI
         {
             PolicyMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
             CloseCommissionMenu();
+            PolicyViewModel policyViewModel = new PolicyViewModel(_unitOfWork, _mapper);
+            _mainViewModel.SelectedViewModel = policyViewModel;
+            DataContext = _mainViewModel;
         }
 
         private void CloseCommissionMenu()
