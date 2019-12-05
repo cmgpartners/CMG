@@ -38,7 +38,7 @@ namespace CMG.UI
             _notifier = InitializeNotifier();
             InitializeComponent();
             _mainViewModel = new MainViewModel(_unitOfWork, _mapper, _notifier);
-            //lstNavItems.SelectedItem = lstNavItems.Items[0];
+            lstNavItems.SelectedItem = lstNavItems.Items[0];
         }
         private void LstNavItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -72,7 +72,7 @@ namespace CMG.UI
                     FinanceSummaryViewModel financeSummaryViewModel = new FinanceSummaryViewModel(_unitOfWork, _mapper, _dialogService, _notifier);
                     _mainViewModel.SelectedViewModel = financeSummaryViewModel;
                     DataContext = _mainViewModel;
-                    //lstNavItems.SelectedItem = lstNavItems.Items[2];
+                    lstNavItems.SelectedItem = lstNavItems.Items[2];
                 }
             }
             else if (lstNavigation.SelectedIndex == 3)
@@ -148,6 +148,9 @@ namespace CMG.UI
         {
             PolicyMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
             CloseCommissionMenu();
+            PolicyViewModel policyViewModel = new PolicyViewModel(_unitOfWork, _mapper);
+            _mainViewModel.SelectedViewModel = policyViewModel;
+            DataContext = _mainViewModel;
         }
 
         private void CloseCommissionMenu()

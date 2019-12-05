@@ -24,6 +24,9 @@
             <DataTemplate DataType="{x:Type viewModels:FinanceSummaryViewModel}" >
                 <views:FinanceSummaryView DataContext="{Binding }"></views:FinanceSummaryView>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:PolicyViewModel}" >
+                <views:PolicyView DataContext="{Binding }"></views:PolicyView>
+            </DataTemplate>
             <Storyboard x:Key="MenuOpen">
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="GridMenu">
                     <EasingDoubleKeyFrame KeyTime="0" Value="0"></EasingDoubleKeyFrame>
