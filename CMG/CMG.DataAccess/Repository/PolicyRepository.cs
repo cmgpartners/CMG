@@ -1,11 +1,11 @@
 ﻿using CMG.DataAccess.Domain;
 using CMG.DataAccess.Interface;
-using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using LinqKit;
+using System.Collections.Generic;
 
 namespace CMG.DataAccess.Repository
 {
@@ -50,9 +50,77 @@ namespace CMG.DataAccess.Repository
             }).FirstOrDefault();
         }
 
-        //public IQueryable<Policys> Find(ISearchCriteria criteria)
-        //{
-        //    var query = Context.Business.Include(x => x.BusinessPolicys)
-        //}
+        public IQueryResult<Policys> Find(ISearchCriteria criteria)
+        {
+            var query = Context.Policys.Include(x => x.PeoplePolicys);
+
+            IQueryable<Policys> queryable = query;
+            if ((criteria.FilterBy?.Count() ?? 0) > 0)
+            {
+                queryable = queryable.Where(GetPredicate(criteria));
+            }
+            if (criteria.SortBy != null)
+            {
+                //queryable = OrderByPredicate(queryable, criteria.SortBy);
+            }
+
+            var result = queryable.Select(x => new Policys
+            {
+                Keynumo = x.Keynumo,
+                Policynum = x.Policynum,
+                Company = x.Company,
+                //faceAmount
+                Amount = x.Amount,
+                Status = x.Status,
+                Frequency = x.Frequency,
+                Type = x.Type,
+                Plancode = x.Plancode,
+                //rating
+                Class = x.Class,
+                Currency = x.Currency,
+                Cr8Date = x.Cr8Date,
+                IssueAge = x.IssueAge
+            });
+
+            var totalRecords = result.Count();
+            return new PagedQueryResult<Policys>()
+            {
+                Result = result.ToList(),
+                TotalRecords = totalRecords
+            };
+        }
+        
+        private static Expression<Func<Policys, bool>> GetPredicate(ISearchCriteria criteria)
+        {
+            Expression<Func<Policys, bool>> predicate = null;
+            foreach(var filterBy in criteria.FilterBy)
+            {
+                if(predicate == null)
+                {
+                    predicate = FilterByClausure(filterBy);
+                }
+                else
+                {
+                    predicate = predicate.And(FilterByClausure(filterBy));
+                }
+            }
+            return predicate;
+        }
+
+        private static Expression<Func<Policys, bool>> FilterByClausure(FilterBy filterBy)
+        {
+            switch (filterBy.Property.ToLower())
+            {
+                case "keynump":
+                    return KeynumpExpression(filterBy.Equal);
+                default:
+                    throw new InvalidOperationException($"Can not filter for criteria: filter by {filterBy.Property}");
+            }
+        }
+
+        private static Expression<Func<Policys, bool>> KeynumpExpression(string equals)
+        {
+            return w => w.PeoplePolicys.Any(x => x.Keynump == Convert.ToInt32(equals));
+        }
     }
 }

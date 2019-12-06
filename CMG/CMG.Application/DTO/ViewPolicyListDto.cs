@@ -1,8 +1,24 @@
-﻿namespace CMG.Application.DTO
+﻿using System;
+
+namespace CMG.Application.DTO
 {
     public class ViewPolicyListDto
     {
-      //  public int PolicyId { get; set; }
+        public int Id { get; set; }
         public string PolicyNumber { get; set; }
+        public string CompanyName { get; set; }
+        public decimal FaceAmount { get; set; }
+        public decimal Payment { get; set; }
+        public string Status { get; set; }
+        public string Frequency { get; set; }
+        public string Type { get; set; }
+        public string PlanCode { get; set; }
+        public string Rating { get; set; }        
+        public string Class { get; set; }        
+        public string Currency { get; set; }        
+        public DateTime PolicyDate { get; set; }        
+        public DateTime PlacedOn { get; set; }        
+        public DateTime ReprojectedOn { get; set; }        
+        public int Age { get; set; }        
     }
 }
