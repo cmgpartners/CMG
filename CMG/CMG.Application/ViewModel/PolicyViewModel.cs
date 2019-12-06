@@ -77,7 +77,7 @@ namespace CMG.Application.ViewModel
             }
         }
         
-         private IEnumerable<string> _policies;
+        private IEnumerable<string> _policies;
         public IEnumerable<string> Policies
         {
             get { return _policies; }
@@ -85,6 +85,29 @@ namespace CMG.Application.ViewModel
             {
                 _policies = value;
                 OnPropertyChanged("Policies");
+            }
+        }
+
+        private ViewClientSearchDto _selectedClient;
+        public ViewClientSearchDto SelectedClient
+        {
+            get { return _selectedClient; }
+            set 
+            { 
+                _selectedClient = value;
+                OnPropertyChanged("Policies");
+                GetPolicyCollection();
+            }
+        }
+
+        private ViewComboDto _selectedClientType;
+        public ViewComboDto SelectedClientType
+        {
+            get { return _selectedClientType; }
+            set
+            {
+                _selectedClientType = value;
+                OnPropertyChanged("SelectedClientType");
             }
         }
 
@@ -173,21 +196,10 @@ namespace CMG.Application.ViewModel
             }
         }
 
-        private string _entityType;
-        public string EntityType
-        {
-            get { return _entityType; }
-            set
-            {
-                _entityType = value;
-                OnPropertyChanged("EntityType");
-            }
-        }
-
         #region command properties
         public ICommand SearchClientCommand
         {
-            get { return CreateCommand(SearchPolicyTemp); }//Search
+            get { return CreateCommand(Search); }//Search
         }
         #endregion command properties
         #endregion Properties
@@ -226,8 +238,7 @@ namespace CMG.Application.ViewModel
         {
             SearchQuery searchQuery = BuildSearchQuery();
             var dataSearchBy = _unitOfWork.People.Find(searchQuery);
-            var dataCollection = dataSearchBy.Result.Select(x => { x.Clienttyp = string.IsNullOrEmpty(x.Clienttyp.Trim()) ? "" : ClientTypeCollection.Where(c => c.FieldCode == x.Clienttyp.Trim()).FirstOrDefault().Description; return x; });
-            ClientCollection = new ObservableCollection<ViewClientSearchDto>(dataCollection.Select(r => _mapper.Map<ViewClientSearchDto>(r)).ToList());
+            ClientCollection = new ObservableCollection<ViewClientSearchDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewClientSearchDto>(r)).ToList());
         }
         private SearchQuery BuildSearchQuery()
         {
@@ -241,18 +252,14 @@ namespace CMG.Application.ViewModel
             {
                 BuildFilterByContains("LastName", LastName, searchBy);
             }
-            if (!string.IsNullOrEmpty(CompanyName))
+            if (!string.IsNullOrEmpty(CommanName))
             {
-                BuildFilterByContains("Commoname", CommanName, searchBy);
+                BuildFilterByContains("Commonname", CommanName, searchBy);
             }
-            if(!string.IsNullOrEmpty(EntityType))
+            if (SelectedClientType != null)
             {
-                BuildFilterByEquals("entitytype", EntityType, searchBy);
+                BuildFilterByContains("EntityType", SelectedClientType.FieldCode, searchBy);
             }
-            //if (FromDate != null && ToDate != null)
-            //{
-            //    BuildFilterByRange("PayDate", FromDate.Value.ToShortDateString(), ToDate.Value.ToShortDateString(), searchBy);
-            //}
 
             searchQuery.FilterBy = searchBy;
             return searchQuery;
@@ -286,6 +293,10 @@ namespace CMG.Application.ViewModel
             var policies = _unitOfWork.Policies.GetAllPolicyNumber();
             var temppolicies = policies.Select(r => _mapper.Map<ViewPolicyListDto>(r)).ToList();
             Policies = temppolicies.Select(r => r.PolicyNumber).AsEnumerable();
+        }
+        private void GetPolicyCollection()
+        {
+
         }
         #endregion Methods
     }

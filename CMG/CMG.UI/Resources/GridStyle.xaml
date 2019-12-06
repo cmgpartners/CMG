@@ -17,6 +17,41 @@
         <Setter Property="FontSize" Value="12"/>
     </Style>
 
+    <Style x:Key="ClientHeaderStyle" TargetType="DataGridColumnHeader">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="BorderBrush" Value="#FFCEEAFF" />
+        <Setter Property="BorderThickness" Value="0 0 0 3" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="MinWidth" Value="0" />
+        <Setter Property="MinHeight" Value="45" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+
+    <Style x:Key="ClientFirstColumnHeaderStyle" TargetType="DataGridColumnHeader" BasedOn="{StaticResource ClientHeaderStyle}">
+        <Setter Property="Margin" Value="8 0 0 0"/>
+    </Style>
+
+    <Style x:Key="ClientRowStyle" TargetType="{x:Type DataGridRow}">
+        <Setter Property="Background" Value="#FF454A4D"/>
+        <Setter Property="Margin" Value="0 5 0 5"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Height" Value="25"/>
+        <Style.Triggers>
+            <Trigger Property="IsSelected"
+                        Value="True">
+                <Setter Property="Background"
+                        Value="#00A3FF" />
+                <Setter Property="Opacity" Value="0.9"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#00A3FF"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <Style x:Key="PageHeader" TargetType="Grid">
         <Setter Property="Background" Value="#FF9BADB8"/>
         <Setter Property="Opacity" Value="0.7"/>
