@@ -29,7 +29,7 @@ namespace CMG.DataAccess.Repository
             }
             if(criteria.SortBy != null)
             {
-                //queryable = OrderByPredicate(queryable, criteria.SortBy);
+                queryable = OrderByPredicate(queryable, criteria.SortBy);
             }
 
             var result = queryable.Select(x => new People
@@ -77,6 +77,8 @@ namespace CMG.DataAccess.Repository
                     return LastNameExpression(filterBy.Contains);
                 case "commonname":
                     return CommonNameExpression(filterBy.Contains);
+                case "entitytype":
+                    return EntityTypeExpression(filterBy.Equal);
                 default:
                     throw new InvalidOperationException($"Can not filter for criteria: filter by {filterBy.Property}");
             }
@@ -120,6 +122,10 @@ namespace CMG.DataAccess.Repository
         private static Expression<Func<People, bool>> CommonNameExpression(string contains)
         {
             return w => w.Commname.ToLowerInvariant().StartsWith(contains.ToLowerInvariant());
+        }
+        private static Expression<Func<People,bool>> EntityTypeExpression(string equals)
+        {
+            return w => w.Clienttyp.Trim() == equals;
         }
     }
 }
