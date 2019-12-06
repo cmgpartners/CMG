@@ -173,10 +173,21 @@ namespace CMG.Application.ViewModel
             }
         }
 
+        private string _entityType;
+        public string EntityType
+        {
+            get { return _entityType; }
+            set
+            {
+                _entityType = value;
+                OnPropertyChanged("EntityType");
+            }
+        }
+
         #region command properties
         public ICommand SearchClientCommand
         {
-            get { return CreateCommand(Search); }
+            get { return CreateCommand(SearchPolicyTemp); }//Search
         }
         #endregion command properties
         #endregion Properties
@@ -197,9 +208,22 @@ namespace CMG.Application.ViewModel
             GetClientType();
             GetPolicies();
         }
+
+        private void SearchPolicyTemp()
+        {
+            SearchQuery searchQuery = new SearchQuery();
+            List<FilterBy> searchBy = new List<FilterBy>();
+            FilterBy filterBy = new FilterBy();
+            filterBy.Property = "keynump";
+            filterBy.Equal = "23109";// "23109" - 40 records will come // "1575" -- no records;
+            searchBy.Add(filterBy);
+            searchQuery.FilterBy = searchBy;
+
+            var dataSearchBy = _unitOfWork.Policies.Find(searchQuery);
+            PolicyCollection = new ObservableCollection<ViewPolicyListDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewPolicyListDto>(r)).ToList());
+        }
         private void Search()
         {
-            FirstName = "peter";
             SearchQuery searchQuery = BuildSearchQuery();
             var dataSearchBy = _unitOfWork.People.Find(searchQuery);
             var dataCollection = dataSearchBy.Result.Select(x => { x.Clienttyp = string.IsNullOrEmpty(x.Clienttyp.Trim()) ? "" : ClientTypeCollection.Where(c => c.FieldCode == x.Clienttyp.Trim()).FirstOrDefault().Description; return x; });
@@ -221,6 +245,10 @@ namespace CMG.Application.ViewModel
             {
                 BuildFilterByContains("Commoname", CommanName, searchBy);
             }
+            if(!string.IsNullOrEmpty(EntityType))
+            {
+                BuildFilterByEquals("entitytype", EntityType, searchBy);
+            }
             //if (FromDate != null && ToDate != null)
             //{
             //    BuildFilterByRange("PayDate", FromDate.Value.ToShortDateString(), ToDate.Value.ToShortDateString(), searchBy);
@@ -234,6 +262,15 @@ namespace CMG.Application.ViewModel
             FilterBy filterBy = new FilterBy();
             filterBy.Property = property;
             filterBy.Contains = value;
+            searchBy.Add(filterBy);
+        }
+
+        private void BuildFilterByEquals(string property, string value, List<FilterBy> searchBy)
+        {
+            value = ClientTypeCollection.Where(x => x.Description.Trim() == value.Trim()).FirstOrDefault().FieldCode.Trim();
+            FilterBy filterBy = new FilterBy();
+            filterBy.Property = property;
+            filterBy.Equal = value;
             searchBy.Add(filterBy);
         }
         private void BuildFilterByRange(string property, string fromvalue, string toValue, List<FilterBy> searchBy)
