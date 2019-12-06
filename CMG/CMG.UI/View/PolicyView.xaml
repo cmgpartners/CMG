@@ -38,7 +38,7 @@
                 <ColumnDefinition Width="300"/>
             </Grid.ColumnDefinitions>
 
-            <Grid Grid.Row="0" Grid.Column="0" Background="#FF252627" Opacity="1" x:Name="SliderPannel">
+            <Grid Grid.Row="0" Grid.Column="0" Background="#FF252627" x:Name="SliderPannel">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="100"/>
                     <RowDefinition Height="300" />
@@ -66,19 +66,19 @@
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Row="0" Grid.Column="0">
                             <TextBlock Text="Common Name" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3"  Text="" MinWidth="150"></TextBox>
+                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3"  Text="{Binding CommanName}" Foreground="White" FontSize="16" MinWidth="150"></TextBox>
                         </StackPanel>
                         <StackPanel Grid.Row="0" Grid.Column="1">
                             <TextBlock Text="Last Name" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3"  Text="" MinWidth="150"></TextBox>
+                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Foreground="White" FontSize="16"  Text="{Binding LastName}" MinWidth="150"></TextBox>
                         </StackPanel>
                         <StackPanel Grid.Row="0" Grid.Column="2">
                             <TextBlock Text="First Name" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3"  Text="" MinWidth="150" Foreground="White"></TextBox>
+                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Foreground="White" FontSize="16"  Text="{Binding FirstName}" MinWidth="150"></TextBox>
                         </StackPanel>
                         <StackPanel Grid.Row="0" Grid.Column="3">
                             <TextBlock Text="Entity Type" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <ComboBox ItemsSource="{Binding ClientTypeCollection}" DisplayMemberPath="Description" Foreground="White" Margin="0 0 15 0" Style="{StaticResource EntityTypeStyle}">
+                            <ComboBox ItemsSource="{Binding ClientTypeCollection}" SelectedValue="{Binding SelectedClientType}" DisplayMemberPath="Description" Foreground="White" FontSize="16" Margin="0 0 15 0" Style="{StaticResource EntityTypeStyle}">
                             </ComboBox>
                             
                         </StackPanel>
@@ -95,6 +95,7 @@
                                     Foreground="White"
                                     Margin="15 0 0 0"
 		                            HorizontalAlignment="Left"
+                                    FontSize="16"
                                     BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3"
 		                            Text="{Binding Path=PolicyNumber, UpdateSourceTrigger=PropertyChanged}" 
 		                            behaviors:AutoCompleteBehavior.AutoCompleteItemsSource="{Binding DataContext.SelectedViewModel.Policies, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}}}" 
@@ -103,15 +104,12 @@
                         </StackPanel>
                         <StackPanel Grid.Row="1" Grid.Column="1">
                             <TextBlock Text="Company" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3"  Text="" MinWidth="150"></TextBox>
+                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Foreground="White" FontSize="16" Text="" MinWidth="150"></TextBox>
                         </StackPanel>
-                        <StackPanel Grid.Row="1" Grid.Column="2">
-                            <TextBlock Text="Business" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3"  Text="" MinWidth="150"></TextBox>
-                        </StackPanel>
-                        <StackPanel Grid.Row="1" Grid.Column="3">
+                       
+                        <StackPanel Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2">
                             <TextBlock Text="Policy Date" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3"  Text="" MinWidth="150"></TextBox>
+                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Foreground="White" FontSize="16" Text="" MinWidth="150"></TextBox>
                         </StackPanel>
 
                         <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Top">
@@ -122,12 +120,46 @@
                             </Button>
                         </StackPanel>
                         <StackPanel Grid.Row="2" Grid.Column="4">
-                            <Button Content="Search" Width="85"></Button>
+                            <Button Content="Search" Width="85" Command="{Binding SearchClientCommand}"></Button>
                         </StackPanel>
                     </Grid>
                 </Grid>
                 <Grid Grid.Row="2">
-                </Grid>
+                    <DataGrid AutoGenerateColumns="False" x:Name="search" IsReadOnly="True" Background="{x:Null}" GridLinesVisibility="None"
+                          ItemsSource="{Binding ClientCollection}" ColumnHeaderStyle="{StaticResource ClientHeaderStyle}" RowStyle="{StaticResource ClientRowStyle }" 
+                          SelectionUnit="FullRow" SelectedItem="{Binding SelectedClient}">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Common Name" Width="105" SortMemberPath="CommonName" CanUserSort="True" HeaderStyle="{StaticResource ClientFirstColumnHeaderStyle }">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=CommonName}" Margin="10 0 10 0" Foreground="White" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Last Name" Width="100" SortMemberPath="LastName" CanUserSort="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=LastName}" Foreground="White" ></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="First Name" Width="90" SortMemberPath="FirstName" CanUserSort="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=FirstName}" Foreground="White"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Entity Type" Width="200" SortMemberPath="ClientType" CanUserSort="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=ClientType}" Foreground="White"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                   </Grid>
             </Grid>
             <Grid Grid.Row="0" Grid.Column="1">
                 <Grid.RowDefinitions>

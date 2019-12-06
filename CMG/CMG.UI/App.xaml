@@ -21,6 +21,7 @@
                 <ResourceDictionary Source="/Resources/ContextMenu.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="/Resources/LabelStyle.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="/Resources/ComboStyle.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="/Resources/TextBoxStyle.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="pack://application:,,,/ToastNotifications.Messages;component/Themes/Default.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="VisibilityConverter" />
