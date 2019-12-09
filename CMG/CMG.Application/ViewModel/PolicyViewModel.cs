@@ -221,24 +221,12 @@ namespace CMG.Application.ViewModel
             GetPolicies();
         }
 
-        private void SearchPolicyTemp()
-        {
-            SearchQuery searchQuery = new SearchQuery();
-            List<FilterBy> searchBy = new List<FilterBy>();
-            FilterBy filterBy = new FilterBy();
-            filterBy.Property = "keynump";
-            filterBy.Equal = "23109";// "23109" - 40 records will come // "1575" -- no records;
-            searchBy.Add(filterBy);
-            searchQuery.FilterBy = searchBy;
-
-            var dataSearchBy = _unitOfWork.Policies.Find(searchQuery);
-            PolicyCollection = new ObservableCollection<ViewPolicyListDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewPolicyListDto>(r)).ToList());
-        }
         private void Search()
         {
             SearchQuery searchQuery = BuildSearchQuery();
             var dataSearchBy = _unitOfWork.People.Find(searchQuery);
-            ClientCollection = new ObservableCollection<ViewClientSearchDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewClientSearchDto>(r)).ToList());
+            var dataCollection = dataSearchBy.Result.Select(x => { x.Clienttyp = string.IsNullOrEmpty(x.Clienttyp.Trim()) ? "" : ClientTypeCollection.Where(c => c.FieldCode == x.Clienttyp.Trim()).FirstOrDefault().Description; return x; });
+            ClientCollection = new ObservableCollection<ViewClientSearchDto>(dataCollection.Select(r => _mapper.Map<ViewClientSearchDto>(r)).ToList());
         }
         private SearchQuery BuildSearchQuery()
         {
@@ -258,7 +246,7 @@ namespace CMG.Application.ViewModel
             }
             if (SelectedClientType != null)
             {
-                BuildFilterByContains("EntityType", SelectedClientType.FieldCode, searchBy);
+                BuildFilterByEquals("EntityType", SelectedClientType.FieldCode, searchBy);
             }
 
             searchQuery.FilterBy = searchBy;
@@ -274,7 +262,7 @@ namespace CMG.Application.ViewModel
 
         private void BuildFilterByEquals(string property, string value, List<FilterBy> searchBy)
         {
-            value = ClientTypeCollection.Where(x => x.Description.Trim() == value.Trim()).FirstOrDefault().FieldCode.Trim();
+            value = ClientTypeCollection.Where(x => x.FieldCode.Trim() == value.Trim()).FirstOrDefault().FieldCode.Trim();
             FilterBy filterBy = new FilterBy();
             filterBy.Property = property;
             filterBy.Equal = value;
