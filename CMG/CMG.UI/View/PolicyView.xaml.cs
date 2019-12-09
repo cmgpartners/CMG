@@ -34,6 +34,7 @@ namespace CMG.UI.View
                 timer.Stop();
                 SliderColumn.Width = new GridLength(0);
                 SearchBar.Visibility = Visibility.Visible;
+                searchBarColumn.Width = new GridLength(200);
             };
             
         }
@@ -42,6 +43,7 @@ namespace CMG.UI.View
         {
             SearchBar.Visibility = Visibility.Collapsed;
             SliderColumn.Width = new GridLength(450);
+            searchBarColumn.Width = new GridLength(0);
         }
     }
 }

@@ -40,7 +40,10 @@ namespace CMG.DataAccess.Repository
                 Commname = x.Commname,
                 Birthdate = x.Birthdate,
                 Smoker = x.Smoker,
-                Clienttyp = x.Clienttyp
+                Clienttyp = x.Clienttyp,
+                Pstatus = x.Pstatus,
+                SvcType = x.SvcType,
+                Pnotes = x.Pnotes
             });
 
             var totalRecords = result.Count();

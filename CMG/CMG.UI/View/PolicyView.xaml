@@ -66,36 +66,32 @@
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Row="0" Grid.Column="0">
                             <TextBlock Text="Common Name" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3"  Text="{Binding CommanName}" Foreground="White" FontSize="16" MinWidth="150"></TextBox>
+                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3"  Text="{Binding CommanName}" Foreground="White" FontSize="14" MinWidth="150"></TextBox>
                         </StackPanel>
                         <StackPanel Grid.Row="0" Grid.Column="1">
                             <TextBlock Text="Last Name" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Foreground="White" FontSize="16"  Text="{Binding LastName}" MinWidth="150"></TextBox>
+                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Foreground="White" FontSize="14"  Text="{Binding LastName}" MinWidth="150"></TextBox>
                         </StackPanel>
                         <StackPanel Grid.Row="0" Grid.Column="2">
                             <TextBlock Text="First Name" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Foreground="White" FontSize="16"  Text="{Binding FirstName}" MinWidth="150"></TextBox>
+                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Foreground="White" FontSize="14"  Text="{Binding FirstName}" MinWidth="150"></TextBox>
                         </StackPanel>
                         <StackPanel Grid.Row="0" Grid.Column="3">
                             <TextBlock Text="Entity Type" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <ComboBox ItemsSource="{Binding ClientTypeCollection}" SelectedValue="{Binding SelectedClientType}" DisplayMemberPath="Description" Foreground="White" FontSize="16" Margin="0 0 15 0" Style="{StaticResource EntityTypeStyle}">
+                            <ComboBox ItemsSource="{Binding ClientTypeCollection}" SelectedValue="{Binding SelectedClientType}" DisplayMemberPath="Description" Foreground="White" FontSize="13" Margin="0 0 17 0" Style="{StaticResource EntityTypeStyle}">
                             </ComboBox>
                             
                         </StackPanel>
 
                         <StackPanel Grid.Row="1" Grid.Column="0">
                             <TextBlock Text="Policy #" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <!--<ComboBox Width="100"
-                                      IsEditable="True"
-                                      ItemsSource="{Binding Policies}"
-                                      IsTextSearchEnabled="True"></ComboBox>-->
                             <TextBox
                                     Visibility="{Binding IsNew, Converter={StaticResource VisibilityConverter}}"
 		                            Width="85"
                                     Foreground="White"
                                     Margin="15 0 0 0"
 		                            HorizontalAlignment="Left"
-                                    FontSize="16"
+                                    FontSize="14"
                                     BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3"
 		                            Text="{Binding Path=PolicyNumber, UpdateSourceTrigger=PropertyChanged}" 
 		                            behaviors:AutoCompleteBehavior.AutoCompleteItemsSource="{Binding DataContext.SelectedViewModel.Policies, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}}}" 
@@ -104,12 +100,12 @@
                         </StackPanel>
                         <StackPanel Grid.Row="1" Grid.Column="1">
                             <TextBlock Text="Company" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Foreground="White" FontSize="16" Text="" MinWidth="150"></TextBox>
+                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Foreground="White" FontSize="14" Text="" MinWidth="150"></TextBox>
                         </StackPanel>
                        
                         <StackPanel Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2">
                             <TextBlock Text="Policy Date" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Foreground="White" FontSize="16" Text="" MinWidth="150"></TextBox>
+                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Foreground="White" FontSize="14" Text="" MinWidth="150"></TextBox>
                         </StackPanel>
 
                         <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Top">
@@ -163,18 +159,212 @@
             </Grid>
             <Grid Grid.Row="0" Grid.Column="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="70"/>
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0" x:Name="searchBarColumn"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
                 <DockPanel x:Name="SearchBar" Visibility="Collapsed">
                     <materialDesign:PackIcon Kind="Search" VerticalAlignment="Center" Margin="20" Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
-                    <TextBlock Text="Search" Margin="0 38 10 10" FontSize="16" Foreground="White" ></TextBlock>
+                    <TextBlock Text="Search" Margin="0 22 10 10" FontSize="16" Foreground="White" ></TextBlock>
                     <Button Background="Transparent" BorderBrush="Transparent" Width="50" x:Name="ButtonOpen" HorizontalAlignment="Left" Click="ButtonOpen_Click">
                         <materialDesign:PackIcon Kind="ArrowRightBoldCircleOutline" VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
                     </Button>
+                    <TextBlock Text="|" Margin="0 10 10 10" FontSize="35" Foreground="#FFF0F9FF" FontWeight="Light" Opacity="0.3"></TextBlock>
                 </DockPanel>
+                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Snowflake" Margin="10 10 0 10" VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
+                    <TextBlock Margin="10 22 10 10" FontSize="16" Foreground="White">
+                        <Run Text="{Binding SelectedClient.ClientType}"/>
+                        <Run Text=" : "/>
+                        <Run Text="{Binding SelectedClient.CommonName}"/>
+                        <Run Text=" "/>
+                        <Run Text="{Binding SelectedClient.LastName}"/>
+                    </TextBlock>
+                </StackPanel>
+                <Grid Grid.Row="1" Margin="10 0 10 10" Grid.ColumnSpan="2">
+                    <DataGrid AutoGenerateColumns="False" 
+                      x:Name="policies" IsReadOnly="False" 
+                      ItemsSource="{Binding PolicyCollection}" 
+                      ColumnHeaderStyle="{StaticResource HeaderStyle}" 
+                      CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="40">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Number" Width="105" SortMemberPath="PolicyNumber" CanUserSort="True" HeaderStyle="{StaticResource FirstColumnHeaderStyle }">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=PolicyNumber}" Margin="10 0 10 0"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Company" Width="150" SortMemberPath="CompanyName" CanUserSort="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=CompanyName}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Face Amount" Width="90" SortMemberPath="FaceAmount" CanUserSort="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=FaceAmount}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Payment" Width="100" SortMemberPath="Payment" CanUserSort="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Payment}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Status" Width="120" SortMemberPath="Status" CanUserSort="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Status}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Frequency" Width="80" SortMemberPath="Frequency" CanUserSort="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Frequency}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Type" Width="70" SortMemberPath="Type" CanUserSort="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Type}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="PlanCode" Width="130" SortMemberPath="PlanCode" CanUserSort="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=PlanCode}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Rating" Width="100" SortMemberPath="Rating" CanUserSort="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Rating}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Class" Width="60" SortMemberPath="Class" CanUserSort="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Class}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Currency" Width="70" SortMemberPath="Currency" CanUserSort="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Currency}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Policy Date" Width="100" SortMemberPath="PolicyDate" CanUserSort="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=PolicyDate, StringFormat='{}{0: MMM d, yyyy}'}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Placed On" Width="100" SortMemberPath="PlacedOn" CanUserSort="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=PlacedOn, StringFormat='{}{0: MMM d, yyyy}'}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Reprojected On" Width="100" SortMemberPath="ReprojectedOn" CanUserSort="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=ReprojectedOn, StringFormat='{}{0: MMM d, yyyy}'}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Age" Width="70" SortMemberPath="Age" CanUserSort="True">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Age}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
             </Grid>
-            
+            <Grid Grid.Row="0" Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="2" Background="White" Margin="0 0 10 10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="150"/>
+                        <RowDefinition Height="150"/>
+                        <RowDefinition Height="200"/>
+                        <RowDefinition Height="80"/>
+                        <RowDefinition Height="100"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Background="LightGray">
+                        <Button Content="View Policy Illustration" Width="200" Margin="10"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Margin="20 10 10 10">
+                        <TextBlock Text="General Notes" FontWeight="Bold" Margin="0 0 0 5"/>
+                        <TextBlock Text="{Binding SelectedClient.GeneralNotes}" TextWrapping="Wrap"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Margin="20 10 10 10">
+                        <Separator Background="LightGray" Margin="0 10"/>
+                        <TextBlock Text="Policy Notes" FontWeight="Bold" Margin="0 0 0 5"/>
+                        <TextBlock Text="{Binding SelectedPolicy.PolicyNotes}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" Margin="20 10 10 10">
+                        <Separator Background="LightGray" Margin="0 10"/>
+                        <TextBlock Text="Relationships" FontWeight="Bold"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="4" Margin="10 10 10 10">
+                        <Separator Background="LightGray" Margin="0 10"/>
+                        <Grid Background="LightBlue" Height="70">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Margin="5">
+                                <TextBlock Text="Birthday"/>
+                                <TextBlock Text="{Binding SelectedClient.BirthDate, StringFormat='{}{0: MM/dd/yyyy}'}"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="5">
+                                <TextBlock Text="Smoker" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding SelectedClient.Smoker}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2" Margin="5">
+                                <TextBlock Text="Status" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding SelectedClient.Status}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="3" Margin="5">
+                                <TextBlock Text="SVC Type" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding SelectedClient.SVCType}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+                        
+                    </StackPanel>
+                    <StackPanel Grid.Row="5" Margin="20 10 10 10">
+                        <Separator Background="LightGray" Margin="0 10"/>
+                        <TextBlock Text="Agents and Splits" FontWeight="Bold"></TextBlock>
+                    </StackPanel>
+                    
+                </Grid>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>

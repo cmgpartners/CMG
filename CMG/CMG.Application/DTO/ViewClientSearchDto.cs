@@ -11,7 +11,10 @@ namespace CMG.Application.DTO
         public string LastName { get; set; }
         public string CommonName { get; set; }
         public Nullable<DateTime> BirthDate { get; set; }
-        public bool IsSmoker { get; set; }
+        public string Smoker { get; set; }
         public string ClientType { get; set; }
+        public string Status { get; set; }
+        public string SVCType { get; set; }
+        public string GeneralNotes { get; set; }
     }
 }
