@@ -82,6 +82,8 @@ namespace CMG.DataAccess.Repository
                     return CommonNameExpression(filterBy.Contains);
                 case "entitytype":
                     return EntityTypeExpression(filterBy.Equal);
+                case "keynump":
+                    return KeynumpExpression(filterBy.In);
                 default:
                     throw new InvalidOperationException($"Can not filter for criteria: filter by {filterBy.Property}");
             }
@@ -129,6 +131,11 @@ namespace CMG.DataAccess.Repository
         private static Expression<Func<People,bool>> EntityTypeExpression(string equals)
         {
             return w => w.Clienttyp.Trim() == equals;
+        }
+        private static Expression<Func<People, bool>> KeynumpExpression(string filterIn)
+        {
+            var keynumpList = filterIn.Split(',').Select(x => x.Trim()).ToList();
+            return w => keynumpList.Contains(w.Keynump.ToString());
         }
     }
 }
