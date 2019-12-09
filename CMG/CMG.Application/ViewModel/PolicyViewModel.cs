@@ -142,6 +142,17 @@ namespace CMG.Application.ViewModel
             }
         }
 
+        private ViewPolicyListDto _selectedPolicy;
+        public ViewPolicyListDto SelectedPolicy
+        {
+            get { return _selectedPolicy; }
+            set
+            {
+                _selectedPolicy = value;
+                OnPropertyChanged("SelectedPolicy");
+            }
+        }
+
         private ViewComboDto _selectedClientType;
         public ViewComboDto SelectedClientType
         {
@@ -381,6 +392,11 @@ namespace CMG.Application.ViewModel
                     x.CompanyName = string.IsNullOrEmpty(x.CompanyName.Trim()) ? "" : CompanyCollection.Where(c => c.FieldCode == x.CompanyName.Trim()).FirstOrDefault().Description;
                     return x;
                 }));
+
+                if(PolicyCollection.Count > 0)
+                {
+                    SelectedPolicy = PolicyCollection[0];
+                }
             }
         }
         #endregion Methods
