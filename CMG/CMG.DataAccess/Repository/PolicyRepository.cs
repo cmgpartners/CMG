@@ -69,17 +69,18 @@ namespace CMG.DataAccess.Repository
                 Keynumo = x.Keynumo,
                 Policynum = x.Policynum,
                 Company = x.Company,
-                //faceAmount
                 Amount = x.Amount,
+                Payment = x.Payment,
                 Status = x.Status,
                 Frequency = x.Frequency,
                 Type = x.Type,
                 Plancode = x.Plancode,
-                //rating
+                Risk = x.Risk,
                 Class = x.Class,
                 Currency = x.Currency,
                 Cr8Date = x.Cr8Date,
-                IssueAge = x.IssueAge
+                IssueAge = x.IssueAge,
+                Comment = x.Comment
             });
 
             var totalRecords = result.Count();
