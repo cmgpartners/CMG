@@ -66,8 +66,8 @@ namespace CMG.Application.ViewModel
             set { _combo = value; }
         }
 
-        private ObservableCollection<ViewComboDto> _clientTypeCollection;
-        public ObservableCollection<ViewComboDto> ClientTypeCollection
+        private List<ViewComboDto> _clientTypeCollection;
+        public List<ViewComboDto> ClientTypeCollection
         {
             get { return _clientTypeCollection; }
             set
@@ -95,7 +95,7 @@ namespace CMG.Application.ViewModel
             set 
             { 
                 _selectedClient = value;
-                OnPropertyChanged("Policies");
+                OnPropertyChanged("SelectedClient");
                 GetPolicyCollection();
             }
         }
@@ -199,7 +199,7 @@ namespace CMG.Application.ViewModel
         #region command properties
         public ICommand SearchClientCommand
         {
-            get { return CreateCommand(Search); }//Search
+            get { return CreateCommand(Search); }
         }
         #endregion command properties
         #endregion Properties
@@ -209,15 +209,15 @@ namespace CMG.Application.ViewModel
         {
             var combo = _unitOfWork.Combo.All();
             Combo = combo.Select(r => _mapper.Map<ViewComboDto>(r)).ToList();
+            GetClientType();
         }
         private void GetClientType()
         {
-            ClientTypeCollection = new ObservableCollection<ViewComboDto>(Combo.Where(x => x.FieldName.Trim() == comboFieldNameClentType).ToList());
+            ClientTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameClentType).ToList();
         }
         private void LoadData()
         {
             GetComboData();
-            GetClientType();
             GetPolicies();
         }
 
@@ -246,7 +246,7 @@ namespace CMG.Application.ViewModel
             }
             if (SelectedClientType != null)
             {
-                BuildFilterByEquals("EntityType", SelectedClientType.FieldCode, searchBy);
+                BuildFilterByEquals("EntityType", SelectedClientType.FieldCode.Trim(), searchBy);
             }
 
             searchQuery.FilterBy = searchBy;
@@ -262,7 +262,6 @@ namespace CMG.Application.ViewModel
 
         private void BuildFilterByEquals(string property, string value, List<FilterBy> searchBy)
         {
-            value = ClientTypeCollection.Where(x => x.FieldCode.Trim() == value.Trim()).FirstOrDefault().FieldCode.Trim();
             FilterBy filterBy = new FilterBy();
             filterBy.Property = property;
             filterBy.Equal = value;
@@ -284,7 +283,16 @@ namespace CMG.Application.ViewModel
         }
         private void GetPolicyCollection()
         {
+            if (SelectedClient != null)
+            {
+                SearchQuery searchQuery = new SearchQuery();
+                List<FilterBy> searchBy = new List<FilterBy>();
+                BuildFilterByEquals("keynump", SelectedClient.Keynump.ToString(), searchBy);
+                searchQuery.FilterBy = searchBy;
 
+                var dataSearchBy = _unitOfWork.Policies.Find(searchQuery);
+                PolicyCollection = new ObservableCollection<ViewPolicyListDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewPolicyListDto>(r)).ToList());
+            }
         }
         #endregion Methods
     }
