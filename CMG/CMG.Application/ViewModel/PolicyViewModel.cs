@@ -199,7 +199,7 @@ namespace CMG.Application.ViewModel
         #region command properties
         public ICommand SearchClientCommand
         {
-            get { return CreateCommand(Search); }//Search
+            get { return CreateCommand(Search); }
         }
         #endregion command properties
         #endregion Properties
@@ -220,7 +220,29 @@ namespace CMG.Application.ViewModel
             GetClientType();
             GetPolicies();
         }
+        
+        private void SearchByPolicyNumber()
+        {
+            SearchQuery searchQuery = new SearchQuery();
+            List<FilterBy> searchBy = new List<FilterBy>();
+            FilterBy filterBy = new FilterBy();
+            filterBy.Property = "policynumber";
+            filterBy.Equal = "N065700T"; //"3473188" - 3 records will come
+            searchBy.Add(filterBy);
+            searchQuery.FilterBy = searchBy;
 
+            var policyTemp = _unitOfWork.Policies.Find(searchQuery);
+            searchQuery = new SearchQuery();
+            searchBy = new List<FilterBy>();
+            filterBy = new FilterBy();
+            List<string> keynumpList = policyTemp.Result.FirstOrDefault().PeoplePolicys.ToList().Where(c => c.Keynump > 0).Select(x => x.Keynump.ToString()).ToList();
+
+            searchBy.Add(FilterByIn("keynump", string.Join(",", keynumpList)));
+            searchQuery.FilterBy = searchBy;
+            var dataSearchBy = _unitOfWork.People.Find(searchQuery);
+            var dataCollection = dataSearchBy.Result.Select(x => { x.Clienttyp = string.IsNullOrEmpty(x.Clienttyp.Trim()) ? "" : ClientTypeCollection.Where(c => c.FieldCode == x.Clienttyp.Trim()).FirstOrDefault().Description; return x; });
+            ClientCollection = new ObservableCollection<ViewClientSearchDto>(dataCollection.Select(r => _mapper.Map<ViewClientSearchDto>(r)).ToList());
+        }
         private void Search()
         {
             SearchQuery searchQuery = BuildSearchQuery();
@@ -252,6 +274,13 @@ namespace CMG.Application.ViewModel
             searchQuery.FilterBy = searchBy;
             return searchQuery;
         }
+        private FilterBy FilterByIn(string propertyName, string value)
+        {
+            FilterBy filterBy = new FilterBy();
+            filterBy.Property = propertyName;
+            filterBy.In = value;
+            return filterBy;
+        }
         private void BuildFilterByContains(string property, string value, List<FilterBy> searchBy)
         {
             FilterBy filterBy = new FilterBy();
@@ -259,7 +288,6 @@ namespace CMG.Application.ViewModel
             filterBy.Contains = value;
             searchBy.Add(filterBy);
         }
-
         private void BuildFilterByEquals(string property, string value, List<FilterBy> searchBy)
         {
             value = ClientTypeCollection.Where(x => x.FieldCode.Trim() == value.Trim()).FirstOrDefault().FieldCode.Trim();
