@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CMG.Application.DTO
 {
@@ -21,5 +22,6 @@ namespace CMG.Application.DTO
         public DateTime ReprojectedOn { get; set; }        
         public int Age { get; set; }        
         public string PolicyNotes { get; set; }
+        public ICollection<ViewPolicyAgentDto> PolicyAgent { get; set; } = new List<ViewPolicyAgentDto>();
     }
 }

@@ -52,7 +52,7 @@ namespace CMG.DataAccess.Repository
 
         public IQueryResult<Policys> Find(ISearchCriteria criteria)
         {
-            var query = Context.Policys.Include(x => x.PeoplePolicys);
+            var query = Context.Policys.Include(x => x.PeoplePolicys).Include(p => p.PolicyAgent).ThenInclude(a => a.Agent);
 
             IQueryable<Policys> queryable = query;
             if ((criteria.FilterBy?.Count() ?? 0) > 0)
@@ -85,6 +85,15 @@ namespace CMG.DataAccess.Repository
                 {
                     Keynump = a.Keynump,
                     Keynumo = a.Keynumo
+                }),
+                PolicyAgent = x.PolicyAgent.Select(p => new PolicyAgent
+                {
+                    Id = p.Id,
+                    AgentId = p.AgentId,
+                    Agent = p.Agent,
+                    Split = p.Split,
+                    AgentOrder = p.AgentOrder,
+                    IsDeleted = p.IsDeleted
                 })
             });
 
