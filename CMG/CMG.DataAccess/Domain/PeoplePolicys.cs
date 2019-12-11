@@ -27,5 +27,6 @@ namespace CMG.DataAccess.Domain
         public string Hnamec { get; set; }
 
         public virtual People KeynumpNavigation { get; set; }
+        public virtual Policys Policy { get; set; }
     }
 }

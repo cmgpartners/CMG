@@ -2137,6 +2137,12 @@ namespace CMG.DataAccess.Domain
                     .HasForeignKey(d => d.Keynump)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PEOPLE_POLICYS_PEOPLE");
+
+                entity.HasOne(d => d.Policy)
+                    .WithMany(p => p.PeoplePolicys)
+                    .HasForeignKey(d => d.Keynumo)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PEOPLE_POLICYS_POLICYS");
             });
 
             modelBuilder.Entity<PolChg>(entity =>

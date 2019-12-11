@@ -269,36 +269,12 @@ namespace CMG.Application.ViewModel
             CompanyCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameCompany).ToList();
             PersonStatusCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNamePStatus).ToList();
             SVCTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameSVCType).ToList();
-        }
-       
+        }       
         private void LoadData()
         {
             GetComboData();
             GetPolicies();
-        }
-        
-        private void SearchByPolicyNumber()
-        {
-            SearchQuery searchQuery = new SearchQuery();
-            List<FilterBy> searchBy = new List<FilterBy>();
-            FilterBy filterBy = new FilterBy();
-            filterBy.Property = "policynumber";
-            filterBy.Equal = "N065700T"; //"3473188" - 3 records will come
-            searchBy.Add(filterBy);
-            searchQuery.FilterBy = searchBy;
-
-            var policyTemp = _unitOfWork.Policies.Find(searchQuery);
-            searchQuery = new SearchQuery();
-            searchBy = new List<FilterBy>();
-            filterBy = new FilterBy();
-            List<string> keynumpList = policyTemp.Result.FirstOrDefault().PeoplePolicys.ToList().Where(c => c.Keynump > 0).Select(x => x.Keynump.ToString()).ToList();
-
-            searchBy.Add(FilterByIn("keynump", string.Join(",", keynumpList)));
-            searchQuery.FilterBy = searchBy;
-            var dataSearchBy = _unitOfWork.People.Find(searchQuery);
-            var dataCollection = dataSearchBy.Result.Select(x => { x.Clienttyp = string.IsNullOrEmpty(x.Clienttyp.Trim()) ? "" : ClientTypeCollection.Where(c => c.FieldCode == x.Clienttyp.Trim()).FirstOrDefault().Description; return x; });
-            ClientCollection = new ObservableCollection<ViewClientSearchDto>(dataCollection.Select(r => _mapper.Map<ViewClientSearchDto>(r)).ToList());
-        }
+        }        
         private void Search()
         {
             SearchQuery searchQuery = BuildSearchQuery();
@@ -332,16 +308,13 @@ namespace CMG.Application.ViewModel
             {
                 BuildFilterByEquals("EntityType", SelectedClientType.FieldCode.Trim(), searchBy);
             }
+            if (!string.IsNullOrEmpty(PolicyNumber))
+            {
+                BuildFilterByContains("PolicyNumber", PolicyNumber.Trim(), searchBy);
+            }
 
             searchQuery.FilterBy = searchBy;
             return searchQuery;
-        }
-        private FilterBy FilterByIn(string propertyName, string value)
-        {
-            FilterBy filterBy = new FilterBy();
-            filterBy.Property = propertyName;
-            filterBy.In = value;
-            return filterBy;
         }
         private void BuildFilterByContains(string property, string value, List<FilterBy> searchBy)
         {

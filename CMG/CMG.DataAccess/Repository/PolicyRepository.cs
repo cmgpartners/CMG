@@ -128,8 +128,6 @@ namespace CMG.DataAccess.Repository
             {
                 case "keynump":
                     return KeynumpExpression(filterBy.Equal);
-                case "policynumber":
-                    return PolicyNumberExpression(filterBy.Equal);
                 default:
                     throw new InvalidOperationException($"Can not filter for criteria: filter by {filterBy.Property}");
             }
@@ -138,10 +136,6 @@ namespace CMG.DataAccess.Repository
         private static Expression<Func<Policys, bool>> KeynumpExpression(string equals)
         {
             return w => w.PeoplePolicys.Any(x => x.Keynump == Convert.ToInt32(equals));
-        }
-        private static Expression<Func<Policys, bool>> PolicyNumberExpression(string equals)
-        {
-            return w => w.Policynum.Equals(equals);
         }
     }
 }

@@ -84,6 +84,8 @@ namespace CMG.DataAccess.Repository
                     return EntityTypeExpression(filterBy.Equal);
                 case "keynump":
                     return KeynumpExpression(filterBy.In);
+                case "policynumber":
+                    return PolicyNumberExpression(filterBy.Contains);
                 default:
                     throw new InvalidOperationException($"Can not filter for criteria: filter by {filterBy.Property}");
             }
@@ -136,6 +138,10 @@ namespace CMG.DataAccess.Repository
         {
             var keynumpList = filterIn.Split(',').Select(x => x.Trim()).ToList();
             return w => keynumpList.Contains(w.Keynump.ToString());
+        }
+        private static Expression<Func<People, bool>> PolicyNumberExpression(string contains)
+        {
+            return w => w.PeoplePolicys.Any(x => x.Policy.Policynum == contains && x.Keynump > 0);
         }
     }
 }
