@@ -19,7 +19,7 @@ namespace CMG.DataAccess.Repository
         }
         public IQueryResult<People> Find(ISearchCriteria criteria)
         {
-            var query = Context.People.AsQueryable().Include(x => x.PeoplePolicys);
+            var query = Context.People.AsQueryable().Include(x => x.PeoplePolicys).Where(x => x.Keynump > 0);
 
             IQueryable<People> queryable = query;
 
@@ -44,7 +44,7 @@ namespace CMG.DataAccess.Repository
                 Pstatus = x.Pstatus,
                 SvcType = x.SvcType,
                 Pnotes = x.Pnotes
-            });
+            }).OrderBy(x => x.Commname).OrderBy(x => x.Lastname).OrderBy(x => x.Firstname);
 
             var totalRecords = result.Count();
             return new PagedQueryResult<People>()
@@ -86,6 +86,8 @@ namespace CMG.DataAccess.Repository
                     return KeynumpExpression(filterBy.In);
                 case "policynumber":
                     return PolicyNumberExpression(filterBy.Contains);
+                case "companyname":
+                    return CompanyCodeExpression(filterBy.Equal);
                 default:
                     throw new InvalidOperationException($"Can not filter for criteria: filter by {filterBy.Property}");
             }
@@ -141,7 +143,11 @@ namespace CMG.DataAccess.Repository
         }
         private static Expression<Func<People, bool>> PolicyNumberExpression(string contains)
         {
-            return w => w.PeoplePolicys.Any(x => x.Policy.Policynum == contains && x.Keynump > 0);
+            return w => w.PeoplePolicys.Any(x => x.Policy.Policynum == contains);
+        }
+        private static Expression<Func<People, bool>> CompanyCodeExpression(string equal)
+        {
+            return w => w.PeoplePolicys.Any(x => x.Policy.Company == equal);
         }
     }
 }

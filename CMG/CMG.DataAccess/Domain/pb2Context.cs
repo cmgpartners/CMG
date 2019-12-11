@@ -2132,7 +2132,7 @@ namespace CMG.DataAccess.Domain
                     .HasColumnType("numeric(5, 2)")
                     .HasDefaultValueSql("((0.0))");
 
-                entity.HasOne(d => d.KeynumpNavigation)
+                entity.HasOne(d => d.People)
                     .WithMany(p => p.PeoplePolicys)
                     .HasForeignKey(d => d.Keynump)
                     .OnDelete(DeleteBehavior.ClientSetNull)
