@@ -189,7 +189,16 @@
                       ItemsSource="{Binding PolicyCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" 
                       CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="40" SelectedItem="{Binding SelectedPolicy}">
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="Number" Width="105" SortMemberPath="PolicyNumber" CanUserSort="True" HeaderStyle="{StaticResource FirstColumnHeaderStyle }">
+                            <DataGridTemplateColumn Header="" Width="40" HeaderStyle="{StaticResource FirstColumnHeaderStyle }">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Background="Transparent" BorderBrush="Transparent" Width="50" x:Name="ButtonOpen" HorizontalAlignment="Left" Click="ButtonOpen_Click">
+                                            <materialDesign:PackIcon Kind="Pencil" VerticalAlignment="Center"  Foreground="#00A3FF" FontWeight="Bold"></materialDesign:PackIcon>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Number" Width="105" SortMemberPath="PolicyNumber" CanUserSort="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=PolicyNumber}" Margin="10 0 10 0"/>
@@ -310,7 +319,7 @@
                         <RowDefinition Height="175"/>
                         <RowDefinition Height="200"/>
                         <RowDefinition Height="80"/>
-                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="150"/>
                     </Grid.RowDefinitions>
                     <StackPanel Background="LightGray">
                         <Button Content="View Policy Illustration" Width="200" Margin="10"/>
@@ -358,7 +367,32 @@
                     </StackPanel>
                     <StackPanel Grid.Row="5" Margin="20 10 10 10">
                         <Separator Background="LightGray" Margin="0 10"/>
-                        <TextBlock Text="Agents and Splits" FontWeight="Bold"></TextBlock>
+                        <TextBlock Text="Agents and Splits" FontWeight="Bold" Margin="0 0 0 10"></TextBlock>
+                        <ItemsControl ItemsSource="{Binding SelectedPolicy.PolicyAgent}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Rows="4" Columns="2" HorizontalAlignment="Left" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="15"
+                                                BorderBrush="{Binding Agent.Color}"
+                                                BorderThickness="1"
+                                                Background="{Binding Agent.Color}"
+                                                Margin="5">
+                                        <Grid Width="100">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0" Text="{Binding Agent.FirstName}" Foreground="Black" Margin="5"/>
+                                            <TextBlock Grid.Column="1"  Text="{Binding Split, StringFormat='{}{0:#,#.00}'}" Foreground="Black" Margin="5"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </StackPanel>
                     
                 </Grid>
