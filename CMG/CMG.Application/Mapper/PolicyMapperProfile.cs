@@ -26,7 +26,15 @@ namespace CMG.Application.Mapper
                 .ForMember(des => des.PlacedOn, mo => mo.MapFrom(src => src.Cr8Date))
                 .ForMember(des => des.ReprojectedOn, mo => mo.MapFrom(src => src.Reprojdate))
                 .ForMember(des => des.Age, mo => mo.MapFrom(src => !string.IsNullOrEmpty(src.IssueAge.Trim()) ? Convert.ToInt32(src.IssueAge) : 0))
-                .ForMember(des => des.PolicyNotes, mo => mo.MapFrom(src => src.Comment));
+                .ForMember(des => des.PolicyNotes, mo => mo.MapFrom(src => src.Comment))
+                .ForMember(des => des.PeoplePolicy, mo => mo.MapFrom(src => src.PeoplePolicys));
+
+            CreateMap<PeoplePolicys, ViewPeoplePolicyDto>()
+                .ForMember(des => des.PeopleId, mo => mo.MapFrom(src => src.Keynump))
+                .ForMember(des => des.PolicyId, mo => mo.MapFrom(src => src.Keynumo))
+                .ForMember(des => des.Name, mo => mo.MapFrom(src => src.Hname.Trim()))
+                .ForMember(des => des.Category, mo => mo.MapFrom(src => src.Catgry.Trim()))
+                .ForMember(des => des.Relation, mo => mo.MapFrom(src => src.Relatn.Trim()));
 
             CreateMap<Policys, ViewPolicyDto>()
                .ForMember(des => des.PolicyId, mo => mo.MapFrom(src => src.Keynumo))
@@ -43,8 +51,7 @@ namespace CMG.Application.Mapper
              .ForMember(des => des.AgentCommissions, mo => mo.MapFrom(src => src.PolicyAgents));
 
             CreateMap<ViewPolicyAgentDto, ViewAgentCommissionDto>()
-            .ForMember(des => des.Id, mo => mo.Ignore());
-             
+            .ForMember(des => des.Id, mo => mo.Ignore());           
         }
     }
 }

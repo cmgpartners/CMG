@@ -23,5 +23,6 @@ namespace CMG.Application.DTO
         public int Age { get; set; }        
         public string PolicyNotes { get; set; }
         public ICollection<ViewPolicyAgentDto> PolicyAgent { get; set; } = new List<ViewPolicyAgentDto>();
+        public ICollection<ViewPeoplePolicyDto> PeoplePolicy { get; set; } = new List<ViewPeoplePolicyDto>();
     }
 }

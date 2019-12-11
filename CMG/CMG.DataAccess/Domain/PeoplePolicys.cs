@@ -26,7 +26,7 @@ namespace CMG.DataAccess.Domain
         public bool? Islinked { get; set; }
         public string Hnamec { get; set; }
 
-        public virtual People KeynumpNavigation { get; set; }
+        public virtual People People { get; set; }
         public virtual Policys Policy { get; set; }
     }
 }
