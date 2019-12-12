@@ -287,7 +287,7 @@ namespace CMG.Application.ViewModel
             PersonStatusCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNamePStatus).ToList();
             SVCTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameSVCType).ToList();
             CategoryCollection = Combo.Where(x => x.FieldCode.Trim() == comboFieldNameCategory).ToList();
-        }       
+        }
         private void LoadData()
         {
             GetComboData();
@@ -329,6 +329,10 @@ namespace CMG.Application.ViewModel
             if (!string.IsNullOrEmpty(PolicyNumber))
             {
                 BuildFilterByContains("PolicyNumber", PolicyNumber.Trim(), searchBy);
+            }
+            if (!string.IsNullOrEmpty(CompanyName))
+            {
+                BuildFilterByEquals("CompanyName", "ML", searchBy);
             }
 
             searchQuery.FilterBy = searchBy;

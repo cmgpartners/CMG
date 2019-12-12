@@ -11,8 +11,10 @@ namespace CMG.DataAccess.Repository
 {
     public class PolicyRepository : Repository<Policys>, IPolicyRepository
     {
+        #region Member variables
         private readonly pb2Context _context;
-
+        private string excludeCategory = "0, 1, 2, 3";
+        #endregion Member variables
         public PolicyRepository(pb2Context context) : base(context)
         {
             _context = context;
@@ -52,6 +54,7 @@ namespace CMG.DataAccess.Repository
 
         public IQueryResult<Policys> Find(ISearchCriteria criteria)
         {
+            var excludeCategoryList = excludeCategory.Split(',').Select(x => x.Trim()).ToList();
             var query = Context.Policys.Include(x => x.PeoplePolicys).Include(p => p.PolicyAgent).ThenInclude(a => a.Agent);
 
             IQueryable<Policys> queryable = query;
@@ -81,10 +84,14 @@ namespace CMG.DataAccess.Repository
                 Cr8Date = x.Cr8Date,
                 IssueAge = x.IssueAge,
                 Comment = x.Comment,
-                PeoplePolicys = x.PeoplePolicys.Select(a => new PeoplePolicys
+                PeoplePolicys = x.PeoplePolicys.Where(x => !excludeCategoryList.Contains(x.Catgry)).Select(a => new PeoplePolicys
                 {
                     Keynump = a.Keynump,
-                    Keynumo = a.Keynumo
+                    Keynumo = a.Keynumo,
+                    Hname = a.Hname,
+                    Catgry = a.Catgry,
+                    Relatn = a.Relatn,
+                    Split = a.Split
                 }),
                 PolicyAgent = x.PolicyAgent.Select(p => new PolicyAgent
                 {
