@@ -332,7 +332,7 @@ namespace CMG.Application.ViewModel
             }
             if (!string.IsNullOrEmpty(CompanyName))
             {
-                var companyCode = CompanyCollection.Where(c => c.Description == CompanyName).FirstOrDefault()?.Description;
+                var companyCode = CompanyCollection.Where(c => c.Description == CompanyName).FirstOrDefault()?.FieldCode;
                 if (!string.IsNullOrEmpty(companyCode))
                 {
                     BuildFilterByEquals("CompanyName", companyCode, searchBy);
