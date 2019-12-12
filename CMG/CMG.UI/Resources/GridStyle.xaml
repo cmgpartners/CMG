@@ -17,6 +17,15 @@
         <Setter Property="FontSize" Value="12"/>
     </Style>
 
+    <Style x:Key="TotalHeaderStyle" TargetType="DataGridColumnHeader"  BasedOn="{StaticResource HeaderStyle}">
+        <Setter Property="Control.HorizontalContentAlignment" Value="Right" />
+        <Setter Property="Padding" Value="0"/>
+    </Style>
+    
+    <Style x:Key="FirstColumnHeaderStyle" TargetType="DataGridColumnHeader" BasedOn="{StaticResource HeaderStyle}">
+        <Setter Property="Margin" Value="15 0 0 0"/>
+    </Style>
+
     <Style x:Key="ClientHeaderStyle" TargetType="DataGridColumnHeader">
         <Setter Property="Foreground" Value="White" />
         <Setter Property="BorderBrush" Value="#FFCEEAFF" />
@@ -52,6 +61,22 @@
         </Style.Triggers>
     </Style>
 
+    <Style x:Key="RelationshipHeaderStyle" TargetType="DataGridColumnHeader">
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="BorderBrush" Value="#FFCEEAFF" />
+        <Setter Property="BorderThickness" Value="0 0 0 1" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="MinWidth" Value="0" />
+        <Setter Property="MinHeight" Value="45" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+    <Style x:Key="RelationshipFirstColumnHeaderStyle" TargetType="DataGridColumnHeader" BasedOn="{StaticResource RelationshipHeaderStyle}">
+        <Setter Property="Margin" Value="8 0 0 0"/>
+    </Style>
+
     <Style x:Key="PageHeader" TargetType="Grid">
         <Setter Property="Background" Value="#FF9BADB8"/>
         <Setter Property="Opacity" Value="0.7"/>
@@ -73,11 +98,5 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    <Style x:Key="TotalHeaderStyle" TargetType="DataGridColumnHeader"  BasedOn="{StaticResource HeaderStyle}">
-        <Setter Property="Control.HorizontalContentAlignment" Value="Right" />        
-        <Setter Property="Padding" Value="0"/>
-    </Style>
-    <Style x:Key="FirstColumnHeaderStyle" TargetType="DataGridColumnHeader" BasedOn="{StaticResource HeaderStyle}">
-        <Setter Property="Margin" Value="15 0 0 0"/>
-    </Style>
+   
 </ResourceDictionary>

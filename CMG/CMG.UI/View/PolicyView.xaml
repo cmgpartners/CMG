@@ -35,7 +35,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="450" x:Name="SliderColumn" />
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="350"/>
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Row="0" Grid.Column="0" Background="#FF252627" x:Name="SliderPannel">
@@ -336,35 +336,35 @@
                     <StackPanel Grid.Row="3" Margin="20 10 10 10">
                         <Separator Background="LightGray" Margin="0 10"/>
                         <TextBlock Text="Relationships" FontWeight="Bold"/>
-                        <DataGrid AutoGenerateColumns="False" x:Name="relationship" IsReadOnly="True" Background="{x:Null}" GridLinesVisibility="None"
-                          ColumnHeaderStyle="{StaticResource ClientHeaderStyle}" RowStyle="{StaticResource ClientRowStyle }" 
+                        <DataGrid AutoGenerateColumns="False" x:Name="relationship" IsReadOnly="True" Background="{x:Null}" GridLinesVisibility="None" Width="325"
+                          ColumnHeaderStyle="{StaticResource RelationshipHeaderStyle}" ItemsSource="{Binding SelectedPolicy.PeoplePolicy}" MinRowHeight="25" ScrollViewer.HorizontalScrollBarVisibility="Auto"
                           SelectionUnit="FullRow">
                             <DataGrid.Columns>
-                                <DataGridTemplateColumn Header="Category" Width="105" HeaderStyle="{StaticResource ClientFirstColumnHeaderStyle }">
+                                <DataGridTemplateColumn Header="Category" Width="85" HeaderStyle="{StaticResource RelationshipFirstColumnHeaderStyle}">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Path=CommonName}" Margin="10 0 10 0" />
+                                            <TextBlock Text="{Binding Path=Category}" Margin="10 0 10 0" />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="Name" Width="100">
+                                <DataGridTemplateColumn Header="Name">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Path=LastName}" ></TextBlock>
+                                            <TextBlock Text="{Binding Path=Name}" ></TextBlock>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="Relation" Width="90" >
+                                <DataGridTemplateColumn Header="Relation" Width="65" >
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Path=FirstName}"></TextBlock>
+                                            <TextBlock Text="{Binding Path=Relation}"></TextBlock>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="Split" Width="200">
+                                <DataGridTemplateColumn Header="Split" Width="40">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Path=ClientType}"></TextBlock>
+                                            <TextBlock Text="{Binding Path=Split}"></TextBlock>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>

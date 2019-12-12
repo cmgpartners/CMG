@@ -286,7 +286,7 @@ namespace CMG.Application.ViewModel
             CompanyCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameCompany).ToList();
             PersonStatusCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNamePStatus).ToList();
             SVCTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameSVCType).ToList();
-            CategoryCollection = Combo.Where(x => x.FieldCode.Trim() == comboFieldNameCategory).ToList();
+            CategoryCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameCategory).ToList();
         }
         private void LoadData()
         {
@@ -332,7 +332,15 @@ namespace CMG.Application.ViewModel
             }
             if (!string.IsNullOrEmpty(CompanyName))
             {
-                BuildFilterByEquals("CompanyName", "ML", searchBy);
+                var companyCode = CompanyCollection.Where(c => c.Description == CompanyName).FirstOrDefault()?.Description;
+                if (!string.IsNullOrEmpty(companyCode))
+                {
+                    BuildFilterByEquals("CompanyName", companyCode, searchBy);
+                }
+                else
+                { 
+                    //show error message company not exist
+                }
             }
 
             searchQuery.FilterBy = searchBy;
@@ -385,7 +393,13 @@ namespace CMG.Application.ViewModel
                     x.Frequency = string.IsNullOrEmpty(x.Frequency.Trim()) ? "" : FrequencyTypeCollection.Where(c => c.FieldCode == x.Frequency.Trim()).FirstOrDefault()?.Description;
                     x.Status = string.IsNullOrEmpty(x.Status.Trim()) ? "" : StatusTypeCollection.Where(c => c.FieldCode == x.Status.Trim()).FirstOrDefault()?.Description;
                     x.CompanyName = string.IsNullOrEmpty(x.CompanyName.Trim()) ? "" : CompanyCollection.Where(c => c.FieldCode == x.CompanyName.Trim()).FirstOrDefault()?.Description;
-                    //need to add people policy manipulation for category
+                    x.PeoplePolicy = x.PeoplePolicy.Select(
+                        p =>
+                        {
+                            p.Category = string.IsNullOrEmpty(p.Category.Trim()) ? "" : CategoryCollection.Where(c => c.FieldCode == p.Category.Trim()).FirstOrDefault()?.Description;
+                            return p;
+                        }
+                    ).ToList();
                     return x;
                 }));
 
