@@ -27,6 +27,7 @@ namespace CMG.Application.ViewModel
         private const string comboFieldNameCompany = "COMPANY";
         private const string comboFieldNamePStatus = "PSTATUS";
         private const string comboFieldNameSVCType = "SVC_TYPE";
+        private const string comboFieldNameCategory = "CATGRY";
         #endregion
 
         #region Constructor
@@ -118,7 +119,12 @@ namespace CMG.Application.ViewModel
             get { return _svcTypeCollection; }
             set { _svcTypeCollection = value; }
         }
-
+        private List<ViewComboDto> _categoryCollection;
+        public List<ViewComboDto> CategoryCollection
+        {
+            get { return _categoryCollection; }
+            set { _categoryCollection = value; }
+        }
         private IEnumerable<string> _policies;
         public IEnumerable<string> Policies
         {
@@ -138,6 +144,8 @@ namespace CMG.Application.ViewModel
             { 
                 _selectedClient = value;
                 OnPropertyChanged("SelectedClient");
+                OnPropertyChanged("IsClientSelected");
+                OnPropertyChanged("IsPolicyDetailVisible");
                 GetPolicyCollection();
             }
         }
@@ -248,6 +256,15 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("ToDate");
             }
         }
+        public bool IsClientSelected
+        {
+            get { return SelectedClient != null ? true : false ; }
+        }
+
+        public bool IsPolicyDetailVisible
+        {
+            get { return SelectedClient == null ? true : false; }
+        }
 
         #region command properties
         public ICommand SearchClientCommand
@@ -269,6 +286,7 @@ namespace CMG.Application.ViewModel
             CompanyCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameCompany).ToList();
             PersonStatusCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNamePStatus).ToList();
             SVCTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameSVCType).ToList();
+            CategoryCollection = Combo.Where(x => x.FieldCode.Trim() == comboFieldNameCategory).ToList();
         }       
         private void LoadData()
         {
@@ -282,9 +300,9 @@ namespace CMG.Application.ViewModel
             var dataCollection = new ObservableCollection<ViewClientSearchDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewClientSearchDto>(r)).ToList());
 
             ClientCollection = new ObservableCollection<ViewClientSearchDto>(dataCollection.Select(x => {
-                                    x.ClientType = string.IsNullOrEmpty(x.ClientType.Trim()) ? "" : ClientTypeCollection.Where(c => c.FieldCode == x.ClientType.Trim()).FirstOrDefault().Description;
-                                    x.Status = string.IsNullOrEmpty(x.Status.Trim()) ? "" : PersonStatusCollection.Where(c => c.FieldCode == x.Status.Trim()).FirstOrDefault().Description;
-                                    x.SVCType = string.IsNullOrEmpty(x.SVCType.Trim()) ? "" : SVCTypeCollection.Where(c => c.FieldCode == x.SVCType.Trim()).FirstOrDefault().Description;
+                                    x.ClientType = string.IsNullOrEmpty(x.ClientType.Trim()) ? "" : ClientTypeCollection.Where(c => c.FieldCode == x.ClientType.Trim()).FirstOrDefault()?.Description;
+                                    x.Status = string.IsNullOrEmpty(x.Status.Trim()) ? "" : PersonStatusCollection.Where(c => c.FieldCode == x.Status.Trim()).FirstOrDefault()?.Description;
+                                    x.SVCType = string.IsNullOrEmpty(x.SVCType.Trim()) ? "" : SVCTypeCollection.Where(c => c.FieldCode == x.SVCType.Trim()).FirstOrDefault()?.Description;
                                     return x;
                                 }));
         }
@@ -359,10 +377,11 @@ namespace CMG.Application.ViewModel
 
                 PolicyCollection = new ObservableCollection<ViewPolicyListDto>(policyCollection.Select(x =>
                 {
-                    x.Type = string.IsNullOrEmpty(x.Type.Trim()) ? "" : PolicyTypeCollection.Where(c => c.FieldCode == x.Type.Trim()).FirstOrDefault().Description;
-                    x.Frequency = string.IsNullOrEmpty(x.Frequency.Trim()) ? "" : FrequencyTypeCollection.Where(c => c.FieldCode == x.Frequency.Trim()).FirstOrDefault().Description;
-                    x.Status = string.IsNullOrEmpty(x.Status.Trim()) ? "" : StatusTypeCollection.Where(c => c.FieldCode == x.Status.Trim()).FirstOrDefault().Description;
-                    x.CompanyName = string.IsNullOrEmpty(x.CompanyName.Trim()) ? "" : CompanyCollection.Where(c => c.FieldCode == x.CompanyName.Trim()).FirstOrDefault().Description;
+                    x.Type = string.IsNullOrEmpty(x.Type.Trim()) ? "" : PolicyTypeCollection.Where(c => c.FieldCode == x.Type.Trim()).FirstOrDefault()?.Description;
+                    x.Frequency = string.IsNullOrEmpty(x.Frequency.Trim()) ? "" : FrequencyTypeCollection.Where(c => c.FieldCode == x.Frequency.Trim()).FirstOrDefault()?.Description;
+                    x.Status = string.IsNullOrEmpty(x.Status.Trim()) ? "" : StatusTypeCollection.Where(c => c.FieldCode == x.Status.Trim()).FirstOrDefault()?.Description;
+                    x.CompanyName = string.IsNullOrEmpty(x.CompanyName.Trim()) ? "" : CompanyCollection.Where(c => c.FieldCode == x.CompanyName.Trim()).FirstOrDefault()?.Description;
+                    //need to add people policy manipulation for category
                     return x;
                 }));
 
