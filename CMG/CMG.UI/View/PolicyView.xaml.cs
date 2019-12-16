@@ -7,6 +7,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -44,6 +45,24 @@ namespace CMG.UI.View
             SearchBar.Visibility = Visibility.Collapsed;
             SliderColumn.Width = new GridLength(450);
             searchBarColumn.Width = new GridLength(0);
+        }
+        private void ButtonIllustrationOpen_Click(object sender, RoutedEventArgs e)
+        {
+            IllustrationSliderPanel.Visibility = Visibility.Visible;
+            IllustrationSliderPanel.Width = PolicyMainView.ActualWidth - 100; 
+            PolicyMainView.Opacity = 0.3;
+        }
+
+        private void ButtonIllustrationClose_Click(object sender, RoutedEventArgs e)
+        {
+            var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(600) };
+            timer.Start();
+            timer.Tick += (sender, args) =>
+            {
+                timer.Stop();
+                IllustrationSliderPanel.Visibility = Visibility.Collapsed;
+                PolicyMainView.Opacity = 0.9;
+            };
         }
     }
 }
