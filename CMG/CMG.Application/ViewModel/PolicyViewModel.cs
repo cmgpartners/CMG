@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using ToastNotifications;
+using ToastNotifications.Messages;
 
 namespace CMG.Application.ViewModel
 {
@@ -106,6 +107,12 @@ namespace CMG.Application.ViewModel
             get { return _companyCollection; }
             set { _companyCollection = value; }
         }
+        private List<string> _companyNames;
+        public List<string> CompanyNames
+        {
+            get { return _companyNames; }
+            set { _companyNames = value; }
+        }
         private List<ViewComboDto> _personStatusCollection;
         public List<ViewComboDto> PersonStatusCollection
         {
@@ -119,8 +126,8 @@ namespace CMG.Application.ViewModel
             set { _svcTypeCollection = value; }
         }
 
-        private IEnumerable<string> _policies;
-        public IEnumerable<string> Policies
+        private List<string> _policies;
+        public List<string> Policies
         {
             get { return _policies; }
             set
@@ -129,7 +136,6 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("Policies");
             }
         }
-
         private ViewClientSearchDto _selectedClient;
         public ViewClientSearchDto SelectedClient
         {
@@ -267,6 +273,7 @@ namespace CMG.Application.ViewModel
             FrequencyTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameFrequency).ToList();
             StatusTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameStatus).ToList();
             CompanyCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameCompany).ToList();
+            CompanyNames = CompanyCollection.Select(x => x.Description.Trim()).ToList();
             PersonStatusCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNamePStatus).ToList();
             SVCTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameSVCType).ToList();
         }
@@ -277,16 +284,55 @@ namespace CMG.Application.ViewModel
         }        
         private void Search()
         {
-            SearchQuery searchQuery = BuildSearchQuery();
-            var dataSearchBy = _unitOfWork.People.Find(searchQuery);
-            var dataCollection = new ObservableCollection<ViewClientSearchDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewClientSearchDto>(r)).ToList());
+            if (IsValidSearchCriteria())
+            {
+                SearchQuery searchQuery = BuildSearchQuery();
+                var dataSearchBy = _unitOfWork.People.Find(searchQuery);
+                var dataCollection = new ObservableCollection<ViewClientSearchDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewClientSearchDto>(r)).ToList());
 
-            ClientCollection = new ObservableCollection<ViewClientSearchDto>(dataCollection.Select(x => {
-                                    x.ClientType = string.IsNullOrEmpty(x.ClientType.Trim()) ? "" : ClientTypeCollection.Where(c => c.FieldCode == x.ClientType.Trim()).FirstOrDefault().Description;
-                                    x.Status = string.IsNullOrEmpty(x.Status.Trim()) ? "" : PersonStatusCollection.Where(c => c.FieldCode == x.Status.Trim()).FirstOrDefault().Description;
-                                    x.SVCType = string.IsNullOrEmpty(x.SVCType.Trim()) ? "" : SVCTypeCollection.Where(c => c.FieldCode == x.SVCType.Trim()).FirstOrDefault().Description;
-                                    return x;
-                                }));
+                ClientCollection = new ObservableCollection<ViewClientSearchDto>(dataCollection.Select(x =>
+                {
+                    x.ClientType = string.IsNullOrEmpty(x.ClientType.Trim()) ? "" : ClientTypeCollection.Where(c => c.FieldCode == x.ClientType.Trim()).FirstOrDefault().Description;
+                    x.Status = string.IsNullOrEmpty(x.Status.Trim()) ? "" : PersonStatusCollection.Where(c => c.FieldCode == x.Status.Trim()).FirstOrDefault().Description;
+                    x.SVCType = string.IsNullOrEmpty(x.SVCType.Trim()) ? "" : SVCTypeCollection.Where(c => c.FieldCode == x.SVCType.Trim()).FirstOrDefault().Description;
+                    return x;
+                }));
+            }
+        }
+
+        private bool IsValidSearchCriteria()
+        {
+            bool isValid = true;
+            if(string.IsNullOrEmpty(CompanyName))
+            {
+                isValid = false;
+                _notifier.ShowError("Enter valid company name");
+            }
+            if (string.IsNullOrEmpty(PolicyNumber))
+            {
+                isValid = false;
+                _notifier.ShowError("Enter valid policy number");
+            }
+
+            if (isValid)
+            {
+                if (!string.IsNullOrEmpty(CompanyName))
+                {
+                    isValid = CompanyNames.Any(x => x.ToLower().Equals(CompanyName.ToString().ToLower().Trim()));
+                    if (!isValid)
+                        _notifier.ShowError("Select valid company name");
+
+                }
+                if (!string.IsNullOrEmpty(PolicyNumber))
+                {
+                    isValid = Policies.Any(x => x.ToLower().Equals(PolicyNumber.ToLower().Trim()));
+                    if (!isValid)
+                        _notifier.ShowError("Select valid Policy number");
+
+                }
+            }
+
+            return isValid;
         }
         private SearchQuery BuildSearchQuery()
         {
@@ -346,7 +392,7 @@ namespace CMG.Application.ViewModel
         {
             var policies = _unitOfWork.Policies.GetAllPolicyNumber();
             var temppolicies = policies.Select(r => _mapper.Map<ViewPolicyListDto>(r)).ToList();
-            Policies = temppolicies.Select(r => r.PolicyNumber).AsEnumerable();
+            Policies = temppolicies.Select(r => r.PolicyNumber).ToList();
         }
         private void GetPolicyCollection()
         {
