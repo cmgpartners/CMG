@@ -132,7 +132,7 @@ namespace CMG.Application.ViewModel
             get { return _categoryCollection; }
             set { _categoryCollection = value; }
         }
-	private List<string> _policies;
+	    private List<string> _policies;
         public List<string> Policies
         {
             get { return _policies; }
@@ -320,15 +320,11 @@ namespace CMG.Application.ViewModel
         private bool IsValidSearchCriteria()
         {
             bool isValid = true;
-            if(string.IsNullOrEmpty(CompanyName))
+            if(string.IsNullOrEmpty(CompanyName)
+                && string.IsNullOrEmpty(PolicyNumber))
             {
                 isValid = false;
-                _notifier.ShowError("Enter valid company name");
-            }
-            if (string.IsNullOrEmpty(PolicyNumber))
-            {
-                isValid = false;
-                _notifier.ShowError("Enter valid policy number");
+                _notifier.ShowError("Enter valid information to search client");
             }
 
             if (isValid)
