@@ -90,7 +90,7 @@ namespace CMG.UI
                 if (!(_mainViewModel.SelectedViewModel is PolicyViewModel))
                 {
                     _mainViewModel.SelectedIndexLeftNavigation = (int)LeftNavigation.Search;
-                    PolicyViewModel policyViewModel = new PolicyViewModel(_unitOfWork, _mapper);
+                    PolicyViewModel policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, _dialogService, _notifier);
                     _mainViewModel.SelectedViewModel = policyViewModel;
                     DataContext = _mainViewModel;
                 }
@@ -148,7 +148,7 @@ namespace CMG.UI
         {
             PolicyMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
             CloseCommissionMenu();
-            PolicyViewModel policyViewModel = new PolicyViewModel(_unitOfWork, _mapper);
+            PolicyViewModel policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, _dialogService, _notifier);
             _mainViewModel.SelectedViewModel = policyViewModel;
             DataContext = _mainViewModel;
         }
