@@ -35,7 +35,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="450" x:Name="SliderColumn" />
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="350"/>
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Row="0" Grid.Column="0" Background="#FF252627" x:Name="SliderPannel">
@@ -105,7 +105,7 @@
                             </Button>
                         </StackPanel>
                         <StackPanel Grid.Row="2" Grid.Column="4">
-                            <Button Content="Search" Width="85" Command="{Binding SearchClientCommand}"></Button>
+                            <Button Content="Search" Width="85" Command="{Binding SearchClientCommand}" IsDefault="True"></Button>
                         </StackPanel>
                     </Grid>
                 </Grid>
@@ -164,14 +164,14 @@
                     <TextBlock Text="|" Margin="0 10 10 10" FontSize="35" Foreground="#FFF0F9FF" FontWeight="Light" Opacity="0.3"></TextBlock>
                 </DockPanel>
                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
-                    <materialDesign:PackIcon Kind="Snowflake" Margin="10 10 0 10" VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
-                    <TextBlock Margin="10 22 10 10" FontSize="16" Foreground="White">
+                    <materialDesign:PackIcon Kind="Snowflake" Margin="10 10 0 10" VerticalAlignment="Center"  Foreground="Black" FontWeight="Bold"></materialDesign:PackIcon>
+                    <TextBlock Margin="10 22 10 10" FontSize="16" Foreground="Black" Visibility="{Binding IsClientSelected, Converter={StaticResource VisibilityConverter}}">
                         <Run Text="{Binding SelectedClient.ClientType}"/>
                         <Run Text=" : "/>
                         <Run Text="{Binding SelectedClient.CommonName}"/>
-                        <Run Text=" "/>
                         <Run Text="{Binding SelectedClient.LastName}"/>
                     </TextBlock>
+                    <TextBlock Text="Policy Details" Margin="10 22 10 10" FontSize="16" Foreground="Black" Visibility="{Binding IsPolicyDetailVisible, Converter={StaticResource VisibilityConverter}}"/>
                 </StackPanel>
                 <Grid Grid.Row="1" Margin="10 0 10 10" Grid.ColumnSpan="2">
                     <DataGrid AutoGenerateColumns="False" x:Name="policies" IsReadOnly="False" 
@@ -325,6 +325,40 @@
                     <StackPanel Grid.Row="3" Margin="20 10 10 10">
                         <Separator Background="LightGray" Margin="0 10"/>
                         <TextBlock Text="Relationships" FontWeight="Bold"/>
+                        <DataGrid AutoGenerateColumns="False" x:Name="relationship" IsReadOnly="True" Background="{x:Null}" GridLinesVisibility="None" Width="325"
+                          ColumnHeaderStyle="{StaticResource RelationshipHeaderStyle}" ItemsSource="{Binding SelectedPolicy.PeoplePolicy}" MinRowHeight="25" ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                          SelectionUnit="FullRow">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="Category" Width="85" HeaderStyle="{StaticResource RelationshipFirstColumnHeaderStyle}">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=Category}" Margin="10 0 10 0" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Name">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=Name}" ></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Relation" Width="65" >
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=Relation}"></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Split" Width="40">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=Split}"></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
                     </StackPanel>
                     <StackPanel Grid.Row="4" Margin="10 10 10 10">
                         <Separator Background="LightGray" Margin="0 10"/>

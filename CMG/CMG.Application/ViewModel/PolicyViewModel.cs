@@ -28,6 +28,7 @@ namespace CMG.Application.ViewModel
         private const string comboFieldNameCompany = "COMPANY";
         private const string comboFieldNamePStatus = "PSTATUS";
         private const string comboFieldNameSVCType = "SVC_TYPE";
+        private const string comboFieldNameCategory = "CATGRY";
         #endregion
 
         #region Constructor
@@ -125,8 +126,13 @@ namespace CMG.Application.ViewModel
             get { return _svcTypeCollection; }
             set { _svcTypeCollection = value; }
         }
-
-        private List<string> _policies;
+        private List<ViewComboDto> _categoryCollection;
+        public List<ViewComboDto> CategoryCollection
+        {
+            get { return _categoryCollection; }
+            set { _categoryCollection = value; }
+        }
+	private List<string> _policies;
         public List<string> Policies
         {
             get { return _policies; }
@@ -144,6 +150,8 @@ namespace CMG.Application.ViewModel
             { 
                 _selectedClient = value;
                 OnPropertyChanged("SelectedClient");
+                OnPropertyChanged("IsClientSelected");
+                OnPropertyChanged("IsPolicyDetailVisible");
                 GetPolicyCollection();
             }
         }
@@ -254,6 +262,15 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("ToDate");
             }
         }
+        public bool IsClientSelected
+        {
+            get { return SelectedClient != null ? true : false ; }
+        }
+
+        public bool IsPolicyDetailVisible
+        {
+            get { return SelectedClient == null ? true : false; }
+        }
 
         #region command properties
         public ICommand SearchClientCommand
@@ -276,6 +293,7 @@ namespace CMG.Application.ViewModel
             CompanyNames = CompanyCollection.Select(x => x.Description.Trim()).ToList();
             PersonStatusCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNamePStatus).ToList();
             SVCTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameSVCType).ToList();
+            CategoryCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameCategory).ToList();
         }
         private void LoadData()
         {
@@ -290,11 +308,10 @@ namespace CMG.Application.ViewModel
                 var dataSearchBy = _unitOfWork.People.Find(searchQuery);
                 var dataCollection = new ObservableCollection<ViewClientSearchDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewClientSearchDto>(r)).ToList());
 
-                ClientCollection = new ObservableCollection<ViewClientSearchDto>(dataCollection.Select(x =>
-                {
-                    x.ClientType = string.IsNullOrEmpty(x.ClientType.Trim()) ? "" : ClientTypeCollection.Where(c => c.FieldCode == x.ClientType.Trim()).FirstOrDefault().Description;
-                    x.Status = string.IsNullOrEmpty(x.Status.Trim()) ? "" : PersonStatusCollection.Where(c => c.FieldCode == x.Status.Trim()).FirstOrDefault().Description;
-                    x.SVCType = string.IsNullOrEmpty(x.SVCType.Trim()) ? "" : SVCTypeCollection.Where(c => c.FieldCode == x.SVCType.Trim()).FirstOrDefault().Description;
+            ClientCollection = new ObservableCollection<ViewClientSearchDto>(dataCollection.Select(x => {
+                                    x.ClientType = string.IsNullOrEmpty(x.ClientType.Trim()) ? "" : ClientTypeCollection.Where(c => c.FieldCode == x.ClientType.Trim()).FirstOrDefault()?.Description;
+                                    x.Status = string.IsNullOrEmpty(x.Status.Trim()) ? "" : PersonStatusCollection.Where(c => c.FieldCode == x.Status.Trim()).FirstOrDefault()?.Description;
+                                    x.SVCType = string.IsNullOrEmpty(x.SVCType.Trim()) ? "" : SVCTypeCollection.Where(c => c.FieldCode == x.SVCType.Trim()).FirstOrDefault()?.Description;
                     return x;
                 }));
             }
@@ -360,7 +377,15 @@ namespace CMG.Application.ViewModel
             }
             if (!string.IsNullOrEmpty(CompanyName))
             {
-                BuildFilterByEquals("CompanyName", "ML", searchBy);
+                var companyCode = CompanyCollection.Where(c => c.Description == CompanyName).FirstOrDefault()?.FieldCode;
+                if (!string.IsNullOrEmpty(companyCode))
+                {
+                    BuildFilterByEquals("CompanyName", companyCode, searchBy);
+                }
+                else
+                { 
+                    //show error message company not exist
+                }
             }
 
             searchQuery.FilterBy = searchBy;
@@ -409,10 +434,17 @@ namespace CMG.Application.ViewModel
 
                 PolicyCollection = new ObservableCollection<ViewPolicyListDto>(policyCollection.Select(x =>
                 {
-                    x.Type = string.IsNullOrEmpty(x.Type.Trim()) ? "" : PolicyTypeCollection.Where(c => c.FieldCode == x.Type.Trim()).FirstOrDefault().Description;
-                    x.Frequency = string.IsNullOrEmpty(x.Frequency.Trim()) ? "" : FrequencyTypeCollection.Where(c => c.FieldCode == x.Frequency.Trim()).FirstOrDefault().Description;
-                    x.Status = string.IsNullOrEmpty(x.Status.Trim()) ? "" : StatusTypeCollection.Where(c => c.FieldCode == x.Status.Trim()).FirstOrDefault().Description;
-                    x.CompanyName = string.IsNullOrEmpty(x.CompanyName.Trim()) ? "" : CompanyCollection.Where(c => c.FieldCode == x.CompanyName.Trim()).FirstOrDefault().Description;
+                    x.Type = string.IsNullOrEmpty(x.Type.Trim()) ? "" : PolicyTypeCollection.Where(c => c.FieldCode == x.Type.Trim()).FirstOrDefault()?.Description;
+                    x.Frequency = string.IsNullOrEmpty(x.Frequency.Trim()) ? "" : FrequencyTypeCollection.Where(c => c.FieldCode == x.Frequency.Trim()).FirstOrDefault()?.Description;
+                    x.Status = string.IsNullOrEmpty(x.Status.Trim()) ? "" : StatusTypeCollection.Where(c => c.FieldCode == x.Status.Trim()).FirstOrDefault()?.Description;
+                    x.CompanyName = string.IsNullOrEmpty(x.CompanyName.Trim()) ? "" : CompanyCollection.Where(c => c.FieldCode == x.CompanyName.Trim()).FirstOrDefault()?.Description;
+                    x.PeoplePolicy = x.PeoplePolicy.Select(
+                        p =>
+                        {
+                            p.Category = string.IsNullOrEmpty(p.Category.Trim()) ? "" : CategoryCollection.Where(c => c.FieldCode == p.Category.Trim()).FirstOrDefault()?.Description;
+                            return p;
+                        }
+                    ).ToList();
                     return x;
                 }));
 
