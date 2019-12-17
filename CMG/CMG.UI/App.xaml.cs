@@ -68,6 +68,7 @@ namespace CMG.UI
                 mc.AddProfile(new WithdrawalMapperProfile());
                 mc.AddProfile(new ComboMapperProfile());
                 mc.AddProfile(new ClientSearchProfiler());
+                mc.AddProfile(new PolicyIllustrationMapperProfile());
             });
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);

@@ -67,6 +67,17 @@ namespace CMG.Application.ViewModel
             }
         }
 
+        private ObservableCollection<ViewPolicyIllustrationDto> _policyIllustrationCollection;
+        public ObservableCollection<ViewPolicyIllustrationDto> PolicyIllustrationCollection
+        {
+            get { return _policyIllustrationCollection; }
+            set
+            {
+                _policyIllustrationCollection = value;
+                OnPropertyChanged("PolicyIllustrationCollection");
+            }
+        }
+
         private List<ViewComboDto> _combo;
         public List<ViewComboDto> Combo
         {
@@ -166,7 +177,17 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("SelectedPolicy");
             }
         }
-
+        
+        private ViewPolicyIllustrationDto _selectedIllustration;
+        public ViewPolicyIllustrationDto SelectedIllustration
+        {
+            get { return _selectedIllustration; }
+            set
+            {
+                _selectedIllustration = value;
+                OnPropertyChanged("SelectedIllustration");
+            }
+        }
         private ViewComboDto _selectedClientType;
         public ViewComboDto SelectedClientType
         {
@@ -271,11 +292,15 @@ namespace CMG.Application.ViewModel
         {
             get { return SelectedClient == null ? true : false; }
         }
-
+       
         #region command properties
         public ICommand SearchClientCommand
         {
             get { return CreateCommand(Search); }
+        }
+        public ICommand ViewIllustrationCommand
+        {
+            get { return CreateCommand(ViewIllustration);  }
         }
         #endregion command properties
         #endregion Properties
@@ -447,6 +472,19 @@ namespace CMG.Application.ViewModel
                 if(PolicyCollection.Count > 0)
                 {
                     SelectedPolicy = PolicyCollection[0];
+                }
+            }
+        }
+
+        private void ViewIllustration()
+        {
+            if(SelectedPolicy != null)
+            {
+                var policyIllustrations = _unitOfWork.PolicyIllustration.GetPolicyIllustration(SelectedPolicy.Id);
+                PolicyIllustrationCollection = new ObservableCollection<ViewPolicyIllustrationDto>(policyIllustrations.Select(r => _mapper.Map<ViewPolicyIllustrationDto>(r))); 
+                if(PolicyIllustrationCollection.Count > 0)
+                {
+                    SelectedIllustration = PolicyIllustrationCollection[0];
                 }
             }
         }

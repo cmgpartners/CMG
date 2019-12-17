@@ -19,11 +19,6 @@ namespace CMG.DataAccess.Domain
         public decimal Ncpi { get; set; }
         public decimal Incpay { get; set; }
         public decimal Lifepay { get; set; }
-        public DateTime RevDate { get; set; }
-        public string RevLocn { get; set; }
-        public DateTime Cr8Date { get; set; }
-        public string Cr8Locn { get; set; }
-        public bool Del { get; set; }
         public decimal Anndepre { get; set; }
         public decimal Anndepact { get; set; }
         public decimal Acbact { get; set; }
