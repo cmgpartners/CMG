@@ -84,6 +84,8 @@ namespace CMG.DataAccess.Repository
                 Cr8Date = x.Cr8Date,
                 IssueAge = x.IssueAge,
                 Comment = x.Comment,
+                NoteCli = x.NoteCli,
+                NoteInt = x.NoteInt,
                 PeoplePolicys = x.PeoplePolicys.Where(x => !excludeCategoryList.Contains(x.Catgry)).Select(a => new PeoplePolicys
                 {
                     Keynump = a.Keynump,

@@ -27,6 +27,8 @@ namespace CMG.Application.Mapper
                 .ForMember(des => des.ReprojectedOn, mo => mo.MapFrom(src => src.Reprojdate))
                 .ForMember(des => des.Age, mo => mo.MapFrom(src => !string.IsNullOrEmpty(src.IssueAge.Trim()) ? Convert.ToInt32(src.IssueAge) : 0))
                 .ForMember(des => des.PolicyNotes, mo => mo.MapFrom(src => src.Comment))
+                .ForMember(des => des.ClientNotes, mo => mo.MapFrom(src => src.NoteCli))
+                .ForMember(des => des.InternalNotes, mo => mo.MapFrom(src => src.NoteInt))
                 .ForMember(des => des.PeoplePolicy, mo => mo.MapFrom(src => src.PeoplePolicys));
 
             CreateMap<PeoplePolicys, ViewPeoplePolicyDto>()
