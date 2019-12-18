@@ -9,14 +9,14 @@
              d:DesignHeight="450" d:DesignWidth="800"
              xmlns:uc="clr-namespace:CMG.UI.Controls">
     <UserControl.Resources>
-        <Storyboard x:Key="SliderOpen">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="SliderPannel">
+        <Storyboard x:Key="SearchSliderOpen">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="SearchSliderPannel">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0"></EasingDoubleKeyFrame>
                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="450"></EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
-        <Storyboard x:Key="SliderClose">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="SliderPannel">
+        <Storyboard x:Key="SearchSliderClose">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="SearchSliderPannel">
                 <EasingDoubleKeyFrame KeyTime="0" Value="450"></EasingDoubleKeyFrame>
                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"></EasingDoubleKeyFrame>
             </DoubleAnimationUsingKeyFrames>
@@ -41,13 +41,33 @@
                 </ThicknessAnimation.To>
             </ThicknessAnimation>
         </Storyboard>
+        <Storyboard x:Key="IllustrationEditOpen" TargetProperty="Margin">
+            <ThicknessAnimation Duration="0:0:0.6" Storyboard.Target="{Binding ElementName=IllustrationEdit}">
+                <ThicknessAnimation.From>
+                    <Thickness Left="0" Top="525" Bottom="-525" Right="0"/>
+                </ThicknessAnimation.From>
+                <ThicknessAnimation.To>
+                    <Thickness Left="0" Top="0" Bottom="0" Right="0"/>
+                </ThicknessAnimation.To>
+            </ThicknessAnimation>
+        </Storyboard>
+        <Storyboard x:Key="IllustrationEditClose" TargetProperty="Margin">
+            <ThicknessAnimation Duration="0:0:0.6" Storyboard.Target="{Binding ElementName=IllustrationEdit}">
+                <ThicknessAnimation.From>
+                    <Thickness Left="0" Top="0" Bottom="0" Right="0"/>
+                </ThicknessAnimation.From>
+                <ThicknessAnimation.To>
+                    <Thickness Left="0" Top="525" Bottom="-525" Right="0"/>
+                </ThicknessAnimation.To>
+            </ThicknessAnimation>
+        </Storyboard>
     </UserControl.Resources>
     <UserControl.Triggers>
-        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonOpen">
-            <BeginStoryboard Storyboard="{StaticResource SliderOpen}"></BeginStoryboard>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonSearchSliderOpen">
+            <BeginStoryboard Storyboard="{StaticResource SearchSliderOpen}"></BeginStoryboard>
         </EventTrigger>
-        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonClose">
-            <BeginStoryboard Storyboard="{StaticResource SliderClose}"></BeginStoryboard>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonSearchSliderClose">
+            <BeginStoryboard Storyboard="{StaticResource SearchSliderClose}"></BeginStoryboard>
         </EventTrigger>
         <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonIllustrationOpen">
             <BeginStoryboard Storyboard="{StaticResource IllustrationSliderOpen}"></BeginStoryboard>
@@ -55,17 +75,19 @@
         <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonIllustrationClose">
             <BeginStoryboard Storyboard="{StaticResource IllustrationSliderClose}"></BeginStoryboard>
         </EventTrigger>
-        
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonIllustrationEditClose">
+            <BeginStoryboard Storyboard="{StaticResource IllustrationEditClose}"></BeginStoryboard>
+        </EventTrigger>
     </UserControl.Triggers>
     <Grid>
         <Grid x:Name="PolicyMainView">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="450" x:Name="SliderColumn" />
+                <ColumnDefinition Width="450" x:Name="SearchSliderColumn" />
                 <ColumnDefinition Width="*" x:Name="PolicyGridColumn"/>
                 <ColumnDefinition Width="375" x:Name="PolicyDetailColumn"/>
             </Grid.ColumnDefinitions>
 
-            <Grid Grid.Row="0" Grid.Column="0" Background="#FF252627" x:Name="SliderPannel">
+            <Grid Grid.Row="0" Grid.Column="0" Background="#FF252627" x:Name="SearchSliderPannel">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="100"/>
                     <RowDefinition Height="300" />
@@ -74,8 +96,8 @@
                 <DockPanel>
                     <materialDesign:PackIcon Kind="Search" VerticalAlignment="Center" Margin="20" Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
                     <TextBlock Text="Search" Margin="0 38 10 10" FontSize="16" Foreground="White" ></TextBlock>
-                    <Button Background="Transparent" BorderBrush="Transparent" Width="50" HorizontalAlignment="Right" x:Name="ButtonClose" Click="ButtonClose_Click">
-                    <materialDesign:PackIcon Kind="ArrowLeftBoldCircleOutline"  VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
+                    <Button Background="Transparent" BorderBrush="Transparent" Width="50" HorizontalAlignment="Right" x:Name="ButtonSearchSliderClose" Click="ButtonSearchSliderClose_Click">
+                        <materialDesign:PackIcon Kind="ArrowLeftBoldCircleOutline"  VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
                     </Button>
                 </DockPanel>
                 <Grid Grid.Row="1">
@@ -107,7 +129,7 @@
                             <TextBlock Text="Entity Type" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                             <ComboBox ItemsSource="{Binding ClientTypeCollection}" SelectedValue="{Binding SelectedClientType}" DisplayMemberPath="Description" Foreground="White" FontSize="13" Margin="0 0 17 0" Style="{StaticResource EntityTypeStyle}">
                             </ComboBox>
-                            
+
                         </StackPanel>
 
                         <StackPanel Grid.Row="1" Grid.Column="0">
@@ -118,7 +140,7 @@
                             <TextBlock Text="Company" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                             <uc:AutoCompleteBox AutoSuggestionList="{Binding CompanyNames}" SelectedValue="{Binding CompanyName}"></uc:AutoCompleteBox>
                         </StackPanel>
-                       
+
                         <StackPanel Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2">
                             <TextBlock Text="Policy Date" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                             <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Foreground="White" FontSize="14" Text="" MinWidth="150"></TextBox>
@@ -171,7 +193,7 @@
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                   </Grid>
+                </Grid>
             </Grid>
             <Grid Grid.Row="0" Grid.Column="1">
                 <Grid.RowDefinitions>
@@ -185,7 +207,7 @@
                 <DockPanel x:Name="SearchBar" Visibility="Collapsed">
                     <materialDesign:PackIcon Kind="Search" VerticalAlignment="Center" Margin="20" Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
                     <TextBlock Text="Search" Margin="0 22 10 10" FontSize="16" Foreground="White" ></TextBlock>
-                    <Button Background="Transparent" BorderBrush="Transparent" Width="50" x:Name="ButtonOpen" HorizontalAlignment="Left" Click="ButtonOpen_Click">
+                    <Button Background="Transparent" BorderBrush="Transparent" Width="50" x:Name="ButtonSearchSliderOpen" HorizontalAlignment="Left" Click="ButtonSearchSliderOpen_Click">
                         <materialDesign:PackIcon Kind="ArrowRightBoldCircleOutline" VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
                     </Button>
                     <TextBlock Text="|" Margin="0 10 10 10" FontSize="35" Foreground="#FFF0F9FF" FontWeight="Light" Opacity="0.3"></TextBlock>
@@ -208,7 +230,7 @@
                             <DataGridTemplateColumn Header="" Width="40" HeaderStyle="{StaticResource FirstColumnHeaderStyle }">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Background="Transparent" BorderBrush="Transparent" Width="50" x:Name="ButtonOpen" HorizontalAlignment="Left" Click="ButtonOpen_Click">
+                                        <Button Background="Transparent" BorderBrush="Transparent" Width="50" x:Name="ButtonPolicyEditOpen" HorizontalAlignment="Left">
                                             <materialDesign:PackIcon Kind="Pencil" VerticalAlignment="Center"  Foreground="#00A3FF" FontWeight="Bold"></materialDesign:PackIcon>
                                         </Button>
                                     </DataTemplate>
@@ -375,7 +397,7 @@
                                 <TextBlock Text="{Binding SelectedClient.SVCType}" HorizontalAlignment="Center"/>
                             </StackPanel>
                         </Grid>
-                        
+
                     </StackPanel>
                     <StackPanel Grid.Row="4" Margin="20 10 10 10">
                         <Separator Background="LightGray" Margin="0 10"/>
@@ -409,8 +431,8 @@
                     <StackPanel Grid.Row="5" Margin="20 10 10 10">
                         <Separator Background="LightGray" Margin="0 10"/>
                         <TextBlock Text="Relationships" FontWeight="Bold"/>
-                          <ScrollViewer HorizontalScrollBarVisibility="Auto" MaxWidth="360" VerticalScrollBarVisibility="Hidden">
-                          <DataGrid AutoGenerateColumns="False" x:Name="relationship" IsReadOnly="True" Background="{x:Null}" GridLinesVisibility="None"
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" MaxWidth="360" VerticalScrollBarVisibility="Hidden">
+                            <DataGrid AutoGenerateColumns="False" x:Name="relationship" IsReadOnly="True" Background="{x:Null}" GridLinesVisibility="None"
                           ColumnHeaderStyle="{StaticResource RelationshipHeaderStyle}" ItemsSource="{Binding SelectedPolicy.PeoplePolicy}" MinRowHeight="25"
                           SelectionUnit="FullRow">
                                 <DataGrid.Columns>
@@ -463,156 +485,161 @@
             </Grid>
         </Grid>
         <Grid x:Name="IllustrationSliderPanel" Visibility="Collapsed" Background="#FF9BADB8" HorizontalAlignment="Right">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="26"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="375"/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" Background="#00A3FF" VerticalAlignment="Stretch" Margin="0 0 8 0">
-                    <Button Background="Transparent" BorderBrush="Transparent" Width="30" Padding="0" HorizontalContentAlignment="Left" HorizontalAlignment="Left" 
-                            x:Name="ButtonIllustrationClose" Click="ButtonIllustrationClose_Click">
-                        <materialDesign:PackIcon Kind="CloseCircleOutline"  VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
-                    </Button>
-                </StackPanel>
-                <DockPanel Grid.Column="1" Margin="5 0 0 10">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="70"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Grid Grid.Row="0">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                        </Grid>
-                        <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
-                            <materialDesign:PackIcon  Kind="LayersTripleOutline"  VerticalAlignment="Center"  Foreground="Black" FontWeight="Bold"></materialDesign:PackIcon>
-                            <TextBlock  Text="Policy Illustration" VerticalAlignment="Center" Margin="10 0 0 0" FontSize="16"/>
-                        </StackPanel>
-                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 10 0">
-                            <TextBlock Text="Policy # : " HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="16" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBlock Text="{Binding SelectedPolicy.PolicyNumber}" VerticalAlignment="Center" Margin="0 0 20 0" FontSize="16"/>
-                            <TextBlock Text="Policy Date : " VerticalAlignment="Center" FontSize="16" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBlock Text="{Binding SelectedPolicy.PolicyDate, StringFormat='{}{0: MMM d, yyyy}'}" FontSize="16" VerticalAlignment="Center" Margin="0 0 20 0"/>
-                        </StackPanel>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="26"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="375"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Background="#00A3FF" VerticalAlignment="Stretch" Margin="0 0 8 0">
+                <Button Background="Transparent" BorderBrush="Transparent" Width="30" Padding="0" HorizontalContentAlignment="Left" HorizontalAlignment="Left" 
+                        x:Name="ButtonIllustrationClose" Click="ButtonIllustrationClose_Click">
+                    <materialDesign:PackIcon Kind="CloseCircleOutline"  VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
+                </Button>
+            </StackPanel>
+            <DockPanel Grid.Column="1" Margin="5 0 0 10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
                     </Grid>
-                    <DataGrid AutoGenerateColumns="False" x:Name="illustration" IsReadOnly="False" Grid.Row="1" 
-                      ItemsSource="{Binding PolicyIllustrationCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" 
-                      CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="40" RowHeaderWidth="10" SelectedItem="{Binding SelectedIllustration}">
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="" Width="40" HeaderStyle="{StaticResource FirstColumnHeaderStyle }">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Button Background="Transparent" BorderBrush="Transparent" Width="50" x:Name="ButtonOpen" HorizontalAlignment="Left" Click="ButtonOpen_Click">
-                                            <materialDesign:PackIcon Kind="Pencil" VerticalAlignment="Center"  Foreground="#00A3FF" FontWeight="Bold"></materialDesign:PackIcon>
-                                        </Button>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Year" Width="105" SortMemberPath="CalendarYear" CanUserSort="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=CalendarYear}" Margin="10 0 10 0"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Value Type" Width="150">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="Original"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Annual Deposit" Width="100">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=AnnualDeposit}"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Cash Value" Width="100">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=CashValue}"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Death Benefit" Width="120">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=DeathBenefit}"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Adjusted Cost Base" Width="150">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=AdjustedCostBase}"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="NCPI" Width="70">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=NCPI}"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Increasing Pay" Width="130">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Increasingpay}"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Life Pay" Width="100">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=LifePay}"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                        <DataGrid.RowDetailsTemplate>
-                            <DataTemplate>
-                                <Grid Width="1065" Margin="100 0 0 0">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="150"/>
-                                        <ColumnDefinition Width="100"/>
-                                        <ColumnDefinition Width="100"/>
-                                        <ColumnDefinition Width="120"/>
-                                        <ColumnDefinition Width="150"/>
-                                        <ColumnDefinition Width="70"/>
-                                        <ColumnDefinition Width="230"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="25"/>
-                                        <RowDefinition Height="25"/>
-                                    </Grid.RowDefinitions>
-                                    <TextBlock Text="Actual" Grid.Row="0" Grid.Column="0"/>
-                                    <TextBlock Text="{Binding AnnualDepositActual}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left"/>
-                                    <TextBlock Text="{Binding CashValueActual}" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left"/>
-                                    <TextBlock Text="{Binding DeathBenefitActual}" Grid.Row="0" Grid.Column="3"/>
-                                    <TextBlock Text="{Binding AdjustedCostBaseActual}" Grid.Row="0" Grid.Column="4" />
-                                    <TextBlock Text="{Binding NCPIActual}" Grid.Row="0" Grid.Column="5"/>
-                                    <TextBlock Width="230" Grid.Row="0" Grid.Column="6"/>
-
-                                    <TextBlock Text="Reprojection" Grid.Row="1" Grid.Column="0"/>
-                                    <TextBlock Text="{Binding AnnualDepositReprojection}" Grid.Row="1" Grid.Column="1"/>
-                                    <TextBlock Text="{Binding CashValueReprojection}" Grid.Row="1" Grid.Column="2"/>
-                                    <TextBlock Text="{Binding DeathBenefitReprojection}" Grid.Row="1" Grid.Column="3"/>
-                                    <TextBlock Text="{Binding AdjustedCostBaseReprojection}" Grid.Row="1" Grid.Column="4"/>
-                                    <TextBlock Text="{Binding NCPIReprojection}" Grid.Row="1" Grid.Column="5"/>
-                                    <TextBlock Width="230" Grid.Row="0" Grid.Column="6"/>
-                                </Grid>
-                            </DataTemplate>
-                        </DataGrid.RowDetailsTemplate>
-                    </DataGrid>
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
+                        <materialDesign:PackIcon  Kind="LayersTripleOutline"  VerticalAlignment="Center"  Foreground="Black" FontWeight="Bold"></materialDesign:PackIcon>
+                        <TextBlock  Text="Policy Illustration" VerticalAlignment="Center" Margin="10 0 0 0" FontSize="16"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 10 0">
+                        <TextBlock Text="Policy # : " HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="16" Foreground="#FFCEEAFF"></TextBlock>
+                        <TextBlock Text="{Binding SelectedPolicy.PolicyNumber}" VerticalAlignment="Center" Margin="0 0 20 0" FontSize="16"/>
+                        <TextBlock Text="Policy Date : " VerticalAlignment="Center" FontSize="16" Foreground="#FFCEEAFF"></TextBlock>
+                        <TextBlock Text="{Binding SelectedPolicy.PolicyDate, StringFormat='{}{0: MMM d, yyyy}'}" FontSize="16" VerticalAlignment="Center" Margin="0 0 20 0"/>
+                    </StackPanel>
                 </Grid>
-                </DockPanel>
-                <DockPanel Grid.Column="2" Margin="10 0 10 10">
+                <DataGrid AutoGenerateColumns="False" x:Name="illustration" IsReadOnly="False" Grid.Row="1" 
+                    ItemsSource="{Binding PolicyIllustrationCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" 
+                    CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="40" RowHeaderWidth="10" SelectedItem="{Binding SelectedIllustration}">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Header="" Width="40" HeaderStyle="{StaticResource FirstColumnHeaderStyle }">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Background="Transparent" BorderBrush="Transparent" Width="50" HorizontalAlignment="Left" x:Name="ButtonIllustrationEditOpen" Click="ButtonIllustrationEditOpen_Click">
+                                        <materialDesign:PackIcon Kind="Pencil" VerticalAlignment="Center"  Foreground="#00A3FF" FontWeight="Bold"></materialDesign:PackIcon>
+                                        <Button.Triggers>
+                                            <EventTrigger RoutedEvent="ButtonBase.Click">
+                                                <BeginStoryboard Storyboard="{StaticResource IllustrationEditOpen}"></BeginStoryboard>
+                                            </EventTrigger>
+                                        </Button.Triggers>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Year" Width="105" SortMemberPath="CalendarYear" CanUserSort="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=CalendarYear}" Margin="10 0 10 0"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Value Type" Width="150">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="Original"></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Annual Deposit" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=AnnualDeposit}"></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Cash Value" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=CashValue}"></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Death Benefit" Width="120">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=DeathBenefit}"></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Adjusted Cost Base" Width="150">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=AdjustedCostBase}"></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="NCPI" Width="70">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=NCPI}"></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Increasing Pay" Width="130">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=Increasingpay}"></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Life Pay" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=LifePay}"></TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                    <DataGrid.RowDetailsTemplate>
+                        <DataTemplate>
+                            <Grid Width="1065" Margin="100 0 0 0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="70"/>
+                                    <ColumnDefinition Width="230"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="25"/>
+                                    <RowDefinition Height="25"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Actual" Grid.Row="0" Grid.Column="0"/>
+                                <TextBlock Text="{Binding AnnualDepositActual}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left"/>
+                                <TextBlock Text="{Binding CashValueActual}" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left"/>
+                                <TextBlock Text="{Binding DeathBenefitActual}" Grid.Row="0" Grid.Column="3"/>
+                                <TextBlock Text="{Binding AdjustedCostBaseActual}" Grid.Row="0" Grid.Column="4" />
+                                <TextBlock Text="{Binding NCPIActual}" Grid.Row="0" Grid.Column="5"/>
+                                <TextBlock Width="230" Grid.Row="0" Grid.Column="6"/>
+
+                                <TextBlock Text="Reprojection" Grid.Row="1" Grid.Column="0"/>
+                                <TextBlock Text="{Binding AnnualDepositReprojection}" Grid.Row="1" Grid.Column="1"/>
+                                <TextBlock Text="{Binding CashValueReprojection}" Grid.Row="1" Grid.Column="2"/>
+                                <TextBlock Text="{Binding DeathBenefitReprojection}" Grid.Row="1" Grid.Column="3"/>
+                                <TextBlock Text="{Binding AdjustedCostBaseReprojection}" Grid.Row="1" Grid.Column="4"/>
+                                <TextBlock Text="{Binding NCPIReprojection}" Grid.Row="1" Grid.Column="5"/>
+                                <TextBlock Width="230" Grid.Row="0" Grid.Column="6"/>
+                            </Grid>
+                        </DataTemplate>
+                    </DataGrid.RowDetailsTemplate>
+                </DataGrid>
+            </Grid>
+            </DockPanel>
+            <DockPanel Grid.Column="2" Margin="10 0 10 10">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="70"/>
@@ -651,9 +678,144 @@
                         </Grid>
                     </Grid>
                 </Grid>
-                
-                </DockPanel>
+
+            </DockPanel>
         </Grid>
         
+        <Grid x:Name="IllustrationEdit" Visibility="Collapsed" Background="White" Height="500" Width="500" Opacity="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100"/>
+                <RowDefinition/>
+                <RowDefinition Height="250"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Margin="50 25" Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Grid.Row="0" Text="Edit Illustration Details" FontWeight="Bold" VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Cancel" Margin="10 0" x:Name="ButtonIllustrationEditClose" Click="ButtonIllustrationEditClose_Click"/>
+                    <Button Content="Save"/>
+                </StackPanel>
+            </Grid>
+            <Grid Margin="50 5" Grid.Row="1" Grid.Column="0">
+                <Grid Width="250" HorizontalAlignment="Left">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Margin="0 0 40 0">
+                        <TextBlock Text="Year"/>
+                        <TextBox Text="{Binding SelectedIllustration.CalendarYear}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="Policy #"/>
+                        <TextBox Text="{Binding SelectedPolicy.PolicyNumber}"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+            <Grid Margin="50 5 50 20" Grid.Row="2" Grid.Column="0" Background="LightGray">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Column="0" Grid.Row="0" Text="Original" Margin="0 5" VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="1" Grid.Row="0" Margin="0 0 10 0">
+                    <TextBlock Text="Annual Deposit" Margin="0 5"/>
+                    <TextBox Text="{Binding SelectedIllustration.AnnualDeposit}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Grid.Row="0" Margin="0 0 10 0">
+                    <TextBlock Text="Cash Value" Margin="0 5"/>
+                    <TextBox Text="{Binding SelectedIllustration.CashValue}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="3" Grid.Row="0" Margin="0 0 10 0">
+                    <TextBlock Text="Death Benefit" Margin="0 5"/>
+                    <TextBox Text="{Binding SelectedIllustration.DeathBenefit}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="4" Grid.Row="0" Margin="0 0 10 0">
+                    <TextBlock Text="Adjusted Cost Base" Margin="0 5"/>
+                    <TextBox Text="{Binding SelectedIllustration.AdjustedCostBase}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="5" Grid.Row="0" Margin="0 0 10 0">
+                    <TextBlock Text="NCPI" Margin="0 5"/>
+                    <TextBox Text="{Binding SelectedIllustration.NCPI}"/>
+                </StackPanel>
+
+
+                <TextBlock Grid.Column="0" Grid.Row="1" Text="Actual" Margin="0 5" VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="1" Grid.Row="1" Margin="0 0 10 0">
+                    <TextBlock Text="Annual Deposit" Margin="0 5"/>
+                    <TextBox Text="{Binding SelectedIllustration.AnnualDepositActual}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Grid.Row="1" Margin="0 0 10 0">
+                    <TextBlock Text="Cash Value" Margin="0 5"/>
+                    <TextBox Text="{Binding SelectedIllustration.CashValueActual}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="3" Grid.Row="1" Margin="0 0 10 0">
+                    <TextBlock Text="Death Benefit" Margin="0 5"/>
+                    <TextBox Text="{Binding SelectedIllustration.DeathBenefitActual}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="4" Grid.Row="1" Margin="0 0 10 0">
+                    <TextBlock Text="Adjusted Cost Base" Margin="0 5"/>
+                    <TextBox Text="{Binding SelectedIllustration.AdjustedCostBaseActual}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="5" Grid.Row="1" Margin="0 0 10 0">
+                    <TextBlock Text="NCPI" Margin="0 5"/>
+                    <TextBox Text="{Binding SelectedIllustration.NCPIActual}"/>
+                </StackPanel>
+
+
+                <TextBlock Grid.Column="0" Grid.Row="2" Text="Reprojection" Margin="0 5" VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="1" Grid.Row="2" Margin="0 0 10 0">
+                    <TextBlock Text="Annual Deposit" Margin="0 5"/>
+                    <TextBox Text="{Binding SelectedIllustration.AnnualDepositReprojection}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Grid.Row="2" Margin="0 0 10 0">
+                    <TextBlock Text="Cash Value" Margin="0 5"/>
+                    <TextBox Text="{Binding SelectedIllustration.CashValueReprojection}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="3" Grid.Row="2" Margin="0 0 10 0">
+                    <TextBlock Text="Death Benefit" Margin="0 5"/>
+                    <TextBox Text="{Binding SelectedIllustration.DeathBenefitReprojection}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="4" Grid.Row="2" Margin="0 0 10 0">
+                    <TextBlock Text="Adjusted Cost Base" Margin="0 5"/>
+                    <TextBox Text="{Binding SelectedIllustration.AdjustedCostBaseReprojection}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="5" Grid.Row="2" Margin="0 0 10 0">
+                    <TextBlock Text="NCPI" Margin="0 5"/>
+                    <TextBox Text="{Binding SelectedIllustration.NCPIReprojection}"/>
+                </StackPanel>
+            </Grid>
+            <Grid Margin="50 5" Grid.Row="3" Grid.Column="0" Width="250" HorizontalAlignment="Left">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Margin="0 0 40 0">
+                    <TextBlock Text="Increasing Pay"/>
+                    <TextBox Text="{Binding SelectedIllustration.Increasingpay}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="Life Pay"/>
+                    <TextBox Text="{Binding SelectedPolicy.Lifepay}"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
     </Grid>
 </UserControl>
