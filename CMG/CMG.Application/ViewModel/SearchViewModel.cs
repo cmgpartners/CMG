@@ -92,7 +92,16 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("SelecteAgentIndex");
             }
         }
-
+        private List<string> _policies;
+        public List<string> Policies
+        {
+            get { return _policies; }
+            set
+            {
+                _policies = value;
+                OnPropertyChanged("Policies");
+            }
+        }
         private string _policyNumber;
         public string PolicyNumber
         {
@@ -407,6 +416,7 @@ namespace CMG.Application.ViewModel
             AgentList = new ObservableCollection<ViewAgentDto>(agents.Select(r => _mapper.Map<ViewAgentDto>(r)).ToList());
             GetComboData();
             GetCompanies();
+            GetPolicies();
         }
         private void LoadPagination()
         {
@@ -422,6 +432,12 @@ namespace CMG.Application.ViewModel
         {
             Companies = Combo.Where(x => x.FieldName.Trim() == "COMPANY").ToList();
             CompanyNames = Companies.Select(x => x.Description).ToList();
+        }
+        private void GetPolicies()
+        {
+            var policies = _unitOfWork.Policies.GetAllPolicyNumber();
+            var temppolicies = policies.Select(r => _mapper.Map<ViewPolicyListDto>(r)).ToList();
+            Policies = temppolicies.Select(r => r.PolicyNumber).ToList();
         }
 
         #endregion Methods
