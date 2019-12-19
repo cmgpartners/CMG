@@ -21,5 +21,9 @@ namespace CMG.DataAccess.Repository
         {
             return Context.PolIll.Where(x => x.Keynumo == keynumo).ToList();
         }
+        public PolIll GetById(long? id)
+        {
+            return Context.PolIll.SingleOrDefault(x => x.Id == (id ?? 0));
+        }
     }
 }
