@@ -36,7 +36,8 @@ namespace CMG.Application.Mapper
                .ForMember(des => des.NCPIActual, mo => mo.MapFrom(src => src.Ncpiact))
                .ForMember(des => des.NCPIReprojection, mo => mo.MapFrom(src => src.Ncpire))
                .ForMember(des => des.DivisionScale, mo => mo.MapFrom(src => src.Divscale))
-               .ForMember(des => des.CalendarYear, mo => mo.MapFrom(src => src.Yearcal));
+               .ForMember(des => des.CalendarYear, mo => mo.MapFrom(src => src.Yearcal))
+               .ReverseMap(); 
         }
     }
 }

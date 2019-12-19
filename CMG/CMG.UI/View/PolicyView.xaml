@@ -78,6 +78,9 @@
         <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonIllustrationEditClose">
             <BeginStoryboard Storyboard="{StaticResource IllustrationEditClose}"></BeginStoryboard>
         </EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonIllustrationEditSave">
+            <BeginStoryboard Storyboard="{StaticResource IllustrationEditClose}"></BeginStoryboard>
+        </EventTrigger>
     </UserControl.Triggers>
     <Grid>
         <Grid x:Name="PolicyMainView">
@@ -715,7 +718,7 @@
                 <TextBlock Grid.Column="0" Grid.Row="0" Text="Edit Illustration Details" FontWeight="Bold" VerticalAlignment="Center"/>
                 <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Content="Cancel" Margin="10 0" x:Name="ButtonIllustrationEditClose" Click="ButtonIllustrationEditClose_Click"/>
-                    <Button Content="Save"/>
+                    <Button Content="Save" Command="{Binding SaveIllustrationCommand}" x:Name="ButtonIllustrationEditSave" Click="ButtonIllustrationEditClose_Click"/>
                 </StackPanel>
             </Grid>
             <Grid Margin="50 5" Grid.Row="1" Grid.Column="0">
@@ -726,15 +729,15 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Margin="0 0 40 0">
                         <TextBlock Text="Year"/>
-                        <TextBox Text="{Binding SelectedIllustration.CalendarYear}"/>
+                        <TextBox Text="{Binding SelectedIllustration.CalendarYear}" IsEnabled="False"/>
                     </StackPanel>
                     <StackPanel Grid.Column="1">
                         <TextBlock Text="Policy #"/>
-                        <TextBox Text="{Binding SelectedPolicy.PolicyNumber}"/>
+                        <TextBox Text="{Binding SelectedPolicy.PolicyNumber}" IsEnabled="False"/>
                     </StackPanel>
                 </Grid>
             </Grid>
-            <Grid Margin="50 5 50 20" Grid.Row="2" Grid.Column="0" Background="LightGray">
+            <Grid Margin="50 5 50 20" Grid.Row="2" Grid.Column="0" Background="#FFF8F8F8">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
@@ -751,69 +754,69 @@
                 <TextBlock Grid.Column="0" Grid.Row="0" Text="Original" Margin="0 5" VerticalAlignment="Center"/>
                 <StackPanel Grid.Column="1" Grid.Row="0" Margin="0 0 10 0">
                     <TextBlock Text="Annual Deposit" Margin="0 5"/>
-                    <TextBox Text="{Binding SelectedIllustration.AnnualDeposit}"/>
+                    <TextBox Text="{Binding SelectedIllustration.AnnualDeposit}" IsEnabled="False"/>
                 </StackPanel>
                 <StackPanel Grid.Column="2" Grid.Row="0" Margin="0 0 10 0">
                     <TextBlock Text="Cash Value" Margin="0 5"/>
-                    <TextBox Text="{Binding SelectedIllustration.CashValue}"/>
+                    <TextBox Text="{Binding SelectedIllustration.CashValue}" IsEnabled="False"/>
                 </StackPanel>
                 <StackPanel Grid.Column="3" Grid.Row="0" Margin="0 0 10 0">
                     <TextBlock Text="Death Benefit" Margin="0 5"/>
-                    <TextBox Text="{Binding SelectedIllustration.DeathBenefit}"/>
+                    <TextBox Text="{Binding SelectedIllustration.DeathBenefit}" IsEnabled="False"/>
                 </StackPanel>
                 <StackPanel Grid.Column="4" Grid.Row="0" Margin="0 0 10 0">
                     <TextBlock Text="Adjusted Cost Base" Margin="0 5"/>
-                    <TextBox Text="{Binding SelectedIllustration.AdjustedCostBase}"/>
+                    <TextBox Text="{Binding SelectedIllustration.AdjustedCostBase}" IsEnabled="False"/>
                 </StackPanel>
                 <StackPanel Grid.Column="5" Grid.Row="0" Margin="0 0 10 0">
                     <TextBlock Text="NCPI" Margin="0 5"/>
-                    <TextBox Text="{Binding SelectedIllustration.NCPI}"/>
+                    <TextBox Text="{Binding SelectedIllustration.NCPI}" IsEnabled="False"/>
                 </StackPanel>
 
 
                 <TextBlock Grid.Column="0" Grid.Row="1" Text="Actual" Margin="0 5" VerticalAlignment="Center"/>
                 <StackPanel Grid.Column="1" Grid.Row="1" Margin="0 0 10 0">
                     <TextBlock Text="Annual Deposit" Margin="0 5"/>
-                    <TextBox Text="{Binding SelectedIllustration.AnnualDepositActual}"/>
+                    <TextBox Text="{Binding SelectedIllustration.AnnualDepositActual, StringFormat='{}{0:#,0.00}'}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="2" Grid.Row="1" Margin="0 0 10 0">
                     <TextBlock Text="Cash Value" Margin="0 5"/>
-                    <TextBox Text="{Binding SelectedIllustration.CashValueActual}"/>
+                    <TextBox Text="{Binding SelectedIllustration.CashValueActual, StringFormat='{}{0:#,0.00}'}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="3" Grid.Row="1" Margin="0 0 10 0">
                     <TextBlock Text="Death Benefit" Margin="0 5"/>
-                    <TextBox Text="{Binding SelectedIllustration.DeathBenefitActual}"/>
+                    <TextBox Text="{Binding SelectedIllustration.DeathBenefitActual, StringFormat='{}{0:#,0.00}'}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="4" Grid.Row="1" Margin="0 0 10 0">
                     <TextBlock Text="Adjusted Cost Base" Margin="0 5"/>
-                    <TextBox Text="{Binding SelectedIllustration.AdjustedCostBaseActual}"/>
+                    <TextBox Text="{Binding SelectedIllustration.AdjustedCostBaseActual, StringFormat='{}{0:#,0.00}'}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="5" Grid.Row="1" Margin="0 0 10 0">
                     <TextBlock Text="NCPI" Margin="0 5"/>
-                    <TextBox Text="{Binding SelectedIllustration.NCPIActual}"/>
+                    <TextBox Text="{Binding SelectedIllustration.NCPIActual, StringFormat='{}{0:#,0.00}'}"/>
                 </StackPanel>
 
 
                 <TextBlock Grid.Column="0" Grid.Row="2" Text="Reprojection" Margin="0 5" VerticalAlignment="Center"/>
                 <StackPanel Grid.Column="1" Grid.Row="2" Margin="0 0 10 0">
                     <TextBlock Text="Annual Deposit" Margin="0 5"/>
-                    <TextBox Text="{Binding SelectedIllustration.AnnualDepositReprojection}"/>
+                    <TextBox Text="{Binding SelectedIllustration.AnnualDepositReprojection, StringFormat='{}{0:#,0.00}'}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="2" Grid.Row="2" Margin="0 0 10 0">
                     <TextBlock Text="Cash Value" Margin="0 5"/>
-                    <TextBox Text="{Binding SelectedIllustration.CashValueReprojection}"/>
+                    <TextBox Text="{Binding SelectedIllustration.CashValueReprojection, StringFormat='{}{0:#,0.00}'}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="3" Grid.Row="2" Margin="0 0 10 0">
                     <TextBlock Text="Death Benefit" Margin="0 5"/>
-                    <TextBox Text="{Binding SelectedIllustration.DeathBenefitReprojection}"/>
+                    <TextBox Text="{Binding SelectedIllustration.DeathBenefitReprojection, StringFormat='{}{0:#,0.00}'}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="4" Grid.Row="2" Margin="0 0 10 0">
                     <TextBlock Text="Adjusted Cost Base" Margin="0 5"/>
-                    <TextBox Text="{Binding SelectedIllustration.AdjustedCostBaseReprojection}"/>
+                    <TextBox Text="{Binding SelectedIllustration.AdjustedCostBaseReprojection, StringFormat='{}{0:#,0.00}'}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="5" Grid.Row="2" Margin="0 0 10 0">
                     <TextBlock Text="NCPI" Margin="0 5"/>
-                    <TextBox Text="{Binding SelectedIllustration.NCPIReprojection}"/>
+                    <TextBox Text="{Binding SelectedIllustration.NCPIReprojection, StringFormat='{}{0:#,0.00}'}"/>
                 </StackPanel>
             </Grid>
             <Grid Margin="50 5" Grid.Row="3" Grid.Column="0" Width="250" HorizontalAlignment="Left">
@@ -823,11 +826,11 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Margin="0 0 40 0">
                     <TextBlock Text="Increasing Pay"/>
-                    <TextBox Text="{Binding SelectedIllustration.Increasingpay}"/>
+                    <TextBox Text="{Binding SelectedIllustration.Increasingpay, StringFormat='{}{0:#,0.00}'}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1">
                     <TextBlock Text="Life Pay"/>
-                    <TextBox Text="{Binding SelectedPolicy.Lifepay}"/>
+                    <TextBox Text="{Binding SelectedPolicy.Lifepay, StringFormat='{}{0:#,0.00}'}"/>
                 </StackPanel>
             </Grid>
         </Grid>
