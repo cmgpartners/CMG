@@ -7,7 +7,8 @@
              xmlns:local="clr-namespace:CMG.UI.View"
              xmlns:behaviors="clr-namespace:WPFTextBoxAutoComplete;assembly=WPFTextBoxAutoComplete"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             xmlns:uc="clr-namespace:CMG.UI.Controls">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"></RowDefinition>
@@ -108,15 +109,14 @@
                                                 </ContextMenu>
                                             </TextBlock.ContextMenu>
                                         </TextBlock>
-                                        <TextBox
-                                    Visibility="{Binding IsNew, Converter={StaticResource VisibilityConverter}}"
-		                            Width="90"
-		                            HorizontalAlignment="Left"
-		                            Text="{Binding Path=PolicyNumber, UpdateSourceTrigger=PropertyChanged}" 
-		                            behaviors:AutoCompleteBehavior.AutoCompleteItemsSource="{Binding DataContext.SelectedViewModel.Policies, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}}}" 
-                                    behaviors:AutoCompleteBehavior.AutoCompleteStringComparison="InvariantCultureIgnoreCase"
-	                            />
-                                        <Button Style="{StaticResource AutoCompletePolicyButton}" Content=">>" Visibility="{Binding IsNew, Converter={StaticResource VisibilityConverter}}" Command="{Binding DataContext.SelectedViewModel.PolicyDetailsCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" CommandParameter="{Binding}"></Button>
+                                    <uc:AutoCompleteBox x:Name="UserControlPolicyNumber" 
+                                                        AutoSuggestionList="{Binding DataContext.SelectedViewModel.Policies, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}}}"
+                                                        SelectedValue="{Binding Path=PolicyNumber, UpdateSourceTrigger=PropertyChanged}"
+                                                        Visibility="{Binding IsNew, Converter={StaticResource VisibilityConverter}}"                                                        
+                                                        HorizontalAlignment="Left">
+                                    </uc:AutoCompleteBox>
+
+                                    <Button Style="{StaticResource AutoCompletePolicyButton}" Content=">>" Visibility="{Binding IsNew, Converter={StaticResource VisibilityConverter}}" Command="{Binding DataContext.SelectedViewModel.PolicyDetailsCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" CommandParameter="{Binding}"></Button>
                                     </Grid>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

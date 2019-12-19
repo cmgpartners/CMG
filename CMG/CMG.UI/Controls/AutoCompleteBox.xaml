@@ -11,13 +11,10 @@
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center">
             <TextBox x:Name="autoTextBox"
-                             Width="85"
-                             Foreground="White"
-                             Margin="15 0 0 0"
-		                     HorizontalAlignment="Left"
-                             FontSize="14"
-                             BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3"
-                             Padding="0,0,0,0"
+                             MinWidth="130"
+		                     HorizontalAlignment="Stretch"
+                             FontSize="13"
+                             Padding="0 0 0 0"
                              Background="Transparent"
                              TextChanged="AutoTextBox_TextChanged" />
             <Popup x:Name="autoListPopup"

@@ -137,11 +137,26 @@
 
                         <StackPanel Grid.Row="1" Grid.Column="0">
                             <TextBlock Text="Policy #" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <uc:AutoCompleteBox x:Name="UserControlPolicyNumber" AutoSuggestionList="{Binding Policies}" SelectedValue="{Binding PolicyNumber}" ></uc:AutoCompleteBox>
+                            <uc:AutoCompleteBox 
+                                x:Name="UserControlPolicyNumber" 
+                                Foreground="White" 
+                                BorderBrush="#FFCEEAFF" 
+                                BorderThickness="0 0 0 3" 
+                                Margin="19 0 10 0" 
+                                AutoSuggestionList="{Binding Policies}" 
+                                SelectedValue="{Binding PolicyNumber, UpdateSourceTrigger=PropertyChanged}">                                
+                            </uc:AutoCompleteBox>
                         </StackPanel>
                         <StackPanel Grid.Row="1" Grid.Column="1">
                             <TextBlock Text="Company" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <uc:AutoCompleteBox AutoSuggestionList="{Binding CompanyNames}" SelectedValue="{Binding CompanyName}"></uc:AutoCompleteBox>
+                            <uc:AutoCompleteBox 
+                                AutoSuggestionList="{Binding CompanyNames}" 
+                                Foreground="White" 
+                                BorderBrush="#FFCEEAFF" 
+                                BorderThickness="0 0 0 3" 
+                                Margin="15 0 10 0"  
+                                SelectedValue="{Binding CompanyName, UpdateSourceTrigger=PropertyChanged}">                                
+                            </uc:AutoCompleteBox>
                         </StackPanel>
 
                         <StackPanel Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2">

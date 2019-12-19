@@ -346,12 +346,15 @@ namespace CMG.Application.ViewModel
                 }));
             }
         }
-
         private bool IsValidSearchCriteria()
         {
             bool isValid = true;
             if(string.IsNullOrEmpty(CompanyName)
-                && string.IsNullOrEmpty(PolicyNumber))
+                && string.IsNullOrEmpty(PolicyNumber)
+                && string.IsNullOrEmpty(FirstName)
+                && string.IsNullOrEmpty(CommanName)
+                && string.IsNullOrEmpty(LastName)
+                && SelectedClientType == null)
             {
                 isValid = false;
                 _notifier.ShowError("Enter valid information to search client");
