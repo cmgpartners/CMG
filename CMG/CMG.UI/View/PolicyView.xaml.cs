@@ -25,7 +25,7 @@ namespace CMG.UI.View
             InitializeComponent();
         }
 
-        private void ButtonClose_Click(object sender, RoutedEventArgs e)
+        private void ButtonSearchSliderClose_Click(object sender, RoutedEventArgs e)
         {
             
             var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(450) };
@@ -33,17 +33,16 @@ namespace CMG.UI.View
             timer.Tick += (sender, args) =>
             {
                 timer.Stop();
-                SliderColumn.Width = new GridLength(0);
+                SearchSliderColumn.Width = new GridLength(0);
                 SearchBar.Visibility = Visibility.Visible;
                 searchBarColumn.Width = new GridLength(200);
             };
             
         }
-
-        private void ButtonOpen_Click(object sender, RoutedEventArgs e)
+        private void ButtonSearchSliderOpen_Click(object sender, RoutedEventArgs e)
         {
             SearchBar.Visibility = Visibility.Collapsed;
-            SliderColumn.Width = new GridLength(450);
+            SearchSliderColumn.Width = new GridLength(450);
             searchBarColumn.Width = new GridLength(0);
         }
         private void ButtonIllustrationOpen_Click(object sender, RoutedEventArgs e)
@@ -52,7 +51,6 @@ namespace CMG.UI.View
             IllustrationSliderPanel.Width = PolicyMainView.ActualWidth - 100; 
             PolicyMainView.Opacity = 0.3;
         }
-
         private void ButtonIllustrationClose_Click(object sender, RoutedEventArgs e)
         {
             var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(600) };
@@ -63,6 +61,27 @@ namespace CMG.UI.View
                 IllustrationSliderPanel.Visibility = Visibility.Collapsed;
                 PolicyMainView.Opacity = 0.9;
             };
+        }
+        private void ButtonIllustrationEditOpen_Click(object sender, RoutedEventArgs e)
+        {
+            IllustrationEdit.Visibility = Visibility.Visible;
+            IllustrationEdit.Width = IllustrationSliderPanel.ActualWidth - 300;
+            IllustrationSliderPanel.Opacity = 0.6;
+            PolicyMainView.Background = Brushes.Black;
+            PolicyMainView.Opacity = 0.05;
+        }
+        private void ButtonIllustrationEditClose_Click(object sender, RoutedEventArgs e)
+        {
+            var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(600) };
+            timer.Start();
+            timer.Tick += (sender, args) =>
+            {
+                timer.Stop();
+                IllustrationEdit.Visibility = Visibility.Collapsed;
+                IllustrationSliderPanel.Opacity = 1;
+                PolicyMainView.Opacity = 0.3;
+            };
+           
         }
     }
 }
