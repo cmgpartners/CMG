@@ -129,8 +129,8 @@ namespace CMG.Application.ViewModel
             }
         }
 
-        private IEnumerable<string> _policies;
-        public IEnumerable<string> Policies
+        private List<string> _policies;
+        public List<string> Policies
         {
             get { return _policies; }
             set
@@ -395,7 +395,7 @@ namespace CMG.Application.ViewModel
         {
             var policies = _unitOfWork.Policies.GetAllPolicyNumber();
             var temppolicies = policies.Select(r => _mapper.Map<ViewPolicyListDto>(r)).ToList();
-            Policies = temppolicies.Select(r => r.PolicyNumber).AsEnumerable();
+            Policies = temppolicies.Select(r => r.PolicyNumber).ToList();
         }
         private void GetComboData()
         {
