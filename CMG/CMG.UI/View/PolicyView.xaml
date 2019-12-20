@@ -409,11 +409,32 @@
                         <TextBlock Text="General Notes" FontWeight="Bold" Margin="0 0 0 5"/>
                         <TextBlock Text="{Binding SelectedClient.GeneralNotes}" TextWrapping="Wrap"/>
                     </StackPanel>
-                    <StackPanel Grid.Row="2" Margin="20 10 10 10">
-                        <Separator Background="LightGray" Margin="0 10"/>
-                        <TextBlock Text="Policy Notes" FontWeight="Bold" Margin="0 0 0 5"/>
-                        <TextBlock Text="{Binding SelectedPolicy.PolicyNotes}" TextWrapping="Wrap"/>
-                    </StackPanel>
+                    <Grid Grid.Row="2" Margin="20 10 10 10" ShowGridLines="False">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Separator Background="LightGray" Margin="0 10" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"/>
+                        <TextBlock Text="Policy Notes" FontWeight="Bold" Margin="0 0 0 5" Grid.Column="0" Grid.Row="1"/>
+                        <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
+                            <Button HorizontalContentAlignment="Left" Height="25" Padding="5" Width="25" Command="{Binding EditPolicyNotesCommand}" Visibility="{Binding IsPolicyNotesEditVisible, Converter={StaticResource VisibilityConverter}}">
+                                <materialDesign:PackIcon Kind="Pencil" Height="15" Width="15"/>
+                            </Button>
+                            <Button HorizontalContentAlignment="Left" Height="25" Padding="5" Width="25" Command="{Binding SavePolicyNotesCommand}" Background="#FF57C125" Margin="5 0" BorderBrush="Transparent" Visibility="{Binding IsPolicyNotesSaveVisible, Converter={StaticResource VisibilityConverter}}">
+                                <materialDesign:PackIcon Kind="Check" Height="15" Width="15"/>
+                            </Button>
+                            <Button HorizontalContentAlignment="Left" Height="25" Padding="5" Width="25" Command="{Binding CancelPolicyNotesCommand}" Background="#FFEB7533" BorderBrush="Transparent" Visibility="{Binding IsPolicyNotesSaveVisible, Converter={StaticResource VisibilityConverter}}">
+                                <materialDesign:PackIcon Kind="Close" Height="15" Width="15"/>
+                            </Button>
+                        </StackPanel>
+                        <TextBlock Text="{Binding SelectedPolicy.PolicyNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding IsPolicyNotesEditVisible, Converter={StaticResource VisibilityConverter}}"/>
+                        <TextBox Text="{Binding SelectedPolicy.PolicyNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding IsPolicyNotesSaveVisible, Converter={StaticResource VisibilityConverter}}" VerticalAlignment="Top"/>
+                    </Grid>
                     <StackPanel Grid.Row="3" Margin="10 10 10 10">
                         <Separator Background="LightGray" Margin="0 10"/>
                         <Grid Background="LightBlue" Height="70">
@@ -527,6 +548,7 @@
                 </Grid>
             </Grid>
         </Grid>
+        
         <Grid x:Name="IllustrationSliderPanel" Visibility="Collapsed" Background="#FF9BADB8" HorizontalAlignment="Right">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="26"/>

@@ -146,5 +146,10 @@ namespace CMG.DataAccess.Repository
         {
             return w => w.PeoplePolicys.Any(x => x.Keynump == Convert.ToInt32(equals));
         }
+
+        public Policys GetById(long? id)
+        {
+            return Context.Policys.SingleOrDefault(x => x.Keynumo == (id ?? 0));
+        }
     }
 }

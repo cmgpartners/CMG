@@ -10,5 +10,7 @@ namespace CMG.DataAccess.Interface
         Policys FindByPolicyNumber(string policyNumber);
 
         IQueryResult<Policys> Find(ISearchCriteria criteria);
+
+        Policys GetById(long? id);
     }
 }
