@@ -61,6 +61,26 @@
                 </ThicknessAnimation.To>
             </ThicknessAnimation>
         </Storyboard>
+        <Storyboard x:Key="PolicyEditOpen" TargetProperty="Margin">
+            <ThicknessAnimation Duration="0:0:0.6" Storyboard.Target="{Binding ElementName=PolicyEdit}">
+                <ThicknessAnimation.From>
+                    <Thickness Left="0" Top="525" Bottom="-525" Right="0"/>
+                </ThicknessAnimation.From>
+                <ThicknessAnimation.To>
+                    <Thickness Left="0" Top="0" Bottom="0" Right="0"/>
+                </ThicknessAnimation.To>
+            </ThicknessAnimation>
+        </Storyboard>
+        <Storyboard x:Key="PolicyEditClose" TargetProperty="Margin">
+            <ThicknessAnimation Duration="0:0:0.6" Storyboard.Target="{Binding ElementName=PolicyEdit}">
+                <ThicknessAnimation.From>
+                    <Thickness Left="0" Top="0" Bottom="0" Right="0"/>
+                </ThicknessAnimation.From>
+                <ThicknessAnimation.To>
+                    <Thickness Left="0" Top="525" Bottom="-525" Right="0"/>
+                </ThicknessAnimation.To>
+            </ThicknessAnimation>
+        </Storyboard>
     </UserControl.Resources>
     <UserControl.Triggers>
         <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonSearchSliderOpen">
@@ -248,8 +268,13 @@
                             <DataGridTemplateColumn Header="" Width="40" HeaderStyle="{StaticResource FirstColumnHeaderStyle }">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Background="Transparent" BorderBrush="Transparent" Width="50" x:Name="ButtonPolicyEditOpen" HorizontalAlignment="Left">
+                                        <Button Background="Transparent" BorderBrush="Transparent" Width="50" x:Name="ButtonPolicyEditOpen" HorizontalAlignment="Left" Click="ButtonPolicyEditOpen_Click">
                                             <materialDesign:PackIcon Kind="Pencil" VerticalAlignment="Center"  Foreground="#00A3FF" FontWeight="Bold"></materialDesign:PackIcon>
+                                            <Button.Triggers>
+                                                <EventTrigger RoutedEvent="ButtonBase.Click">
+                                                    <BeginStoryboard Storyboard="{StaticResource PolicyEditOpen}"></BeginStoryboard>
+                                                </EventTrigger>
+                                            </Button.Triggers>
                                         </Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -831,6 +856,120 @@
                 <StackPanel Grid.Column="1">
                     <TextBlock Text="Life Pay"/>
                     <TextBox Text="{Binding SelectedPolicy.Lifepay, StringFormat='{}{0:#,0.00}'}"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <Grid x:Name="PolicyEdit" Visibility="Collapsed" Background="White" Height="500" Width="500" Opacity="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="330"/>
+            </Grid.RowDefinitions>
+            <Grid Margin="50 25" Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Grid.Row="0" Text="Edit Policy Detail" FontWeight="Bold" VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Cancel" Margin="10 0" x:Name="ButtonPolicyEditClose" Click="ButtonPolicyEditClose_Click"/>
+                    <Button Content="Save"/>
+                </StackPanel>
+            </Grid>
+            <Grid Margin="50 5 50 20" Grid.Row="2" Grid.Column="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <StackPanel Margin="0 0 40 0">
+                    <TextBlock Text="Policy #"/>
+                    <TextBox Text="{Binding SelectedPolicy.PolicyNumber}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Grid.ColumnSpan="2">
+                    <TextBlock Text="Company Name"/>
+                    <TextBox Text="{Binding SelectedPolicy.CompanyName}"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="0" Grid.Row="1" Margin="0 0 10 0">
+                    <TextBlock Text="Face Amount" Margin="0 5"/>
+                    <TextBox Text="{Binding SelectedPolicy.FaceAmount}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Grid.Row="1" Margin="0 0 10 0">
+                    <TextBlock Text="Policy Date" Margin="0 5"/>
+                    <TextBox Text="{Binding Path=SelectedPolicy.PolicyDate, StringFormat='{}{0: MMM d, yyyy}'}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Grid.Row="1" Margin="0 0 10 0">
+                    <TextBlock Text="Plan Code" Margin="0 5"/>
+                    <TextBox Text="{Binding SelectedPolicy.PlanCode}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="0" Grid.Row="2" Margin="0 0 10 0">
+                    <TextBlock Text="Payment" Margin="0 5"/>
+                    <TextBox Text="{Binding SelectedPolicy.Payment}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Grid.Row="2" Margin="0 0 10 0">
+                    <TextBlock Text="Placement Date" Margin="0 5"/>
+                    <TextBox Text="{Binding Path=SelectedPolicy.PlacedOn, StringFormat='{}{0: MMM d, yyyy}'}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Grid.Row="2" Margin="0 0 10 0">
+                    <TextBlock Text="Rating" Margin="0 5"/>
+                    <TextBox Text="{Binding SelectedPolicy.Rating}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="0" Grid.Row="3" Margin="0 0 10 0">
+                    <TextBlock Text="Currency" Margin="0 5"/>
+                    <TextBox Text="{Binding SelectedPolicy.Currency}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Grid.Row="3" Margin="0 0 10 0">
+                    <TextBlock Text="Reprojection Date" Margin="0 5"/>
+                    <TextBox Text="{Binding SelectedPolicy.ReprojectedOn}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Grid.Row="3" Margin="0 0 10 0">
+                    <TextBlock Text="Class" Margin="0 5"/>
+                    <TextBox Text="{Binding SelectedPolicy.Class}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="0" Grid.Row="4" Margin="0 0 10 0">
+                    <TextBlock Text="Status" Margin="0 5"/>
+                    <!--<TextBox Text="{Binding SelectedPolicy.Status}"/>-->
+                    <ComboBox ItemsSource="{Binding StatusTypeCollection}" SelectedValue="{Binding SelectedPolicyStatus}" DisplayMemberPath="Description" Foreground="White" FontSize="13" Margin="0 0 17 0" Style="{StaticResource EntityTypeStyle}">
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Grid.Row="4" Margin="0 0 10 0">                    
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="50"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Column="0" Grid.Row="0">
+                            <TextBlock Text="Frequency" Margin="0 5"/>
+                            <!--<TextBox Text="{Binding SelectedPolicy.Frequency}"/>-->
+                            <ComboBox ItemsSource="{Binding FrequencyTypeCollection}" SelectedValue="{Binding SelectedPolicyFrequencyType}" DisplayMemberPath="Description" Foreground="White" FontSize="13" Margin="0 0 17 0" Style="{StaticResource EntityTypeStyle}">
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Grid.Row="0">
+                            <TextBlock Text="Age" Margin="0 5"/>
+                            <TextBox Text="{Binding SelectedPolicy.Age}"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Grid.Row="4" Margin="0 0 10 0">
+                    <TextBlock Text="Type" Margin="0 5"/>
+                    <TextBox Text="{Binding SelectedPolicy.Type}"/>
                 </StackPanel>
             </Grid>
         </Grid>

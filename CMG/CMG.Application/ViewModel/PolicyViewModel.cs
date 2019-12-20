@@ -175,10 +175,31 @@ namespace CMG.Application.ViewModel
             set
             {
                 _selectedPolicy = value;
+                GetSelectedPolicyDropdownData();
                 OnPropertyChanged("SelectedPolicy");
             }
         }
-        
+        private ViewComboDto selectedPolicyStatus;
+        public ViewComboDto SelectedPolicyStatus
+        {
+            get { return selectedPolicyStatus; }
+            set
+            {
+                selectedPolicyStatus = value;
+                OnPropertyChanged("SelectedPolicyStatus");
+            }
+        }
+
+        private ViewComboDto selectedPolicyFrequencyType;
+        public ViewComboDto SelectedPolicyFrequencyType
+        {
+            get { return selectedPolicyFrequencyType; }
+            set
+            {
+                selectedPolicyFrequencyType = value;
+                OnPropertyChanged("SelectedPolicyFrequencyType");
+            }
+        }        
         private ViewPolicyIllustrationDto _selectedIllustration;
         public ViewPolicyIllustrationDto SelectedIllustration
         {
@@ -311,6 +332,11 @@ namespace CMG.Application.ViewModel
         #endregion Properties
 
         #region Methods
+        private void GetSelectedPolicyDropdownData()
+        {
+            SelectedPolicyStatus = StatusTypeCollection.Where(x => x.Description.Trim() == SelectedPolicy.Status.Trim()).FirstOrDefault();
+            SelectedPolicyFrequencyType = FrequencyTypeCollection.Where(x => x.Description.Trim() == SelectedPolicy.Frequency.Trim()).FirstOrDefault();
+        }
         private void GetComboData()
         {
             var combo = _unitOfWork.Combo.All();

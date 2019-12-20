@@ -80,8 +80,28 @@ namespace CMG.UI.View
                 IllustrationEdit.Visibility = Visibility.Collapsed;
                 IllustrationSliderPanel.Opacity = 1;
                 PolicyMainView.Opacity = 0.3;
+            };           
+        }
+        private void ButtonPolicyEditOpen_Click(object sender, RoutedEventArgs e)
+        {
+            PolicyEdit.Visibility = Visibility.Visible;
+            PolicyEdit.Width = 700;
+            //IllustrationSliderPanel.Opacity = 0.6;
+            PolicyMainView.Background = Brushes.Black;
+            //PolicyMainView.Opacity = 0.05;
+        }
+
+        private void ButtonPolicyEditClose_Click(object sender, RoutedEventArgs e)
+        {
+            var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(600) };
+            timer.Start();
+            timer.Tick += (sender, args) =>
+            {
+                timer.Stop();
+                PolicyEdit.Visibility = Visibility.Collapsed;
+                //IllustrationSliderPanel.Opacity = 1;
+                PolicyMainView.Opacity = 1;
             };
-           
         }
     }
 }
