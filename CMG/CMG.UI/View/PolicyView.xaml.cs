@@ -72,7 +72,7 @@ namespace CMG.UI.View
         }
         private void ButtonIllustrationEditClose_Click(object sender, RoutedEventArgs e)
         {
-            var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(600) };
+            var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(700) };
             timer.Start();
             timer.Tick += (sender, args) =>
             {

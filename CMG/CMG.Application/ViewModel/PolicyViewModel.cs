@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CMG.Application.DTO;
+using CMG.DataAccess.Domain;
 using CMG.DataAccess.Interface;
 using CMG.DataAccess.Query;
 using CMG.Service.Interface;
@@ -323,6 +324,10 @@ namespace CMG.Application.ViewModel
         {
             get { return CreateCommand(ViewIllustration);  }
         }
+        public ICommand SaveIllustrationCommand
+        {
+            get { return CreateCommand(SaveIllustration); }
+        }
         #endregion command properties
         #endregion Properties
 
@@ -516,6 +521,84 @@ namespace CMG.Application.ViewModel
                     SelectedIllustration = PolicyIllustrationCollection[0];
                 }
             }
+        }
+        private void SaveIllustration()
+        {
+            if(SelectedIllustration != null && ValidateIllustration())
+            {
+                var entity = _mapper.Map<PolIll>(SelectedIllustration);
+                _unitOfWork.PolicyIllustration.Save(entity);
+                _unitOfWork.Commit();
+                var updatedEntity = _unitOfWork.PolicyIllustration.GetById(entity.Id);
+                SelectedIllustration = _mapper.Map<ViewPolicyIllustrationDto>(updatedEntity);
+                _notifier.ShowSuccess("Illustration updated successfully");
+
+            }
+        }
+
+        private bool ValidateIllustration()
+        {
+            if(!decimal.TryParse(SelectedIllustration.AnnualDepositActual.ToString(), out decimal ada))
+            {
+                _notifier.ShowError("Actual annual deposit value is invalid");
+                return false;
+            }
+            if (!decimal.TryParse(SelectedIllustration.CashValueActual.ToString(), out decimal cva))
+            {
+                _notifier.ShowError("Actual cash value is invalid");
+                return false;
+            }
+            if (!decimal.TryParse(SelectedIllustration.DeathBenefitActual.ToString(), out decimal dba))
+            {
+                _notifier.ShowError("Actual Death Benefit value is invalid");
+                return false;
+            }
+            if (!decimal.TryParse(SelectedIllustration.AdjustedCostBaseActual.ToString(), out decimal acba))
+            {
+                _notifier.ShowError("Actual adjusted cost base value is invalid");
+                return false;
+            }
+            if (!decimal.TryParse(SelectedIllustration.NCPIActual.ToString(), out decimal ncpia))
+            {
+                _notifier.ShowError("Actual NCPI value is invalid");
+                return false;
+            }
+            if (!decimal.TryParse(SelectedIllustration.AnnualDepositReprojection.ToString(), out decimal adr))
+            {
+                _notifier.ShowError("Reprojection annual deposit value is invalid");
+                return false;
+            }
+            if (!decimal.TryParse(SelectedIllustration.CashValueReprojection.ToString(), out decimal cvr))
+            {
+                _notifier.ShowError("Reprojection cash value is invalid");
+                return false;
+            }
+            if (!decimal.TryParse(SelectedIllustration.DeathBenefitReprojection.ToString(), out decimal dbr))
+            {
+                _notifier.ShowError("Reprojection Death Benefit value is invalid");
+                return false;
+            }
+            if (!decimal.TryParse(SelectedIllustration.AdjustedCostBaseReprojection.ToString(), out decimal acbr))
+            {
+                _notifier.ShowError("Reprojection adjusted cost base value is invalid");
+                return false;
+            }
+            if (!decimal.TryParse(SelectedIllustration.NCPIReprojection.ToString(), out decimal ncpir))
+            {
+                _notifier.ShowError("Reprojection NCPI value is invalid");
+                return false;
+            }
+            if (!decimal.TryParse(SelectedIllustration.Increasingpay.ToString(), out decimal increasingPay))
+            {
+                _notifier.ShowError("Increasing Pay value is invalid");
+                return false;
+            }
+            if (!decimal.TryParse(SelectedIllustration.Lifepay.ToString(), out decimal lifePay))
+            {
+                _notifier.ShowError("Life Pay value is invalid");
+                return false;
+            }
+            return true;
         }
         #endregion Methods
     }

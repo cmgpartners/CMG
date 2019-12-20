@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace CMG.DataAccess.Domain
 {
@@ -28,6 +29,7 @@ namespace CMG.DataAccess.Domain
         public int? KeyIll { get; set; }
         public byte Divscale { get; set; }
         public short? Yearcal { get; set; }
+        [Key]
         public int Id { get; set; }
 
         public virtual Policys KeynumoNavigation { get; set; }
