@@ -175,8 +175,9 @@ namespace CMG.Application.ViewModel
             set
             {
                 _selectedPolicy = value;
-                GetSelectedPolicyDropdownData();
                 OnPropertyChanged("SelectedPolicy");
+                GetSelectedPolicyDropdownData();
+                CancelPolicyNotes();
             }
         }
         private ViewComboDto selectedPolicyStatus;
@@ -314,7 +315,20 @@ namespace CMG.Application.ViewModel
         {
             get { return SelectedClient == null ? true : false; }
         }
-       
+
+        private bool _isPolicyNotesEditVisible = false;
+        public bool IsPolicyNotesEditVisible
+        {
+            get { return _isPolicyNotesEditVisible; }
+            set { _isPolicyNotesEditVisible = value; OnPropertyChanged("IsPolicyNotesEditVisible"); }
+        }
+
+        private bool _isPolicyNotesSaveVisible = false;
+        public bool IsPolicyNotesSaveVisible
+        {
+            get { return _isPolicyNotesSaveVisible; }
+            set { _isPolicyNotesSaveVisible = value; OnPropertyChanged("IsPolicyNotesSaveVisible"); }
+        }
         #region command properties
         public ICommand SearchClientCommand
         {
@@ -328,14 +342,26 @@ namespace CMG.Application.ViewModel
         {
             get { return CreateCommand(SaveIllustration); }
         }
+        public ICommand EditPolicyNotesCommand
+        {
+            get { return CreateCommand(EditPolicyNotes); }
+        }
+        public ICommand SavePolicyNotesCommand
+        {
+            get { return CreateCommand(SavePolicyNotes); }
+        }
+        public ICommand CancelPolicyNotesCommand
+        {
+            get { return CreateCommand(CancelPolicyNotes); }
+        }
         #endregion command properties
         #endregion Properties
 
         #region Methods
         private void GetSelectedPolicyDropdownData()
         {
-            SelectedPolicyStatus = StatusTypeCollection.Where(x => x.Description.Trim() == SelectedPolicy.Status.Trim()).FirstOrDefault();
-            SelectedPolicyFrequencyType = FrequencyTypeCollection.Where(x => x.Description.Trim() == SelectedPolicy.Frequency.Trim()).FirstOrDefault();
+            SelectedPolicyStatus = SelectedPolicy != null ? StatusTypeCollection.Where(x => x.Description.Trim() == SelectedPolicy.Status.Trim()).FirstOrDefault() : default;
+            SelectedPolicyFrequencyType = SelectedPolicy != null ? FrequencyTypeCollection.Where(x => x.Description.Trim() == SelectedPolicy.Frequency.Trim()).FirstOrDefault() : default;
         }
         private void GetComboData()
         {
@@ -509,7 +535,6 @@ namespace CMG.Application.ViewModel
                 }
             }
         }
-
         private void ViewIllustration()
         {
             if(SelectedPolicy != null)
@@ -524,18 +549,23 @@ namespace CMG.Application.ViewModel
         }
         private void SaveIllustration()
         {
-            if(SelectedIllustration != null && ValidateIllustration())
+            try
             {
-                var entity = _mapper.Map<PolIll>(SelectedIllustration);
-                _unitOfWork.PolicyIllustration.Save(entity);
-                _unitOfWork.Commit();
-                var updatedEntity = _unitOfWork.PolicyIllustration.GetById(entity.Id);
-                SelectedIllustration = _mapper.Map<ViewPolicyIllustrationDto>(updatedEntity);
-                _notifier.ShowSuccess("Illustration updated successfully");
-
+                if (SelectedIllustration != null && ValidateIllustration())
+                {
+                    var entity = _mapper.Map<PolIll>(SelectedIllustration);
+                    _unitOfWork.PolicyIllustration.Save(entity);
+                    _unitOfWork.Commit();
+                    var updatedEntity = _unitOfWork.PolicyIllustration.GetById(entity.Id);
+                    SelectedIllustration = _mapper.Map<ViewPolicyIllustrationDto>(updatedEntity);
+                    _notifier.ShowSuccess("Illustration updated successfully");
+                }
+            }
+            catch
+            {
+                _notifier.ShowError("Error occured while updating policy illustration");
             }
         }
-
         private bool ValidateIllustration()
         {
             if(!decimal.TryParse(SelectedIllustration.AnnualDepositActual.ToString(), out decimal ada))
@@ -599,6 +629,39 @@ namespace CMG.Application.ViewModel
                 return false;
             }
             return true;
+        }
+        private void EditPolicyNotes()
+        {
+            IsPolicyNotesEditVisible = false;
+            IsPolicyNotesSaveVisible = true;
+        }
+        private void SavePolicyNotes()
+        {
+            try
+            {
+                IsPolicyNotesEditVisible = true;
+                IsPolicyNotesSaveVisible = false;
+                if (SelectedPolicy != null)
+                {
+                    var entity = _mapper.Map<Policys>(SelectedPolicy);
+                    _unitOfWork.Policies.Save(entity);
+                    _unitOfWork.Commit();
+                    _notifier.ShowSuccess("Policy Notes updated successfully");
+                }
+            }
+            catch
+            {
+                _notifier.ShowError("Error occured while updating policy notes");
+            }
+           
+        }
+        private void CancelPolicyNotes()
+        {
+            IsPolicyNotesEditVisible = true;
+            IsPolicyNotesSaveVisible = false;
+            var originalPolicy = _unitOfWork.Policies.GetById(SelectedPolicy.Id);
+            SelectedPolicy.PolicyNotes = originalPolicy.Comment;
+            OnPropertyChanged("SelectedPolicy");
         }
         #endregion Methods
     }

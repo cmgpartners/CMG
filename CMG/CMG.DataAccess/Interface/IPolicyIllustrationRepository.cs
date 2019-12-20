@@ -7,6 +7,6 @@ namespace CMG.DataAccess.Interface
     {
         List<PolIll> GetPolicyIllustration(int keynumo);
 
-        public PolIll GetById(long? id);
+        PolIll GetById(long? id);
     }
 }
