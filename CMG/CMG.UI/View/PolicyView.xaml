@@ -568,23 +568,26 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                    </Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
                         <materialDesign:PackIcon  Kind="LayersTripleOutline"  VerticalAlignment="Center"  Foreground="Black" FontWeight="Bold"></materialDesign:PackIcon>
                         <TextBlock  Text="Policy Illustration" VerticalAlignment="Center" Margin="10 0 0 0" FontSize="16"/>
                     </StackPanel>
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 10 0">
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 0 0">
                         <TextBlock Text="Policy # : " HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="16" Foreground="#FFCEEAFF"></TextBlock>
                         <TextBlock Text="{Binding SelectedPolicy.PolicyNumber}" VerticalAlignment="Center" Margin="0 0 20 0" FontSize="16"/>
                         <TextBlock Text="Policy Date : " VerticalAlignment="Center" FontSize="16" Foreground="#FFCEEAFF"></TextBlock>
                         <TextBlock Text="{Binding SelectedPolicy.PolicyDate, StringFormat='{}{0: MMM d, yyyy}'}" FontSize="16" VerticalAlignment="Center" Margin="0 0 20 0"/>
                     </StackPanel>
-                </Grid>
+                        <StackPanel Grid.Column="2"  HorizontalAlignment="Right" Orientation="Vertical" VerticalAlignment="Center">
+                            <RadioButton Margin="10,5,10,0" GroupName="DividentScale" IsChecked="True" Command="{Binding DividentScaleFilterCommand}" CommandParameter="false">Primary</RadioButton>
+                            <RadioButton Margin="10,5,10,0" GroupName="DividentScale" Command="{Binding DividentScaleFilterCommand}" CommandParameter="true">Reduced</RadioButton>
+                        </StackPanel>
+                    </Grid>
                 <DataGrid AutoGenerateColumns="False" x:Name="illustration" IsReadOnly="False" Grid.Row="1" 
                     ItemsSource="{Binding PolicyIllustrationCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" 
                     CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="40" RowHeaderWidth="10" SelectedItem="{Binding SelectedIllustration}">

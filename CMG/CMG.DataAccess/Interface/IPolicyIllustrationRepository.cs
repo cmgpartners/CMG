@@ -5,7 +5,7 @@ namespace CMG.DataAccess.Interface
 {
     public interface IPolicyIllustrationRepository : IRepository<PolIll>
     {
-        List<PolIll> GetPolicyIllustration(int keynumo);
+        List<PolIll> GetPolicyIllustration(int keynumo, int dividentScale);
 
         PolIll GetById(long? id);
     }
