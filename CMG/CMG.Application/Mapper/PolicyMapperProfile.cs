@@ -29,7 +29,8 @@ namespace CMG.Application.Mapper
                 .ForMember(des => des.PolicyNotes, mo => mo.MapFrom(src => src.Comment))
                 .ForMember(des => des.ClientNotes, mo => mo.MapFrom(src => src.NoteCli))
                 .ForMember(des => des.InternalNotes, mo => mo.MapFrom(src => src.NoteInt))
-                .ForMember(des => des.PeoplePolicy, mo => mo.MapFrom(src => src.PeoplePolicys));
+                .ForMember(des => des.PeoplePolicy, mo => mo.MapFrom(src => src.PeoplePolicys))
+                .ReverseMap();
 
             CreateMap<PeoplePolicys, ViewPeoplePolicyDto>()
                 .ForMember(des => des.PeopleId, mo => mo.MapFrom(src => src.Keynump))
