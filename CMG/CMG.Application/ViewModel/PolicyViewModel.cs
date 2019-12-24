@@ -846,8 +846,11 @@ namespace CMG.Application.ViewModel
         {
             IsPolicyNotesEditVisible = true;
             IsPolicyNotesSaveVisible = false;
-            var originalPolicy = _unitOfWork.Policies.GetById(SelectedPolicy.Id);
-            SelectedPolicy.PolicyNotes = originalPolicy.Comment;
+            if (SelectedPolicy != null)
+            {
+                var originalPolicy = _unitOfWork.Policies.GetById(SelectedPolicy.Id);
+                SelectedPolicy.PolicyNotes = originalPolicy.Comment;
+            }
             OnPropertyChanged("SelectedPolicy");
         }
         private void EditClientNotes()
