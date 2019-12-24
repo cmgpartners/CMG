@@ -19,7 +19,7 @@ namespace CMG.Application.Mapper
                 .ForMember(des => des.Frequency, mo => mo.MapFrom(src => src.Frequency.Trim()))
                 .ForMember(des => des.Type, mo => mo.MapFrom(src => src.Type.Trim()))
                 .ForMember(des => des.PlanCode, mo => mo.MapFrom(src => src.Plancode.Trim()))
-                .ForMember(des => des.Rating, mo => mo.MapFrom(src => src.Risk))
+                .ForMember(des => des.Rating, mo => mo.MapFrom(src => src.Risk.Trim()))
                 .ForMember(des => des.Class, mo => mo.MapFrom(src => src.Class.Trim()))
                 .ForMember(des => des.Currency, mo => mo.MapFrom(src => src.Currency.Trim()))
                 .ForMember(des => des.PolicyDate, mo => mo.MapFrom(src => src.Issuedate))
@@ -30,6 +30,10 @@ namespace CMG.Application.Mapper
                 .ForMember(des => des.ClientNotes, mo => mo.MapFrom(src => src.NoteCli))
                 .ForMember(des => des.InternalNotes, mo => mo.MapFrom(src => src.NoteInt))
                 .ForMember(des => des.PeoplePolicy, mo => mo.MapFrom(src => src.PeoplePolicys))
+		.ForMember(des => des.ModifiedDate, mo => mo.MapFrom(src => src.RevDate))
+                .ForMember(des => des.ModifiedBy, mo => mo.MapFrom(src => src.RevLocn))
+                .ForMember(des => des.CreatedDate, mo => mo.MapFrom(src => src.Cr8Date))
+                .ForMember(des => des.CreatedBy, mo => mo.MapFrom(src => src.Cr8Locn))
                 .ReverseMap();
 
             CreateMap<PeoplePolicys, ViewPeoplePolicyDto>()
@@ -37,7 +41,8 @@ namespace CMG.Application.Mapper
                 .ForMember(des => des.PolicyId, mo => mo.MapFrom(src => src.Keynumo))
                 .ForMember(des => des.Name, mo => mo.MapFrom(src => src.Hname.Trim()))
                 .ForMember(des => des.Category, mo => mo.MapFrom(src => src.Catgry.Trim()))
-                .ForMember(des => des.Relation, mo => mo.MapFrom(src => src.Relatn.Trim()));
+                .ForMember(des => des.Relation, mo => mo.MapFrom(src => src.Relatn.Trim()))
+                .ReverseMap();
 
             CreateMap<Policys, ViewPolicyDto>()
                .ForMember(des => des.PolicyId, mo => mo.MapFrom(src => src.Keynumo))
