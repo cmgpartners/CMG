@@ -432,6 +432,10 @@ namespace CMG.Application.ViewModel
         {
             get { return CreateCommand(CancelInternalNotes); }
         }
+        public ICommand DividentScaleFilterCommand
+        {
+            get { return CreateCommand(DividentScaleFilter); }
+        }
         #endregion command properties
         #endregion Properties
 
@@ -618,11 +622,11 @@ namespace CMG.Application.ViewModel
                 }
             }
         }
-        private void ViewIllustration()
+        private void ViewIllustration(object dividentScale)
         {
             if(SelectedPolicy != null)
             {
-                var policyIllustrations = _unitOfWork.PolicyIllustration.GetPolicyIllustration(SelectedPolicy.Id);
+                var policyIllustrations = _unitOfWork.PolicyIllustration.GetPolicyIllustration(SelectedPolicy.Id, Convert.ToInt32(dividentScale));
                 PolicyIllustrationCollection = new ObservableCollection<ViewPolicyIllustrationDto>(policyIllustrations.Select(r => _mapper.Map<ViewPolicyIllustrationDto>(r))); 
                 if(PolicyIllustrationCollection.Count > 0)
                 {
@@ -846,11 +850,9 @@ namespace CMG.Application.ViewModel
         {
             IsPolicyNotesEditVisible = true;
             IsPolicyNotesSaveVisible = false;
-            if (SelectedPolicy != null)
-            {
-                var originalPolicy = _unitOfWork.Policies.GetById(SelectedPolicy.Id);
+            var originalPolicy = _unitOfWork.Policies.GetById(SelectedPolicy?.Id);
+            if(originalPolicy != null)
                 SelectedPolicy.PolicyNotes = originalPolicy.Comment;
-            }
             OnPropertyChanged("SelectedPolicy");
         }
         private void EditClientNotes()
@@ -885,8 +887,9 @@ namespace CMG.Application.ViewModel
         {
             IsClientNotesEditVisible = true;
             IsClientNotesSaveVisible = false;
-            var originalPolicy = _unitOfWork.Policies.GetById(SelectedPolicy.Id);
-            SelectedPolicy.ClientNotes = originalPolicy.NoteCli;
+            var originalPolicy = _unitOfWork.Policies.GetById(SelectedPolicy?.Id);
+            if (originalPolicy != null)
+                SelectedPolicy.ClientNotes = originalPolicy.NoteCli;
             OnPropertyChanged("SelectedPolicy");
         }
         private void EditInternalNotes()
@@ -921,9 +924,21 @@ namespace CMG.Application.ViewModel
         {
             IsInternalNotesEditVisible = true;
             IsInternalNotesSaveVisible = false;
-            var originalPolicy = _unitOfWork.Policies.GetById(SelectedPolicy.Id);
-            SelectedPolicy.InternalNotes = originalPolicy.NoteInt;
+            var originalPolicy = _unitOfWork.Policies.GetById(SelectedPolicy?.Id);
+            if (originalPolicy != null)
+                SelectedPolicy.InternalNotes = originalPolicy.NoteInt;
             OnPropertyChanged("SelectedPolicy");
+        }
+        private void DividentScaleFilter(object isDividentScale)
+        {
+            if (Convert.ToBoolean(isDividentScale))
+            {
+                ViewIllustration(1);
+            }
+            else
+            {
+                ViewIllustration(0);
+            }
         }
         #endregion Methods
     }
