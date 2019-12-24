@@ -201,6 +201,28 @@ namespace CMG.Application.ViewModel
             }
         }        
         private ViewPolicyIllustrationDto _selectedIllustration;
+
+        private ViewComboDto selectedPolicyType;
+        public ViewComboDto SelectedPolicyType
+        {
+            get { return selectedPolicyType; }
+            set
+            {
+                selectedPolicyType = value;
+                OnPropertyChanged("SelectedPolicyType");
+            }
+        }
+
+        private ViewComboDto selectedPolicyCompany;
+        public ViewComboDto SelectedPolicyCompany
+        {
+            get { return selectedPolicyCompany; }
+            set
+            {
+                selectedPolicyCompany = value;
+                OnPropertyChanged("SelectedPolicyCompany");
+            }
+        }
         public ViewPolicyIllustrationDto SelectedIllustration
         {
             get { return _selectedIllustration; }
@@ -328,14 +350,23 @@ namespace CMG.Application.ViewModel
         {
             get { return CreateCommand(SaveIllustration); }
         }
+        public ICommand SavePolicyCommand
+        {
+            get { return CreateCommand(SavePolicy); }
+        }
         #endregion command properties
         #endregion Properties
 
         #region Methods
         private void GetSelectedPolicyDropdownData()
         {
-            SelectedPolicyStatus = StatusTypeCollection.Where(x => x.Description.Trim() == SelectedPolicy.Status.Trim()).FirstOrDefault();
-            SelectedPolicyFrequencyType = FrequencyTypeCollection.Where(x => x.Description.Trim() == SelectedPolicy.Frequency.Trim()).FirstOrDefault();
+            if (SelectedPolicy != null)
+            {
+                SelectedPolicyStatus = StatusTypeCollection.Where(x => x.Description.Trim() == SelectedPolicy.Status.Trim()).FirstOrDefault();
+                SelectedPolicyFrequencyType = FrequencyTypeCollection.Where(x => x.Description.Trim() == SelectedPolicy.Frequency.Trim()).FirstOrDefault();
+                SelectedPolicyType = PolicyTypeCollection.Where(x => x.Description.Trim() == SelectedPolicy.Type.Trim()).FirstOrDefault();
+                SelectedPolicyCompany = CompanyCollection.Where(x => x.Description.Trim() == SelectedPolicy.CompanyName.Trim()).FirstOrDefault();
+            }
         }
         private void GetComboData()
         {
@@ -535,7 +566,31 @@ namespace CMG.Application.ViewModel
 
             }
         }
+        private void SavePolicy()
+        {
+            if(SelectedPolicy != null 
+                && IsValidPolicy())
+            {
+                var originalEntity = _unitOfWork.Policies.GetById(SelectedPolicy.Id);
+                originalEntity.PolicyAgent = null;
+                SelectedPolicy.PolicyAgent = null;
+                var entity = _mapper.Map(SelectedPolicy, originalEntity);
+                entity.PeoplePolicys = null;
+                entity.Status = SelectedPolicyStatus != null ? SelectedPolicyStatus.FieldCode.Trim() : SelectedPolicy.Status.Substring(0, 1);
+                entity.Frequency = SelectedPolicyFrequencyType != null ? SelectedPolicyFrequencyType.FieldCode.Trim() : SelectedPolicy.Frequency.Substring(0, 1);
+                entity.Type = SelectedPolicyType != null ? SelectedPolicyType.FieldCode.Trim() : SelectedPolicy.Type.Substring(0, 1);
+                entity.Company = SelectedPolicyCompany != null ? SelectedPolicyCompany.FieldCode.Trim() : SelectedPolicy.CompanyName.Substring(0, 1);
+                entity.Risk = SelectedPolicy.Rating.Trim();
 
+                _unitOfWork.Policies.Save(entity);
+                _unitOfWork.Commit();
+
+                var updatedEntity = _unitOfWork.Policies.GetById(entity.Keynumo);
+                SelectedPolicy = _mapper.Map<ViewPolicyListDto>(updatedEntity);
+                GetPolicyCollection();
+                _notifier.ShowSuccess("Policy updated successfully");
+            }
+        }
         private bool ValidateIllustration()
         {
             if(!decimal.TryParse(SelectedIllustration.AnnualDepositActual.ToString(), out decimal ada))
@@ -596,6 +651,82 @@ namespace CMG.Application.ViewModel
             if (!decimal.TryParse(SelectedIllustration.Lifepay.ToString(), out decimal lifePay))
             {
                 _notifier.ShowError("Life Pay value is invalid");
+                return false;
+            }
+            return true;
+        }
+
+        private bool IsValidPolicy()
+        {
+            if(string.IsNullOrEmpty(SelectedPolicy.CompanyName.Trim()))
+            {
+                _notifier.ShowError("Company name is invalid");
+                return false;
+            }
+            if(!decimal.TryParse(SelectedPolicy.FaceAmount.ToString(), out decimal faceAmount))
+            {
+                _notifier.ShowError("Faceamount is invalid");
+                return false;
+            }
+            DateTime? date = null;
+            if (SelectedPolicy.PolicyDate == date)
+            {
+                _notifier.ShowError("Policy date is invalid");
+                return false;
+            }
+            if (string.IsNullOrEmpty(SelectedPolicy.PlanCode.Trim()))
+            {
+                _notifier.ShowError("Plan code is invalid");
+                return false;
+            }
+            if (!decimal.TryParse(SelectedPolicy.Payment.ToString(), out decimal payment))
+            {
+                _notifier.ShowError("Payment is invalid");
+                return false;
+            }
+            if (SelectedPolicy.PlacedOn == date)
+            {
+                _notifier.ShowError("Placement date is invalid");
+                return false;
+            }
+            if (string.IsNullOrEmpty(SelectedPolicy.Rating.Trim()))
+            {
+                _notifier.ShowError("Rating is invalid");
+                return false;
+            }
+            if (string.IsNullOrEmpty(SelectedPolicy.Currency.Trim()))
+            {
+                _notifier.ShowError("Currency is invalid");
+                return false;
+            }
+            if (SelectedPolicy.ReprojectedOn == date)
+            {
+                _notifier.ShowError("Reprojection date is invalid");
+                return false;
+            }
+            if (string.IsNullOrEmpty(SelectedPolicy.Class.Trim()))
+            {
+                _notifier.ShowError("Class is invalid");
+                return false;
+            }
+            if (string.IsNullOrEmpty(SelectedPolicyStatus.Description.Trim()))
+            {
+                _notifier.ShowError("Policy status is invalid");
+                return false;
+            }
+            if (string.IsNullOrEmpty(SelectedPolicyFrequencyType.Description.Trim()))
+            {
+                _notifier.ShowError("Frequency type is invalid");
+                return false;
+            }
+            if (!int.TryParse(SelectedPolicy.Age.ToString(), out int age))
+            {
+                _notifier.ShowError("Age is invalid");
+                return false;
+            }
+            if (string.IsNullOrEmpty(SelectedPolicy.Type.Trim()))
+            {
+                _notifier.ShowError("Policy type is invalid");
                 return false;
             }
             return true;
