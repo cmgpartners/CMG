@@ -941,7 +941,7 @@
                 <TextBlock Grid.Column="0" Grid.Row="0" Text="Edit Policy Detail" FontWeight="Bold" VerticalAlignment="Center"/>
                 <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Content="Cancel" Margin="10 0" x:Name="ButtonPolicyEditClose" Click="ButtonPolicyEditClose_Click"/>
-                    <Button Content="Save"/>
+                    <Button Content="Save" Command="{Binding SavePolicyCommand}" x:Name="ButtonPolicyEditSave" Click="ButtonPolicyEditClose_Click"/>
                 </StackPanel>
             </Grid>
             <Grid Margin="50 5 50 20" Grid.Row="2" Grid.Column="0">
@@ -963,7 +963,14 @@
                 </StackPanel>
                 <StackPanel Grid.Column="1" Grid.ColumnSpan="2">
                     <TextBlock Text="Company Name"/>
-                    <TextBox Text="{Binding SelectedPolicy.CompanyName}"/>
+                    <ComboBox ItemsSource="{Binding CompanyCollection}" 
+                              SelectedValue="{Binding SelectedPolicyCompany}" 
+                              DisplayMemberPath="Description" 
+                              Foreground="Black"
+                              FontSize="13" 
+                              Margin="0 0 17 0" 
+                              Style="{StaticResource EditPolicyComboStyle}">
+                    </ComboBox>
                 </StackPanel>
                 
                 <StackPanel Grid.Column="0" Grid.Row="1" Margin="0 0 10 0">
@@ -1007,8 +1014,13 @@
 
                 <StackPanel Grid.Column="0" Grid.Row="4" Margin="0 0 10 0">
                     <TextBlock Text="Status" Margin="0 5"/>
-                    <!--<TextBox Text="{Binding SelectedPolicy.Status}"/>-->
-                    <ComboBox ItemsSource="{Binding StatusTypeCollection}" SelectedValue="{Binding SelectedPolicyStatus}" DisplayMemberPath="Description" Foreground="White" FontSize="13" Margin="0 0 17 0" Style="{StaticResource EntityTypeStyle}">
+                    <ComboBox ItemsSource="{Binding StatusTypeCollection}" 
+                              SelectedValue="{Binding SelectedPolicyStatus}" 
+                              DisplayMemberPath="Description" 
+                              Foreground="Black" 
+                              FontSize="13" 
+                              Margin="0 0 17 0" 
+                              Style="{StaticResource EditPolicyComboStyle}">
                     </ComboBox>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Grid.Row="4" Margin="0 0 10 0">                    
@@ -1022,8 +1034,13 @@
                         </Grid.RowDefinitions>
                         <StackPanel Grid.Column="0" Grid.Row="0">
                             <TextBlock Text="Frequency" Margin="0 5"/>
-                            <!--<TextBox Text="{Binding SelectedPolicy.Frequency}"/>-->
-                            <ComboBox ItemsSource="{Binding FrequencyTypeCollection}" SelectedValue="{Binding SelectedPolicyFrequencyType}" DisplayMemberPath="Description" Foreground="White" FontSize="13" Margin="0 0 17 0" Style="{StaticResource EntityTypeStyle}">
+                            <ComboBox ItemsSource="{Binding FrequencyTypeCollection}" 
+                                      SelectedValue="{Binding SelectedPolicyFrequencyType}" 
+                                      DisplayMemberPath="Description" 
+                                      Foreground="Black" 
+                                      FontSize="13" 
+                                      Margin="0 0 17 0" 
+                                      Style="{StaticResource EditPolicyComboStyle}">
                             </ComboBox>
                         </StackPanel>
                         <StackPanel Grid.Column="2" Grid.Row="0">
@@ -1034,7 +1051,14 @@
                 </StackPanel>
                 <StackPanel Grid.Column="2" Grid.Row="4" Margin="0 0 10 0">
                     <TextBlock Text="Type" Margin="0 5"/>
-                    <TextBox Text="{Binding SelectedPolicy.Type}"/>
+                    <ComboBox ItemsSource="{Binding PolicyTypeCollection}" 
+                              SelectedValue="{Binding SelectedPolicyType}" 
+                              DisplayMemberPath="Description" 
+                              Foreground="Black" 
+                              FontSize="13" 
+                              Margin="0 0 17 0" 
+                              Style="{StaticResource EditPolicyComboStyle}">
+                    </ComboBox>
                 </StackPanel>
             </Grid>
         </Grid>
