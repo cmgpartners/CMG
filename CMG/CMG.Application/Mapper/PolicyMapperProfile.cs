@@ -30,7 +30,7 @@ namespace CMG.Application.Mapper
                 .ForMember(des => des.ClientNotes, mo => mo.MapFrom(src => src.NoteCli))
                 .ForMember(des => des.InternalNotes, mo => mo.MapFrom(src => src.NoteInt))
                 .ForMember(des => des.PeoplePolicy, mo => mo.MapFrom(src => src.PeoplePolicys))
-                .ForMember(des => des.ModifiedDate, mo => mo.MapFrom(src => src.RevDate))
+		.ForMember(des => des.ModifiedDate, mo => mo.MapFrom(src => src.RevDate))
                 .ForMember(des => des.ModifiedBy, mo => mo.MapFrom(src => src.RevLocn))
                 .ForMember(des => des.CreatedDate, mo => mo.MapFrom(src => src.Cr8Date))
                 .ForMember(des => des.CreatedBy, mo => mo.MapFrom(src => src.Cr8Locn))

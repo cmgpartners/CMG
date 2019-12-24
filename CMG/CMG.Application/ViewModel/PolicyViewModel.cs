@@ -175,8 +175,9 @@ namespace CMG.Application.ViewModel
             set
             {
                 _selectedPolicy = value;
-                GetSelectedPolicyDropdownData();
                 OnPropertyChanged("SelectedPolicy");
+                GetSelectedPolicyDropdownData();
+                CancelPolicyNotes();
             }
         }
         private ViewComboDto selectedPolicyStatus;
@@ -230,6 +231,8 @@ namespace CMG.Application.ViewModel
             {
                 _selectedIllustration = value;
                 OnPropertyChanged("SelectedIllustration");
+                CancelClientNotes();
+                CancelInternalNotes();
             }
         }
         private ViewComboDto _selectedClientType;
@@ -336,7 +339,46 @@ namespace CMG.Application.ViewModel
         {
             get { return SelectedClient == null ? true : false; }
         }
-       
+
+        private bool _isPolicyNotesEditVisible = false;
+        public bool IsPolicyNotesEditVisible
+        {
+            get { return _isPolicyNotesEditVisible; }
+            set { _isPolicyNotesEditVisible = value; OnPropertyChanged("IsPolicyNotesEditVisible"); }
+        }
+
+        private bool _isPolicyNotesSaveVisible = false;
+        public bool IsPolicyNotesSaveVisible
+        {
+            get { return _isPolicyNotesSaveVisible; }
+            set { _isPolicyNotesSaveVisible = value; OnPropertyChanged("IsPolicyNotesSaveVisible"); }
+        }
+        private bool _isClientNotesEditVisible = false;
+        public bool IsClientNotesEditVisible
+        {
+            get { return _isClientNotesEditVisible; }
+            set { _isClientNotesEditVisible = value; OnPropertyChanged("IsClientNotesEditVisible"); }
+        }
+
+        private bool _isClientNotesSaveVisible = false;
+        public bool IsClientNotesSaveVisible
+        {
+            get { return _isClientNotesSaveVisible; }
+            set { _isClientNotesSaveVisible = value; OnPropertyChanged("IsClientNotesSaveVisible"); }
+        }
+        private bool _isInternalNotesEditVisible = false;
+        public bool IsInternalNotesEditVisible
+        {
+            get { return _isInternalNotesEditVisible; }
+            set { _isInternalNotesEditVisible = value; OnPropertyChanged("IsInternalNotesEditVisible"); }
+        }
+
+        private bool _isInternalNotesSaveVisible = false;
+        public bool IsInternalNotesSaveVisible
+        {
+            get { return _isInternalNotesSaveVisible; }
+            set { _isInternalNotesSaveVisible = value; OnPropertyChanged("IsInternalNotesSaveVisible"); }
+        }
         #region command properties
         public ICommand SearchClientCommand
         {
@@ -353,6 +395,42 @@ namespace CMG.Application.ViewModel
         public ICommand SavePolicyCommand
         {
             get { return CreateCommand(SavePolicy); }
+        }
+        public ICommand EditPolicyNotesCommand
+        {
+            get { return CreateCommand(EditPolicyNotes); }
+        }
+        public ICommand SavePolicyNotesCommand
+        {
+            get { return CreateCommand(SavePolicyNotes); }
+        }
+        public ICommand CancelPolicyNotesCommand
+        {
+            get { return CreateCommand(CancelPolicyNotes); }
+        }
+        public ICommand EditClientNotesCommand
+        {
+            get { return CreateCommand(EditClientNotes); }
+        }
+        public ICommand SaveClientNotesCommand
+        {
+            get { return CreateCommand(SaveClientNotes); }
+        }
+        public ICommand CancelClientNotesCommand
+        {
+            get { return CreateCommand(CancelClientNotes); }
+        }
+        public ICommand EditInternalNotesCommand
+        {
+            get { return CreateCommand(EditInternalNotes); }
+        }
+        public ICommand SaveInternalNotesCommand
+        {
+            get { return CreateCommand(SaveInternalNotes); }
+        }
+        public ICommand CancelInternalNotesCommand
+        {
+            get { return CreateCommand(CancelInternalNotes); }
         }
         #endregion command properties
         #endregion Properties
@@ -540,7 +618,6 @@ namespace CMG.Application.ViewModel
                 }
             }
         }
-
         private void ViewIllustration()
         {
             if(SelectedPolicy != null)
@@ -555,15 +632,21 @@ namespace CMG.Application.ViewModel
         }
         private void SaveIllustration()
         {
-            if(SelectedIllustration != null && ValidateIllustration())
+            try
             {
-                var entity = _mapper.Map<PolIll>(SelectedIllustration);
-                _unitOfWork.PolicyIllustration.Save(entity);
-                _unitOfWork.Commit();
-                var updatedEntity = _unitOfWork.PolicyIllustration.GetById(entity.Id);
-                SelectedIllustration = _mapper.Map<ViewPolicyIllustrationDto>(updatedEntity);
-                _notifier.ShowSuccess("Illustration updated successfully");
-
+                if (SelectedIllustration != null && ValidateIllustration())
+                {
+                    var entity = _mapper.Map<PolIll>(SelectedIllustration);
+                    _unitOfWork.PolicyIllustration.Save(entity);
+                    _unitOfWork.Commit();
+                    var updatedEntity = _unitOfWork.PolicyIllustration.GetById(entity.Id);
+                    SelectedIllustration = _mapper.Map<ViewPolicyIllustrationDto>(updatedEntity);
+                    _notifier.ShowSuccess("Illustration updated successfully");
+                }
+            }
+            catch
+            {
+                _notifier.ShowError("Error occured while updating policy illustration");
             }
         }
         private void SavePolicy()
@@ -730,6 +813,114 @@ namespace CMG.Application.ViewModel
                 return false;
             }
             return true;
+        }
+        private void EditPolicyNotes()
+        {
+            IsPolicyNotesEditVisible = false;
+            IsPolicyNotesSaveVisible = true;
+        }
+        private void SavePolicyNotes()
+        {
+            try
+            {
+                IsPolicyNotesEditVisible = true;
+                IsPolicyNotesSaveVisible = false;
+                if (SelectedPolicy != null)
+                {
+                    SelectedPolicy.PeoplePolicy = null;
+                    SelectedPolicy.PolicyAgent = null;
+                    var originalPolicy = _unitOfWork.Policies.GetById(SelectedPolicy.Id);
+                    var entity = _mapper.Map(SelectedPolicy, originalPolicy);
+                    _unitOfWork.Policies.Save(entity);
+                    _unitOfWork.Commit();
+                    _notifier.ShowSuccess("Policy Notes updated successfully");
+                }
+            }
+            catch
+            {
+                _notifier.ShowError("Error occured while updating policy notes");
+            }
+           
+        }
+        private void CancelPolicyNotes()
+        {
+            IsPolicyNotesEditVisible = true;
+            IsPolicyNotesSaveVisible = false;
+            var originalPolicy = _unitOfWork.Policies.GetById(SelectedPolicy.Id);
+            SelectedPolicy.PolicyNotes = originalPolicy.Comment;
+            OnPropertyChanged("SelectedPolicy");
+        }
+        private void EditClientNotes()
+        {
+            IsClientNotesEditVisible = false;
+            IsClientNotesSaveVisible = true;
+        }
+        private void SaveClientNotes()
+        {
+            try
+            {
+                IsClientNotesEditVisible = true;
+                IsClientNotesSaveVisible = false;
+                if (SelectedPolicy != null)
+                {
+                    SelectedPolicy.PeoplePolicy = null;
+                    SelectedPolicy.PolicyAgent = null;
+                    var originalPolicy = _unitOfWork.Policies.GetById(SelectedPolicy.Id);
+                    var entity = _mapper.Map(SelectedPolicy, originalPolicy);
+                    _unitOfWork.Policies.Save(entity);
+                    _unitOfWork.Commit();
+                    _notifier.ShowSuccess("Policy Notes updated successfully");
+                }
+            }
+            catch(Exception ex)
+            {
+                _notifier.ShowError("Error occured while updating policy notes");
+            }
+
+        }
+        private void CancelClientNotes()
+        {
+            IsClientNotesEditVisible = true;
+            IsClientNotesSaveVisible = false;
+            var originalPolicy = _unitOfWork.Policies.GetById(SelectedPolicy.Id);
+            SelectedPolicy.ClientNotes = originalPolicy.NoteCli;
+            OnPropertyChanged("SelectedPolicy");
+        }
+        private void EditInternalNotes()
+        {
+            IsInternalNotesEditVisible = false;
+            IsInternalNotesSaveVisible = true;
+        }
+        private void SaveInternalNotes()
+        {
+            try
+            {
+                IsInternalNotesEditVisible = true;
+                IsInternalNotesSaveVisible = false;
+                if (SelectedPolicy != null)
+                {
+                    SelectedPolicy.PeoplePolicy = null;
+                    SelectedPolicy.PolicyAgent = null;
+                    var originalPolicy = _unitOfWork.Policies.GetById(SelectedPolicy.Id);
+                    var entity = _mapper.Map(SelectedPolicy, originalPolicy);
+                    _unitOfWork.Policies.Save(entity);
+                    _unitOfWork.Commit();
+                    _notifier.ShowSuccess("Policy Notes updated successfully");
+                }
+            }
+            catch
+            {
+                _notifier.ShowError("Error occured while updating policy notes");
+            }
+
+        }
+        private void CancelInternalNotes()
+        {
+            IsInternalNotesEditVisible = true;
+            IsInternalNotesSaveVisible = false;
+            var originalPolicy = _unitOfWork.Policies.GetById(SelectedPolicy.Id);
+            SelectedPolicy.InternalNotes = originalPolicy.NoteInt;
+            OnPropertyChanged("SelectedPolicy");
         }
         #endregion Methods
     }

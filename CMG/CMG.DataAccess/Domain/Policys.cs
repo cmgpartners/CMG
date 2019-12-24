@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace CMG.DataAccess.Domain
 {
@@ -11,7 +12,7 @@ namespace CMG.DataAccess.Domain
             PolIll = new HashSet<PolIll>();
             PolicyAgent = new HashSet<PolicyAgent>();
         }
-
+        [Key]
         public int Keynumo { get; set; }
         public int Restricted { get; set; }
         public string Policynum { get; set; }
