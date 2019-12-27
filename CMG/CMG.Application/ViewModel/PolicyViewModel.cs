@@ -30,6 +30,7 @@ namespace CMG.Application.ViewModel
         private const string comboFieldNamePStatus = "PSTATUS";
         private const string comboFieldNameSVCType = "SVC_TYPE";
         private const string comboFieldNameCategory = "CATGRY";
+        private const string comboFieldNameCurrency = "CURRENCY";
         #endregion
 
         #region Constructor
@@ -105,6 +106,13 @@ namespace CMG.Application.ViewModel
         {
             get { return _frequencyTypeCollection; }
             set { _frequencyTypeCollection = value; }
+        }
+
+        private List<ViewComboDto> _currencyCollection;
+        public  List<ViewComboDto> CurrencyCollection
+        {
+            get { return _currencyCollection; }
+            set { _currencyCollection = value; }
         }
         
         private List<ViewComboDto> _statusTypeCollection;
@@ -188,6 +196,17 @@ namespace CMG.Application.ViewModel
             {
                 selectedPolicyStatus = value;
                 OnPropertyChanged("SelectedPolicyStatus");
+            }
+        }
+
+        private ViewComboDto selectedPolicyCurrency;
+        public ViewComboDto SelectedPolicyCurrency
+        {
+            get { return selectedPolicyCurrency; }
+            set
+            {
+                selectedPolicyCurrency = value;
+                OnPropertyChanged("SelectedPolicyCurrency");
             }
         }
 
@@ -448,6 +467,7 @@ namespace CMG.Application.ViewModel
                 SelectedPolicyFrequencyType = FrequencyTypeCollection.Where(x => x.Description.Trim() == SelectedPolicy.Frequency.Trim()).FirstOrDefault();
                 SelectedPolicyType = PolicyTypeCollection.Where(x => x.Description.Trim() == SelectedPolicy.Type.Trim()).FirstOrDefault();
                 SelectedPolicyCompany = CompanyCollection.Where(x => x.Description.Trim() == SelectedPolicy.CompanyName.Trim()).FirstOrDefault();
+                SelectedPolicyCurrency = CurrencyCollection.Where(x => x.Description.Trim() == SelectedPolicy.Currency.Trim()).FirstOrDefault();
             }
         }
         private void GetComboData()
@@ -463,6 +483,7 @@ namespace CMG.Application.ViewModel
             PersonStatusCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNamePStatus).ToList();
             SVCTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameSVCType).ToList();
             CategoryCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameCategory).ToList();
+            CurrencyCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameCurrency).ToList();
         }
         private void LoadData()
         {
@@ -667,6 +688,7 @@ namespace CMG.Application.ViewModel
                 entity.Frequency = SelectedPolicyFrequencyType != null ? SelectedPolicyFrequencyType.FieldCode.Trim() : SelectedPolicy.Frequency.Substring(0, 1);
                 entity.Type = SelectedPolicyType != null ? SelectedPolicyType.FieldCode.Trim() : SelectedPolicy.Type.Substring(0, 1);
                 entity.Company = SelectedPolicyCompany != null ? SelectedPolicyCompany.FieldCode.Trim() : SelectedPolicy.CompanyName.Substring(0, 1);
+                entity.Currency = SelectedPolicyCurrency != null ? SelectedPolicyCurrency.FieldCode.Trim() : SelectedPolicy.Currency.Substring(0, 3);
                 entity.Risk = SelectedPolicy.Rating.Trim();
 
                 _unitOfWork.Policies.Save(entity);
@@ -781,7 +803,7 @@ namespace CMG.Application.ViewModel
                 _notifier.ShowError("Rating is invalid");
                 return false;
             }
-            if (string.IsNullOrEmpty(SelectedPolicy.Currency.Trim()))
+            if (string.IsNullOrEmpty(SelectedPolicyCurrency.Description.Trim()))
             {
                 _notifier.ShowError("Currency is invalid");
                 return false;

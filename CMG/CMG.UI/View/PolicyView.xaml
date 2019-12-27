@@ -1004,7 +1004,14 @@
 
                 <StackPanel Grid.Column="0" Grid.Row="3" Margin="0 0 10 0">
                     <TextBlock Text="Currency" Margin="0 5"/>
-                    <TextBox Text="{Binding SelectedPolicy.Currency}"/>
+                    <ComboBox ItemsSource="{Binding CurrencyCollection}" 
+                              SelectedValue="{Binding SelectedPolicyCurrency}" 
+                              DisplayMemberPath="Description" 
+                              Foreground="Black" 
+                              FontSize="13" 
+                              Margin="0 0 17 0" 
+                              Style="{StaticResource EditPolicyComboStyle}">
+                    </ComboBox>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Grid.Row="3" Margin="0 0 10 0">
                     <TextBlock Text="Reprojection Date" Margin="0 5"/>
