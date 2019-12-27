@@ -8,6 +8,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -24,7 +25,6 @@ namespace CMG.UI.View
         {
             InitializeComponent();
         }
-
         private void ButtonSearchSliderClose_Click(object sender, RoutedEventArgs e)
         {
             
@@ -84,10 +84,22 @@ namespace CMG.UI.View
         }
         private void ButtonPolicyEditOpen_Click(object sender, RoutedEventArgs e)
         {
+            DropShadowBitmapEffect myDropShadowEffect = new DropShadowBitmapEffect();
+            Color myShadowColor = new Color();
+            myShadowColor.ScA = 1;
+            myShadowColor.ScB = 0;
+            myShadowColor.ScG = 0;
+            myShadowColor.ScR = 0;
+            myDropShadowEffect.Color = myShadowColor;
+            myDropShadowEffect.Direction = 90; // 180; //320
+            myDropShadowEffect.ShadowDepth = 15;
+            myDropShadowEffect.Softness = 1;
+            myDropShadowEffect.Opacity = 0.5;
+            PolicyEdit.BitmapEffect = myDropShadowEffect;
+
             PolicyEdit.Visibility = Visibility.Visible;
             PolicyEdit.Width = 700;
         }
-
         private void ButtonPolicyEditClose_Click(object sender, RoutedEventArgs e)
         {
             var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(600) };
