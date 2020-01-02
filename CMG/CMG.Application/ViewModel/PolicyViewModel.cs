@@ -7,6 +7,7 @@ using CMG.Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Windows.Input;
 using ToastNotifications;
@@ -31,6 +32,20 @@ namespace CMG.Application.ViewModel
         private const string comboFieldNameSVCType = "SVC_TYPE";
         private const string comboFieldNameCategory = "CATGRY";
         private const string comboFieldNameCurrency = "CURRENCY";
+
+        private const string ColumnNamePolicyNumber = "PolicyNumber";
+        private const string ColumnNameCompanyName = "CompanyName";
+        private const string ColumnNameFaceAmount = "FaceAmount";
+        private const string ColumnNamePayment = "Payment";
+        private const string ColumnNameStatus = "Status";
+        private const string ColumnNameFrequency = "Frequency";
+        private const string ColumnNameType = "Type";
+        private const string ColumnNamePlanCode = "PlanCode";
+        private const string ColumnNameRating = "Rating";
+        private const string ColumnNameClass = "Class";
+        private const string ColumnNameCurrency = "Currency";
+        private const string ColumnNamePolicyDate = "PolicyDate";
+        private const string ColumnNamePlacedOn = "PlacedOn";
         #endregion
 
         #region Constructor
@@ -398,6 +413,28 @@ namespace CMG.Application.ViewModel
             get { return _isInternalNotesSaveVisible; }
             set { _isInternalNotesSaveVisible = value; OnPropertyChanged("IsInternalNotesSaveVisible"); }
         }
+
+        private List<string> columnNames;
+        public List<string> ColumnNames
+        {
+            get { return columnNames; }
+            set
+            {
+                columnNames = value;
+                OnPropertyChanged("ColumnNames");
+            }
+        }
+
+        private DataTable policyTable;
+        public DataTable PolicyTable
+        {
+            get { return policyTable; }
+            set
+            {
+                policyTable = value;
+                OnPropertyChanged("PolicyTable");
+            }
+        }
         #region command properties
         public ICommand SearchClientCommand
         {
@@ -455,6 +492,11 @@ namespace CMG.Application.ViewModel
         {
             get { return CreateCommand(DividentScaleFilter); }
         }
+
+        public ICommand AddColumnCommand
+        {
+            get { return CreateCommand(AddColumnToPolicyTable); }
+        }
         #endregion command properties
         #endregion Properties
 
@@ -469,6 +511,20 @@ namespace CMG.Application.ViewModel
                 SelectedPolicyCompany = CompanyCollection.Where(x => x.Description.Trim() == SelectedPolicy.CompanyName.Trim()).FirstOrDefault();
                 SelectedPolicyCurrency = CurrencyCollection.Where(x => x.Description.Trim() == SelectedPolicy.Currency.Trim()).FirstOrDefault();
             }
+        }
+
+        private void GetPolicyTableData()
+        {
+            PolicyTable = new DataTable();
+            PolicyTable.TableName = "PolicyTable";
+            PolicyTable.Columns.Add(ColumnNamePolicyNumber, typeof(string));
+            PolicyTable.Columns.Add(ColumnNameCompanyName, typeof(string));
+            PolicyTable.Columns.Add(ColumnNameFaceAmount, typeof(decimal));
+            PolicyTable.Columns.Add(ColumnNamePayment, typeof(decimal));
+            PolicyTable.Columns.Add(ColumnNameStatus, typeof(string));
+            PolicyTable.Columns.Add(ColumnNameFrequency, typeof(string));
+            PolicyTable.Columns.Add(ColumnNameType, typeof(string));
+            PolicyTable.Columns.Add(ColumnNamePlanCode, typeof(string));
         }
         private void GetComboData()
         {
@@ -487,8 +543,15 @@ namespace CMG.Application.ViewModel
         }
         private void LoadData()
         {
+            GetPolicyTableData();
             GetComboData();
             GetPolicies();
+            ColumnNames = new List<string>();
+            ColumnNames.Add(ColumnNameRating);
+            ColumnNames.Add(ColumnNameClass);
+            ColumnNames.Add(ColumnNameCurrency);
+            ColumnNames.Add(ColumnNamePolicyDate);
+            ColumnNames.Add(ColumnNamePlacedOn);
         }        
         private void Search()
         {
@@ -606,7 +669,7 @@ namespace CMG.Application.ViewModel
         {
             var policies = _unitOfWork.Policies.GetAllPolicyNumber();
             var temppolicies = policies.Select(r => _mapper.Map<ViewPolicyListDto>(r)).ToList();
-            Policies = temppolicies.Select(r => r.PolicyNumber).ToList();
+            Policies = temppolicies.Select(r => r.PolicyNumber).ToList();            
         }
         private void GetPolicyCollection()
         {
@@ -640,6 +703,24 @@ namespace CMG.Application.ViewModel
                 if(PolicyCollection.Count > 0)
                 {
                     SelectedPolicy = PolicyCollection[0];
+
+                    // Rishita - BEGIN
+                    GetPolicyTableData();
+                    DataRow row;
+                    for (int i = 0; i < PolicyCollection.Count; i++)
+                    {
+                        row = PolicyTable.NewRow();
+                        row[ColumnNamePolicyNumber] = PolicyCollection[i].PolicyNumber;
+                        row[ColumnNameCompanyName] = PolicyCollection[i].CompanyName;
+                        row[ColumnNameFaceAmount] = PolicyCollection[i].FaceAmount;
+                        row[ColumnNamePayment] = PolicyCollection[i].Payment;
+                        row[ColumnNameStatus] = PolicyCollection[i].Status;
+                        row[ColumnNameFrequency] = PolicyCollection[i].Frequency;
+                        row[ColumnNameType] = PolicyCollection[i].Type;
+                        row[ColumnNamePlanCode] = PolicyCollection[i].PlanCode;
+                        PolicyTable.Rows.Add(row);
+                    }
+                    // Rishita - END
                 }
             }
         }
@@ -764,7 +845,6 @@ namespace CMG.Application.ViewModel
             }
             return true;
         }
-
         private bool IsValidPolicy()
         {
             if(string.IsNullOrEmpty(SelectedPolicy.CompanyName.Trim()))
@@ -961,6 +1041,79 @@ namespace CMG.Application.ViewModel
             {
                 ViewIllustration(0);
             }
+        }
+        private void AddColumnToPolicyTable(object inputParameter)
+        {
+            switch(inputParameter)
+            {
+                case ColumnNameRating:
+                    if (!policyTable.Columns.Contains(ColumnNameRating))
+                    {
+                        PolicyTable.Columns.Add(ColumnNameRating, typeof(string));
+                        BindNewColumnData(ColumnNameRating);
+                    }
+                    break;
+                case ColumnNameClass:
+                    if (!policyTable.Columns.Contains(ColumnNameClass))
+                    {
+                        PolicyTable.Columns.Add(ColumnNameClass, typeof(string));
+                        BindNewColumnData(ColumnNameClass);
+                    }
+                    break;
+                case ColumnNameCurrency:
+                    if (!policyTable.Columns.Contains(ColumnNameCurrency))
+                    {
+                        PolicyTable.Columns.Add(ColumnNameCurrency, typeof(string));
+                        BindNewColumnData(ColumnNameCurrency);
+                    }
+                    break;
+                case ColumnNamePolicyDate:
+                    if (!policyTable.Columns.Contains(ColumnNamePolicyDate))
+                    {
+                        PolicyTable.Columns.Add(ColumnNamePolicyDate, typeof(DateTime));
+                        BindNewColumnData(ColumnNamePolicyDate);
+                    }
+                    break;
+                case ColumnNamePlacedOn:
+                    if (!policyTable.Columns.Contains(ColumnNamePlacedOn))
+                    {
+                        PolicyTable.Columns.Add(ColumnNamePlacedOn, typeof(DateTime));
+                        BindNewColumnData(ColumnNamePlacedOn);
+                    }
+                    break;
+                default:
+                    break;
+            }
+            OnPropertyChanged("PolicyTable");
+        }
+
+        private void BindNewColumnData(string columnName)
+        {
+            for (int i = 0; i < PolicyCollection.Count; i++)
+            {
+                DataRow row = PolicyTable.Rows[i];
+                switch (columnName)
+                {
+                    case ColumnNameRating:
+                        row[ColumnNameRating] = PolicyCollection[i].Rating;
+                        break;
+                    case ColumnNameClass:
+                        row[ColumnNameClass] = PolicyCollection[i].Class;
+                        break;
+                    case ColumnNameCurrency:
+                        row[ColumnNameCurrency] = PolicyCollection[i].Currency;
+                        break;
+                    case ColumnNamePolicyDate:
+                        row[ColumnNamePolicyDate] = PolicyCollection[i].PolicyDate;
+                        break;
+                    case ColumnNamePlacedOn:
+                        row[ColumnNamePlacedOn] = PolicyCollection[i].PlacedOn;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
         }
         #endregion Methods
     }

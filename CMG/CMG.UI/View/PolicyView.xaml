@@ -261,10 +261,10 @@
                     <TextBlock Text="Policy Details" Margin="10 22 10 10" FontSize="16" Foreground="Black" Visibility="{Binding IsPolicyDetailVisible, Converter={StaticResource VisibilityConverter}}"/>
                 </StackPanel>
                 <Grid Grid.Row="1" Margin="10 0 10 10" Grid.ColumnSpan="2">
-                    <DataGrid AutoGenerateColumns="False" x:Name="policies" IsReadOnly="False" 
-                      ItemsSource="{Binding PolicyCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" 
-                      CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="40" SelectedItem="{Binding SelectedPolicy}">
-                        <DataGrid.Columns>
+                    <DataGrid AutoGenerateColumns="True" x:Name="policies" IsReadOnly="False" 
+                      ItemsSource="{Binding PolicyTable, IsAsync=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ColumnHeaderStyle="{StaticResource HeaderStyle}" 
+                      CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="40" SelectedItem="{Binding SelectedPolicy}">                        
+                        <DataGrid.Columns>                            
                             <DataGridTemplateColumn Header="" Width="40" HeaderStyle="{StaticResource FirstColumnHeaderStyle }">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
@@ -279,7 +279,7 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Number" Width="105" SortMemberPath="PolicyNumber" CanUserSort="True">
+                            <!--<DataGridTemplateColumn Header="Number" Width="105" SortMemberPath="PolicyNumber" CanUserSort="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=PolicyNumber}" Margin="10 0 10 0"/>
@@ -334,8 +334,30 @@
                                         <TextBlock Text="{Binding Path=PlanCode}"></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>-->
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.Header>
+                                    <Menu Name="menu1" HorizontalAlignment="Left" VerticalAlignment="Top" Tag="{Binding RelativeSource={RelativeSource Self}}" DataContext="{Binding AgentWithdrawals}">
+                                        <Menu.Background>
+                                            <SolidColorBrush Color="Transparent"></SolidColorBrush>
+                                        </Menu.Background>
+                                        <MenuItem Header="+" Style="{StaticResource MenuParentStyle}" 
+                                                  ItemContainerStyle="{StaticResource MenuItemStyle}" 
+                                                  ItemsSource="{Binding DataContext.SelectedViewModel.ColumnNames, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}">
+                                            <MenuItem.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Button x:Name="btnAgentExpenses" Content="{Binding}" BorderBrush="Transparent" Background="Transparent" Foreground="Gray" FontWeight="Regular"
+                                                            Command="{Binding DataContext.SelectedViewModel.AddColumnCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
+                                                            CommandParameter="{Binding}">                                                        
+                                                    </Button>
+                                                </DataTemplate>
+                                            </MenuItem.ItemTemplate>
+                                        </MenuItem>
+                                    </Menu>
+                                </DataGridTemplateColumn.Header>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Rating" Width="100" SortMemberPath="Rating" CanUserSort="True">
+                            <!--<DataGridTemplateColumn Header="Rating" Width="100" 
+                                                        SortMemberPath="Rating" CanUserSort="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=Rating}"></TextBlock>
@@ -383,7 +405,7 @@
                                         <TextBlock Text="{Binding Path=Age}"></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
+                            </DataGridTemplateColumn>-->
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
