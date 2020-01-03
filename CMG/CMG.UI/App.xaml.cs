@@ -12,7 +12,6 @@ using CMG.Application.Mapper;
 using CMG.Service.Interface;
 using CMG.Service;
 using System.Threading;
-
 namespace CMG.UI
 {
     /// <summary>
@@ -58,6 +57,7 @@ namespace CMG.UI
             services.AddDbContext<pb2Context>(connection => connection.UseSqlServer(configuration.GetConnectionString("Default")));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IDialogService, DialogService>();
+            services.AddScoped<IReportService, ReportService>();
             services.AddTransient(typeof(MainWindow));
 
             var mappingConfig = new MapperConfiguration(mc =>
