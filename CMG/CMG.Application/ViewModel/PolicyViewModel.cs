@@ -7,7 +7,6 @@ using CMG.Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data;
 using System.Linq;
 using System.Windows.Input;
 using ToastNotifications;
@@ -32,24 +31,10 @@ namespace CMG.Application.ViewModel
         private const string comboFieldNameSVCType = "SVC_TYPE";
         private const string comboFieldNameCategory = "CATGRY";
         private const string comboFieldNameCurrency = "CURRENCY";
-
-        private const string ColumnNamePolicyNumber = "PolicyNumber";
-        private const string ColumnNameCompanyName = "CompanyName";
-        private const string ColumnNameFaceAmount = "FaceAmount";
-        private const string ColumnNamePayment = "Payment";
-        private const string ColumnNameStatus = "Status";
-        private const string ColumnNameFrequency = "Frequency";
-        private const string ColumnNameType = "Type";
-        private const string ColumnNamePlanCode = "PlanCode";
-        private const string ColumnNameRating = "Rating";
-        private const string ColumnNameClass = "Class";
-        private const string ColumnNameCurrency = "Currency";
-        private const string ColumnNamePolicyDate = "PolicyDate";
-        private const string ColumnNamePlacedOn = "PlacedOn";
         #endregion
 
         #region Constructor
-        public PolicyViewModel(IUnitOfWork unitOfWork, IMapper mapper, IDialogService dialogService = null, Notifier notifier = null) 
+        public PolicyViewModel(IUnitOfWork unitOfWork, IMapper mapper, IDialogService dialogService = null, Notifier notifier = null)
             : base(unitOfWork, mapper)
         {
             _unitOfWork = unitOfWork;
@@ -106,7 +91,7 @@ namespace CMG.Application.ViewModel
         public List<ViewComboDto> ClientTypeCollection
         {
             get { return _clientTypeCollection; }
-            set {_clientTypeCollection = value;}
+            set { _clientTypeCollection = value; }
         }
 
         private List<ViewComboDto> _policyTypeCollection;
@@ -124,12 +109,12 @@ namespace CMG.Application.ViewModel
         }
 
         private List<ViewComboDto> _currencyCollection;
-        public  List<ViewComboDto> CurrencyCollection
+        public List<ViewComboDto> CurrencyCollection
         {
             get { return _currencyCollection; }
             set { _currencyCollection = value; }
         }
-        
+
         private List<ViewComboDto> _statusTypeCollection;
         public List<ViewComboDto> StatusTypeCollection
         {
@@ -167,7 +152,7 @@ namespace CMG.Application.ViewModel
             get { return _categoryCollection; }
             set { _categoryCollection = value; }
         }
-	    private List<string> _policies;
+        private List<string> _policies;
         public List<string> Policies
         {
             get { return _policies; }
@@ -181,8 +166,8 @@ namespace CMG.Application.ViewModel
         public ViewClientSearchDto SelectedClient
         {
             get { return _selectedClient; }
-            set 
-            { 
+            set
+            {
                 _selectedClient = value;
                 OnPropertyChanged("SelectedClient");
                 OnPropertyChanged("IsClientSelected");
@@ -234,7 +219,7 @@ namespace CMG.Application.ViewModel
                 selectedPolicyFrequencyType = value;
                 OnPropertyChanged("SelectedPolicyFrequencyType");
             }
-        }        
+        }
         private ViewPolicyIllustrationDto _selectedIllustration;
 
         private ViewComboDto selectedPolicyType;
@@ -293,7 +278,7 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("CommanName");
             }
         }
-        
+
         private string _firstName;
         public string FirstName
         {
@@ -343,7 +328,7 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("CompanyName");
             }
         }
-        
+
         private DateTime? _fromDate;
         public DateTime? FromDate
         {
@@ -366,7 +351,7 @@ namespace CMG.Application.ViewModel
         }
         public bool IsClientSelected
         {
-            get { return SelectedClient != null ? true : false ; }
+            get { return SelectedClient != null ? true : false; }
         }
 
         public bool IsPolicyDetailVisible
@@ -413,28 +398,6 @@ namespace CMG.Application.ViewModel
             get { return _isInternalNotesSaveVisible; }
             set { _isInternalNotesSaveVisible = value; OnPropertyChanged("IsInternalNotesSaveVisible"); }
         }
-
-        private List<string> columnNames;
-        public List<string> ColumnNames
-        {
-            get { return columnNames; }
-            set
-            {
-                columnNames = value;
-                OnPropertyChanged("ColumnNames");
-            }
-        }
-
-        private DataTable policyTable;
-        public DataTable PolicyTable
-        {
-            get { return policyTable; }
-            set
-            {
-                policyTable = value;
-                OnPropertyChanged("PolicyTable");
-            }
-        }
         #region command properties
         public ICommand SearchClientCommand
         {
@@ -442,7 +405,7 @@ namespace CMG.Application.ViewModel
         }
         public ICommand ViewIllustrationCommand
         {
-            get { return CreateCommand(ViewIllustration);  }
+            get { return CreateCommand(ViewIllustration); }
         }
         public ICommand SaveIllustrationCommand
         {
@@ -492,11 +455,6 @@ namespace CMG.Application.ViewModel
         {
             get { return CreateCommand(DividentScaleFilter); }
         }
-
-        public ICommand AddColumnCommand
-        {
-            get { return CreateCommand(AddColumnToPolicyTable); }
-        }
         #endregion command properties
         #endregion Properties
 
@@ -511,20 +469,6 @@ namespace CMG.Application.ViewModel
                 SelectedPolicyCompany = CompanyCollection.Where(x => x.Description.Trim() == SelectedPolicy.CompanyName.Trim()).FirstOrDefault();
                 SelectedPolicyCurrency = CurrencyCollection.Where(x => x.Description.Trim() == SelectedPolicy.Currency.Trim()).FirstOrDefault();
             }
-        }
-
-        private void GetPolicyTableData()
-        {
-            PolicyTable = new DataTable();
-            PolicyTable.TableName = "PolicyTable";
-            PolicyTable.Columns.Add(ColumnNamePolicyNumber, typeof(string));
-            PolicyTable.Columns.Add(ColumnNameCompanyName, typeof(string));
-            PolicyTable.Columns.Add(ColumnNameFaceAmount, typeof(decimal));
-            PolicyTable.Columns.Add(ColumnNamePayment, typeof(decimal));
-            PolicyTable.Columns.Add(ColumnNameStatus, typeof(string));
-            PolicyTable.Columns.Add(ColumnNameFrequency, typeof(string));
-            PolicyTable.Columns.Add(ColumnNameType, typeof(string));
-            PolicyTable.Columns.Add(ColumnNamePlanCode, typeof(string));
         }
         private void GetComboData()
         {
@@ -543,16 +487,9 @@ namespace CMG.Application.ViewModel
         }
         private void LoadData()
         {
-            GetPolicyTableData();
             GetComboData();
             GetPolicies();
-            ColumnNames = new List<string>();
-            ColumnNames.Add(ColumnNameRating);
-            ColumnNames.Add(ColumnNameClass);
-            ColumnNames.Add(ColumnNameCurrency);
-            ColumnNames.Add(ColumnNamePolicyDate);
-            ColumnNames.Add(ColumnNamePlacedOn);
-        }        
+        }
         private void Search()
         {
             if (IsValidSearchCriteria())
@@ -561,10 +498,10 @@ namespace CMG.Application.ViewModel
                 var dataSearchBy = _unitOfWork.People.Find(searchQuery);
                 var dataCollection = new ObservableCollection<ViewClientSearchDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewClientSearchDto>(r)).ToList());
 
-            ClientCollection = new ObservableCollection<ViewClientSearchDto>(dataCollection.Select(x => {
-                                    x.ClientType = string.IsNullOrEmpty(x.ClientType.Trim()) ? "" : ClientTypeCollection.Where(c => c.FieldCode == x.ClientType.Trim()).FirstOrDefault()?.Description;
-                                    x.Status = string.IsNullOrEmpty(x.Status.Trim()) ? "" : PersonStatusCollection.Where(c => c.FieldCode == x.Status.Trim()).FirstOrDefault()?.Description;
-                                    x.SVCType = string.IsNullOrEmpty(x.SVCType.Trim()) ? "" : SVCTypeCollection.Where(c => c.FieldCode == x.SVCType.Trim()).FirstOrDefault()?.Description;
+                ClientCollection = new ObservableCollection<ViewClientSearchDto>(dataCollection.Select(x => {
+                    x.ClientType = string.IsNullOrEmpty(x.ClientType.Trim()) ? "" : ClientTypeCollection.Where(c => c.FieldCode == x.ClientType.Trim()).FirstOrDefault()?.Description;
+                    x.Status = string.IsNullOrEmpty(x.Status.Trim()) ? "" : PersonStatusCollection.Where(c => c.FieldCode == x.Status.Trim()).FirstOrDefault()?.Description;
+                    x.SVCType = string.IsNullOrEmpty(x.SVCType.Trim()) ? "" : SVCTypeCollection.Where(c => c.FieldCode == x.SVCType.Trim()).FirstOrDefault()?.Description;
                     return x;
                 }));
             }
@@ -572,7 +509,7 @@ namespace CMG.Application.ViewModel
         private bool IsValidSearchCriteria()
         {
             bool isValid = true;
-            if(string.IsNullOrEmpty(CompanyName)
+            if (string.IsNullOrEmpty(CompanyName)
                 && string.IsNullOrEmpty(PolicyNumber)
                 && string.IsNullOrEmpty(FirstName)
                 && string.IsNullOrEmpty(CommanName)
@@ -635,7 +572,7 @@ namespace CMG.Application.ViewModel
                     BuildFilterByEquals("CompanyName", companyCode, searchBy);
                 }
                 else
-                { 
+                {
                     //show error message company not exist
                 }
             }
@@ -669,7 +606,7 @@ namespace CMG.Application.ViewModel
         {
             var policies = _unitOfWork.Policies.GetAllPolicyNumber();
             var temppolicies = policies.Select(r => _mapper.Map<ViewPolicyListDto>(r)).ToList();
-            Policies = temppolicies.Select(r => r.PolicyNumber).ToList();            
+            Policies = temppolicies.Select(r => r.PolicyNumber).ToList();
         }
         private void GetPolicyCollection()
         {
@@ -700,37 +637,19 @@ namespace CMG.Application.ViewModel
                     return x;
                 }));
 
-                if(PolicyCollection.Count > 0)
+                if (PolicyCollection.Count > 0)
                 {
                     SelectedPolicy = PolicyCollection[0];
-
-                    // Rishita - BEGIN
-                    GetPolicyTableData();
-                    DataRow row;
-                    for (int i = 0; i < PolicyCollection.Count; i++)
-                    {
-                        row = PolicyTable.NewRow();
-                        row[ColumnNamePolicyNumber] = PolicyCollection[i].PolicyNumber;
-                        row[ColumnNameCompanyName] = PolicyCollection[i].CompanyName;
-                        row[ColumnNameFaceAmount] = PolicyCollection[i].FaceAmount;
-                        row[ColumnNamePayment] = PolicyCollection[i].Payment;
-                        row[ColumnNameStatus] = PolicyCollection[i].Status;
-                        row[ColumnNameFrequency] = PolicyCollection[i].Frequency;
-                        row[ColumnNameType] = PolicyCollection[i].Type;
-                        row[ColumnNamePlanCode] = PolicyCollection[i].PlanCode;
-                        PolicyTable.Rows.Add(row);
-                    }
-                    // Rishita - END
                 }
             }
         }
         private void ViewIllustration(object dividentScale)
         {
-            if(SelectedPolicy != null)
+            if (SelectedPolicy != null)
             {
                 var policyIllustrations = _unitOfWork.PolicyIllustration.GetPolicyIllustration(SelectedPolicy.Id, Convert.ToInt32(dividentScale));
-                PolicyIllustrationCollection = new ObservableCollection<ViewPolicyIllustrationDto>(policyIllustrations.Select(r => _mapper.Map<ViewPolicyIllustrationDto>(r))); 
-                if(PolicyIllustrationCollection.Count > 0)
+                PolicyIllustrationCollection = new ObservableCollection<ViewPolicyIllustrationDto>(policyIllustrations.Select(r => _mapper.Map<ViewPolicyIllustrationDto>(r)));
+                if (PolicyIllustrationCollection.Count > 0)
                 {
                     SelectedIllustration = PolicyIllustrationCollection[0];
                 }
@@ -757,7 +676,7 @@ namespace CMG.Application.ViewModel
         }
         private void SavePolicy()
         {
-            if(SelectedPolicy != null 
+            if (SelectedPolicy != null
                 && IsValidPolicy())
             {
                 var originalEntity = _unitOfWork.Policies.GetById(SelectedPolicy.Id);
@@ -783,7 +702,7 @@ namespace CMG.Application.ViewModel
         }
         private bool ValidateIllustration()
         {
-            if(!decimal.TryParse(SelectedIllustration.AnnualDepositActual.ToString(), out decimal ada))
+            if (!decimal.TryParse(SelectedIllustration.AnnualDepositActual.ToString(), out decimal ada))
             {
                 _notifier.ShowError("Actual annual deposit value is invalid");
                 return false;
@@ -845,14 +764,15 @@ namespace CMG.Application.ViewModel
             }
             return true;
         }
+
         private bool IsValidPolicy()
         {
-            if(string.IsNullOrEmpty(SelectedPolicy.CompanyName.Trim()))
+            if (string.IsNullOrEmpty(SelectedPolicy.CompanyName.Trim()))
             {
                 _notifier.ShowError("Company name is invalid");
                 return false;
             }
-            if(!decimal.TryParse(SelectedPolicy.FaceAmount.ToString(), out decimal faceAmount))
+            if (!decimal.TryParse(SelectedPolicy.FaceAmount.ToString(), out decimal faceAmount))
             {
                 _notifier.ShowError("Faceamount is invalid");
                 return false;
@@ -946,14 +866,14 @@ namespace CMG.Application.ViewModel
             {
                 _notifier.ShowError("Error occured while updating policy notes");
             }
-           
+
         }
         private void CancelPolicyNotes()
         {
             IsPolicyNotesEditVisible = true;
             IsPolicyNotesSaveVisible = false;
             var originalPolicy = _unitOfWork.Policies.GetById(SelectedPolicy?.Id);
-            if(originalPolicy != null)
+            if (originalPolicy != null)
                 SelectedPolicy.PolicyNotes = originalPolicy.Comment;
             OnPropertyChanged("SelectedPolicy");
         }
@@ -979,7 +899,7 @@ namespace CMG.Application.ViewModel
                     _notifier.ShowSuccess("Policy Notes updated successfully");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _notifier.ShowError("Error occured while updating policy notes");
             }
@@ -1041,79 +961,6 @@ namespace CMG.Application.ViewModel
             {
                 ViewIllustration(0);
             }
-        }
-        private void AddColumnToPolicyTable(object inputParameter)
-        {
-            switch(inputParameter)
-            {
-                case ColumnNameRating:
-                    if (!policyTable.Columns.Contains(ColumnNameRating))
-                    {
-                        PolicyTable.Columns.Add(ColumnNameRating, typeof(string));
-                        BindNewColumnData(ColumnNameRating);
-                    }
-                    break;
-                case ColumnNameClass:
-                    if (!policyTable.Columns.Contains(ColumnNameClass))
-                    {
-                        PolicyTable.Columns.Add(ColumnNameClass, typeof(string));
-                        BindNewColumnData(ColumnNameClass);
-                    }
-                    break;
-                case ColumnNameCurrency:
-                    if (!policyTable.Columns.Contains(ColumnNameCurrency))
-                    {
-                        PolicyTable.Columns.Add(ColumnNameCurrency, typeof(string));
-                        BindNewColumnData(ColumnNameCurrency);
-                    }
-                    break;
-                case ColumnNamePolicyDate:
-                    if (!policyTable.Columns.Contains(ColumnNamePolicyDate))
-                    {
-                        PolicyTable.Columns.Add(ColumnNamePolicyDate, typeof(DateTime));
-                        BindNewColumnData(ColumnNamePolicyDate);
-                    }
-                    break;
-                case ColumnNamePlacedOn:
-                    if (!policyTable.Columns.Contains(ColumnNamePlacedOn))
-                    {
-                        PolicyTable.Columns.Add(ColumnNamePlacedOn, typeof(DateTime));
-                        BindNewColumnData(ColumnNamePlacedOn);
-                    }
-                    break;
-                default:
-                    break;
-            }
-            OnPropertyChanged("PolicyTable");
-        }
-
-        private void BindNewColumnData(string columnName)
-        {
-            for (int i = 0; i < PolicyCollection.Count; i++)
-            {
-                DataRow row = PolicyTable.Rows[i];
-                switch (columnName)
-                {
-                    case ColumnNameRating:
-                        row[ColumnNameRating] = PolicyCollection[i].Rating;
-                        break;
-                    case ColumnNameClass:
-                        row[ColumnNameClass] = PolicyCollection[i].Class;
-                        break;
-                    case ColumnNameCurrency:
-                        row[ColumnNameCurrency] = PolicyCollection[i].Currency;
-                        break;
-                    case ColumnNamePolicyDate:
-                        row[ColumnNamePolicyDate] = PolicyCollection[i].PolicyDate;
-                        break;
-                    case ColumnNamePlacedOn:
-                        row[ColumnNamePlacedOn] = PolicyCollection[i].PlacedOn;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            
         }
         #endregion Methods
     }
