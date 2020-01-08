@@ -12,6 +12,8 @@ using CMG.Application.Mapper;
 using CMG.Service.Interface;
 using CMG.Service;
 using System.Threading;
+using System.DirectoryServices.AccountManagement;
+
 namespace CMG.UI
 {
     /// <summary>
@@ -35,6 +37,18 @@ namespace CMG.UI
             if (!aIsNewInstance)
             {
                 App.Current.Shutdown();
+            }
+
+            using (var ctx = new PrincipalContext(ContextType.Domain))
+            {
+                using (var user = UserPrincipal.FindByIdentity(ctx, Environment.UserName))
+                {
+                    if(user == null)
+                    {
+                        MessageBox.Show("Sorry, you do not have access to the application", "Access Denied");
+                        App.Current.Shutdown();
+                    }
+                }
             }
 
             var configurationBuilder = new ConfigurationBuilder()

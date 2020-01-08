@@ -14,6 +14,7 @@ using System;
 using CMG.Service.Interface;
 using System.Windows.Threading;
 using System.Windows.Media;
+
 namespace CMG.UI
 {
     /// <summary>
