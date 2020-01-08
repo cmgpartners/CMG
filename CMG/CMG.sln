@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMG.Application", "CMG.Appl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMG.Common", "CMG.Common\CMG.Common.csproj", "{021A14E9-6DB9-4BFE-BFD3-02AFCD044A18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMG.Service", "CMG.Service\CMG.Service.csproj", "{089D7A37-3CB8-4B84-94C6-AE67D2CF12A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMG.Service", "CMG.Service\CMG.Service.csproj", "{089D7A37-3CB8-4B84-94C6-AE67D2CF12A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

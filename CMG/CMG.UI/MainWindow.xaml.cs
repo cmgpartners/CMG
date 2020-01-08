@@ -25,16 +25,18 @@ namespace CMG.UI
         public readonly IMapper _mapper;
         public readonly IUnitOfWork _unitOfWork;
         public readonly IDialogService _dialogService;
+        public readonly IReportService _reportService;
         public string _navigateURL = "https://cmgpartners.my.salesforce.com/";
         private MainViewModel _mainViewModel;
         private Notifier _notifier;
 
         public int[] years { get; set; }
-        public MainWindow(IUnitOfWork unitOfWork, IMapper mapper, IDialogService dialogService = null)
+        public MainWindow(IUnitOfWork unitOfWork, IMapper mapper, IDialogService dialogService = null, IReportService reportService = null)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _dialogService = dialogService;
+            _reportService = reportService;
             _notifier = InitializeNotifier();
             InitializeComponent();
             _mainViewModel = new MainViewModel(_unitOfWork, _mapper, _notifier);
@@ -46,7 +48,7 @@ namespace CMG.UI
             if (lstNavigation.SelectedIndex == 0)
             {
                 _mainViewModel.SelectedIndexLeftNavigation = (int)LeftNavigation.Renewals;
-                RenewalsViewModel renewalsViewModel = new RenewalsViewModel(_unitOfWork, _mapper,_dialogService, _notifier);
+                RenewalsViewModel renewalsViewModel = new RenewalsViewModel(_unitOfWork, _mapper,_dialogService, _notifier, _reportService);
                 _mainViewModel.SelectedViewModel = renewalsViewModel;
                 DataContext = _mainViewModel;
                 if(_mainViewModel.CopiedCommission != null)

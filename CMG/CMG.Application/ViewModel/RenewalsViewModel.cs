@@ -6,15 +6,12 @@ using AutoMapper;
 using System.Globalization;
 using System.Collections.Generic;
 using System;
-using CMG.DataAccess.Query;
 using System.Windows.Input;
 using CMG.DataAccess.Domain;
-using System.Windows;
 using ToastNotifications;
 using ToastNotifications.Messages;
 using CMG.Service.Interface;
 using CMG.Service;
-using System.Collections;
 
 namespace CMG.Application.ViewModel
 {
@@ -30,7 +27,7 @@ namespace CMG.Application.ViewModel
         #endregion Member variables
 
         #region Constructor
-        public RenewalsViewModel(IUnitOfWork unitOfWork, IMapper mapper, IDialogService dialogService = null, Notifier notifier = null)
+        public RenewalsViewModel(IUnitOfWork unitOfWork, IMapper mapper, IDialogService dialogService = null, Notifier notifier = null, IReportService reportService = null)
             : base(unitOfWork, mapper)
         {
             _unitOfWork = unitOfWork;
