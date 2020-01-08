@@ -594,7 +594,7 @@
                             <RadioButton Margin="10,5,10,0" GroupName="DividentScale" Command="{Binding DividentScaleFilterCommand}" CommandParameter="true">Reduced</RadioButton>
                         </StackPanel>
                     </Grid>
-                    <DataGrid AutoGenerateColumns="False" x:Name="illustration" IsReadOnly="False" Grid.Row="1" 
+                <DataGrid AutoGenerateColumns="False" x:Name="illustration" IsReadOnly="False" Grid.Row="1" CanUserReorderColumns="False" 
                     ItemsSource="{Binding PolicyIllustrationCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" 
                     CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="40" RowHeaderWidth="10" SelectedItem="{Binding SelectedIllustration}">
                         <DataGrid.Columns>

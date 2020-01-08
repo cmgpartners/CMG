@@ -12,6 +12,7 @@ using CMG.Application.Mapper;
 using CMG.Service.Interface;
 using CMG.Service;
 using System.Threading;
+using System.DirectoryServices.AccountManagement;
 
 namespace CMG.UI
 {
@@ -38,6 +39,18 @@ namespace CMG.UI
                 App.Current.Shutdown();
             }
 
+            using (var ctx = new PrincipalContext(ContextType.Domain))
+            {
+                using (var user = UserPrincipal.FindByIdentity(ctx, Environment.UserName))
+                {
+                    if(user == null)
+                    {
+                        MessageBox.Show("Sorry, you do not have access to the application", "Access Denied");
+                        App.Current.Shutdown();
+                    }
+                }
+            }
+
             var configurationBuilder = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile("appsettings.json");
@@ -58,6 +71,7 @@ namespace CMG.UI
             services.AddDbContext<pb2Context>(connection => connection.UseSqlServer(configuration.GetConnectionString("Default")));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IDialogService, DialogService>();
+            services.AddScoped<IReportService, ReportService>();
             services.AddTransient(typeof(MainWindow));
 
             var mappingConfig = new MapperConfiguration(mc =>
