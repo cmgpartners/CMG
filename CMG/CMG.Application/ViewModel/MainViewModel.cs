@@ -115,6 +115,16 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("PolicyNumber");
             }
         }
+        private string _entityType;
+        public string EntityType
+        {
+            get { return _entityType; }
+            set
+            {
+                _entityType = value;
+                OnPropertyChanged("EntityType");
+            }
+        }
         private string _companyName;
         public string CompanyName
         {

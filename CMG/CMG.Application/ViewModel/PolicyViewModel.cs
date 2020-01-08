@@ -153,6 +153,18 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("Policies");
             }
         }
+
+        private List<string> _entityTypes;
+        public List<string> EntityTypes
+        {
+            get { return _entityTypes; }
+            set
+            {
+                _entityTypes = value;
+                OnPropertyChanged("EntityTypes");
+            }
+        }
+
         private ViewClientSearchDto _policySelectedClient;
         public ViewClientSearchDto PolicySelectedClient
         {
@@ -240,16 +252,6 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("SelectedIllustration");
                 CancelClientNotes();
                 CancelInternalNotes();
-            }
-        }
-        private ViewComboDto _selectedClientType;
-        public ViewComboDto SelectedClientType
-        {
-            get { return _selectedClientType; }
-            set
-            {
-                _selectedClientType = value;
-                OnPropertyChanged("SelectedClientType");
             }
         }
         private bool _isPolicyNotesEditVisible = false;
@@ -382,7 +384,7 @@ namespace CMG.Application.ViewModel
         private void LoadData()
         {
             GetComboData();
-            GetPolicies();
+            GetAutoSuggestionLists();
         }
         private void Search()
         {
@@ -408,7 +410,7 @@ namespace CMG.Application.ViewModel
                 && string.IsNullOrEmpty(FirstName)
                 && string.IsNullOrEmpty(CommanName)
                 && string.IsNullOrEmpty(LastName)
-                && SelectedClientType == null)
+                && string.IsNullOrEmpty(EntityType))
             {
                 isValid = false;
                 _notifier.ShowError("Enter valid information to search client");
@@ -421,14 +423,20 @@ namespace CMG.Application.ViewModel
                     isValid = CompanyNames.Any(x => x.ToLower().Equals(CompanyName.ToString().ToLower().Trim()));
                     if (!isValid)
                         _notifier.ShowError("Select valid company name");
-
                 }
+
                 if (!string.IsNullOrEmpty(PolicyNumber))
                 {
                     isValid = Policies.Any(x => x.ToLower().Equals(PolicyNumber.ToLower().Trim()));
                     if (!isValid)
                         _notifier.ShowError("Select valid Policy number");
+                }
 
+                if (!string.IsNullOrEmpty(EntityType))
+                {
+                    isValid = EntityTypes.Any(x => x.ToLower().Equals(EntityType.ToLower().Trim()));
+                    if (!isValid)
+                        _notifier.ShowError("Select valid entity type");
                 }
             }
 
@@ -450,24 +458,25 @@ namespace CMG.Application.ViewModel
             {
                 BuildFilterByContains("Commonname", CommanName, searchBy);
             }
-            if (SelectedClientType != null)
-            {
-                BuildFilterByEquals("EntityType", SelectedClientType.FieldCode.Trim(), searchBy);
-            }
+            
             if (!string.IsNullOrEmpty(PolicyNumber))
             {
                 BuildFilterByContains("PolicyNumber", PolicyNumber.Trim(), searchBy);
             }
             if (!string.IsNullOrEmpty(CompanyName))
             {
-                var companyCode = CompanyCollection.Where(c => c.Description == CompanyName).FirstOrDefault()?.FieldCode;
+                var companyCode = CompanyCollection.Where(c => c.Description.ToLower() == CompanyName.Trim().ToLower()).FirstOrDefault()?.FieldCode;
                 if (!string.IsNullOrEmpty(companyCode))
                 {
-                    BuildFilterByEquals("CompanyName", companyCode, searchBy);
+                    BuildFilterByEquals("CompanyName", companyCode.Trim(), searchBy);
                 }
-                else
+            }
+            if (!string.IsNullOrEmpty(EntityType))
+            {
+                var entityTypeCode = ClientTypeCollection.Where(c => c.Description.ToLower() == EntityType.Trim().ToLower()).FirstOrDefault()?.FieldCode;
+                if (!string.IsNullOrEmpty(entityTypeCode))
                 {
-                    //show error message company not exist
+                    BuildFilterByEquals("EntityType", entityTypeCode.Trim(), searchBy);
                 }
             }
 
@@ -496,11 +505,13 @@ namespace CMG.Application.ViewModel
             filterBy.LessThan = toValue;
             searchBy.Add(filterBy);
         }
-        private void GetPolicies()
+        private void GetAutoSuggestionLists()
         {
             var policies = _unitOfWork.Policies.GetAllPolicyNumber();
             var temppolicies = policies.Select(r => _mapper.Map<ViewPolicyListDto>(r)).ToList();
             Policies = temppolicies.Select(r => r.PolicyNumber).ToList();
+
+            EntityTypes = ClientTypeCollection.Select(r => r.Description).ToList();
         }
         private void GetPolicyCollection()
         {
