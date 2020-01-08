@@ -84,19 +84,7 @@ namespace CMG.UI.View
         }
         private void ButtonPolicyEditOpen_Click(object sender, RoutedEventArgs e)
         {
-            DropShadowBitmapEffect myDropShadowEffect = new DropShadowBitmapEffect();
-            Color myShadowColor = new Color();
-            myShadowColor.ScA = 1;
-            myShadowColor.ScB = 0;
-            myShadowColor.ScG = 0;
-            myShadowColor.ScR = 0;
-            myDropShadowEffect.Color = myShadowColor;
-            myDropShadowEffect.Direction = 90; // 180; //320
-            myDropShadowEffect.ShadowDepth = 15;
-            myDropShadowEffect.Softness = 1;
-            myDropShadowEffect.Opacity = 0.5;
-            PolicyEdit.BitmapEffect = myDropShadowEffect;
-
+            
             PolicyEdit.Visibility = Visibility.Visible;
             PolicyEdit.Width = 700;
         }
