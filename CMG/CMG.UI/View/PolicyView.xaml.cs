@@ -8,6 +8,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -24,7 +25,6 @@ namespace CMG.UI.View
         {
             InitializeComponent();
         }
-
         private void ButtonSearchSliderClose_Click(object sender, RoutedEventArgs e)
         {
             
@@ -84,10 +84,10 @@ namespace CMG.UI.View
         }
         private void ButtonPolicyEditOpen_Click(object sender, RoutedEventArgs e)
         {
+            
             PolicyEdit.Visibility = Visibility.Visible;
             PolicyEdit.Width = 700;
         }
-
         private void ButtonPolicyEditClose_Click(object sender, RoutedEventArgs e)
         {
             var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(600) };
