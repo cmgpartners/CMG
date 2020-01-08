@@ -34,7 +34,7 @@ namespace CMG.Application.ViewModel
         #endregion
 
         #region Constructor
-        public PolicyViewModel(IUnitOfWork unitOfWork, IMapper mapper, IDialogService dialogService = null, Notifier notifier = null) 
+        public PolicyViewModel(IUnitOfWork unitOfWork, IMapper mapper, IDialogService dialogService = null, Notifier notifier = null)
             : base(unitOfWork, mapper)
         {
             _unitOfWork = unitOfWork;
@@ -43,32 +43,23 @@ namespace CMG.Application.ViewModel
             _dialogService = dialogService;
             LoadData();
         }
+        
+        public PolicyViewModel(IUnitOfWork unitOfWork, IMapper mapper, ViewClientSearchDto selectedClientInput)
+               : base(unitOfWork, mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+            LoadData();
+
+            if (selectedClientInput != null)
+            {
+                PolicySelectedClient = selectedClientInput;
+                GetPolicyCollection();
+            }
+        }
         #endregion Constructor
 
         #region Properties
-        private ObservableCollection<ViewClientSearchDto> _clientCollection;
-        public ObservableCollection<ViewClientSearchDto> ClientCollection
-        {
-            get { return _clientCollection; }
-            set
-            {
-                _clientCollection = value;
-                OnPropertyChanged("ClientCollection");
-                OnPropertyChanged("IsPaginationVisible");
-            }
-        }
-
-        private ObservableCollection<ViewPolicyListDto> _policyCollection;
-        public ObservableCollection<ViewPolicyListDto> PolicyCollection
-        {
-            get { return _policyCollection; }
-            set
-            {
-                _policyCollection = value;
-                OnPropertyChanged("PolicyCollection");
-            }
-        }
-
         private ObservableCollection<ViewPolicyIllustrationDto> _policyIllustrationCollection;
         public ObservableCollection<ViewPolicyIllustrationDto> PolicyIllustrationCollection
         {
@@ -91,7 +82,7 @@ namespace CMG.Application.ViewModel
         public List<ViewComboDto> ClientTypeCollection
         {
             get { return _clientTypeCollection; }
-            set {_clientTypeCollection = value;}
+            set { _clientTypeCollection = value; }
         }
 
         private List<ViewComboDto> _policyTypeCollection;
@@ -109,12 +100,12 @@ namespace CMG.Application.ViewModel
         }
 
         private List<ViewComboDto> _currencyCollection;
-        public  List<ViewComboDto> CurrencyCollection
+        public List<ViewComboDto> CurrencyCollection
         {
             get { return _currencyCollection; }
             set { _currencyCollection = value; }
         }
-        
+
         private List<ViewComboDto> _statusTypeCollection;
         public List<ViewComboDto> StatusTypeCollection
         {
@@ -152,7 +143,7 @@ namespace CMG.Application.ViewModel
             get { return _categoryCollection; }
             set { _categoryCollection = value; }
         }
-	    private List<string> _policies;
+        private List<string> _policies;
         public List<string> Policies
         {
             get { return _policies; }
@@ -162,17 +153,14 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("Policies");
             }
         }
-        private ViewClientSearchDto _selectedClient;
-        public ViewClientSearchDto SelectedClient
+        private ViewClientSearchDto _policySelectedClient;
+        public ViewClientSearchDto PolicySelectedClient
         {
-            get { return _selectedClient; }
-            set 
-            { 
-                _selectedClient = value;
-                OnPropertyChanged("SelectedClient");
-                OnPropertyChanged("IsClientSelected");
-                OnPropertyChanged("IsPolicyDetailVisible");
-                GetPolicyCollection();
+            get { return _policySelectedClient; }
+            set
+            {
+                _policySelectedClient = value;
+                OnPropertyChanged("PolicySelectedClient");
             }
         }
 
@@ -219,7 +207,7 @@ namespace CMG.Application.ViewModel
                 selectedPolicyFrequencyType = value;
                 OnPropertyChanged("SelectedPolicyFrequencyType");
             }
-        }        
+        }
         private ViewPolicyIllustrationDto _selectedIllustration;
 
         private ViewComboDto selectedPolicyType;
@@ -264,101 +252,6 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("SelectedClientType");
             }
         }
-
-        private string _commanName;
-        public string CommanName
-        {
-            get
-            {
-                return _commanName;
-            }
-            set
-            {
-                _commanName = value;
-                OnPropertyChanged("CommanName");
-            }
-        }
-        
-        private string _firstName;
-        public string FirstName
-        {
-            get
-            {
-                return _firstName;
-            }
-            set
-            {
-                _firstName = value;
-                OnPropertyChanged("FirstName");
-            }
-        }
-
-        private string _lastName;
-        public string LastName
-        {
-            get
-            {
-                return _lastName;
-            }
-            set
-            {
-                _lastName = value;
-                OnPropertyChanged("LastName");
-            }
-        }
-
-        private string _policyNumber;
-        public string PolicyNumber
-        {
-            get { return _policyNumber; }
-            set
-            {
-                _policyNumber = value;
-                OnPropertyChanged("PolicyNumber");
-            }
-        }
-
-        private string _companyName;
-        public string CompanyName
-        {
-            get { return _companyName; }
-            set
-            {
-                _companyName = value;
-                OnPropertyChanged("CompanyName");
-            }
-        }
-        
-        private DateTime? _fromDate;
-        public DateTime? FromDate
-        {
-            get { return _fromDate; }
-            set
-            {
-                _fromDate = value;
-                OnPropertyChanged("FromDate");
-            }
-        }
-        private DateTime? _toDate;
-        public DateTime? ToDate
-        {
-            get { return _toDate; }
-            set
-            {
-                _toDate = value;
-                OnPropertyChanged("ToDate");
-            }
-        }
-        public bool IsClientSelected
-        {
-            get { return SelectedClient != null ? true : false ; }
-        }
-
-        public bool IsPolicyDetailVisible
-        {
-            get { return SelectedClient == null ? true : false; }
-        }
-
         private bool _isPolicyNotesEditVisible = false;
         public bool IsPolicyNotesEditVisible
         {
@@ -398,6 +291,7 @@ namespace CMG.Application.ViewModel
             get { return _isInternalNotesSaveVisible; }
             set { _isInternalNotesSaveVisible = value; OnPropertyChanged("IsInternalNotesSaveVisible"); }
         }
+
         #region command properties
         public ICommand SearchClientCommand
         {
@@ -405,7 +299,7 @@ namespace CMG.Application.ViewModel
         }
         public ICommand ViewIllustrationCommand
         {
-            get { return CreateCommand(ViewIllustration);  }
+            get { return CreateCommand(ViewIllustration); }
         }
         public ICommand SaveIllustrationCommand
         {
@@ -489,7 +383,7 @@ namespace CMG.Application.ViewModel
         {
             GetComboData();
             GetPolicies();
-        }        
+        }
         private void Search()
         {
             if (IsValidSearchCriteria())
@@ -498,10 +392,10 @@ namespace CMG.Application.ViewModel
                 var dataSearchBy = _unitOfWork.People.Find(searchQuery);
                 var dataCollection = new ObservableCollection<ViewClientSearchDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewClientSearchDto>(r)).ToList());
 
-            ClientCollection = new ObservableCollection<ViewClientSearchDto>(dataCollection.Select(x => {
-                                    x.ClientType = string.IsNullOrEmpty(x.ClientType.Trim()) ? "" : ClientTypeCollection.Where(c => c.FieldCode == x.ClientType.Trim()).FirstOrDefault()?.Description;
-                                    x.Status = string.IsNullOrEmpty(x.Status.Trim()) ? "" : PersonStatusCollection.Where(c => c.FieldCode == x.Status.Trim()).FirstOrDefault()?.Description;
-                                    x.SVCType = string.IsNullOrEmpty(x.SVCType.Trim()) ? "" : SVCTypeCollection.Where(c => c.FieldCode == x.SVCType.Trim()).FirstOrDefault()?.Description;
+                ClientCollection = new ObservableCollection<ViewClientSearchDto>(dataCollection.Select(x => {
+                    x.ClientType = string.IsNullOrEmpty(x.ClientType.Trim()) ? "" : ClientTypeCollection.Where(c => c.FieldCode == x.ClientType.Trim()).FirstOrDefault()?.Description;
+                    x.Status = string.IsNullOrEmpty(x.Status.Trim()) ? "" : PersonStatusCollection.Where(c => c.FieldCode == x.Status.Trim()).FirstOrDefault()?.Description;
+                    x.SVCType = string.IsNullOrEmpty(x.SVCType.Trim()) ? "" : SVCTypeCollection.Where(c => c.FieldCode == x.SVCType.Trim()).FirstOrDefault()?.Description;
                     return x;
                 }));
             }
@@ -509,7 +403,7 @@ namespace CMG.Application.ViewModel
         private bool IsValidSearchCriteria()
         {
             bool isValid = true;
-            if(string.IsNullOrEmpty(CompanyName)
+            if (string.IsNullOrEmpty(CompanyName)
                 && string.IsNullOrEmpty(PolicyNumber)
                 && string.IsNullOrEmpty(FirstName)
                 && string.IsNullOrEmpty(CommanName)
@@ -572,7 +466,7 @@ namespace CMG.Application.ViewModel
                     BuildFilterByEquals("CompanyName", companyCode, searchBy);
                 }
                 else
-                { 
+                {
                     //show error message company not exist
                 }
             }
@@ -610,17 +504,17 @@ namespace CMG.Application.ViewModel
         }
         private void GetPolicyCollection()
         {
-            if (SelectedClient != null)
+            if (PolicySelectedClient != null)
             {
                 SearchQuery searchQuery = new SearchQuery();
                 List<FilterBy> searchBy = new List<FilterBy>();
-                BuildFilterByEquals("keynump", SelectedClient.Keynump.ToString(), searchBy);
+                BuildFilterByEquals("keynump", PolicySelectedClient.Keynump.ToString(), searchBy);
                 searchQuery.FilterBy = searchBy;
 
                 var dataSearchBy = _unitOfWork.Policies.Find(searchQuery);
 
                 var policyCollection = (dataSearchBy.Result.Select(r => _mapper.Map<ViewPolicyListDto>(r)).ToList());
-
+                
                 PolicyCollection = new ObservableCollection<ViewPolicyListDto>(policyCollection.Select(x =>
                 {
                     x.Type = string.IsNullOrEmpty(x.Type.Trim()) ? "" : PolicyTypeCollection.Where(c => c.FieldCode == x.Type.Trim()).FirstOrDefault()?.Description;
@@ -637,7 +531,7 @@ namespace CMG.Application.ViewModel
                     return x;
                 }));
 
-                if(PolicyCollection.Count > 0)
+                if (PolicyCollection.Count > 0)
                 {
                     SelectedPolicy = PolicyCollection[0];
                 }
@@ -645,11 +539,11 @@ namespace CMG.Application.ViewModel
         }
         private void ViewIllustration(object dividentScale)
         {
-            if(SelectedPolicy != null)
+            if (SelectedPolicy != null)
             {
                 var policyIllustrations = _unitOfWork.PolicyIllustration.GetPolicyIllustration(SelectedPolicy.Id, Convert.ToInt32(dividentScale));
-                PolicyIllustrationCollection = new ObservableCollection<ViewPolicyIllustrationDto>(policyIllustrations.Select(r => _mapper.Map<ViewPolicyIllustrationDto>(r))); 
-                if(PolicyIllustrationCollection.Count > 0)
+                PolicyIllustrationCollection = new ObservableCollection<ViewPolicyIllustrationDto>(policyIllustrations.Select(r => _mapper.Map<ViewPolicyIllustrationDto>(r)));
+                if (PolicyIllustrationCollection.Count > 0)
                 {
                     SelectedIllustration = PolicyIllustrationCollection[0];
                 }
@@ -676,7 +570,7 @@ namespace CMG.Application.ViewModel
         }
         private void SavePolicy()
         {
-            if(SelectedPolicy != null 
+            if (SelectedPolicy != null
                 && IsValidPolicy())
             {
                 var originalEntity = _unitOfWork.Policies.GetById(SelectedPolicy.Id);
@@ -696,13 +590,14 @@ namespace CMG.Application.ViewModel
 
                 var updatedEntity = _unitOfWork.Policies.GetById(entity.Keynumo);
                 SelectedPolicy = _mapper.Map<ViewPolicyListDto>(updatedEntity);
+                PolicySelectedClient = SelectedClient;
                 GetPolicyCollection();
                 _notifier.ShowSuccess("Policy updated successfully");
             }
         }
         private bool ValidateIllustration()
         {
-            if(!decimal.TryParse(SelectedIllustration.AnnualDepositActual.ToString(), out decimal ada))
+            if (!decimal.TryParse(SelectedIllustration.AnnualDepositActual.ToString(), out decimal ada))
             {
                 _notifier.ShowError("Actual annual deposit value is invalid");
                 return false;
@@ -764,15 +659,14 @@ namespace CMG.Application.ViewModel
             }
             return true;
         }
-
         private bool IsValidPolicy()
         {
-            if(string.IsNullOrEmpty(SelectedPolicy.CompanyName.Trim()))
+            if (string.IsNullOrEmpty(SelectedPolicy.CompanyName.Trim()))
             {
                 _notifier.ShowError("Company name is invalid");
                 return false;
             }
-            if(!decimal.TryParse(SelectedPolicy.FaceAmount.ToString(), out decimal faceAmount))
+            if (!decimal.TryParse(SelectedPolicy.FaceAmount.ToString(), out decimal faceAmount))
             {
                 _notifier.ShowError("Faceamount is invalid");
                 return false;
@@ -866,14 +760,14 @@ namespace CMG.Application.ViewModel
             {
                 _notifier.ShowError("Error occured while updating policy notes");
             }
-           
+
         }
         private void CancelPolicyNotes()
         {
             IsPolicyNotesEditVisible = true;
             IsPolicyNotesSaveVisible = false;
             var originalPolicy = _unitOfWork.Policies.GetById(SelectedPolicy?.Id);
-            if(originalPolicy != null)
+            if (originalPolicy != null)
                 SelectedPolicy.PolicyNotes = originalPolicy.Comment;
             OnPropertyChanged("SelectedPolicy");
         }
@@ -899,7 +793,7 @@ namespace CMG.Application.ViewModel
                     _notifier.ShowSuccess("Policy Notes updated successfully");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _notifier.ShowError("Error occured while updating policy notes");
             }
