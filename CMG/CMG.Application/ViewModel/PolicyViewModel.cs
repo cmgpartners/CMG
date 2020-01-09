@@ -270,10 +270,6 @@ namespace CMG.Application.ViewModel
         }
 
         #region command properties
-        public ICommand SearchClientCommand
-        {
-            get { return CreateCommand(Search); }
-        }
         public ICommand ViewIllustrationCommand
         {
             get { return CreateCommand(ViewIllustration); }
