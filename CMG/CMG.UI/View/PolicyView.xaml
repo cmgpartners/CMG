@@ -131,11 +131,13 @@
                     <WrapPanel Orientation="Horizontal">
                         <StackPanel>
                             <TextBlock Text="Common Name" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3"  Text="{Binding DataContext.CommanName, RelativeSource={RelativeSource AncestorType=Window}}" Foreground="White" FontSize="14" Width="85"></TextBox>
+                            <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
+                                     Foreground="White" FontSize="14"
+                                     Text="{Binding DataContext.CommanName, RelativeSource={RelativeSource AncestorType=Window}}"  Width="85"></TextBox>
                         </StackPanel>
                         <StackPanel>
                             <TextBlock Text="Last Name" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Foreground="White" FontSize="14" 
+                            <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
                                      Foreground="White" FontSize="14" 
                                      Text="{Binding DataContext.LastName, RelativeSource={RelativeSource AncestorType=Window}}" Width="85"></TextBox>
                         </StackPanel>
@@ -152,7 +154,8 @@
                                 Foreground="White" 
                                 BorderBrush="#FFCEEAFF" 
                                 BorderThickness="0 0 0 3" 
-                                Margin="19 0 10 0" 
+                                Margin="10 0 15 0" 
+                                Width="85"
                                 AutoSuggestionList="{Binding EntityTypes}" 
                                 SelectedValue="{Binding DataContext.EntityType, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
                             </uc:AutoCompleteBox>

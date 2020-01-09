@@ -493,6 +493,7 @@ namespace CMG.Application.ViewModel
                 }
             }
             return null;
+        }
         #endregion Methods
     }
 }
