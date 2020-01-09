@@ -72,6 +72,7 @@ namespace CMG.UI
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IDialogService, DialogService>();
             services.AddScoped<IReportService, ReportService>();
+            services.AddMemoryCache();
             services.AddTransient(typeof(MainWindow));
 
             var mappingConfig = new MapperConfiguration(mc =>

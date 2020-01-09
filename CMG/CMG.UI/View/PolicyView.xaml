@@ -124,74 +124,75 @@
                     </Button>
                 </DockPanel>
                 <Grid Grid.Row="1">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="0" Grid.Column="0">
-                            <TextBlock Text="Common Name" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3"  Text="{Binding CommanName}" Foreground="White" FontSize="14" MinWidth="150"></TextBox>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <WrapPanel Orientation="Horizontal">
+                        <StackPanel>
+                            <TextBlock Text="Common Name" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                            <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3"  Text="{Binding CommanName}" Foreground="White" FontSize="14" Width="85"></TextBox>
                         </StackPanel>
-                        <StackPanel Grid.Row="0" Grid.Column="1">
-                            <TextBlock Text="Last Name" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Foreground="White" FontSize="14"  Text="{Binding LastName}" MinWidth="150"></TextBox>
+                        <StackPanel>
+                            <TextBlock Text="Last Name" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                            <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Foreground="White" FontSize="14"  Text="{Binding LastName}" Width="85"></TextBox>
                         </StackPanel>
-                        <StackPanel Grid.Row="0" Grid.Column="2">
-                            <TextBlock Text="First Name" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Foreground="White" FontSize="14"  Text="{Binding FirstName}" MinWidth="150"></TextBox>
+                        <StackPanel>
+                            <TextBlock Text="First Name" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                            <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Foreground="White" FontSize="14"  Text="{Binding FirstName}" Width="85"></TextBox>
                         </StackPanel>
-                        <StackPanel Grid.Row="0" Grid.Column="3">
-                            <TextBlock Text="Entity Type" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <ComboBox ItemsSource="{Binding ClientTypeCollection}" SelectedValue="{Binding SelectedClientType}" DisplayMemberPath="Description" Foreground="White" FontSize="13" Margin="0 0 17 0" Style="{StaticResource EntityTypeStyle}">
+                        <StackPanel>
+                            <TextBlock Text="Entity Type" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                            <ComboBox ItemsSource="{Binding ClientTypeCollection}" SelectedValue="{Binding SelectedClientType}" Width="85" DisplayMemberPath="Description" Foreground="White" FontSize="13" Margin="10 0 17 0" Style="{StaticResource EntityTypeStyle}">
                             </ComboBox>
-
                         </StackPanel>
-
-                        <StackPanel Grid.Row="1" Grid.Column="0">
-                            <TextBlock Text="Policy #" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                        <StackPanel>
+                            <TextBlock Text="Policy #" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                             <uc:AutoCompleteBox 
                                 x:Name="UserControlPolicyNumber" 
                                 Foreground="White" 
                                 BorderBrush="#FFCEEAFF" 
                                 BorderThickness="0 0 0 3" 
-                                Margin="19 0 10 0" 
+                                Margin="10 0 15 0" 
+                                Width="85"
                                 AutoSuggestionList="{Binding Policies}" 
                                 SelectedValue="{Binding PolicyNumber, UpdateSourceTrigger=PropertyChanged}">
                             </uc:AutoCompleteBox>
                         </StackPanel>
-                        <StackPanel Grid.Row="1" Grid.Column="1">
-                            <TextBlock Text="Company" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                        <StackPanel>
+                            <TextBlock Text="Company" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                             <uc:AutoCompleteBox 
                                 AutoSuggestionList="{Binding CompanyNames}" 
                                 Foreground="White" 
                                 BorderBrush="#FFCEEAFF" 
                                 BorderThickness="0 0 0 3" 
-                                Margin="15 0 10 0"  
+                                Margin="10 0 15 0"  
+                                Width="85"
                                 SelectedValue="{Binding CompanyName, UpdateSourceTrigger=PropertyChanged}">
                             </uc:AutoCompleteBox>
                         </StackPanel>
-
-                        <StackPanel Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2">
-                            <TextBlock Text="Policy Date" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Foreground="White" FontSize="14" Text="" MinWidth="150"></TextBox>
+                        <StackPanel>
+                            <TextBlock Text="Policy Date" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                            <StackPanel Orientation="Horizontal">
+                            <DatePicker Margin="10 2 5 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="80" Foreground="White"/>
+                            <DatePicker Margin="0 2 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="80" Foreground="White"/>
+                            </StackPanel>
                         </StackPanel>
+                    </WrapPanel>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
 
-                        <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Top">
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Top">
                             <Button Content="Show Less Options" BorderBrush="Transparent" FontWeight="Regular" FontSize="12" Background="Transparent" HorizontalAlignment="Left"/>
                             <Button BorderBrush="Transparent" FontWeight="Regular" FontSize="12" Background="Transparent" HorizontalAlignment="Left" Padding="0">
                                 <materialDesign:PackIcon Kind="ArrowUpBoldCircleOutline" VerticalAlignment="Center"  Foreground="White" FontWeight="Bold">
                                 </materialDesign:PackIcon>
                             </Button>
                         </StackPanel>
-                        <StackPanel Grid.Row="2" Grid.Column="4">
+                        <StackPanel Grid.Column="1" HorizontalAlignment="Right" Margin="0 0 20 0">
                             <Button Content="Search" Width="85" Command="{Binding SearchClientCommand}" IsDefault="True"></Button>
                         </StackPanel>
                     </Grid>

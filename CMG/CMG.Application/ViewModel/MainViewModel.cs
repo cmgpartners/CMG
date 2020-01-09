@@ -7,6 +7,9 @@ using System.Linq;
 using ToastNotifications;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using CMG.DataAccess.Domain;
+using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
 
 namespace CMG.Application.ViewModel
 {
@@ -15,16 +18,24 @@ namespace CMG.Application.ViewModel
         #region MemberVariables
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IMemoryCache _memoryCache;
         private readonly Notifier _notifier;
+        private Dictionary<string, bool> searchOptions;
+        private const string optionsCacheKey = "options";
+        private const string searchOptionsKey = "searchOptions";
+        
         #endregion MemberVariables
 
         #region Constructor
-        public MainViewModel(IUnitOfWork unitOfWork, IMapper mapper, Notifier notifier = null)
+        public MainViewModel(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCache memoryCache = null, Notifier notifier = null)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _memoryCache = memoryCache;
             _notifier = notifier;
+            GetUserOptions();
         }
+     
         #endregion Constructor
 
         #region Properties
@@ -60,6 +71,13 @@ namespace CMG.Application.ViewModel
             get { return _companyNames; }
             set { _companyNames = value; }
         }
+        private List<ViewComboDto> _clientTypeCollection;
+        public List<ViewComboDto> ClientTypeCollection
+        {
+            get { return _clientTypeCollection; }
+            set { _clientTypeCollection = value; }
+        }
+
         private string _lastName;
         public string LastName
         {
@@ -99,12 +117,6 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("CommanName");
             }
         }
-        private List<ViewComboDto> _clientTypeCollection;
-        public List<ViewComboDto> ClientTypeCollection
-        {
-            get { return _clientTypeCollection; }
-            set { _clientTypeCollection = value; }
-        }
         private string _policyNumber;
         public string PolicyNumber
         {
@@ -124,6 +136,23 @@ namespace CMG.Application.ViewModel
                 _companyName = value;
                 OnPropertyChanged("CompanyName");
             }
+        }
+
+        public bool IsLastNameVisible
+        {
+            get { return IsSearchFieldVisible("LastName") ?? true; }
+        }
+        public bool IsFirstNameVisible
+        {
+            get { return IsSearchFieldVisible("FirstName") ?? true; }
+        }
+        public bool IsCommonNameVisible
+        {
+            get { return IsSearchFieldVisible("CommanName") ?? true; }
+        }
+        public bool IsPolicyNumberVisible
+        {
+            get { return IsSearchFieldVisible("PolicyNumber") ?? false; }
         }
         public bool IsClientSelected
         {
@@ -263,6 +292,34 @@ namespace CMG.Application.ViewModel
                 renewalsViewModel.Copy(parameter);
                 CopiedCommission = renewalsViewModel.CopiedCommission;
             }
+        }
+
+        public void GetUserOptions()
+        {
+            
+            if(_memoryCache != null)
+            {
+                List<Options> options = default;
+                if (!_memoryCache.TryGetValue(optionsCacheKey, out options))
+                {
+                    options = _unitOfWork.Options.All().Where(o => o.User == System.Environment.UserName).ToList();
+                    _memoryCache.Set(optionsCacheKey, options);
+                }
+                var searchOptionsValue = options.Where(o => o.Key == searchOptionsKey).FirstOrDefault()?.Value;
+                searchOptions = searchOptionsValue != null ? JsonConvert.DeserializeObject<Dictionary<string, bool>>(searchOptionsValue) : default;
+            }
+        }
+
+        public bool? IsSearchFieldVisible(string field)
+        {
+            if (searchOptions != null && searchOptions.Count > 0)
+            {
+                if (searchOptions.ContainsKey(field))
+                {
+                    return searchOptions[field];
+                }
+            }
+            return null;
         }
         #endregion Methods
     }

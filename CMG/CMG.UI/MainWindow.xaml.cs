@@ -14,6 +14,7 @@ using System;
 using CMG.Service.Interface;
 using System.Windows.Threading;
 using System.Windows.Media;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace CMG.UI
 {
@@ -24,6 +25,7 @@ namespace CMG.UI
     {
         public readonly IMapper _mapper;
         public readonly IUnitOfWork _unitOfWork;
+        public readonly IMemoryCache _memoryCache;
         public readonly IDialogService _dialogService;
         public readonly IReportService _reportService;
         public string _navigateURL = "https://cmgpartners.my.salesforce.com/";
@@ -31,15 +33,16 @@ namespace CMG.UI
         private Notifier _notifier;
 
         public int[] years { get; set; }
-        public MainWindow(IUnitOfWork unitOfWork, IMapper mapper, IDialogService dialogService = null, IReportService reportService = null)
+        public MainWindow(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCache memoryCache = null, IDialogService dialogService = null, IReportService reportService = null)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _memoryCache = memoryCache;
             _dialogService = dialogService;
             _reportService = reportService;
             _notifier = InitializeNotifier();
             InitializeComponent();
-            _mainViewModel = new MainViewModel(_unitOfWork, _mapper, _notifier);
+            _mainViewModel = new MainViewModel(_unitOfWork, _mapper, _memoryCache, _notifier);
             lstNavItems.SelectedItem = lstNavItems.Items[0];
         }
         private void LstNavItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -84,16 +87,6 @@ namespace CMG.UI
                     _mainViewModel.SelectedIndexLeftNavigation = (int)LeftNavigation.Search;
                     SearchViewModel searchViewModel = new SearchViewModel(_unitOfWork, _mapper, _notifier);
                     _mainViewModel.SelectedViewModel = searchViewModel;
-                    DataContext = _mainViewModel;
-                }
-            }
-            else if (lstNavigation.SelectedIndex == 5)
-            {
-                if (!(_mainViewModel.SelectedViewModel is PolicyViewModel))
-                {
-                    _mainViewModel.SelectedIndexLeftNavigation = (int)LeftNavigation.Search;
-                    PolicyViewModel policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, _dialogService, _notifier);
-                    _mainViewModel.SelectedViewModel = policyViewModel;
                     DataContext = _mainViewModel;
                 }
             }
@@ -150,7 +143,7 @@ namespace CMG.UI
         {
             PolicyMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
             CloseCommissionMenu();
-            PolicyViewModel policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, _dialogService, _notifier);
+            PolicyViewModel policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
             _mainViewModel.SelectedViewModel = policyViewModel;
             DataContext = _mainViewModel;
         }

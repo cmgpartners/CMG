@@ -11,6 +11,7 @@ using System.Linq;
 using System.Windows.Input;
 using ToastNotifications;
 using ToastNotifications.Messages;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace CMG.Application.ViewModel
 {
@@ -34,8 +35,8 @@ namespace CMG.Application.ViewModel
         #endregion
 
         #region Constructor
-        public PolicyViewModel(IUnitOfWork unitOfWork, IMapper mapper, IDialogService dialogService = null, Notifier notifier = null)
-            : base(unitOfWork, mapper)
+        public PolicyViewModel(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCache memoryCache = null, IDialogService dialogService = null, Notifier notifier = null)
+            : base(unitOfWork, mapper, memoryCache)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;

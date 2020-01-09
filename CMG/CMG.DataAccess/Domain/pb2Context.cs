@@ -42,6 +42,8 @@ namespace CMG.DataAccess.Domain
         public virtual DbSet<Todo> Todo { get; set; }
         public virtual DbSet<Withd> Withd { get; set; }
 
+        public virtual DbSet<Options> Options { get; set; }
+
         // Unable to generate entity type for table 'dbo.KEY_TABLE'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.TEMPLATES1'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.COMM_BACKUP'. Please see the warning messages.
@@ -3147,6 +3149,12 @@ namespace CMG.DataAccess.Domain
                     .HasColumnName("YRMO")
                     .HasMaxLength(6)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Options>(entity =>
+            {
+                entity.HasKey(e => e.Id)
+                    .ForSqlServerIsClustered(false);
             });
         }
 
