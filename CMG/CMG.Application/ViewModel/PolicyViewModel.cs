@@ -112,31 +112,6 @@ namespace CMG.Application.ViewModel
             get { return _statusTypeCollection; }
             set { _statusTypeCollection = value; }
         }
-
-        private List<ViewComboDto> _companyCollection;
-        public List<ViewComboDto> CompanyCollection
-        {
-            get { return _companyCollection; }
-            set { _companyCollection = value; }
-        }
-        private List<string> _companyNames;
-        public List<string> CompanyNames
-        {
-            get { return _companyNames; }
-            set { _companyNames = value; }
-        }
-        private List<ViewComboDto> _personStatusCollection;
-        public List<ViewComboDto> PersonStatusCollection
-        {
-            get { return _personStatusCollection; }
-            set { _personStatusCollection = value; }
-        }
-        private List<ViewComboDto> _svcTypeCollection;
-        public List<ViewComboDto> SVCTypeCollection
-        {
-            get { return _svcTypeCollection; }
-            set { _svcTypeCollection = value; }
-        }
         private List<ViewComboDto> _categoryCollection;
         public List<ViewComboDto> CategoryCollection
         {
@@ -385,104 +360,7 @@ namespace CMG.Application.ViewModel
         {
             GetComboData();
             GetAutoSuggestionLists();
-        }
-        private void Search()
-        {
-            if (IsValidSearchCriteria())
-            {
-                SearchQuery searchQuery = BuildSearchQuery();
-                var dataSearchBy = _unitOfWork.People.Find(searchQuery);
-                var dataCollection = new ObservableCollection<ViewClientSearchDto>(dataSearchBy.Result.Select(r => _mapper.Map<ViewClientSearchDto>(r)).ToList());
-
-                ClientCollection = new ObservableCollection<ViewClientSearchDto>(dataCollection.Select(x => {
-                    x.ClientType = string.IsNullOrEmpty(x.ClientType.Trim()) ? "" : ClientTypeCollection.Where(c => c.FieldCode == x.ClientType.Trim()).FirstOrDefault()?.Description;
-                    x.Status = string.IsNullOrEmpty(x.Status.Trim()) ? "" : PersonStatusCollection.Where(c => c.FieldCode == x.Status.Trim()).FirstOrDefault()?.Description;
-                    x.SVCType = string.IsNullOrEmpty(x.SVCType.Trim()) ? "" : SVCTypeCollection.Where(c => c.FieldCode == x.SVCType.Trim()).FirstOrDefault()?.Description;
-                    return x;
-                }));
-            }
-        }
-        private bool IsValidSearchCriteria()
-        {
-            bool isValid = true;
-            if (string.IsNullOrEmpty(CompanyName)
-                && string.IsNullOrEmpty(PolicyNumber)
-                && string.IsNullOrEmpty(FirstName)
-                && string.IsNullOrEmpty(CommanName)
-                && string.IsNullOrEmpty(LastName)
-                && string.IsNullOrEmpty(EntityType))
-            {
-                isValid = false;
-                _notifier.ShowError("Enter valid information to search client");
-            }
-
-            if (isValid)
-            {
-                if (!string.IsNullOrEmpty(CompanyName))
-                {
-                    isValid = CompanyNames.Any(x => x.ToLower().Equals(CompanyName.ToString().ToLower().Trim()));
-                    if (!isValid)
-                        _notifier.ShowError("Select valid company name");
-                }
-
-                if (!string.IsNullOrEmpty(PolicyNumber))
-                {
-                    isValid = Policies.Any(x => x.ToLower().Equals(PolicyNumber.ToLower().Trim()));
-                    if (!isValid)
-                        _notifier.ShowError("Select valid Policy number");
-                }
-
-                if (!string.IsNullOrEmpty(EntityType))
-                {
-                    isValid = EntityTypes.Any(x => x.ToLower().Equals(EntityType.ToLower().Trim()));
-                    if (!isValid)
-                        _notifier.ShowError("Select valid entity type");
-                }
-            }
-
-            return isValid;
-        }
-        private SearchQuery BuildSearchQuery()
-        {
-            SearchQuery searchQuery = new SearchQuery();
-            List<FilterBy> searchBy = new List<FilterBy>();
-            if (!string.IsNullOrEmpty(FirstName))
-            {
-                BuildFilterByContains("FirstName", FirstName, searchBy);
-            }
-            if (!string.IsNullOrEmpty(LastName))
-            {
-                BuildFilterByContains("LastName", LastName, searchBy);
-            }
-            if (!string.IsNullOrEmpty(CommanName))
-            {
-                BuildFilterByContains("Commonname", CommanName, searchBy);
-            }
-            
-            if (!string.IsNullOrEmpty(PolicyNumber))
-            {
-                BuildFilterByContains("PolicyNumber", PolicyNumber.Trim(), searchBy);
-            }
-            if (!string.IsNullOrEmpty(CompanyName))
-            {
-                var companyCode = CompanyCollection.Where(c => c.Description.ToLower() == CompanyName.Trim().ToLower()).FirstOrDefault()?.FieldCode;
-                if (!string.IsNullOrEmpty(companyCode))
-                {
-                    BuildFilterByEquals("CompanyName", companyCode.Trim(), searchBy);
-                }
-            }
-            if (!string.IsNullOrEmpty(EntityType))
-            {
-                var entityTypeCode = ClientTypeCollection.Where(c => c.Description.ToLower() == EntityType.Trim().ToLower()).FirstOrDefault()?.FieldCode;
-                if (!string.IsNullOrEmpty(entityTypeCode))
-                {
-                    BuildFilterByEquals("EntityType", entityTypeCode.Trim(), searchBy);
-                }
-            }
-
-            searchQuery.FilterBy = searchBy;
-            return searchQuery;
-        }
+        }        
         private void BuildFilterByContains(string property, string value, List<FilterBy> searchBy)
         {
             FilterBy filterBy = new FilterBy();
