@@ -160,5 +160,14 @@ namespace CMG.UI
                 CollapsibleRow.Height = new GridLength(40);
             };
         }
+
+        private void FileManagerMenu_Click(object sender, RoutedEventArgs e)
+        {
+            FileManagerMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
+            CloseCommissionMenu();
+            FileManagerViewModel fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _dialogService, _notifier);
+            _mainViewModel.SelectedViewModel = fileManagerViewModel;
+            DataContext = _mainViewModel;
+        }
     }
 }

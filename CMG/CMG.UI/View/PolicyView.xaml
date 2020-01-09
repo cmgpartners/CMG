@@ -131,20 +131,31 @@
                     <WrapPanel Orientation="Horizontal">
                         <StackPanel>
                             <TextBlock Text="Common Name" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3"  Text="{Binding CommanName}" Foreground="White" FontSize="14" Width="85"></TextBox>
+                            <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3"  Text="{Binding DataContext.CommanName, RelativeSource={RelativeSource AncestorType=Window}}" Foreground="White" FontSize="14" Width="85"></TextBox>
                         </StackPanel>
                         <StackPanel>
                             <TextBlock Text="Last Name" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Foreground="White" FontSize="14"  Text="{Binding LastName}" Width="85"></TextBox>
+                            <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Foreground="White" FontSize="14" 
+                                     Foreground="White" FontSize="14" 
+                                     Text="{Binding DataContext.LastName, RelativeSource={RelativeSource AncestorType=Window}}" Width="85"></TextBox>
                         </StackPanel>
                         <StackPanel>
                             <TextBlock Text="First Name" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Foreground="White" FontSize="14"  Text="{Binding FirstName}" Width="85"></TextBox>
+                            <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
+                                     Foreground="White" FontSize="14"  
+                                     Text="{Binding DataContext.FirstName, RelativeSource={RelativeSource AncestorType=Window}}" MinWidth="85"></TextBox>
                         </StackPanel>
                         <StackPanel>
                             <TextBlock Text="Entity Type" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <ComboBox ItemsSource="{Binding ClientTypeCollection}" SelectedValue="{Binding SelectedClientType}" Width="85" DisplayMemberPath="Description" Foreground="White" FontSize="13" Margin="10 0 17 0" Style="{StaticResource EntityTypeStyle}">
-                            </ComboBox>
+                            <uc:AutoCompleteBox 
+                                x:Name="UserControlEntityType" 
+                                Foreground="White" 
+                                BorderBrush="#FFCEEAFF" 
+                                BorderThickness="0 0 0 3" 
+                                Margin="19 0 10 0" 
+                                AutoSuggestionList="{Binding EntityTypes}" 
+                                SelectedValue="{Binding DataContext.EntityType, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
+                            </uc:AutoCompleteBox>
                         </StackPanel>
                         <StackPanel>
                             <TextBlock Text="Policy #" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
@@ -156,7 +167,7 @@
                                 Margin="10 0 15 0" 
                                 Width="85"
                                 AutoSuggestionList="{Binding Policies}" 
-                                SelectedValue="{Binding PolicyNumber, UpdateSourceTrigger=PropertyChanged}">
+                                SelectedValue="{Binding DataContext.PolicyNumber, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
                             </uc:AutoCompleteBox>
                         </StackPanel>
                         <StackPanel>
@@ -168,7 +179,7 @@
                                 BorderThickness="0 0 0 3" 
                                 Margin="10 0 15 0"  
                                 Width="85"
-                                SelectedValue="{Binding CompanyName, UpdateSourceTrigger=PropertyChanged}">
+                                SelectedValue="{Binding DataContext.CompanyName, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
                             </uc:AutoCompleteBox>
                         </StackPanel>
                         <StackPanel>
@@ -193,13 +204,13 @@
                             </Button>
                         </StackPanel>
                         <StackPanel Grid.Column="1" HorizontalAlignment="Right" Margin="0 0 20 0">
-                            <Button Content="Search" Width="85" Command="{Binding SearchClientCommand}" IsDefault="True"></Button>
+                            <Button Content="Search" Width="85" Command="{Binding DataContext.SearchClientCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" IsDefault="True"></Button>
                         </StackPanel>
                     </Grid>
                 </Grid>
                 <Grid Grid.Row="2">
                     <DataGrid AutoGenerateColumns="False" x:Name="search" IsReadOnly="True" Background="{x:Null}" GridLinesVisibility="None"
-                          ItemsSource="{Binding ClientCollection}" ColumnHeaderStyle="{StaticResource ClientHeaderStyle}" RowStyle="{StaticResource ClientRowStyle }" 
+                          ItemsSource="{Binding DataContext.ClientCollection, RelativeSource={RelativeSource AncestorType=Window}}" ColumnHeaderStyle="{StaticResource ClientHeaderStyle}" RowStyle="{StaticResource ClientRowStyle }" 
                           SelectionUnit="FullRow" SelectedItem="{Binding SelectedClient}">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="Common Name" Width="105" SortMemberPath="CommonName" CanUserSort="True" HeaderStyle="{StaticResource ClientFirstColumnHeaderStyle }">

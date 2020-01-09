@@ -27,6 +27,9 @@
             <DataTemplate DataType="{x:Type viewModels:PolicyViewModel}" >
                 <views:PolicyView DataContext="{Binding }"></views:PolicyView>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:FileManagerViewModel}">
+                <views:FileManagerView DataContext="{Binding }"></views:FileManagerView>
+            </DataTemplate>
             <Storyboard x:Key="MenuOpen">
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="GridMenu">
                     <EasingDoubleKeyFrame KeyTime="0" Value="0"></EasingDoubleKeyFrame>
@@ -68,6 +71,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="100"></RowDefinition>
                 <RowDefinition Height="230" x:Name="CollapsibleRow"></RowDefinition>
+                <RowDefinition Height="40"></RowDefinition>
                 <RowDefinition Height="40"></RowDefinition>
                 <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
@@ -134,8 +138,10 @@
             </Grid>
 
             <Button  Grid.Row="2" Content="Policies" Style="{StaticResource LeftNavMenuButton}" x:Name="PolicyMenu" Width="145"  Click="PolicyMenu_Click"></Button>
+            
+            <Button  Grid.Row="3" Content="File Manager" Style="{StaticResource LeftNavMenuButton}" x:Name="FileManagerMenu" Width="145"  Click="FileManagerMenu_Click"></Button>
 
-            <Button Grid.Row="3" Style="{StaticResource LeftNavMenuButton}" Width="145">
+            <Button Grid.Row="4" Style="{StaticResource LeftNavMenuButton}" Width="145">
                 <Hyperlink  NavigateUri="http://www.google.com" RequestNavigate="Hyperlink_RequestNavigate"  Style="{StaticResource HyperLinkStyle}">
                     Salesforce
                 </Hyperlink>
