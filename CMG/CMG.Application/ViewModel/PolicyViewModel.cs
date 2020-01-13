@@ -494,6 +494,7 @@ namespace CMG.Application.ViewModel
                 entity.Type = SelectedPolicyType != null ? SelectedPolicyType.FieldCode.Trim() : SelectedPolicy.Type.Substring(0, 1);
                 entity.Company = SelectedPolicyCompany != null ? SelectedPolicyCompany.FieldCode.Trim() : SelectedPolicy.CompanyName.Substring(0, 1);
                 entity.Currency = SelectedPolicyCurrency != null ? SelectedPolicyCurrency.FieldCode.Trim() : SelectedPolicy.Currency.Substring(0, 3);
+                entity.IssueAge = SelectedPolicy.Age.ToString();
                 entity.Risk = SelectedPolicy.Rating.Trim();
                 entity.Cr8Date = SelectedPolicy.PlacedOn;
 
