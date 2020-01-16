@@ -50,7 +50,7 @@ namespace CMG.Application.ViewModel
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             LoadData();
-
+            
             if (selectedClientInput != null)
             {
                 PolicySelectedClient = selectedClientInput;
@@ -118,28 +118,6 @@ namespace CMG.Application.ViewModel
             get { return _categoryCollection; }
             set { _categoryCollection = value; }
         }
-        private List<string> _policies;
-        public List<string> Policies
-        {
-            get { return _policies; }
-            set
-            {
-                _policies = value;
-                OnPropertyChanged("Policies");
-            }
-        }
-
-        private List<string> _entityTypes;
-        public List<string> EntityTypes
-        {
-            get { return _entityTypes; }
-            set
-            {
-                _entityTypes = value;
-                OnPropertyChanged("EntityTypes");
-            }
-        }
-
         private ViewClientSearchDto _policySelectedClient;
         public ViewClientSearchDto PolicySelectedClient
         {
@@ -474,6 +452,10 @@ namespace CMG.Application.ViewModel
         private void CancelPolicy()
         {
             PolicySelectedClient = SelectedClient;
+            if (SelectedPolicy != null)
+            {
+                SavedPolicyDetail = SelectedPolicy;
+            }
             if (PolicySelectedClient != null)
             {
                 GetPolicyCollection();
@@ -495,8 +477,6 @@ namespace CMG.Application.ViewModel
                 entity.Company = SelectedPolicyCompany != null ? SelectedPolicyCompany.FieldCode.Trim() : SelectedPolicy.CompanyName.Substring(0, 1);
                 entity.Currency = SelectedPolicyCurrency != null ? SelectedPolicyCurrency.FieldCode.Trim() : SelectedPolicy.Currency.Substring(0, 3);
                 entity.IssueAge = SelectedPolicy.Age.ToString();
-                entity.Risk = SelectedPolicy.Rating.Trim();
-                entity.Cr8Date = SelectedPolicy.PlacedOn;
 
                 _unitOfWork.Policies.Save(entity);
                 _unitOfWork.Commit();
@@ -575,6 +555,7 @@ namespace CMG.Application.ViewModel
         }
         private bool IsValidPolicy()
         {
+            DateTime date = new DateTime();
             if (string.IsNullOrEmpty(SelectedPolicy.CompanyName.Trim()))
             {
                 _notifier.ShowError("Company name is invalid");
@@ -585,7 +566,8 @@ namespace CMG.Application.ViewModel
                 _notifier.ShowError("Faceamount is invalid");
                 return false;
             }
-            if (!DateTime.TryParse(SelectedPolicy.PolicyDate.ToString(), out DateTime policyDate))
+            if (!DateTime.TryParse(SelectedPolicy.PolicyDate.ToString(), out DateTime policyDate)
+                || policyDate == date)
             {
                 _notifier.ShowError("Policy date is invalid");
                 return false;
@@ -600,7 +582,8 @@ namespace CMG.Application.ViewModel
                 _notifier.ShowError("Payment is invalid");
                 return false;
             }
-            if(!DateTime.TryParse(SelectedPolicy.PlacedOn.ToString(), out DateTime placedOn))
+            if(!DateTime.TryParse(SelectedPolicy.PlacedOn.ToString(), out DateTime placedOn)
+                || placedOn == date)
             {
                 _notifier.ShowError("Placement date is invalid");
                 return false;
@@ -615,7 +598,8 @@ namespace CMG.Application.ViewModel
                 _notifier.ShowError("Currency is invalid");
                 return false;
             }
-            if (!DateTime.TryParse(SelectedPolicy.ReprojectedOn.ToString(), out DateTime reprojectedDate))
+            if (!DateTime.TryParse(SelectedPolicy.ReprojectedOn.ToString(), out DateTime reprojectedDate)
+                || reprojectedDate == date)
             {
                 _notifier.ShowError("Reprojection date is invalid");
                 return false;

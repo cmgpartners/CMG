@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CMG.Application.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -24,6 +25,14 @@ namespace CMG.UI.View
         public PolicyView()
         {
             InitializeComponent();
+            Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() => {
+                PolicyViewModel policyViewModel = (PolicyViewModel)this.DataContext;
+                if (policyViewModel != null
+                    && !string.IsNullOrEmpty(policyViewModel.EntityType))
+                {
+                    UserControlEntityType.autoTextBox.Text = policyViewModel.EntityType;
+                }
+            }));
         }
         private void ButtonSearchSliderClose_Click(object sender, RoutedEventArgs e)
         {
@@ -37,7 +46,6 @@ namespace CMG.UI.View
                 SearchBar.Visibility = Visibility.Visible;
                 searchBarColumn.Width = new GridLength(200);
             };
-            
         }
         private void ButtonSearchSliderOpen_Click(object sender, RoutedEventArgs e)
         {

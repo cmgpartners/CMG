@@ -1,5 +1,4 @@
-﻿//using CMG.Application.Command;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using CMG.DataAccess.Interface;
 using CMG.Application.ViewModel;
@@ -44,6 +43,12 @@ namespace CMG.UI
         }
         private void LstNavItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if(_mainViewModel.SelectedViewModel != null
+                && _mainViewModel.SelectedViewModel is PolicyViewModel)
+            {
+                var policyViewModel = (PolicyViewModel)_mainViewModel.SelectedViewModel;
+                _mainViewModel.SelectedClient = policyViewModel.SelectedClient;
+            }
             ListView lstNavigation = (ListView)sender;
             if (lstNavigation.SelectedIndex == 0)
             {
@@ -150,8 +155,18 @@ namespace CMG.UI
         {
             PolicyMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
             CloseCommissionMenu();
-            PolicyViewModel policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, _dialogService, _notifier);
+            PolicyViewModel policyViewModel;
+            if (_mainViewModel.SelectedClient != null)
+            {
+                policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, _mainViewModel.SelectedClient);
+                policyViewModel.SelectedClient = _mainViewModel.SelectedClient;
+            }
+            else
+            {
+                policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, _dialogService, _notifier);
+            }
             _mainViewModel.SelectedViewModel = policyViewModel;
+            policyViewModel.EntityType = _mainViewModel.EntityType;
             DataContext = _mainViewModel;
         }
 
@@ -170,6 +185,11 @@ namespace CMG.UI
 
         private void FileManagerMenu_Click(object sender, RoutedEventArgs e)
         {
+            if (_mainViewModel.SelectedViewModel != null
+                && _mainViewModel.SelectedViewModel is PolicyViewModel)
+            {
+                _mainViewModel.SelectedClient = ((PolicyViewModel)_mainViewModel.SelectedViewModel).SelectedClient;
+            }
             FileManagerMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
             CloseCommissionMenu();
             FileManagerViewModel fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _dialogService, _notifier);

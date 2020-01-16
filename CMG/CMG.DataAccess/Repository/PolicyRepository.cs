@@ -91,6 +91,7 @@ namespace CMG.DataAccess.Repository
                 NoteCli = x.NoteCli,
                 NoteInt = x.NoteInt, 
                 Issuedate =x.Issuedate,
+                Dateplaced = x.Dateplaced,
                 PeoplePolicys = x.PeoplePolicys.Where(x => !excludeCategoryList.Contains(x.Catgry)).Select(a => new PeoplePolicys
                 {
                     Keynump = a.Keynump,
