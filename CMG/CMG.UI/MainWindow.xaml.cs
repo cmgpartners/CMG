@@ -46,13 +46,14 @@ namespace CMG.UI
         }
         private void LstNavItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(_mainViewModel.SelectedViewModel != null
+            ListView lstNavigation = (ListView)sender;
+
+            if (_mainViewModel.SelectedViewModel != null
                 && _mainViewModel.SelectedViewModel is PolicyViewModel)
             {
                 var policyViewModel = (PolicyViewModel)_mainViewModel.SelectedViewModel;
                 _mainViewModel.SelectedClient = policyViewModel.SelectedClient;
             }
-            ListView lstNavigation = (ListView)sender;
             if (lstNavigation.SelectedIndex == 0)
             {
                 _mainViewModel.SelectedIndexLeftNavigation = (int)LeftNavigation.Renewals;
@@ -151,12 +152,12 @@ namespace CMG.UI
             PolicyViewModel policyViewModel;
             if (_mainViewModel.SelectedClient != null)
             {
-                policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, _mainViewModel.SelectedClient);
+                policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, _mainViewModel.SelectedClient, _memoryCache, _dialogService, _notifier);
                 policyViewModel.SelectedClient = _mainViewModel.SelectedClient;
             }
             else
             {
-                policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, _dialogService, _notifier);
+                policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
             }
             _mainViewModel.SelectedViewModel = policyViewModel;
             policyViewModel.EntityType = _mainViewModel.EntityType;

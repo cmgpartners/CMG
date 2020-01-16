@@ -35,7 +35,7 @@
             </WrapPanel>
         </DataTemplate>
         <DataTemplate x:Key="entityTypeTemplate">
-            <WrapPanel AllowDrop="True" Orientation="Vertical">
+            <WrapPanel AllowDrop="True" Orientation="Vertical" x:Name="EntityTypePanel" Loaded="EntityTypePanel_Loaded">
                 <TextBlock Text="{Binding ColumnName}" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                 <uc:AutoCompleteBox 
                                 x:Name="UserControlEntityType" 
@@ -49,7 +49,7 @@
                 </uc:AutoCompleteBox>
             </WrapPanel>
         </DataTemplate>
-        <DataTemplate x:Key="policyNumberTemplate">
+        <DataTemplate x:Key="policyNumberTemplate" x:Name="policyNumberTemplate">
             <WrapPanel AllowDrop="True" Orientation="Vertical">
                 <TextBlock Text="Policy #" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                 <uc:AutoCompleteBox 
@@ -82,8 +82,8 @@
             <WrapPanel AllowDrop="True" Orientation="Vertical">
                 <TextBlock Text="Policy Date" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                 <StackPanel Orientation="Horizontal">
-                    <DatePicker Margin="10 2 5 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="80" Foreground="White"/>
-                    <DatePicker Margin="0 2 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="80" Foreground="White"/>
+                    <DatePicker Margin="10 6 5 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="80" Foreground="White"/>
+                    <DatePicker Margin="0 6 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="80" Foreground="White"/>
                 </StackPanel>
             </WrapPanel>
         </DataTemplate>
@@ -213,93 +213,31 @@
                     </Button>
                 </DockPanel>
                 <Grid Grid.Row="1" ShowGridLines="False">
-                    <ListView ItemsSource="{Binding SearchOptions, UpdateSourceTrigger=PropertyChanged, IsAsync=True}" Width="450" x:Name="listView" ItemTemplateSelector="{StaticResource searchOptionsSelector}" PreviewMouseLeftButtonDown="ListView_PreviewMouseLeftButtonDown" PreviewMouseMove="ListView_PreviewMouseMove" Drop="ListView_Drop" DragEnter="ListView_DragEnter" AllowDrop="True">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                    <ListView Grid.Row="0" ItemsSource="{Binding SearchOptions, UpdateSourceTrigger=PropertyChanged, IsAsync=True}"  Width="450" x:Name="listView" ItemTemplateSelector="{StaticResource searchOptionsSelector}" PreviewMouseLeftButtonDown="ListView_PreviewMouseLeftButtonDown" PreviewMouseMove="ListView_PreviewMouseMove" Drop="ListView_Drop" DragEnter="ListView_DragEnter" AllowDrop="True">
                         <ListView.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel Orientation="Horizontal" Width="450"></WrapPanel>
                             </ItemsPanelTemplate>
                         </ListView.ItemsPanel>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Padding" Value="0"/>
+                                    <Setter Property="Margin" Value="0"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
                     </ListView>
+                    <StackPanel Grid.Row="1" Margin="295 10 0 0">
+                        <Button Content="Search" Width="85" Command="{Binding DataContext.SearchClientCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" IsDefault="True"></Button>
+                    </StackPanel>
+                    </Grid>
                 </Grid>
-                <!--<Grid Grid.Row="1" ShowGridLines="True">
-                    <WrapPanel Orientation="Horizontal">
-                        <StackPanel Visibility="{Binding IsCommonNameVisible, Converter={StaticResource VisibilityConverter}}" AllowDrop="True">
-                            <TextBlock Text="Common Name" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
-                                     Foreground="White" FontSize="14"
-                                     Text="{Binding DataContext.CommanName, RelativeSource={RelativeSource AncestorType=Window}}"  Width="85"></TextBox>
-                        </StackPanel>
-                        <StackPanel Visibility="{Binding IsLastNameVisible, Converter={StaticResource VisibilityConverter}}">
-                            <TextBlock Text="Last Name" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
-                                     Foreground="White" FontSize="14" 
-                                     Text="{Binding DataContext.LastName, RelativeSource={RelativeSource AncestorType=Window}}" Width="85"></TextBox>
-                        </StackPanel>
-                        <StackPanel Visibility="{Binding IsFirstNameVisible, Converter={StaticResource VisibilityConverter}}">
-                            <TextBlock Text="First Name" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
-                                     Foreground="White" FontSize="14"  
-                                     Text="{Binding DataContext.FirstName, RelativeSource={RelativeSource AncestorType=Window}}" MinWidth="85"></TextBox>
-                        </StackPanel>
-                        <StackPanel Visibility="{Binding IsEntityTypeVisible, Converter={StaticResource VisibilityConverter}}">
-                            <TextBlock Text="Entity Type" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <uc:AutoCompleteBox 
-                                x:Name="UserControlEntityType" 
-                                Foreground="White" 
-                                BorderBrush="#FFCEEAFF" 
-                                BorderThickness="0 0 0 3" 
-                                Margin="10 0 15 0" 
-                                Width="85"
-                                AutoSuggestionList="{Binding EntityTypes}" 
-                                SelectedValue="{Binding DataContext.EntityType, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
-                            </uc:AutoCompleteBox>
-                        </StackPanel>
-                        <StackPanel Visibility="{Binding IsPolicyNumberVisible, Converter={StaticResource VisibilityConverter}}">
-                            <TextBlock Text="Policy #" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <uc:AutoCompleteBox 
-                                x:Name="UserControlPolicyNumber" 
-                                Foreground="White" 
-                                BorderBrush="#FFCEEAFF" 
-                                BorderThickness="0 0 0 3" 
-                                Margin="10 0 15 0" 
-                                Width="85"
-                                AutoSuggestionList="{Binding Policies}" 
-                                SelectedValue="{Binding DataContext.PolicyNumber, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
-                            </uc:AutoCompleteBox>
-                        </StackPanel>
-                        <StackPanel Visibility="{Binding IsCompanyNameVisible, Converter={StaticResource VisibilityConverter}}">
-                            <TextBlock Text="Company" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <uc:AutoCompleteBox 
-                                AutoSuggestionList="{Binding CompanyNames}" 
-                                Foreground="White" 
-                                BorderBrush="#FFCEEAFF" 
-                                BorderThickness="0 0 0 3" 
-                                Margin="10 0 15 0"  
-                                Width="85"
-                                SelectedValue="{Binding DataContext.CompanyName, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
-                            </uc:AutoCompleteBox>
-                        </StackPanel>
-                        <StackPanel Visibility="{Binding IsPolicyDateVisible, Converter={StaticResource VisibilityConverter}}">
-                            <TextBlock Text="Policy Date" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <StackPanel Orientation="Horizontal">
-                                <DatePicker Margin="10 2 5 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="80" Foreground="White"/>
-                                <DatePicker Margin="0 2 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="80" Foreground="White"/>
-                            </StackPanel>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Width="450" Margin="0 15 0 0">
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <Button Content="Show Less Options" BorderBrush="Transparent" FontWeight="Regular" FontSize="12" Background="Transparent" HorizontalAlignment="Left"/>
-                                <Button BorderBrush="Transparent" FontWeight="Regular" FontSize="12" Background="Transparent" HorizontalAlignment="Left" Padding="0">
-                                    <materialDesign:PackIcon Kind="ArrowUpBoldCircleOutline" VerticalAlignment="Center"  Foreground="White" FontWeight="Bold">
-                                    </materialDesign:PackIcon>
-                                </Button>
-                            </StackPanel>
-                            <StackPanel Margin="195 10 0 0">
-                                <Button Content="Search" Width="85" Command="{Binding DataContext.SearchClientCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" IsDefault="True"></Button>
-                            </StackPanel>
-                        </StackPanel>
-                    </WrapPanel>
-                </Grid>-->
                 <Grid Grid.Row="2">
                     <DataGrid AutoGenerateColumns="False" x:Name="search" IsReadOnly="True" Background="{x:Null}" GridLinesVisibility="None"
                           ItemsSource="{Binding DataContext.ClientCollection, RelativeSource={RelativeSource AncestorType=Window}}" ColumnHeaderStyle="{StaticResource ClientHeaderStyle}" RowStyle="{StaticResource ClientRowStyle }" 

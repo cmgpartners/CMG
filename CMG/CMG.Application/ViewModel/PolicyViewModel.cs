@@ -45,11 +45,13 @@ namespace CMG.Application.ViewModel
             LoadData();
         }
         
-        public PolicyViewModel(IUnitOfWork unitOfWork, IMapper mapper, ViewClientSearchDto selectedClientInput)
-               : base(unitOfWork, mapper)
+        public PolicyViewModel(IUnitOfWork unitOfWork, IMapper mapper, ViewClientSearchDto selectedClientInput, IMemoryCache memoryCache = null, IDialogService dialogService = null, Notifier notifier = null)
+               : base(unitOfWork, mapper, memoryCache)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _notifier = notifier;
+            _dialogService = dialogService;
             LoadData();
             
             if (selectedClientInput != null)

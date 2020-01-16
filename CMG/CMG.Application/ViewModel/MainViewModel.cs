@@ -159,36 +159,7 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("SearchOptions");
             }
         }
-
-
-        //public bool IsCommonNameVisible
-        //{
-        //    get { return IsSearchFieldVisible("CommanName") ?? true; }
-        //}
-        //public bool IsLastNameVisible
-        //{
-        //    get { return IsSearchFieldVisible("LastName") ?? true; }
-        //}
-        //public bool IsFirstNameVisible
-        //{
-        //    get { return IsSearchFieldVisible("FirstName") ?? true; }
-        //}
-        //public bool IsEntityTypeVisible
-        //{
-        //    get { return IsSearchFieldVisible("EntityType") ?? true; }
-        //}
-        //public bool IsPolicyNumberVisible
-        //{
-        //    get { return IsSearchFieldVisible("PolicyNumber") ?? false; }
-        //}
-        //public bool IsCompanyNameVisible
-        //{
-        //    get { return IsSearchFieldVisible("CompanyName") ?? false; }
-        //}
-        //public bool IsPolicyDateVisible
-        //{
-        //    get { return IsSearchFieldVisible("PolicyDate") ?? false; }
-        //}
+       
         public bool IsClientSelected
         {
             get { return SelectedClient != null ? true : false; }
@@ -372,7 +343,7 @@ namespace CMG.Application.ViewModel
         }
         private void Search()
         {
-            PolicyViewModel policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, SelectedClient);
+            PolicyViewModel policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, SelectedClient, _memoryCache, null, _notifier);
             PersonStatusCollection = policyViewModel.PersonStatusCollection;
             SVCTypeCollection = policyViewModel.SVCTypeCollection;
             CompanyCollection = policyViewModel.CompanyCollection;
@@ -510,18 +481,7 @@ namespace CMG.Application.ViewModel
                 }
             }
         }
-
-        //public bool? IsSearchFieldVisible(string field)
-        //{
-        //    if (searchOptions != null && searchOptions.Count > 0)
-        //    {
-        //        if (searchOptions.ContainsKey(field))
-        //        {
-        //            return searchOptions[field];
-        //        }
-        //    }
-        //    return null;
-        //}
+       
         public void GetDefaultSearchOptions()
         {
             SearchOptions.Add(new ViewSearchOptionsDto()
@@ -566,12 +526,12 @@ namespace CMG.Application.ViewModel
                 ColumnType = "ComboBox"
             });
 
-            //SearchOptions.Add(new ViewSearchOptionsDto()
-            //{
-            //    ColumnName = "Policy Date",
-            //    ColumnOrder = 6,
-            //    ColumnType = "DatePicker"
-            //});
+            SearchOptions.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Policy Date",
+                ColumnOrder = 6,
+                ColumnType = "DatePicker"
+            });
         }
         #endregion Methods
     }

@@ -1,22 +1,13 @@
 ﻿using CMG.Application.ViewModel;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Effects;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
-using System.Windows.Documents;
 using CMG.Application.DTO;
-using CMG.Application.ViewModel;
+using CMG.UI.Controls;
 
 namespace CMG.UI.View
 {
@@ -29,17 +20,11 @@ namespace CMG.UI.View
         private AdornerLayer _layer;
         private Point startPoint;
         private bool _dragIsOutOfScope = false;
+        private PolicyViewModel policyViewModel;
         public PolicyView()
         {
             InitializeComponent();
-            Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() => {
-                PolicyViewModel policyViewModel = (PolicyViewModel)this.DataContext;
-                if (policyViewModel != null
-                    && !string.IsNullOrEmpty(policyViewModel.EntityType))
-                {
-                    UserControlEntityType.autoTextBox.Text = policyViewModel.EntityType;
-                }
-            }));
+            policyViewModel = (PolicyViewModel)this.DataContext;
         }
         private void ButtonSearchSliderClose_Click(object sender, RoutedEventArgs e)
         {
@@ -148,9 +133,6 @@ namespace CMG.UI.View
             {
                 policyViewModel.SearchOptions.Remove(droppedData);
                 policyViewModel.SearchOptions.Insert(targetIdx, droppedData);
-                //policyViewModel.SearchOptions = policyViewModel.SearchOptions;
-                //searchOptions.Insert(targetIdx, droppedData);
-                //lstCurrent.ItemsSource = searchOptions;
             }
             
         }
@@ -169,15 +151,13 @@ namespace CMG.UI.View
 
             if (listViewItem == null)
                 return;
-
-            // get the data for the ListViewItem
+            
             var currentColumn = listView.ItemContainerGenerator.ItemFromContainer(listViewItem);
 
             //setup the drag adorner.
             InitialiseAdorner(listViewItem);
 
             //add handles to update the adorner.
-            listView.PreviewDragOver += ListViewDragOver;
             listView.DragLeave += ListViewDragLeave;
             listView.DragEnter += ListViewDragEnter;
 
@@ -185,7 +165,6 @@ namespace CMG.UI.View
             DragDropEffects de = DragDrop.DoDragDrop(this.listView, data, DragDropEffects.Move);
 
             //cleanup
-            listView.PreviewDragOver -= ListViewDragOver;
             listView.DragLeave -= ListViewDragLeave;
             listView.DragEnter -= ListViewDragEnter;
 
@@ -195,15 +174,7 @@ namespace CMG.UI.View
                 _adorner = null;
             }
         }
-
-        void ListViewDragOver(object sender, DragEventArgs args)
-        {
-            //if (_adorner != null)
-            //{
-            //    _adorner.OffsetLeft = args.GetPosition(listView).X;
-            //    _adorner.OffsetTop = args.GetPosition(listView).Y - startPoint.Y;
-            //}
-        }
+        
         void ListViewDragLeave(object sender, DragEventArgs e)
         {
             if (e.OriginalSource == listView)
@@ -212,7 +183,7 @@ namespace CMG.UI.View
                 Rect r = VisualTreeHelper.GetContentBounds(listView);
                 if (!r.Contains(p))
                 {
-                    this._dragIsOutOfScope = true;
+                    _dragIsOutOfScope = true;
                     e.Handled = true;
                 }
             }
@@ -246,6 +217,22 @@ namespace CMG.UI.View
             }
             while (current != null);
             return null;
+        }
+
+        private void EntityTypePanel_Loaded(object sender, RoutedEventArgs e)
+        {
+            WrapPanel entityTypePanel = (WrapPanel)sender;
+            var entityTypeAutoComplete = entityTypePanel.Children.Count > 0 ? (AutoCompleteBox)entityTypePanel.Children[1] : null;
+            if(entityTypeAutoComplete != null)
+            {
+                if (policyViewModel != null
+                    && !string.IsNullOrEmpty(policyViewModel.EntityType))
+                {
+                    entityTypeAutoComplete.autoTextBox.Text = policyViewModel.EntityType;
+
+                }
+                
+            }
         }
     }
 }
