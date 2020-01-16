@@ -50,7 +50,7 @@ namespace CMG.Application.ViewModel
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             LoadData();
-
+            
             if (selectedClientInput != null)
             {
                 PolicySelectedClient = selectedClientInput;
@@ -118,28 +118,6 @@ namespace CMG.Application.ViewModel
             get { return _categoryCollection; }
             set { _categoryCollection = value; }
         }
-        private List<string> _policies;
-        public List<string> Policies
-        {
-            get { return _policies; }
-            set
-            {
-                _policies = value;
-                OnPropertyChanged("Policies");
-            }
-        }
-
-        private List<string> _entityTypes;
-        public List<string> EntityTypes
-        {
-            get { return _entityTypes; }
-            set
-            {
-                _entityTypes = value;
-                OnPropertyChanged("EntityTypes");
-            }
-        }
-
         private ViewClientSearchDto _policySelectedClient;
         public ViewClientSearchDto PolicySelectedClient
         {
