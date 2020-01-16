@@ -1047,7 +1047,7 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Grid.Row="0" Text="Edit Policy Detail" FontWeight="Bold" VerticalAlignment="Center"/>
                 <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Content="Cancel" Margin="10 0" x:Name="ButtonPolicyEditClose" Click="ButtonPolicyEditClose_Click"/>
+                    <Button Content="Cancel" Command="{Binding CancelPolicyCommand}" Margin="10 0" x:Name="ButtonPolicyEditClose" Click="ButtonPolicyEditClose_Click"/>
                     <Button Content="Save" Command="{Binding SavePolicyCommand}" x:Name="ButtonPolicyEditSave" Click="ButtonPolicyEditClose_Click"/>
                 </StackPanel>
             </Grid>
@@ -1066,7 +1066,7 @@
                 </Grid.RowDefinitions>
                 <StackPanel Margin="0 0 40 0">
                     <TextBlock Text="Policy #"/>
-                    <TextBox Text="{Binding SelectedPolicy.PolicyNumber}"/>
+                    <TextBox Text="{Binding SelectedPolicy.PolicyNumber}" IsEnabled="False"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Grid.ColumnSpan="2">
                     <TextBlock Text="Company Name"/>
@@ -1086,11 +1086,11 @@
                 </StackPanel>
                 <StackPanel Grid.Column="1" Grid.Row="1" Margin="0 0 10 0">
                     <TextBlock Text="Policy Date" Margin="0 5"/>
-                    <TextBox Text="{Binding Path=SelectedPolicy.PolicyDate, StringFormat='{}{0: MMM d, yyyy}'}"/>
+                    <DatePicker SelectedDate="{Binding Path=SelectedPolicy.PolicyDate, StringFormat='{}{0: MMM d, yyyy}'}"></DatePicker>
                 </StackPanel>
                 <StackPanel Grid.Column="2" Grid.Row="1" Margin="0 0 10 0">
                     <TextBlock Text="Plan Code" Margin="0 5"/>
-                    <TextBox Text="{Binding SelectedPolicy.PlanCode}"/>
+                    <TextBox Text="{Binding SelectedPolicy.PlanCode}" MaxLength="20"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="0" Grid.Row="2" Margin="0 0 10 0">
@@ -1098,12 +1098,12 @@
                     <TextBox Text="{Binding SelectedPolicy.Payment}"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Grid.Row="2" Margin="0 0 10 0">
-                    <TextBlock Text="Placement Date" Margin="0 5"/>
-                    <TextBox Text="{Binding Path=SelectedPolicy.PlacedOn, StringFormat='{}{0: MMM d, yyyy}'}"/>
+                    <TextBlock Text="Placement Date" Margin="0 5"/>                    
+                    <DatePicker SelectedDate="{Binding Path=SelectedPolicy.PlacedOn, StringFormat='{}{0: MMM d, yyyy}'}"></DatePicker>
                 </StackPanel>
                 <StackPanel Grid.Column="2" Grid.Row="2" Margin="0 0 10 0">
                     <TextBlock Text="Rating" Margin="0 5"/>
-                    <TextBox Text="{Binding SelectedPolicy.Rating}"/>
+                    <TextBox Text="{Binding SelectedPolicy.Rating}" MaxLength="20"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="0" Grid.Row="3" Margin="0 0 10 0">
@@ -1119,11 +1119,11 @@
                 </StackPanel>
                 <StackPanel Grid.Column="1" Grid.Row="3" Margin="0 0 10 0">
                     <TextBlock Text="Reprojection Date" Margin="0 5"/>
-                    <TextBox Text="{Binding SelectedPolicy.ReprojectedOn}"/>
+                    <DatePicker SelectedDate="{Binding Path=SelectedPolicy.ReprojectedOn, StringFormat='{}{0: MMM d, yyyy}'}"></DatePicker>
                 </StackPanel>
                 <StackPanel Grid.Column="2" Grid.Row="3" Margin="0 0 10 0">
                     <TextBlock Text="Class" Margin="0 5"/>
-                    <TextBox Text="{Binding SelectedPolicy.Class}"/>
+                    <TextBox Text="{Binding SelectedPolicy.Class}" MaxLength="10"/>
                 </StackPanel>
 
                 <StackPanel Grid.Column="0" Grid.Row="4" Margin="0 0 10 0">
@@ -1159,7 +1159,7 @@
                         </StackPanel>
                         <StackPanel Grid.Column="2" Grid.Row="0">
                             <TextBlock Text="Age" Margin="0 5"/>
-                            <TextBox Text="{Binding SelectedPolicy.Age}"/>
+                            <TextBox Text="{Binding SelectedPolicy.Age}" MaxLength="2"/>
                         </StackPanel>
                     </Grid>
                 </StackPanel>

@@ -164,6 +164,16 @@ namespace CMG.Application.ViewModel
                 CancelPolicyNotes();
             }
         }
+        private ViewPolicyListDto _savedPolicyDetail;
+        public ViewPolicyListDto SavedPolicyDetail
+        {
+            get { return _savedPolicyDetail; }
+            set
+            {
+                _savedPolicyDetail = value;
+                OnPropertyChanged("SavedPolicyDetail");
+            }
+        }
         private ViewComboDto selectedPolicyStatus;
         public ViewComboDto SelectedPolicyStatus
         {
@@ -282,6 +292,10 @@ namespace CMG.Application.ViewModel
         public ICommand SavePolicyCommand
         {
             get { return CreateCommand(SavePolicy); }
+        }
+        public ICommand CancelPolicyCommand
+        {
+            get { return CreateCommand(CancelPolicy); }
         }
         public ICommand EditPolicyNotesCommand
         {
@@ -419,7 +433,11 @@ namespace CMG.Application.ViewModel
 
                 if (PolicyCollection.Count > 0)
                 {
-                    SelectedPolicy = PolicyCollection[0];
+                    if (SavedPolicyDetail != null
+                        && PolicyCollection.Where(x => x.Id == SavedPolicyDetail.Id).FirstOrDefault() != null)
+                    {
+                        SelectedPolicy = PolicyCollection.Where(x => x.Id == SavedPolicyDetail.Id).FirstOrDefault();
+                    }
                 }
             }
         }
@@ -454,6 +472,14 @@ namespace CMG.Application.ViewModel
                 _notifier.ShowError("Error occured while updating policy illustration");
             }
         }
+        private void CancelPolicy()
+        {
+            PolicySelectedClient = SelectedClient;
+            if (PolicySelectedClient != null)
+            {
+                GetPolicyCollection();
+            }
+        }
         private void SavePolicy()
         {
             if (SelectedPolicy != null
@@ -469,13 +495,16 @@ namespace CMG.Application.ViewModel
                 entity.Type = SelectedPolicyType != null ? SelectedPolicyType.FieldCode.Trim() : SelectedPolicy.Type.Substring(0, 1);
                 entity.Company = SelectedPolicyCompany != null ? SelectedPolicyCompany.FieldCode.Trim() : SelectedPolicy.CompanyName.Substring(0, 1);
                 entity.Currency = SelectedPolicyCurrency != null ? SelectedPolicyCurrency.FieldCode.Trim() : SelectedPolicy.Currency.Substring(0, 3);
+                entity.IssueAge = SelectedPolicy.Age.ToString();
                 entity.Risk = SelectedPolicy.Rating.Trim();
+                entity.Cr8Date = SelectedPolicy.PlacedOn;
 
                 _unitOfWork.Policies.Save(entity);
                 _unitOfWork.Commit();
 
                 var updatedEntity = _unitOfWork.Policies.GetById(entity.Keynumo);
                 SelectedPolicy = _mapper.Map<ViewPolicyListDto>(updatedEntity);
+                SavedPolicyDetail = SelectedPolicy;
                 PolicySelectedClient = SelectedClient;
                 GetPolicyCollection();
                 _notifier.ShowSuccess("Policy updated successfully");
@@ -557,8 +586,7 @@ namespace CMG.Application.ViewModel
                 _notifier.ShowError("Faceamount is invalid");
                 return false;
             }
-            DateTime? date = null;
-            if (SelectedPolicy.PolicyDate == date)
+            if (!DateTime.TryParse(SelectedPolicy.PolicyDate.ToString(), out DateTime policyDate))
             {
                 _notifier.ShowError("Policy date is invalid");
                 return false;
@@ -573,7 +601,7 @@ namespace CMG.Application.ViewModel
                 _notifier.ShowError("Payment is invalid");
                 return false;
             }
-            if (SelectedPolicy.PlacedOn == date)
+            if(!DateTime.TryParse(SelectedPolicy.PlacedOn.ToString(), out DateTime placedOn))
             {
                 _notifier.ShowError("Placement date is invalid");
                 return false;
@@ -588,7 +616,7 @@ namespace CMG.Application.ViewModel
                 _notifier.ShowError("Currency is invalid");
                 return false;
             }
-            if (SelectedPolicy.ReprojectedOn == date)
+            if (!DateTime.TryParse(SelectedPolicy.ReprojectedOn.ToString(), out DateTime reprojectedDate))
             {
                 _notifier.ShowError("Reprojection date is invalid");
                 return false;
