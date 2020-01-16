@@ -38,17 +38,25 @@ namespace CMG.UI
             {
                 App.Current.Shutdown();
             }
-
-            using (var ctx = new PrincipalContext(ContextType.Domain))
+            try
             {
-                using (var user = UserPrincipal.FindByIdentity(ctx, Environment.UserName))
+                using (var ctx = new PrincipalContext(ContextType.Domain))
                 {
-                    if(user == null)
+                    using (var user = UserPrincipal.FindByIdentity(ctx, Environment.UserName))
                     {
-                        MessageBox.Show("Sorry, you do not have access to the application", "Access Denied");
-                        App.Current.Shutdown();
+                        if (user == null)
+                        {
+                            MessageBox.Show("Sorry, you do not have access to the application", "Access Denied");
+                            App.Current.Shutdown();
+                        }
                     }
                 }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                App.Current.Shutdown();
+                Environment.Exit(0);
             }
 
             var configurationBuilder = new ConfigurationBuilder()
@@ -72,6 +80,7 @@ namespace CMG.UI
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IDialogService, DialogService>();
             services.AddScoped<IReportService, ReportService>();
+            services.AddMemoryCache();
             services.AddTransient(typeof(MainWindow));
 
             var mappingConfig = new MapperConfiguration(mc =>
