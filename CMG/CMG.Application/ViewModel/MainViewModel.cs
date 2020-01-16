@@ -22,9 +22,8 @@ namespace CMG.Application.ViewModel
         private readonly IMapper _mapper;
         private readonly IMemoryCache _memoryCache;
         private readonly Notifier _notifier;
-        private Dictionary<string, bool> searchOptions;
-        private const string optionsCacheKey = "options";
         private const string searchOptionsKey = "searchOptions";
+        private const string searchoptionsCacheKey = "options";
         
         #endregion MemberVariables
 
@@ -150,22 +149,46 @@ namespace CMG.Application.ViewModel
             }
         }
 
-        public bool IsLastNameVisible
+        private ObservableCollection<ViewSearchOptionsDto> _searchOptions;
+        public ObservableCollection<ViewSearchOptionsDto> SearchOptions
         {
-            get { return IsSearchFieldVisible("LastName") ?? true; }
+            get { return _searchOptions; }
+            set 
+            { 
+                _searchOptions = value;
+                OnPropertyChanged("SearchOptions");
+            }
         }
-        public bool IsFirstNameVisible
-        {
-            get { return IsSearchFieldVisible("FirstName") ?? true; }
-        }
-        public bool IsCommonNameVisible
-        {
-            get { return IsSearchFieldVisible("CommanName") ?? true; }
-        }
-        public bool IsPolicyNumberVisible
-        {
-            get { return IsSearchFieldVisible("PolicyNumber") ?? false; }
-        }
+
+
+        //public bool IsCommonNameVisible
+        //{
+        //    get { return IsSearchFieldVisible("CommanName") ?? true; }
+        //}
+        //public bool IsLastNameVisible
+        //{
+        //    get { return IsSearchFieldVisible("LastName") ?? true; }
+        //}
+        //public bool IsFirstNameVisible
+        //{
+        //    get { return IsSearchFieldVisible("FirstName") ?? true; }
+        //}
+        //public bool IsEntityTypeVisible
+        //{
+        //    get { return IsSearchFieldVisible("EntityType") ?? true; }
+        //}
+        //public bool IsPolicyNumberVisible
+        //{
+        //    get { return IsSearchFieldVisible("PolicyNumber") ?? false; }
+        //}
+        //public bool IsCompanyNameVisible
+        //{
+        //    get { return IsSearchFieldVisible("CompanyName") ?? false; }
+        //}
+        //public bool IsPolicyDateVisible
+        //{
+        //    get { return IsSearchFieldVisible("PolicyDate") ?? false; }
+        //}
         public bool IsClientSelected
         {
             get { return SelectedClient != null ? true : false; }
@@ -173,7 +196,7 @@ namespace CMG.Application.ViewModel
         public bool IsPolicyDetailVisible
         {
             get { return SelectedClient == null ? true : false; }
-        }
+        }        
         private ObservableCollection<ViewClientSearchDto> _clientCollection;
         public ObservableCollection<ViewClientSearchDto> ClientCollection
         {
@@ -473,26 +496,82 @@ namespace CMG.Application.ViewModel
             if(_memoryCache != null)
             {
                 List<Options> options = default;
-                if (!_memoryCache.TryGetValue(optionsCacheKey, out options))
+                if (!_memoryCache.TryGetValue(searchoptionsCacheKey, out options))
                 {
                     options = _unitOfWork.Options.All().Where(o => o.User == System.Environment.UserName).ToList();
-                    _memoryCache.Set(optionsCacheKey, options);
+                    _memoryCache.Set(searchoptionsCacheKey, options);
                 }
                 var searchOptionsValue = options.Where(o => o.Key == searchOptionsKey).FirstOrDefault()?.Value;
-                searchOptions = searchOptionsValue != null ? JsonConvert.DeserializeObject<Dictionary<string, bool>>(searchOptionsValue) : default;
+                SearchOptions = searchOptionsValue != null ? JsonConvert.DeserializeObject<ObservableCollection<ViewSearchOptionsDto>>(searchOptionsValue) : default;
+                if(SearchOptions == null)
+                {
+                    SearchOptions = new ObservableCollection<ViewSearchOptionsDto>();
+                    GetDefaultSearchOptions();
+                }
             }
         }
 
-        public bool? IsSearchFieldVisible(string field)
+        //public bool? IsSearchFieldVisible(string field)
+        //{
+        //    if (searchOptions != null && searchOptions.Count > 0)
+        //    {
+        //        if (searchOptions.ContainsKey(field))
+        //        {
+        //            return searchOptions[field];
+        //        }
+        //    }
+        //    return null;
+        //}
+        public void GetDefaultSearchOptions()
         {
-            if (searchOptions != null && searchOptions.Count > 0)
+            SearchOptions.Add(new ViewSearchOptionsDto()
             {
-                if (searchOptions.ContainsKey(field))
-                {
-                    return searchOptions[field];
-                }
-            }
-            return null;
+                ColumnName = "Common Name",
+                ColumnOrder = 0,
+                ColumnType = "TextBox"
+            });
+
+            SearchOptions.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Last Name",
+                ColumnOrder = 1,
+                ColumnType = "TextBox"
+            });
+
+            SearchOptions.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "First Name",
+                ColumnOrder = 2,
+                ColumnType = "TextBox"
+            });
+
+            SearchOptions.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Entity Type",
+                ColumnOrder = 3,
+                ColumnType = "ComboBox"
+            });
+
+            SearchOptions.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Policy Number",
+                ColumnOrder = 4,
+                ColumnType = "ComboBox"
+            });
+
+            SearchOptions.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Company Name",
+                ColumnOrder = 5,
+                ColumnType = "ComboBox"
+            });
+
+            //SearchOptions.Add(new ViewSearchOptionsDto()
+            //{
+            //    ColumnName = "Policy Date",
+            //    ColumnOrder = 6,
+            //    ColumnType = "DatePicker"
+            //});
         }
         #endregion Methods
     }

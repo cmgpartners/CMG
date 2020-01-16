@@ -5,10 +5,99 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:behaviors="clr-namespace:WPFTextBoxAutoComplete;assembly=WPFTextBoxAutoComplete"
+             xmlns:template="clr-namespace:CMG.UI.TemplateSelector"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              xmlns:uc="clr-namespace:CMG.UI.Controls">
     <UserControl.Resources>
+        <DataTemplate x:Key="commonNameTemplate">
+            <WrapPanel AllowDrop="True" Orientation="Vertical">
+                <TextBlock Text="{Binding ColumnName}" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
+                                     Foreground="White" FontSize="14"
+                                     Text="{Binding DataContext.CommanName, RelativeSource={RelativeSource AncestorType=Window}}"  Width="85"></TextBox>
+            </WrapPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="lastNameTemplate">
+            <WrapPanel AllowDrop="True" Orientation="Vertical">
+                <TextBlock Text="Last Name" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
+                                     Foreground="White" FontSize="14" 
+                                     Text="{Binding DataContext.LastName, RelativeSource={RelativeSource AncestorType=Window}}" Width="85"></TextBox>
+            </WrapPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="firstNameTemplate">
+            <WrapPanel AllowDrop="True" Orientation="Vertical">
+                <TextBlock Text="First Name" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
+                                     Foreground="White" FontSize="14"  
+                                     Text="{Binding DataContext.FirstName, RelativeSource={RelativeSource AncestorType=Window}}" MinWidth="85"></TextBox>
+            </WrapPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="entityTypeTemplate">
+            <WrapPanel AllowDrop="True" Orientation="Vertical">
+                <TextBlock Text="{Binding ColumnName}" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                <uc:AutoCompleteBox 
+                                x:Name="UserControlEntityType" 
+                                Foreground="White" 
+                                BorderBrush="#FFCEEAFF" 
+                                BorderThickness="0 0 0 3" 
+                                Margin="10 0 15 0" 
+                                Width="85"
+                                AutoSuggestionList="{Binding DataContext.SelectedViewModel.EntityTypes, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                SelectedValue="{Binding DataContext.EntityType, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
+                </uc:AutoCompleteBox>
+            </WrapPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="policyNumberTemplate">
+            <WrapPanel AllowDrop="True" Orientation="Vertical">
+                <TextBlock Text="Policy #" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                <uc:AutoCompleteBox 
+                                x:Name="UserControlPolicyNumber" 
+                                Foreground="White" 
+                                BorderBrush="#FFCEEAFF" 
+                                BorderThickness="0 0 0 3" 
+                                Margin="10 0 15 0" 
+                                Width="85"
+                                AutoSuggestionList="{Binding Policies}" 
+                                SelectedValue="{Binding DataContext.PolicyNumber, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
+                </uc:AutoCompleteBox>
+            </WrapPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="companyNameTemplate">
+            <WrapPanel AllowDrop="True" Orientation="Vertical">
+                <TextBlock Text="Company" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                <uc:AutoCompleteBox 
+                                AutoSuggestionList="{Binding CompanyNames}" 
+                                Foreground="White" 
+                                BorderBrush="#FFCEEAFF" 
+                                BorderThickness="0 0 0 3" 
+                                Margin="10 0 15 0"  
+                                Width="85"
+                                SelectedValue="{Binding DataContext.CompanyName, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
+                </uc:AutoCompleteBox>
+            </WrapPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="policyDateTemplate">
+            <WrapPanel AllowDrop="True" Orientation="Vertical">
+                <TextBlock Text="Policy Date" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                <StackPanel Orientation="Horizontal">
+                    <DatePicker Margin="10 2 5 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="80" Foreground="White"/>
+                    <DatePicker Margin="0 2 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="80" Foreground="White"/>
+                </StackPanel>
+            </WrapPanel>
+        </DataTemplate>
+        <template:SearchOptionsSelector x:Key="searchOptionsSelector"
+                                    CommonNameTemplate="{StaticResource commonNameTemplate}"
+                                    LastNameTemplate="{StaticResource lastNameTemplate}"
+                                    FirstNameTemplate="{StaticResource firstNameTemplate}"
+                                    EntityTypeTemplate="{StaticResource entityTypeTemplate}"
+                                    PolicyNumberTemplate="{StaticResource policyNumberTemplate}"
+                                    CompanyNameTemplate="{StaticResource companyNameTemplate}"
+                                    PolicyDateTemplate="{StaticResource policyDateTemplate}">
+            
+        </template:SearchOptionsSelector>
+
         <Storyboard x:Key="SearchSliderOpen">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="SearchSliderPannel">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0"></EasingDoubleKeyFrame>
@@ -123,31 +212,36 @@
                         <materialDesign:PackIcon Kind="ArrowLeftBoldCircleOutline"  VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
                     </Button>
                 </DockPanel>
-                <Grid Grid.Row="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
+                <Grid Grid.Row="1" ShowGridLines="False">
+                    <ListView ItemsSource="{Binding SearchOptions, UpdateSourceTrigger=PropertyChanged, IsAsync=True}" Width="450" x:Name="listView" ItemTemplateSelector="{StaticResource searchOptionsSelector}" PreviewMouseLeftButtonDown="ListView_PreviewMouseLeftButtonDown" PreviewMouseMove="ListView_PreviewMouseMove" Drop="ListView_Drop" DragEnter="ListView_DragEnter" AllowDrop="True">
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal" Width="450"></WrapPanel>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                    </ListView>
+                </Grid>
+                <!--<Grid Grid.Row="1" ShowGridLines="True">
                     <WrapPanel Orientation="Horizontal">
-                        <StackPanel>
+                        <StackPanel Visibility="{Binding IsCommonNameVisible, Converter={StaticResource VisibilityConverter}}" AllowDrop="True">
                             <TextBlock Text="Common Name" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                             <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
                                      Foreground="White" FontSize="14"
                                      Text="{Binding DataContext.CommanName, RelativeSource={RelativeSource AncestorType=Window}}"  Width="85"></TextBox>
                         </StackPanel>
-                        <StackPanel>
+                        <StackPanel Visibility="{Binding IsLastNameVisible, Converter={StaticResource VisibilityConverter}}">
                             <TextBlock Text="Last Name" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                             <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
                                      Foreground="White" FontSize="14" 
                                      Text="{Binding DataContext.LastName, RelativeSource={RelativeSource AncestorType=Window}}" Width="85"></TextBox>
                         </StackPanel>
-                        <StackPanel>
+                        <StackPanel Visibility="{Binding IsFirstNameVisible, Converter={StaticResource VisibilityConverter}}">
                             <TextBlock Text="First Name" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                             <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
                                      Foreground="White" FontSize="14"  
                                      Text="{Binding DataContext.FirstName, RelativeSource={RelativeSource AncestorType=Window}}" MinWidth="85"></TextBox>
                         </StackPanel>
-                        <StackPanel>
+                        <StackPanel Visibility="{Binding IsEntityTypeVisible, Converter={StaticResource VisibilityConverter}}">
                             <TextBlock Text="Entity Type" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                             <uc:AutoCompleteBox 
                                 x:Name="UserControlEntityType" 
@@ -160,7 +254,7 @@
                                 SelectedValue="{Binding DataContext.EntityType, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
                             </uc:AutoCompleteBox>
                         </StackPanel>
-                        <StackPanel>
+                        <StackPanel Visibility="{Binding IsPolicyNumberVisible, Converter={StaticResource VisibilityConverter}}">
                             <TextBlock Text="Policy #" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                             <uc:AutoCompleteBox 
                                 x:Name="UserControlPolicyNumber" 
@@ -173,7 +267,7 @@
                                 SelectedValue="{Binding DataContext.PolicyNumber, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
                             </uc:AutoCompleteBox>
                         </StackPanel>
-                        <StackPanel>
+                        <StackPanel Visibility="{Binding IsCompanyNameVisible, Converter={StaticResource VisibilityConverter}}">
                             <TextBlock Text="Company" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                             <uc:AutoCompleteBox 
                                 AutoSuggestionList="{Binding CompanyNames}" 
@@ -185,32 +279,27 @@
                                 SelectedValue="{Binding DataContext.CompanyName, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
                             </uc:AutoCompleteBox>
                         </StackPanel>
-                        <StackPanel>
+                        <StackPanel Visibility="{Binding IsPolicyDateVisible, Converter={StaticResource VisibilityConverter}}">
                             <TextBlock Text="Policy Date" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                             <StackPanel Orientation="Horizontal">
-                            <DatePicker Margin="10 2 5 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="80" Foreground="White"/>
-                            <DatePicker Margin="0 2 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="80" Foreground="White"/>
+                                <DatePicker Margin="10 2 5 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="80" Foreground="White"/>
+                                <DatePicker Margin="0 2 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="80" Foreground="White"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Width="450" Margin="0 15 0 0">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Button Content="Show Less Options" BorderBrush="Transparent" FontWeight="Regular" FontSize="12" Background="Transparent" HorizontalAlignment="Left"/>
+                                <Button BorderBrush="Transparent" FontWeight="Regular" FontSize="12" Background="Transparent" HorizontalAlignment="Left" Padding="0">
+                                    <materialDesign:PackIcon Kind="ArrowUpBoldCircleOutline" VerticalAlignment="Center"  Foreground="White" FontWeight="Bold">
+                                    </materialDesign:PackIcon>
+                                </Button>
+                            </StackPanel>
+                            <StackPanel Margin="195 10 0 0">
+                                <Button Content="Search" Width="85" Command="{Binding DataContext.SearchClientCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" IsDefault="True"></Button>
                             </StackPanel>
                         </StackPanel>
                     </WrapPanel>
-                    <Grid Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Top">
-                            <Button Content="Show Less Options" BorderBrush="Transparent" FontWeight="Regular" FontSize="12" Background="Transparent" HorizontalAlignment="Left"/>
-                            <Button BorderBrush="Transparent" FontWeight="Regular" FontSize="12" Background="Transparent" HorizontalAlignment="Left" Padding="0">
-                                <materialDesign:PackIcon Kind="ArrowUpBoldCircleOutline" VerticalAlignment="Center"  Foreground="White" FontWeight="Bold">
-                                </materialDesign:PackIcon>
-                            </Button>
-                        </StackPanel>
-                        <StackPanel Grid.Column="1" HorizontalAlignment="Right" Margin="0 0 20 0">
-                            <Button Content="Search" Width="85" Command="{Binding DataContext.SearchClientCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" IsDefault="True"></Button>
-                        </StackPanel>
-                    </Grid>
-                </Grid>
+                </Grid>-->
                 <Grid Grid.Row="2">
                     <DataGrid AutoGenerateColumns="False" x:Name="search" IsReadOnly="True" Background="{x:Null}" GridLinesVisibility="None"
                           ItemsSource="{Binding DataContext.ClientCollection, RelativeSource={RelativeSource AncestorType=Window}}" ColumnHeaderStyle="{StaticResource ClientHeaderStyle}" RowStyle="{StaticResource ClientRowStyle }" 
