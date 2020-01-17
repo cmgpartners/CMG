@@ -8,6 +8,8 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using CMG.Application.DTO;
 using CMG.UI.Controls;
+using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace CMG.UI.View
 {
@@ -19,7 +21,6 @@ namespace CMG.UI.View
         private DragAdorner _adorner;
         private AdornerLayer _layer;
         private Point startPoint;
-        private bool _dragIsOutOfScope = false;
         private PolicyViewModel policyViewModel;
         public PolicyView()
         {
@@ -100,13 +101,11 @@ namespace CMG.UI.View
                 PolicyMainView.Opacity = 1;
             };
         }
-
-        private void ListView_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void SearchOptionsList_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             startPoint = e.GetPosition(null);
         }
-
-        private void ListView_PreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        private void SearchOptionsList_PreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
@@ -119,81 +118,63 @@ namespace CMG.UI.View
                 }
             }
         }
-        
-        private void ListView_Drop(object sender, DragEventArgs e)
+        private void SearchOptionsList_Drop(object sender, DragEventArgs e)
         {
-            PolicyViewModel policyViewModel = (PolicyViewModel)this.DataContext;
-            ListView lstCurrent = (ListView)sender;
-            ViewSearchOptionsDto droppedData = droppedData=(ViewSearchOptionsDto)FindAnchestor<ListViewItem>((DependencyObject)e.OriginalSource).DataContext;
-            var target = lstCurrent.SelectedItem;
-            int removedIdx = lstCurrent.Items.IndexOf(droppedData);
-            int targetIdx = lstCurrent.SelectedIndex;
-
-            if (removedIdx >= 0 && targetIdx >= 0)
+            try
             {
-                policyViewModel.SearchOptions.Remove(droppedData);
-                policyViewModel.SearchOptions.Insert(targetIdx, droppedData);
+                policyViewModel = (PolicyViewModel)this.DataContext;
+                ListView searchOptionsListView = (ListView)sender;
+                ViewSearchOptionsDto droppedData = (ViewSearchOptionsDto)FindAnchestor<ListViewItem>((DependencyObject)e.OriginalSource)?.DataContext;
+                ViewSearchOptionsDto draggedData = (ViewSearchOptionsDto)searchOptionsListView.SelectedItem;
+
+                var droppedDataIndex = searchOptionsListView.Items.IndexOf(droppedData);
+                var draggedDataIndex = searchOptionsListView.Items.IndexOf(draggedData);
+
+                if (draggedDataIndex >= 0 && droppedDataIndex >= 0)
+                {
+                    if (draggedDataIndex > droppedDataIndex)
+                    {
+                        for (var i = droppedDataIndex; i < draggedDataIndex; i++)
+                        {
+                            policyViewModel.SearchOptions[i].ColumnOrder = i + 1;
+                        }
+                        policyViewModel.SearchOptions.Where(s => s.ColumnName == draggedData.ColumnName).Select(o => { o.ColumnOrder = droppedDataIndex; return o; }).ToList();
+                        policyViewModel.SearchOptions = new ObservableCollection<ViewSearchOptionsDto>(policyViewModel.SearchOptions.OrderBy(c => c.ColumnOrder).ToList());
+                    }
+                    else if (droppedDataIndex > draggedDataIndex)
+                    {
+                        for (var i = droppedDataIndex; i > draggedDataIndex; i--)
+                        {
+                            policyViewModel.SearchOptions[i].ColumnOrder = i - 1;
+                        }
+                        policyViewModel.SearchOptions.Where(s => s.ColumnName == draggedData.ColumnName).Select(o => { o.ColumnOrder = droppedDataIndex; return o; }).ToList();
+                        policyViewModel.SearchOptions = new ObservableCollection<ViewSearchOptionsDto>(policyViewModel.SearchOptions.OrderBy(c => c.ColumnOrder).ToList());
+                    }
+                    policyViewModel.SaveSearchOptions();
+                }
+            }
+            catch(Exception ex)
+            {
+                throw ex;
             }
             
-        }
-
-        private void ListView_DragEnter(object sender, DragEventArgs e)
-        {
-            if (!e.Data.GetDataPresent("myFormat") || sender == e.Source)
-            {
-                e.Effects = DragDropEffects.None;
-            }
         }
         private void BeginDrag(MouseEventArgs e)
         {
-            ListView listView = this.listView;
+            ListView searchOptionsListView = SearchOptionsList;
             ListViewItem listViewItem = FindAnchestor<ListViewItem>((DependencyObject)e.OriginalSource);
-
             if (listViewItem == null)
                 return;
             
-            var currentColumn = listView.ItemContainerGenerator.ItemFromContainer(listViewItem);
-
+            var currentColumn = searchOptionsListView.ItemContainerGenerator.ItemFromContainer(listViewItem);
             //setup the drag adorner.
             InitialiseAdorner(listViewItem);
-
-            //add handles to update the adorner.
-            listView.DragLeave += ListViewDragLeave;
-            listView.DragEnter += ListViewDragEnter;
-
             DataObject data = new DataObject(currentColumn);
-            DragDropEffects de = DragDrop.DoDragDrop(this.listView, data, DragDropEffects.Move);
-
-            //cleanup
-            listView.DragLeave -= ListViewDragLeave;
-            listView.DragEnter -= ListViewDragEnter;
-
+            DragDropEffects de = DragDrop.DoDragDrop(SearchOptionsList, data, DragDropEffects.Move);
             if (_adorner != null)
             {
-                AdornerLayer.GetAdornerLayer(listView).Remove(_adorner);
+                AdornerLayer.GetAdornerLayer(searchOptionsListView).Remove(_adorner);
                 _adorner = null;
-            }
-        }
-        
-        void ListViewDragLeave(object sender, DragEventArgs e)
-        {
-            if (e.OriginalSource == listView)
-            {
-                Point p = e.GetPosition(listView);
-                Rect r = VisualTreeHelper.GetContentBounds(listView);
-                if (!r.Contains(p))
-                {
-                    _dragIsOutOfScope = true;
-                    e.Handled = true;
-                }
-            }
-        }
-        private void ListViewDragEnter(object sender, DragEventArgs e)
-        {
-            if (!e.Data.GetDataPresent("myFormat") ||
-                sender == e.Source)
-            {
-                e.Effects = DragDropEffects.None;
             }
         }
         private void InitialiseAdorner(ListViewItem listViewItem)
@@ -201,7 +182,7 @@ namespace CMG.UI.View
             VisualBrush brush = new VisualBrush(listViewItem);
             _adorner = new DragAdorner((UIElement)listViewItem, listViewItem.RenderSize, brush);
             _adorner.Opacity = 0.5;
-            _layer = AdornerLayer.GetAdornerLayer(listView as Visual);
+            _layer = AdornerLayer.GetAdornerLayer(SearchOptionsList as Visual);
             _layer.Add(_adorner);
         }
         private static T FindAnchestor<T>(DependencyObject current)
@@ -218,7 +199,6 @@ namespace CMG.UI.View
             while (current != null);
             return null;
         }
-
         private void EntityTypePanel_Loaded(object sender, RoutedEventArgs e)
         {
             WrapPanel entityTypePanel = (WrapPanel)sender;
