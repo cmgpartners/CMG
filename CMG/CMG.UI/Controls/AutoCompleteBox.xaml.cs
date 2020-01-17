@@ -74,15 +74,15 @@ namespace CMG.UI.Controls
         {
             try
             {
-                this.SelectedValue = this.autoTextBox.Text.Trim().ToLower();
+                this.SelectedValue = this.autoTextBox.Text.Trim();
                 if (string.IsNullOrEmpty(this.autoTextBox.Text))
                 {
                     this.CloseAutoSuggestionBox();
 
                     return;
                 }
-
-                this.OpenAutoSuggestionBox();
+                if(!this.AutoSuggestionList.Any(a => a == SelectedValue))
+                    this.OpenAutoSuggestionBox();
                 this.autoList.ItemsSource = this.AutoSuggestionList.Where(p => p.ToLower().StartsWith(this.autoTextBox.Text.ToLower())).ToList();
             }
             catch (Exception ex)
