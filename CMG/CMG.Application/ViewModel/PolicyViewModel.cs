@@ -596,7 +596,9 @@ namespace CMG.Application.ViewModel
                 _notifier.ShowError("Rating is invalid");
                 return false;
             }
-            if (string.IsNullOrEmpty(SelectedPolicyCurrency.Description.Trim()))
+            if (SelectedPolicyCurrency == null
+                || (SelectedPolicyCurrency != null
+                    && string.IsNullOrEmpty(SelectedPolicyCurrency.Description.Trim())) )
             {
                 _notifier.ShowError("Currency is invalid");
                 return false;
@@ -612,12 +614,16 @@ namespace CMG.Application.ViewModel
                 _notifier.ShowError("Class is invalid");
                 return false;
             }
-            if (string.IsNullOrEmpty(SelectedPolicyStatus.Description.Trim()))
+            if (SelectedPolicyStatus == null
+                || (SelectedPolicyStatus != null
+                    && string.IsNullOrEmpty(SelectedPolicyStatus.Description.Trim())) )
             {
                 _notifier.ShowError("Policy status is invalid");
                 return false;
             }
-            if (string.IsNullOrEmpty(SelectedPolicyFrequencyType.Description.Trim()))
+            if (SelectedPolicyFrequencyType == null
+                || (SelectedPolicyFrequencyType != null
+                    && string.IsNullOrEmpty(SelectedPolicyFrequencyType.Description.Trim())) )
             {
                 _notifier.ShowError("Frequency type is invalid");
                 return false;
