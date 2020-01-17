@@ -7,8 +7,11 @@ using System.Linq;
 using ToastNotifications;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using CMG.DataAccess.Domain;
+using Microsoft.Extensions.Caching.Memory;
 using CMG.DataAccess.Query;
 using ToastNotifications.Messages;
+using Newtonsoft.Json;
 
 namespace CMG.Application.ViewModel
 {
@@ -17,16 +20,23 @@ namespace CMG.Application.ViewModel
         #region MemberVariables
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IMemoryCache _memoryCache;
         private readonly Notifier _notifier;
+        private const string searchOptionsKey = "searchOptions";
+        private const string searchoptionsCacheKey = "options";
+        
         #endregion MemberVariables
 
         #region Constructor
-        public MainViewModel(IUnitOfWork unitOfWork, IMapper mapper, Notifier notifier = null)
+        public MainViewModel(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCache memoryCache = null, Notifier notifier = null)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _memoryCache = memoryCache;
             _notifier = notifier;
+            GetUserOptions();
         }
+     
         #endregion Constructor
 
         #region Properties
@@ -62,6 +72,13 @@ namespace CMG.Application.ViewModel
             get { return _companyNames; }
             set { _companyNames = value; }
         }
+        private List<ViewComboDto> _clientTypeCollection;
+        public List<ViewComboDto> ClientTypeCollection
+        {
+            get { return _clientTypeCollection; }
+            set { _clientTypeCollection = value; }
+        }
+
         private string _lastName;
         public string LastName
         {
@@ -101,12 +118,6 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("CommanName");
             }
         }
-        private List<ViewComboDto> _clientTypeCollection;
-        public List<ViewComboDto> ClientTypeCollection
-        {
-            get { return _clientTypeCollection; }
-            set { _clientTypeCollection = value; }
-        }
         private string _policyNumber;
         public string PolicyNumber
         {
@@ -137,6 +148,18 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("CompanyName");
             }
         }
+
+        private ObservableCollection<ViewSearchOptionsDto> _searchOptions;
+        public ObservableCollection<ViewSearchOptionsDto> SearchOptions
+        {
+            get { return _searchOptions; }
+            set 
+            { 
+                _searchOptions = value;
+                OnPropertyChanged("SearchOptions");
+            }
+        }
+       
         public bool IsClientSelected
         {
             get { return SelectedClient != null ? true : false; }
@@ -144,7 +167,7 @@ namespace CMG.Application.ViewModel
         public bool IsPolicyDetailVisible
         {
             get { return SelectedClient == null ? true : false; }
-        }
+        }        
         private ObservableCollection<ViewClientSearchDto> _clientCollection;
         public ObservableCollection<ViewClientSearchDto> ClientCollection
         {
@@ -328,7 +351,7 @@ namespace CMG.Application.ViewModel
         }
         private void Search()
         {
-            PolicyViewModel policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, SelectedClient);
+            PolicyViewModel policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, SelectedClient, _memoryCache, null, _notifier);
             PersonStatusCollection = policyViewModel.PersonStatusCollection;
             SVCTypeCollection = policyViewModel.SVCTypeCollection;
             CompanyCollection = policyViewModel.CompanyCollection;
@@ -445,6 +468,78 @@ namespace CMG.Application.ViewModel
             filterBy.Property = property;
             filterBy.Equal = value;
             searchBy.Add(filterBy);
+        }
+        public void GetUserOptions()
+        {
+            
+            if(_memoryCache != null)
+            {
+                List<Options> options = default;
+                if (!_memoryCache.TryGetValue(searchoptionsCacheKey, out options))
+                {
+                    options = _unitOfWork.Options.All().Where(o => o.User == System.Environment.UserName).ToList();
+                    _memoryCache.Set(searchoptionsCacheKey, options);
+                }
+                var searchOptionsValue = options.Where(o => o.Key == searchOptionsKey).FirstOrDefault()?.Value;
+                SearchOptions = searchOptionsValue != null ? JsonConvert.DeserializeObject<ObservableCollection<ViewSearchOptionsDto>>(searchOptionsValue) : default;
+                if(SearchOptions == null)
+                {
+                    SearchOptions = new ObservableCollection<ViewSearchOptionsDto>();
+                    GetDefaultSearchOptions();
+                }
+            }
+        }
+       
+        public void GetDefaultSearchOptions()
+        {
+            SearchOptions.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Common Name",
+                ColumnOrder = 0,
+                ColumnType = "TextBox"
+            });
+
+            SearchOptions.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Last Name",
+                ColumnOrder = 1,
+                ColumnType = "TextBox"
+            });
+
+            SearchOptions.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "First Name",
+                ColumnOrder = 2,
+                ColumnType = "TextBox"
+            });
+
+            SearchOptions.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Entity Type",
+                ColumnOrder = 3,
+                ColumnType = "ComboBox"
+            });
+
+            SearchOptions.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Policy Number",
+                ColumnOrder = 4,
+                ColumnType = "ComboBox"
+            });
+
+            SearchOptions.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Company Name",
+                ColumnOrder = 5,
+                ColumnType = "ComboBox"
+            });
+
+            SearchOptions.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Policy Date",
+                ColumnOrder = 6,
+                ColumnType = "DatePicker"
+            });
         }
         #endregion Methods
     }

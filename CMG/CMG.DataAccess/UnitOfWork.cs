@@ -38,6 +38,7 @@ namespace CMG.DataAccess
         private IBusinessRepository _businessRepository;
         private IBusinessPolicyRepository _businessPolicyRepository;
         private IPolicyIllustrationRepository _policyIllustrationRepository;
+        private IOptionsRepository _optionsRepository;
 
         public ICommissionRepository Commissions => _commissionRepository ?? (_commissionRepository = new CommissionRepository(_context));
         public IAgentRepository Agents => _agentRepository ?? (_agentRepository = new AgentRepository(_context));
@@ -53,6 +54,7 @@ namespace CMG.DataAccess
         public IBusinessRepository Business => _businessRepository ?? (_businessRepository = new BusinessRepository(_context));
         public IBusinessPolicyRepository BusinessPolicy => _businessPolicyRepository ?? (_businessPolicyRepository = new BusinessPolicyRepository(_context));
         public IPolicyIllustrationRepository PolicyIllustration => _policyIllustrationRepository ?? (_policyIllustrationRepository = new PolicyIllustrationRepository(_context));
+        public IOptionsRepository Options => _optionsRepository ?? (_optionsRepository = new OptionsRepository(_context));
 
         public void Commit()
         {
