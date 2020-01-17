@@ -164,7 +164,15 @@ namespace CMG.Application.ViewModel
             {
                 _policyCollection = value;
                 OnPropertyChanged("PolicyCollection");
+                OnPropertyChanged("IsNoRecordFound");
             }
+        }
+        public bool IsNoRecordFound
+        {
+            get
+            {
+                return PolicyCollection != null && PolicyCollection.Count == 0;
+            }            
         }
         private ViewClientSearchDto _selectedClient;
         public ViewClientSearchDto SelectedClient
@@ -217,7 +225,7 @@ namespace CMG.Application.ViewModel
                 _policies = value;
                 OnPropertyChanged("Policies");
             }
-        }
+        }        
         private List<string> _entityTypes;
         public List<string> EntityTypes
         {

@@ -397,6 +397,11 @@
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
+                    <TextBlock Text="No records found" 
+                           HorizontalAlignment="Center" 
+                           VerticalAlignment="Center" 
+                           Visibility="{Binding IsNoRecordFound, Converter={StaticResource VisibilityConverter}, UpdateSourceTrigger=PropertyChanged}" 
+                           Style="{StaticResource NoRecordsTextBlock}" />
                 </Grid>
             </Grid>
             <Grid Grid.Row="0" Grid.Column="2">
