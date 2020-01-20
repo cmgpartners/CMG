@@ -30,7 +30,7 @@ namespace CMG.UI.View
         private void ButtonSearchSliderClose_Click(object sender, RoutedEventArgs e)
         {
             
-            var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(450) };
+            var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(550) };
             timer.Start();
             timer.Tick += (sender, args) =>
             {

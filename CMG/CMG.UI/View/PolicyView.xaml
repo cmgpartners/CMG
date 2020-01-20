@@ -98,17 +98,25 @@
             
         </template:SearchOptionsSelector>
 
-        <Storyboard x:Key="SearchSliderOpen">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="SearchSliderPannel">
-                <EasingDoubleKeyFrame KeyTime="0" Value="0"></EasingDoubleKeyFrame>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="450"></EasingDoubleKeyFrame>
-            </DoubleAnimationUsingKeyFrames>
+        <Storyboard x:Key="SearchSliderOpen" TargetProperty="Margin">
+            <ThicknessAnimation Storyboard.TargetName="SearchSliderPannel" Duration="0:0:0.6">
+                <ThicknessAnimation.From>
+                    <Thickness Right="450" Top="0" Bottom="0" Left="0"/>
+                </ThicknessAnimation.From>
+                <ThicknessAnimation.To>
+                    <Thickness Left="0" Top="0" Bottom="0" Right="0"/>
+                </ThicknessAnimation.To>
+            </ThicknessAnimation>
         </Storyboard>
-        <Storyboard x:Key="SearchSliderClose">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="SearchSliderPannel">
-                <EasingDoubleKeyFrame KeyTime="0" Value="450"></EasingDoubleKeyFrame>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"></EasingDoubleKeyFrame>
-            </DoubleAnimationUsingKeyFrames>
+        <Storyboard x:Key="SearchSliderClose" TargetProperty="Margin">
+            <ThicknessAnimation Storyboard.TargetName="SearchSliderPannel" Duration="0:0:0.6">
+                <ThicknessAnimation.From>
+                    <Thickness Left="0" Top="0" Bottom="0" Right="0"/>
+                </ThicknessAnimation.From>
+                <ThicknessAnimation.To>
+                    <Thickness Right="450" Top="0" Bottom="0" Left="0"/>
+                </ThicknessAnimation.To>
+            </ThicknessAnimation>
         </Storyboard>
         <Storyboard x:Key="IllustrationSliderOpen" TargetProperty="Margin">
             <ThicknessAnimation Storyboard.TargetName="IllustrationSliderPanel" Duration="0:0:0.6">
