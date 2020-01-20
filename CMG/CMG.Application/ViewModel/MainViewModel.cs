@@ -384,16 +384,7 @@ namespace CMG.Application.ViewModel
             EntityTypes = ClientTypeCollection.Select(r => r.Description).ToList();
         }
         private void Search()
-        {
-            //PolicyViewModel policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, SelectedClient, _memoryCache, null, _notifier);
-            //PersonStatusCollection = policyViewModel.PersonStatusCollection;
-            //SVCTypeCollection = policyViewModel.SVCTypeCollection;
-            //CompanyCollection = policyViewModel.CompanyCollection;            
-            //ClientTypeCollection = policyViewModel.ClientTypeCollection;
-
-            //Policies = policyViewModel.Policies;
-            //EntityTypes = policyViewModel.EntityTypes;
-            //CompanyNames = policyViewModel.CompanyNames;
+        {           
             if (IsValidSearchCriteria())
             {
                 SearchQuery searchQuery = BuildSearchQuery();

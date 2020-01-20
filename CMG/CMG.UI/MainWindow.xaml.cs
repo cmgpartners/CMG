@@ -151,7 +151,6 @@ namespace CMG.UI
 
         private void PolicyMenu_Click(object sender, RoutedEventArgs e)
         {
-            //_mainViewModel.LoadData();
             PolicyMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
             CloseCommissionMenu();
             PolicyViewModel policyViewModel;

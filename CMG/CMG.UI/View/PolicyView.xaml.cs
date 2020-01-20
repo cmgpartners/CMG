@@ -25,7 +25,6 @@ namespace CMG.UI.View
         public PolicyView()
         {
             InitializeComponent();
-            //policyViewModel = (PolicyViewModel)this.DataContext;
             Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() => {
                 if (policyViewModel == null)
                 {
