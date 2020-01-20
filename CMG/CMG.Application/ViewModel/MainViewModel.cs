@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using CMG.Application.DTO;
 using CMG.DataAccess.Interface;
 using System.Windows.Input;
@@ -503,6 +504,26 @@ namespace CMG.Application.ViewModel
             filterBy.Equal = value;
             searchBy.Add(filterBy);
         }
+        public void SaveSearchOptions()
+        {
+            var originalSearchOptions = _unitOfWork.Options.All().Where(o => o.User == Environment.UserName && o.Key == searchOptionsKey).FirstOrDefault();
+            if(originalSearchOptions == null)
+            {
+                originalSearchOptions = new Options();
+                originalSearchOptions.Key = searchOptionsKey;
+                originalSearchOptions.Value = JsonConvert.SerializeObject(SearchOptions);
+                originalSearchOptions.User = Environment.UserName;
+                _unitOfWork.Options.Add(originalSearchOptions);
+            }
+            else
+            {
+                originalSearchOptions.Value = JsonConvert.SerializeObject(SearchOptions);
+                _unitOfWork.Options.Save(originalSearchOptions);
+            }
+            _unitOfWork.Commit();
+            if(_memoryCache != null)
+                _memoryCache.Set(searchoptionsCacheKey, originalSearchOptions);
+        }
         public void GetUserOptions()
         {
             
@@ -511,7 +532,7 @@ namespace CMG.Application.ViewModel
                 List<Options> options = default;
                 if (!_memoryCache.TryGetValue(searchoptionsCacheKey, out options))
                 {
-                    options = _unitOfWork.Options.All().Where(o => o.User == System.Environment.UserName).ToList();
+                    options = _unitOfWork.Options.All().Where(o => o.User == Environment.UserName).ToList();
                     _memoryCache.Set(searchoptionsCacheKey, options);
                 }
                 var searchOptionsValue = options.Where(o => o.Key == searchOptionsKey).FirstOrDefault()?.Value;
