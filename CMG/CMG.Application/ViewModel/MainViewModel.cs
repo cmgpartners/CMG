@@ -25,7 +25,11 @@ namespace CMG.Application.ViewModel
         private readonly Notifier _notifier;
         private const string searchOptionsKey = "searchOptions";
         private const string searchoptionsCacheKey = "options";
-        
+        private const string comboFieldNamePStatus = "PSTATUS";
+        private const string comboFieldNameSVCType = "SVC_TYPE";
+        private const string comboFieldNameClientType = "CLIENTTYP";
+        private const string comboFieldNameCompany = "COMPANY";
+
         #endregion MemberVariables
 
         #region Constructor
@@ -36,6 +40,7 @@ namespace CMG.Application.ViewModel
             _memoryCache = memoryCache;
             _notifier = notifier;
             GetUserOptions();
+            LoadData();
         }
      
         #endregion Constructor
@@ -260,6 +265,12 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("EntityTypes");
             }
         }
+        private List<ViewComboDto> _combo;
+        public List<ViewComboDto> Combo
+        {
+            get { return _combo; }
+            set { _combo = value; }
+        }
         #endregion Properties
 
         #region Methods
@@ -350,16 +361,30 @@ namespace CMG.Application.ViewModel
                 CopiedCommission = renewalsViewModel.CopiedCommission;
             }
         }
-        private void Search()
+        public void LoadData()
         {
-            PolicyViewModel policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, SelectedClient, _memoryCache, null, _notifier);
-            PersonStatusCollection = policyViewModel.PersonStatusCollection;
-            SVCTypeCollection = policyViewModel.SVCTypeCollection;
-            CompanyCollection = policyViewModel.CompanyCollection;
-            Policies = policyViewModel.Policies;
-            EntityTypes = policyViewModel.EntityTypes;
-            ClientTypeCollection = policyViewModel.ClientTypeCollection;
-            CompanyNames = policyViewModel.CompanyNames;
+            GetComboData();
+            GetAutoSuggestionLists();
+        }
+        public void GetComboData()
+        {
+            var combo = _unitOfWork.Combo.All();
+            Combo = combo.Select(r => _mapper.Map<ViewComboDto>(r)).ToList();
+            PersonStatusCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNamePStatus).ToList();
+            SVCTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameSVCType).ToList();
+            ClientTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameClientType).ToList();
+            CompanyCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameCompany).ToList();
+        }
+        public void GetAutoSuggestionLists()
+        {
+            var policies = _unitOfWork.Policies.GetAllPolicyNumber();
+            var temppolicies = policies.Select(r => _mapper.Map<ViewPolicyListDto>(r)).ToList();
+            Policies = temppolicies.Select(r => r.PolicyNumber).ToList();
+            CompanyNames = CompanyCollection.Select(x => x.Description.Trim()).ToList();
+            EntityTypes = ClientTypeCollection.Select(r => r.Description).ToList();
+        }
+        private void Search()
+        {           
             if (IsValidSearchCriteria())
             {
                 SearchQuery searchQuery = BuildSearchQuery();
@@ -509,7 +534,7 @@ namespace CMG.Application.ViewModel
                     GetDefaultSearchOptions();
                 }
             }
-        }
+        }       
         public void GetDefaultSearchOptions()
         {
             SearchOptions.Add(new ViewSearchOptionsDto()

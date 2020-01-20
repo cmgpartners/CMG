@@ -336,21 +336,15 @@ namespace CMG.Application.ViewModel
         {
             var combo = _unitOfWork.Combo.All();
             Combo = combo.Select(r => _mapper.Map<ViewComboDto>(r)).ToList();
-            ClientTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameClientType).ToList();
             PolicyTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNamePolicyType).ToList();
             FrequencyTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameFrequency).ToList();
             StatusTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameStatus).ToList();
-            CompanyCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameCompany).ToList();
-            CompanyNames = CompanyCollection.Select(x => x.Description.Trim()).ToList();
-            PersonStatusCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNamePStatus).ToList();
-            SVCTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameSVCType).ToList();
             CategoryCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameCategory).ToList();
             CurrencyCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameCurrency).ToList();
         }
         private void LoadData()
         {
             GetComboData();
-            GetAutoSuggestionLists();
         }        
         private void BuildFilterByContains(string property, string value, List<FilterBy> searchBy)
         {
@@ -373,14 +367,6 @@ namespace CMG.Application.ViewModel
             filterBy.GreaterThan = fromvalue;
             filterBy.LessThan = toValue;
             searchBy.Add(filterBy);
-        }
-        private void GetAutoSuggestionLists()
-        {
-            var policies = _unitOfWork.Policies.GetAllPolicyNumber();
-            var temppolicies = policies.Select(r => _mapper.Map<ViewPolicyListDto>(r)).ToList();
-            Policies = temppolicies.Select(r => r.PolicyNumber).ToList();
-
-            EntityTypes = ClientTypeCollection.Select(r => r.Description).ToList();
         }
         private void GetPolicyCollection()
         {
