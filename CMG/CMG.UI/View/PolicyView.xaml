@@ -44,13 +44,13 @@
                                 BorderThickness="0 0 0 3" 
                                 Margin="10 0 15 0" 
                                 Width="85"
-                                AutoSuggestionList="{Binding DataContext.SelectedViewModel.EntityTypes, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                AutoSuggestionList="{Binding DataContext.EntityTypes, RelativeSource={RelativeSource AncestorType=Window}}" 
                                 SelectedValue="{Binding DataContext.EntityType, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
                 </uc:AutoCompleteBox>
             </WrapPanel>
         </DataTemplate>
         <DataTemplate x:Key="policyNumberTemplate" x:Name="policyNumberTemplate">
-            <WrapPanel AllowDrop="True" Orientation="Vertical">
+            <WrapPanel AllowDrop="True" Orientation="Vertical" Loaded="PolicyNumberPanel_Loaded">
                 <TextBlock Text="Policy #" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                 <uc:AutoCompleteBox 
                                 x:Name="UserControlPolicyNumber" 
@@ -59,16 +59,16 @@
                                 BorderThickness="0 0 0 3" 
                                 Margin="10 0 15 0" 
                                 Width="85"
-                                AutoSuggestionList="{Binding Policies}" 
+                                AutoSuggestionList="{Binding DataContext.Policies, RelativeSource={RelativeSource AncestorType=Window}}" 
                                 SelectedValue="{Binding DataContext.PolicyNumber, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
                 </uc:AutoCompleteBox>
             </WrapPanel>
         </DataTemplate>
         <DataTemplate x:Key="companyNameTemplate">
-            <WrapPanel AllowDrop="True" Orientation="Vertical">
+            <WrapPanel AllowDrop="True" Orientation="Vertical" Loaded="CompanyNamePanel_Loaded">
                 <TextBlock Text="Company" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                 <uc:AutoCompleteBox 
-                                AutoSuggestionList="{Binding CompanyNames}" 
+                                AutoSuggestionList="{Binding DataContext.CompanyNames, RelativeSource={RelativeSource AncestorType=Window}}" 
                                 Foreground="White" 
                                 BorderBrush="#FFCEEAFF" 
                                 BorderThickness="0 0 0 3" 

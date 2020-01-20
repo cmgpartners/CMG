@@ -24,7 +24,13 @@ namespace CMG.UI.View
         public PolicyView()
         {
             InitializeComponent();
-            policyViewModel = (PolicyViewModel)this.DataContext;
+            //policyViewModel = (PolicyViewModel)this.DataContext;
+            Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() => {
+                if (policyViewModel == null)
+                {
+                    policyViewModel = (PolicyViewModel)this.DataContext;
+                }
+            }));
         }
         private void ButtonSearchSliderClose_Click(object sender, RoutedEventArgs e)
         {
@@ -224,14 +230,41 @@ namespace CMG.UI.View
             WrapPanel entityTypePanel = (WrapPanel)sender;
             var entityTypeAutoComplete = entityTypePanel.Children.Count > 0 ? (AutoCompleteBox)entityTypePanel.Children[1] : null;
             if(entityTypeAutoComplete != null)
-            {
+            {                
                 if (policyViewModel != null
                     && !string.IsNullOrEmpty(policyViewModel.EntityType))
                 {
                     entityTypeAutoComplete.autoTextBox.Text = policyViewModel.EntityType;
-
                 }
                 
+            }
+        }
+
+        private void PolicyNumberPanel_Loaded(object sender, RoutedEventArgs e)
+        {
+            WrapPanel policyNumberPanel = (WrapPanel)sender;
+            var policyNumberAutoComplete = policyNumberPanel.Children.Count > 0 ? (AutoCompleteBox)policyNumberPanel.Children[1] : null;
+            if(policyNumberAutoComplete != null)
+            {                
+                if (policyViewModel != null
+                    && !string.IsNullOrEmpty(policyViewModel.PolicyNumber))
+                {
+                    policyNumberAutoComplete.autoTextBox.Text = policyViewModel.PolicyNumber;
+                }
+            }
+        }
+
+        private void CompanyNamePanel_Loaded(object sender, RoutedEventArgs e)
+        {
+            WrapPanel companyNamePanel = (WrapPanel)sender;
+            var companyNameAutoComplete = companyNamePanel.Children.Count > 0 ? (AutoCompleteBox)companyNamePanel.Children[1] : null;
+            if (companyNameAutoComplete != null)
+            {
+                if (policyViewModel != null
+                    && !string.IsNullOrEmpty(policyViewModel.CompanyName))
+                {
+                    companyNameAutoComplete.autoTextBox.Text = policyViewModel.CompanyName;
+                }
             }
         }
     }

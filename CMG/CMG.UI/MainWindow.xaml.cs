@@ -51,7 +51,11 @@ namespace CMG.UI
             if (_mainViewModel.SelectedViewModel != null
                 && _mainViewModel.SelectedViewModel is PolicyViewModel)
             {
+                
                 var policyViewModel = (PolicyViewModel)_mainViewModel.SelectedViewModel;
+                if(_mainViewModel.SelectedClient == null
+                    ||(_mainViewModel.SelectedClient != null
+                       && _mainViewModel.SelectedClient.Keynump != policyViewModel.SelectedClient.Keynump))
                 _mainViewModel.SelectedClient = policyViewModel.SelectedClient;
             }
             if (lstNavigation.SelectedIndex == 0)
@@ -147,6 +151,7 @@ namespace CMG.UI
 
         private void PolicyMenu_Click(object sender, RoutedEventArgs e)
         {
+            //_mainViewModel.LoadData();
             PolicyMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
             CloseCommissionMenu();
             PolicyViewModel policyViewModel;
@@ -161,6 +166,8 @@ namespace CMG.UI
             }
             _mainViewModel.SelectedViewModel = policyViewModel;
             policyViewModel.EntityType = _mainViewModel.EntityType;
+            policyViewModel.PolicyNumber = _mainViewModel.PolicyNumber;
+            policyViewModel.CompanyName = _mainViewModel.CompanyName;
             DataContext = _mainViewModel;
         }
 
