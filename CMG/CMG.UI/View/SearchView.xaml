@@ -25,7 +25,7 @@
                             <ColumnDefinition Width="100"/>
                             <ColumnDefinition Width="70"/>
                             <ColumnDefinition Width="150"/>
-                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="100"/>
                             <ColumnDefinition Width="280"/>
                         </Grid.ColumnDefinitions>
                         <Grid>
@@ -110,9 +110,7 @@
                             <TextBox Grid.Row="1" Margin="15 0 15 5" Text="{Binding Comment}"></TextBox>
                         </Grid>
                         <Grid Grid.Column="7">
-                            <Button Command="{Binding SearchCommand}" CommandParameter="true" IsDefault="True">
-                                <Image Source="/Asset/Search.png"></Image>
-                            </Button>
+                            <Button Command="{Binding SearchCommand}" CommandParameter="true" IsDefault="True" Content="Search"></Button>
                         </Grid>
                         <Grid Grid.Column="8">
                             <Button Content="Generate Report" Width="150" HorizontalAlignment="Right" Margin="0 0 15 0" ></Button>
@@ -122,7 +120,8 @@
                 <Grid Grid.Row="1">
                     <DataGrid AutoGenerateColumns="False" x:Name="search" IsReadOnly="True" 
                           ItemsSource="{Binding DataCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" 
-                          SelectionUnit="FullRow" RowHeight="50">
+                          SelectionUnit="FullRow" RowHeight="50"
+                          RowStyle="{StaticResource GridRowStyle}">
                         <DataGrid.Columns>
                         <DataGridTemplateColumn>
                             <DataGridTemplateColumn.CellTemplate>

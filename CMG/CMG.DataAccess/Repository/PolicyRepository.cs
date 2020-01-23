@@ -48,7 +48,7 @@ namespace CMG.DataAccess.Repository
                     Agent = a.Agent,
                     Split = a.Split,
                     AgentOrder = a.AgentOrder
-                })
+                }).ToList()
             }).FirstOrDefault();
         }
 
@@ -100,7 +100,7 @@ namespace CMG.DataAccess.Repository
                     Catgry = a.Catgry,
                     Relatn = a.Relatn,
                     Split = a.Split
-                }),
+                }).ToList(),
                 PolicyAgent = x.PolicyAgent.Select(p => new PolicyAgent
                 {
                     Id = p.Id,
@@ -109,7 +109,7 @@ namespace CMG.DataAccess.Repository
                     Split = p.Split,
                     AgentOrder = p.AgentOrder,
                     IsDeleted = p.IsDeleted
-                })
+                }).ToList()
             });
 
             var totalRecords = result.Count();

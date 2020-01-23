@@ -74,7 +74,8 @@
                               ItemsSource="{Binding AgentExpensesTable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               x:Name="AgentExpenses" IsReadOnly="False" 
                               ColumnHeaderStyle="{StaticResource HeaderStyle}" 
-                              CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50" MaxHeight="250">
+                              RowStyle="{StaticResource GridRowStyle}"
+                              CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50" MinHeight="250" MaxHeight="250">
                             <DataGrid.Columns>
                             <DataGridTemplateColumn Width="5">
                                     <DataGridTemplateColumn.CellTemplate>
@@ -198,7 +199,8 @@
                               ItemsSource="{Binding DueToPartnersTable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               x:Name="DueToPartners" IsReadOnly="False" 
                               ColumnHeaderStyle="{StaticResource HeaderStyle}" 
-                              CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50" MaxHeight="250">
+                              RowStyle="{StaticResource GridRowStyle}"
+                              CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50" MinHeight="250" MaxHeight="250">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Width="5">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -321,8 +323,9 @@
                     <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible"
                               ItemsSource="{Binding BankPositionsTable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               x:Name="BankPositions" IsReadOnly="False" 
-                              ColumnHeaderStyle="{StaticResource HeaderStyle}" 
-                              CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50" MaxHeight="250">
+                              ColumnHeaderStyle="{StaticResource HeaderStyle}"
+                              RowStyle="{StaticResource GridRowStyle}"
+                              CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50" MinHeight="250" MaxHeight="250">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Width="5">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -424,8 +427,9 @@
                     <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Visible"
                               ItemsSource="{Binding PersonalcommissionsTable, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                               x:Name="PersonalCommissions" IsReadOnly="False" 
-                              ColumnHeaderStyle="{StaticResource HeaderStyle}" 
-                              CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50" MaxHeight="250">
+                              ColumnHeaderStyle="{StaticResource HeaderStyle}"
+                              RowStyle="{StaticResource GridRowStyle}"
+                              CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50" MinHeight="250" MaxHeight="250">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Width="5">
                                 <DataGridTemplateColumn.CellTemplate>

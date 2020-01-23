@@ -46,7 +46,8 @@
                 <DataGrid AutoGenerateColumns="False" 
                       x:Name="fyc" IsReadOnly="False" 
                       ItemsSource="{Binding DataCollection}" 
-                      ColumnHeaderStyle="{StaticResource HeaderStyle}" 
+                      ColumnHeaderStyle="{StaticResource HeaderStyle}"
+                      RowStyle="{StaticResource GridRowStyle}"
                       CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn>

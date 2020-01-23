@@ -379,7 +379,7 @@ namespace CMG.Application.ViewModel
 
                 var dataSearchBy = _unitOfWork.Policies.Find(searchQuery);
 
-                var policyCollection = (dataSearchBy.Result.Select(r => _mapper.Map<ViewPolicyListDto>(r)).ToList());
+                var policyCollection = dataSearchBy.Result.Select(r => _mapper.Map<ViewPolicyListDto>(r));
                 
                 PolicyCollection = new ObservableCollection<ViewPolicyListDto>(policyCollection.Select(x =>
                 {
@@ -395,7 +395,7 @@ namespace CMG.Application.ViewModel
                         }
                     ).ToList();
                     return x;
-                }));
+                }).OrderByDescending(o => o.PolicyDate));
 
                 if (PolicyCollection.Count > 0)
                 {
@@ -430,6 +430,7 @@ namespace CMG.Application.ViewModel
                     _unitOfWork.Commit();
                     var updatedEntity = _unitOfWork.PolicyIllustration.GetById(entity.Id);
                     SelectedIllustration = _mapper.Map<ViewPolicyIllustrationDto>(updatedEntity);
+                    ViewIllustration(0);
                     _notifier.ShowSuccess("Illustration updated successfully");
                 }
             }

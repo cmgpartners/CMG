@@ -20,6 +20,7 @@
     <None Remove="Asset\RowSelectorKP.png" />
     <None Remove="Asset\Salesforce.png" />
     <None Remove="Asset\Search.png" />
+    <None Remove="Asset\Search_white.png" />
     <None Remove="Asset\Settings.png" />
   </ItemGroup>
 
@@ -74,6 +75,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Asset\Search.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Asset\Search_white.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Asset\Settings.png">

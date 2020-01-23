@@ -54,7 +54,6 @@ namespace CMG.UI.View
         private void ButtonIllustrationOpen_Click(object sender, RoutedEventArgs e)
         {
             IllustrationSliderPanel.Visibility = Visibility.Visible;
-            IllustrationSliderPanel.Width = PolicyMainView.ActualWidth - 100; 
             PolicyEdit.Visibility = Visibility.Collapsed;
             PolicyMainView.Opacity = 0.3;
         }
