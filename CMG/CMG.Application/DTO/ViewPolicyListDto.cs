@@ -18,7 +18,7 @@ namespace CMG.Application.DTO
         public string Class { get; set; }        
         public string Currency { get; set; }        
         public DateTime? PolicyDate { get; set; }        
-        public DateTime PlacedOn { get; set; }        
+        public DateTime? PlacedOn { get; set; }        
         public DateTime? ReprojectedOn { get; set; }        
         public int Age { get; set; }        
         public string PolicyNotes { get; set; }
