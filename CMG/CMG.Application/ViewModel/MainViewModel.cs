@@ -13,6 +13,7 @@ using Microsoft.Extensions.Caching.Memory;
 using CMG.DataAccess.Query;
 using ToastNotifications.Messages;
 using Newtonsoft.Json;
+using System.Data;
 
 namespace CMG.Application.ViewModel
 {
@@ -24,11 +25,30 @@ namespace CMG.Application.ViewModel
         private readonly IMemoryCache _memoryCache;
         private readonly Notifier _notifier;
         private const string searchOptionsKey = "searchOptions";
-        private const string searchoptionsCacheKey = "options";
+        private const string PolicyColumnsKey = "policyColumns";
+        private const string optionsCacheKey = "options";
         private const string comboFieldNamePStatus = "PSTATUS";
         private const string comboFieldNameSVCType = "SVC_TYPE";
         private const string comboFieldNameClientType = "CLIENTTYP";
         private const string comboFieldNameCompany = "COMPANY";
+
+        private const string ColumnNamePolicyNotes = "Policy Notes";
+
+        private const string ColumnNamePolicyNumber = "Number";
+        private const string ColumnNameCompanyName = "Company";
+        private const string ColumnNameFaceAmount = "Face Amount";
+        private const string ColumnNamePayment = "Payment";
+        private const string ColumnNameStatus = "Status";
+        private const string ColumnNameFrequency = "Frequency";
+        private const string ColumnNameType = "Type";
+        private const string ColumnNamePlanCode = "PlanCode";
+        private const string ColumnNameRating = "Rating";
+        private const string ColumnNameClass = "Class";
+        private const string ColumnNameCurrency = "Currency";
+        private const string ColumnNamePolicyDate = "Policy Date";
+        private const string ColumnNamePlacedOn = "Placed On";
+        private const string ColumnNameReprojectedOn = "Reprojected On";
+        private const string ColumnNameAge = "Age";
 
         #endregion MemberVariables
 
@@ -165,7 +185,18 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("SearchOptions");
             }
         }
-       
+
+        private ObservableCollection<ViewSearchOptionsDto> _policyColumns;
+        public ObservableCollection<ViewSearchOptionsDto> PolicyColumns
+        {
+            get { return _policyColumns; }
+            set
+            {
+                _policyColumns = value;
+                OnPropertyChanged("PolicyColumns");
+            }
+        }
+
         public bool IsClientSelected
         {
             get { return SelectedClient != null ? true : false; }
@@ -215,6 +246,16 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("IsPolicyDetailVisible");
                 PolicyViewModel pv = new PolicyViewModel(_unitOfWork, _mapper, SelectedClient);
                 PolicyCollection = pv.PolicyCollection;
+            }
+        }
+        private List<string> columnNames;
+        public List<string> ColumnNames
+        {
+            get { return columnNames; }
+            set
+            {
+                columnNames = value;
+                OnPropertyChanged("ColumnNames");
             }
         }
         private ViewComboDto _selectedClientType;
@@ -306,7 +347,7 @@ namespace CMG.Application.ViewModel
         public ICommand SearchClientCommand
         {
             get { return CreateCommand(Search); }
-        }
+        }        
         public void SearchPolicy(object parameter)
         {
             if (parameter != null)
@@ -365,6 +406,26 @@ namespace CMG.Application.ViewModel
         {
             GetComboData();
             GetAutoSuggestionLists();
+
+            ColumnNames = new List<string>();
+            ColumnNames.Add("Policy Number");
+            ColumnNames.Add("Company");
+            ColumnNames.Add("Face Amount");
+            ColumnNames.Add("Payment");
+            ColumnNames.Add("Status");
+            ColumnNames.Add("Frequency");
+            ColumnNames.Add("Type");
+            ColumnNames.Add("Plan Code");
+            ColumnNames.Add(ColumnNameRating);
+            ColumnNames.Add(ColumnNameClass);
+            ColumnNames.Add(ColumnNameCurrency);
+            ColumnNames.Add(ColumnNamePolicyDate);
+            ColumnNames.Add(ColumnNamePlacedOn);
+            ColumnNames.Add("Reprojected On");
+            ColumnNames.Add("Age");
+            ColumnNames.Add(ColumnNamePolicyNotes);
+            ColumnNames.Add("Client Notes");
+            ColumnNames.Add("Internal Notes");
         }
         public void GetComboData()
         {
@@ -513,18 +574,17 @@ namespace CMG.Application.ViewModel
             }
             _unitOfWork.Commit();
             if(_memoryCache != null)
-                _memoryCache.Set(searchoptionsCacheKey, originalSearchOptions);
-        }
+                _memoryCache.Set(optionsCacheKey, originalSearchOptions);
+        }        
         public void GetUserOptions()
-        {
-            
+        {            
             if(_memoryCache != null)
             {
                 List<Options> options = default;
-                if (!_memoryCache.TryGetValue(searchoptionsCacheKey, out options))
+                if (!_memoryCache.TryGetValue(optionsCacheKey, out options))
                 {
                     options = _unitOfWork.Options.All().Where(o => o.User == Environment.UserName).ToList();
-                    _memoryCache.Set(searchoptionsCacheKey, options);
+                    _memoryCache.Set(optionsCacheKey, options);
                 }
                 var searchOptionsValue = options.Where(o => o.Key == searchOptionsKey).FirstOrDefault()?.Value;
                 SearchOptions = searchOptionsValue != null ? JsonConvert.DeserializeObject<ObservableCollection<ViewSearchOptionsDto>>(searchOptionsValue) : default;
@@ -532,6 +592,13 @@ namespace CMG.Application.ViewModel
                 {
                     SearchOptions = new ObservableCollection<ViewSearchOptionsDto>();
                     GetDefaultSearchOptions();
+                }
+                var policyColumnsValue = options.Where(x => x.Key == PolicyColumnsKey).FirstOrDefault()?.Value;
+                PolicyColumns = policyColumnsValue != null ? JsonConvert.DeserializeObject<ObservableCollection<ViewSearchOptionsDto>>(policyColumnsValue) : default;
+                if (PolicyColumns == null)
+                {
+                    PolicyColumns = new ObservableCollection<ViewSearchOptionsDto>();
+                    GetDefaultPolicyColumns();
                 }
             }
         }       
@@ -584,6 +651,99 @@ namespace CMG.Application.ViewModel
                 ColumnName = "Policy Date",
                 ColumnOrder = 6,
                 ColumnType = "DatePicker"
+            });
+        }
+        public void SaveOptionKeyPolicyColumns()
+        {
+            var originalPolicyColumn = _unitOfWork.Options.All().Where(o => o.User == Environment.UserName && o.Key == PolicyColumnsKey).FirstOrDefault();
+            if (originalPolicyColumn == null)
+            {
+                originalPolicyColumn = new Options();
+                originalPolicyColumn.Key = PolicyColumnsKey;
+                originalPolicyColumn.Value = JsonConvert.SerializeObject(PolicyColumns);
+                originalPolicyColumn.User = Environment.UserName;
+                _unitOfWork.Options.Add(originalPolicyColumn);
+            }
+            else
+            {
+                originalPolicyColumn.Value = JsonConvert.SerializeObject(PolicyColumns);
+                _unitOfWork.Options.Save(originalPolicyColumn);
+            }
+            _unitOfWork.Commit();
+            if (_memoryCache != null)
+                _memoryCache.Set(optionsCacheKey, originalPolicyColumn);
+        }
+        private void GetDefaultPolicyColumns()
+        {
+            PolicyColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Policy Number",
+                ColumnOrder = 1
+            });
+            PolicyColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Company",
+                ColumnOrder = 2
+            });
+            PolicyColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Face Amount",
+                ColumnOrder = 3
+            });
+            PolicyColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Payment",
+                ColumnOrder = 4
+            });
+            PolicyColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Status",
+                ColumnOrder = 5
+            });
+            PolicyColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Frequency",
+                ColumnOrder = 6
+            });
+            PolicyColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Type",
+                ColumnOrder = 7
+            });
+            PolicyColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Plan Code",
+                ColumnOrder = 8
+            });
+            PolicyColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Rating",
+                ColumnOrder = 9
+            });
+            PolicyColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Class",
+                ColumnOrder = 10
+            });
+            PolicyColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Currency",
+                ColumnOrder = 11
+            });
+            PolicyColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Policy Date",
+                ColumnOrder = 12
+            });
+            PolicyColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Placed On",
+                ColumnOrder = 13
+            });
+            PolicyColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = "Reprojected On",
+                ColumnOrder = 14
             });
         }
         #endregion Methods
