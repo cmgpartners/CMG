@@ -572,8 +572,8 @@ namespace CMG.Application.ViewModel
                 _notifier.ShowError("Payment is invalid");
                 return false;
             }
-            if(!DateTime.TryParse(SelectedPolicy.PlacedOn.ToString(), out DateTime placedOn)
-                || placedOn == date)
+            if(SelectedPolicy.PlacedOn != null 
+                &&  !DateTime.TryParse(SelectedPolicy.PlacedOn.ToString(), out DateTime placedOn))
             {
                 _notifier.ShowError("Placement date is invalid");
                 return false;
@@ -590,8 +590,8 @@ namespace CMG.Application.ViewModel
                 _notifier.ShowError("Currency is invalid");
                 return false;
             }
-            if (!DateTime.TryParse(SelectedPolicy.ReprojectedOn.ToString(), out DateTime reprojectedDate)
-                || reprojectedDate == date)
+            if (SelectedPolicy.ReprojectedOn != null 
+                && !DateTime.TryParse(SelectedPolicy.ReprojectedOn.ToString(), out DateTime reprojectedDate))
             {
                 _notifier.ShowError("Reprojection date is invalid");
                 return false;
@@ -638,16 +638,7 @@ namespace CMG.Application.ViewModel
             {
                 IsPolicyNotesEditVisible = true;
                 IsPolicyNotesSaveVisible = false;
-                if (SelectedPolicy != null)
-                {
-                    SelectedPolicy.PeoplePolicy = null;
-                    SelectedPolicy.PolicyAgent = null;
-                    var originalPolicy = _unitOfWork.Policies.GetById(SelectedPolicy.Id);
-                    var entity = _mapper.Map(SelectedPolicy, originalPolicy);
-                    _unitOfWork.Policies.Save(entity);
-                    _unitOfWork.Commit();
-                    _notifier.ShowSuccess("Policy Notes updated successfully");
-                }
+                SaveNotes("Policy");
             }
             catch
             {
@@ -675,18 +666,9 @@ namespace CMG.Application.ViewModel
             {
                 IsClientNotesEditVisible = true;
                 IsClientNotesSaveVisible = false;
-                if (SelectedPolicy != null)
-                {
-                    SelectedPolicy.PeoplePolicy = null;
-                    SelectedPolicy.PolicyAgent = null;
-                    var originalPolicy = _unitOfWork.Policies.GetById(SelectedPolicy.Id);
-                    var entity = _mapper.Map(SelectedPolicy, originalPolicy);
-                    _unitOfWork.Policies.Save(entity);
-                    _unitOfWork.Commit();
-                    _notifier.ShowSuccess("Policy Notes updated successfully");
-                }
+                SaveNotes("Client");
             }
-            catch (Exception ex)
+            catch
             {
                 _notifier.ShowError("Error occured while updating policy notes");
             }
@@ -712,16 +694,7 @@ namespace CMG.Application.ViewModel
             {
                 IsInternalNotesEditVisible = true;
                 IsInternalNotesSaveVisible = false;
-                if (SelectedPolicy != null)
-                {
-                    SelectedPolicy.PeoplePolicy = null;
-                    SelectedPolicy.PolicyAgent = null;
-                    var originalPolicy = _unitOfWork.Policies.GetById(SelectedPolicy.Id);
-                    var entity = _mapper.Map(SelectedPolicy, originalPolicy);
-                    _unitOfWork.Policies.Save(entity);
-                    _unitOfWork.Commit();
-                    _notifier.ShowSuccess("Policy Notes updated successfully");
-                }
+                SaveNotes("Internal");
             }
             catch
             {
@@ -737,6 +710,30 @@ namespace CMG.Application.ViewModel
             if (originalPolicy != null)
                 SelectedPolicy.InternalNotes = originalPolicy.NoteInt;
             OnPropertyChanged("SelectedPolicy");
+        }
+
+        private void SaveNotes(string noteType)
+        {
+            try
+            {
+                if (SelectedPolicy != null)
+                {
+                    var entity = _unitOfWork.Policies.GetById(SelectedPolicy.Id);
+                    if(noteType == "Client")
+                        entity.NoteCli = SelectedPolicy.ClientNotes;
+                    else if(noteType == "Policy")
+                        entity.Comment = SelectedPolicy.PolicyNotes;
+                    else if(noteType == "Internal")
+                        entity.NoteInt = SelectedPolicy.InternalNotes;
+                    _unitOfWork.Policies.Save(entity);
+                    _unitOfWork.Commit();
+                    _notifier.ShowSuccess($"{noteType} Notes updated successfully");
+                }
+            }
+            catch
+            {
+                throw;
+            }
         }
         private void DividentScaleFilter(object isDividentScale)
         {
