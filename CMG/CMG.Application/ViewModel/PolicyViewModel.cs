@@ -12,6 +12,7 @@ using System.Windows.Input;
 using ToastNotifications;
 using ToastNotifications.Messages;
 using Microsoft.Extensions.Caching.Memory;
+using System.Data;
 
 namespace CMG.Application.ViewModel
 {
@@ -21,7 +22,7 @@ namespace CMG.Application.ViewModel
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         public readonly IDialogService _dialogService;
-        private readonly Notifier _notifier;
+        public readonly Notifier _notifier;
 
         private const string comboFieldNameClientType = "CLIENTTYP";
         private const string comboFieldNamePolicyType = "TYPE";
@@ -32,6 +33,20 @@ namespace CMG.Application.ViewModel
         private const string comboFieldNameSVCType = "SVC_TYPE";
         private const string comboFieldNameCategory = "CATGRY";
         private const string comboFieldNameCurrency = "CURRENCY";
+
+        private const string ColumnNamePolicyNumber = "PolicyNumber";
+        private const string ColumnNameCompanyName = "CompanyName";
+        private const string ColumnNameFaceAmount = "FaceAmount";
+        private const string ColumnNamePayment = "Payment";
+        private const string ColumnNameStatus = "Status";
+        private const string ColumnNameFrequency = "Frequency";
+        private const string ColumnNameType = "Type";
+        private const string ColumnNamePlanCode = "PlanCode";
+        private const string ColumnNameRating = "Rating";
+        private const string ColumnNameClass = "Class";
+        private const string ColumnNameCurrency = "Currency";
+        private const string ColumnNamePolicyDate = "PolicyDate";
+        private const string ColumnNamePlacedOn = "PlacedOn";
         #endregion
 
         #region Constructor
@@ -259,7 +274,16 @@ namespace CMG.Application.ViewModel
             get { return _isInternalNotesSaveVisible; }
             set { _isInternalNotesSaveVisible = value; OnPropertyChanged("IsInternalNotesSaveVisible"); }
         }
-
+        private DataTable policyTable;
+        public DataTable PolicyTable
+        {
+            get { return policyTable; }
+            set
+            {
+                policyTable = value;
+                OnPropertyChanged("PolicyTable");
+            }
+        }
         #region command properties
         public ICommand ViewIllustrationCommand
         {
@@ -320,7 +344,7 @@ namespace CMG.Application.ViewModel
         #endregion command properties
         #endregion Properties
 
-        #region Methods
+        #region Methods        
         private void GetSelectedPolicyDropdownData()
         {
             if (SelectedPolicy != null)
@@ -380,7 +404,7 @@ namespace CMG.Application.ViewModel
                 var dataSearchBy = _unitOfWork.Policies.Find(searchQuery);
 
                 var policyCollection = dataSearchBy.Result.Select(r => _mapper.Map<ViewPolicyListDto>(r));
-                
+
                 PolicyCollection = new ObservableCollection<ViewPolicyListDto>(policyCollection.Select(x =>
                 {
                     x.Type = string.IsNullOrEmpty(x.Type.Trim()) ? "" : PolicyTypeCollection.Where(c => c.FieldCode == x.Type.Trim()).FirstOrDefault()?.Description;
@@ -745,6 +769,28 @@ namespace CMG.Application.ViewModel
             {
                 ViewIllustration(0);
             }
+        }
+        public ObservableCollection<ViewPolicyListDto> ReorderColumns(bool isAddColumn, string newColumnName, int columnIndex)
+        {
+            if(PolicyCollection!= null)
+            {
+                switch(newColumnName)
+                {
+                    case "Class":
+                        if (!PolicyCollection.Any(x => x.PolicyNotes != null))
+                        {
+                            for(int i = 0; i < PolicyCollection.Count(); i++)
+                            {
+                                PolicyCollection[i].PolicyNotes = PolicyCollection[i].PolicyNotes;
+
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return PolicyCollection;
         }
         #endregion Methods
     }
