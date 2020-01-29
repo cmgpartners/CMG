@@ -32,24 +32,24 @@ namespace CMG.Application.ViewModel
         private const string comboFieldNameClientType = "CLIENTTYP";
         private const string comboFieldNameCompany = "COMPANY";
 
-        private const string ColumnNamePolicyNotes = "Policy Notes";
-
-        private const string ColumnNamePolicyNumber = "Number";
-        private const string ColumnNameCompanyName = "Company";
+        private const string ColumnNamePolicyNumber = "Policy Number";
+        private const string ColumnNameCompany = "Company";
         private const string ColumnNameFaceAmount = "Face Amount";
         private const string ColumnNamePayment = "Payment";
         private const string ColumnNameStatus = "Status";
         private const string ColumnNameFrequency = "Frequency";
         private const string ColumnNameType = "Type";
-        private const string ColumnNamePlanCode = "PlanCode";
+        private const string ColumnNamePlanCode = "Plan Code";
         private const string ColumnNameRating = "Rating";
         private const string ColumnNameClass = "Class";
         private const string ColumnNameCurrency = "Currency";
         private const string ColumnNamePolicyDate = "Policy Date";
         private const string ColumnNamePlacedOn = "Placed On";
         private const string ColumnNameReprojectedOn = "Reprojected On";
+        private const string ColumnNamePolicyNotes = "Policy Notes";
+        private const string ColumnNameClientNotes = "Client Notes";
+        private const string ColumnNameInternalNotes = "Internal Notes";
         private const string ColumnNameAge = "Age";
-
         #endregion MemberVariables
 
         #region Constructor
@@ -408,24 +408,24 @@ namespace CMG.Application.ViewModel
             GetAutoSuggestionLists();
 
             ColumnNames = new List<string>();
-            ColumnNames.Add("Policy Number");
-            ColumnNames.Add("Company");
-            ColumnNames.Add("Face Amount");
-            ColumnNames.Add("Payment");
-            ColumnNames.Add("Status");
-            ColumnNames.Add("Frequency");
-            ColumnNames.Add("Type");
-            ColumnNames.Add("Plan Code");
+            ColumnNames.Add(ColumnNamePolicyNumber);
+            ColumnNames.Add(ColumnNameCompany);
+            ColumnNames.Add(ColumnNameFaceAmount);
+            ColumnNames.Add(ColumnNamePayment);
+            ColumnNames.Add(ColumnNameStatus);
+            ColumnNames.Add(ColumnNameFrequency);
+            ColumnNames.Add(ColumnNameType);
+            ColumnNames.Add(ColumnNamePlanCode);
             ColumnNames.Add(ColumnNameRating);
             ColumnNames.Add(ColumnNameClass);
             ColumnNames.Add(ColumnNameCurrency);
             ColumnNames.Add(ColumnNamePolicyDate);
             ColumnNames.Add(ColumnNamePlacedOn);
-            ColumnNames.Add("Reprojected On");
-            ColumnNames.Add("Age");
+            ColumnNames.Add(ColumnNameReprojectedOn);
+            ColumnNames.Add(ColumnNameAge);
             ColumnNames.Add(ColumnNamePolicyNotes);
-            ColumnNames.Add("Client Notes");
-            ColumnNames.Add("Internal Notes");
+            ColumnNames.Add(ColumnNameClientNotes);
+            ColumnNames.Add(ColumnNameInternalNotes);
         }
         public void GetComboData()
         {
@@ -677,72 +677,72 @@ namespace CMG.Application.ViewModel
         {
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = "Policy Number",
+                ColumnName = ColumnNamePolicyNumber,
                 ColumnOrder = 1
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = "Company",
+                ColumnName = ColumnNameCompany,
                 ColumnOrder = 2
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = "Face Amount",
+                ColumnName = ColumnNameFaceAmount,
                 ColumnOrder = 3
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = "Payment",
+                ColumnName = ColumnNamePayment,
                 ColumnOrder = 4
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = "Status",
+                ColumnName = ColumnNameStatus,
                 ColumnOrder = 5
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = "Frequency",
+                ColumnName = ColumnNameFrequency,
                 ColumnOrder = 6
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = "Type",
+                ColumnName = ColumnNameType,
                 ColumnOrder = 7
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = "Plan Code",
+                ColumnName = ColumnNamePlanCode,
                 ColumnOrder = 8
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = "Rating",
+                ColumnName = ColumnNameRating,
                 ColumnOrder = 9
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = "Class",
+                ColumnName = ColumnNameClass,
                 ColumnOrder = 10
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = "Currency",
+                ColumnName = ColumnNameCurrency,
                 ColumnOrder = 11
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = "Policy Date",
+                ColumnName = ColumnNamePolicyDate,
                 ColumnOrder = 12
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = "Placed On",
+                ColumnName = ColumnNamePlacedOn,
                 ColumnOrder = 13
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = "Reprojected On",
+                ColumnName = ColumnNameReprojectedOn,
                 ColumnOrder = 14
             });
         }

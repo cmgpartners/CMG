@@ -45,8 +45,30 @@ namespace CMG.UI.View
         private const string ColumnNamePlacedOn = "Placed On";
         private const string ColumnNameReprojectedOn = "Reprojected On";
         private const string ColumnNameAge = "Age";
+        private const string ColumnNamePolicyNotes = "Policy Notes";
+        private const string ColumnNameClientNotes = "Client Notes";
+        private const string ColumnNameInternalNotes = "Internal Notes";
         private const string MenuItemAddColumns = "Add Columns";
         private const string MenuItemRemove = "Remove";
+
+        private const string BindingPolicyNumner = "PolicyNumber";
+        private const string BindingCompanyName  = "CompanyName";
+        private const string BindingFaceAmount = "FaceAmount";
+        private const string BindingPayment = "Payment";
+        private const string BindingStatus = "Status";
+        private const string BindingFrequency = "Frequency";
+        private const string BindingType = "Type";
+        private const string BindingPlanCode = "PlanCode";
+        private const string BindingRating = "Rating";
+        private const string BindingClass = "Class";
+        private const string BindingCurrency = "Currency";
+        private const string BindingPolicyDate = "PolicyDate";
+        private const string BindingPlacedOn = "PlacedOn";
+        private const string BindingReprojectedOn = "ReprojectedOn";
+        private const string BindingAge = "Age";
+        private const string BindingPolicyNotes = "PolicyNotes";
+        private const string BindingClientNotes = "ClientNotes";
+        private const string BindingInternalNotes = "InternalNotes";
         #endregion
 
         public PolicyView()
@@ -134,11 +156,11 @@ namespace CMG.UI.View
                 PolicyMainView.Opacity = 1;
             };
         }
-        private void SearchOptionsList_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void SearchOptionsList_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             startPoint = e.GetPosition(null);
         }
-        private void SearchOptionsList_PreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        private void SearchOptionsList_PreviewMouseMove(object sender, MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
@@ -329,19 +351,19 @@ namespace CMG.UI.View
                 if (!isColumnExist)
                 {
                     policies.Columns.Insert(columnIndex, AddDataGridColumn(newColumnName));
+                    for (int i = 0; i < policies.Columns.Count; i++)
+                    {
+                        ResizePolicyGridColumns(policies.Columns[i].Header.ToString());
+                    }
+                    ViewSearchOptionsDto newColumnView = new ViewSearchOptionsDto() { ColumnName = newColumnName, ColumnOrder = columnIndex };
+                    ResetPolicyColumnsIndex(columnIndex - 1);
+                    policyViewModel.PolicyColumns.Insert(columnIndex - 1, newColumnView);
+                    policyViewModel.SaveOptionKeyPolicyColumns();
                 }
                 else
                 {
                     policyViewModel._notifier.ShowError("Column " + newColumnName + " already exists");
-                }
-                for (int i = 0; i < policies.Columns.Count; i++)
-                {
-                    ResizePolicyGridColumns(policies.Columns[i].Header.ToString());
-                }
-                ViewSearchOptionsDto newColumnView = new ViewSearchOptionsDto() { ColumnName = newColumnName, ColumnOrder = columnIndex };
-                ResetPolicyColumnsIndex(columnIndex - 1);
-                policyViewModel.PolicyColumns.Insert(columnIndex - 1, newColumnView);
-                policyViewModel.SaveOptionKeyPolicyColumns();
+                }                
             }
         }
         private void Policies_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
@@ -385,36 +407,36 @@ namespace CMG.UI.View
         {
             switch (columnName)
             {
-                case "Plan Code":
+                case ColumnNamePlanCode:
                     SetPolicyGridColumnWidth(columnName, 70);
                     break;
-                case "Company":
+                case ColumnNameCompany:
                     SetPolicyGridColumnWidth(columnName, 110);
                     break;
-                case "Face Amount":
-                case "Payment":
+                case ColumnNameFaceAmount:
+                case ColumnNamePayment:
                     SetPolicyGridColumnWidth(columnName, 110);
                     break;
-                case "Frequency":
-                case "Type":
-                case "Rating":
-                case "Class":
-                case "Currency":
+                case ColumnNameFrequency:
+                case ColumnNameType:
+                case ColumnNameRating:
+                case ColumnNameClass:
+                case ColumnNameCurrency:
                     SetPolicyGridColumnWidth(columnName, 80);
                     break;
-                case "Policy Number":
-                case "Policy Date":
-                case "Placed On":
-                case "Reprojected On":
-                case "Status":
+                case ColumnNamePolicyNumber:
+                case ColumnNamePolicyDate:
+                case ColumnNamePlacedOn:
+                case ColumnNameReprojectedOn:
+                case ColumnNameStatus:
                     SetPolicyGridColumnWidth(columnName, 100);
                     break;
-                case "Age":
+                case ColumnNameAge:
                     SetPolicyGridColumnWidth(columnName, 50);
                     break;
-                case "Policy Notes":
-                case "Client Notes":
-                case "Internal Notes":
+                case ColumnNamePolicyNotes:
+                case ColumnNameClientNotes:
+                case ColumnNameInternalNotes:
                     SetPolicyGridColumnWidth(columnName, 150);
                     break;
                 default:
@@ -463,8 +485,8 @@ namespace CMG.UI.View
             string bindingPath = string.Empty;
             switch (columnName)
             {
-                case "Policy Number":
-                    bindingPath = "PolicyNumber";
+                case ColumnNamePolicyNumber:
+                    bindingPath = BindingPolicyNumner;
                     if (policyViewModel.PolicyCollection != null)
                     {
                         for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
@@ -473,8 +495,8 @@ namespace CMG.UI.View
                         }
                     }
                     break;
-                case "Company":
-                    bindingPath = "CompanyName";
+                case ColumnNameCompany:
+                    bindingPath = BindingCompanyName;
                     if (policyViewModel.PolicyCollection != null)
                     {
                         for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
@@ -483,8 +505,8 @@ namespace CMG.UI.View
                         }
                     }
                     break;
-                case "Face Amount":
-                    bindingPath = "FaceAmount";
+                case ColumnNameFaceAmount:
+                    bindingPath = BindingFaceAmount;
                     if (policyViewModel.PolicyCollection != null)
                     {
                         for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
@@ -493,8 +515,8 @@ namespace CMG.UI.View
                         }
                     }
                     break;
-                case "Payment":
-                    bindingPath = "Payment";
+                case ColumnNamePayment:
+                    bindingPath = BindingPayment;
                     if (policyViewModel.PolicyCollection != null)
                     {
                         for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
@@ -503,8 +525,8 @@ namespace CMG.UI.View
                         }
                     }
                     break;
-                case "Status":
-                    bindingPath = "Status";
+                case ColumnNameStatus:
+                    bindingPath = BindingStatus;
                     if (policyViewModel.PolicyCollection != null)
                     {
                         for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
@@ -513,8 +535,8 @@ namespace CMG.UI.View
                         }
                     }
                     break;
-                case "Frequency":
-                    bindingPath = "Frequency";
+                case ColumnNameFrequency:
+                    bindingPath = BindingFrequency;
                     if (policyViewModel.PolicyCollection != null)
                     {
                         for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
@@ -523,8 +545,8 @@ namespace CMG.UI.View
                         }
                     }
                     break;
-                case "Type":
-                    bindingPath = "Type";
+                case ColumnNameType:
+                    bindingPath = BindingType;
                     if (policyViewModel.PolicyCollection != null)
                     {
                         for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
@@ -533,8 +555,8 @@ namespace CMG.UI.View
                         }
                     }
                     break;
-                case "Plan Code":
-                    bindingPath = "PlanCode";
+                case ColumnNamePlanCode:
+                    bindingPath = BindingPlanCode;
                     if (policyViewModel.PolicyCollection != null)
                     {
                         for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
@@ -543,8 +565,8 @@ namespace CMG.UI.View
                         }
                     }
                     break;
-                case "Rating":
-                    bindingPath = "Rating";
+                case ColumnNameRating:
+                    bindingPath = BindingRating;
                     if (policyViewModel.PolicyCollection != null)
                     {
                         for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
@@ -553,8 +575,8 @@ namespace CMG.UI.View
                         }
                     }
                     break;
-                case "Class":
-                    bindingPath = "Class";
+                case ColumnNameClass:
+                    bindingPath = BindingClass;
                     if (policyViewModel.PolicyCollection != null)
                     {
                         for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
@@ -563,8 +585,8 @@ namespace CMG.UI.View
                         }
                     }
                     break;
-                case "Currency":
-                    bindingPath = "Currency";
+                case ColumnNameCurrency:
+                    bindingPath = BindingCurrency;
                     if (policyViewModel.PolicyCollection != null)
                     {
                         for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
@@ -573,8 +595,8 @@ namespace CMG.UI.View
                         }
                     }
                     break;
-                case "Policy Date":
-                    bindingPath = "PolicyDate";
+                case ColumnNamePolicyDate:
+                    bindingPath = BindingPolicyDate;
                     if (policyViewModel.PolicyCollection != null)
                     {
                         for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
@@ -585,8 +607,8 @@ namespace CMG.UI.View
                     dataGridColumn.Binding = new Binding(bindingPath);
                     dataGridColumn.Binding.StringFormat = "MMM d, yyyy";
                     break;
-                case "Placed On":
-                    bindingPath = "PlacedOn";
+                case ColumnNamePlacedOn:
+                    bindingPath = BindingPlacedOn;
                     if (policyViewModel.PolicyCollection != null)
                     {
                         for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
@@ -597,8 +619,8 @@ namespace CMG.UI.View
                     dataGridColumn.Binding = new Binding(bindingPath);
                     dataGridColumn.Binding.StringFormat = "MMM d, yyyy";
                     break;
-                case "Reprojected On":
-                    bindingPath = "ReprojectedOn";
+                case ColumnNameReprojectedOn:
+                    bindingPath = BindingReprojectedOn;
                     if (policyViewModel.PolicyCollection != null)
                     {
                         for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
@@ -609,8 +631,8 @@ namespace CMG.UI.View
                     dataGridColumn.Binding = new Binding(bindingPath);
                     dataGridColumn.Binding.StringFormat = "MMM d, yyyy";
                     break;
-                case "Age":
-                    bindingPath = "Age";
+                case ColumnNameAge:
+                    bindingPath = BindingAge;
                     if (policyViewModel.PolicyCollection != null)
                     {
                         for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
@@ -619,8 +641,8 @@ namespace CMG.UI.View
                         }
                     }
                     break;
-                case "Policy Notes":
-                    bindingPath = "PolicyNotes";
+                case ColumnNamePolicyNotes:
+                    bindingPath = BindingPolicyNotes;
                     if (policyViewModel.PolicyCollection != null)
                     {
                         for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
@@ -629,8 +651,8 @@ namespace CMG.UI.View
                         }
                     }
                     break;
-                case "Client Notes":
-                    bindingPath = "ClientNotes";
+                case ColumnNameClientNotes:
+                    bindingPath = BindingClientNotes;
                     if (policyViewModel.PolicyCollection != null)
                     {
                         for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
@@ -639,8 +661,8 @@ namespace CMG.UI.View
                         }
                     }
                     break;
-                case "Internal Notes":
-                    bindingPath = "InternalNotes";
+                case ColumnNameInternalNotes:
+                    bindingPath = BindingInternalNotes;
                     if (policyViewModel.PolicyCollection != null)
                     {
                         for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
