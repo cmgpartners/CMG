@@ -383,9 +383,41 @@ namespace CMG.UI.View
                 dgcolHeader.ContextMenu = ctxMenu;
             }
         }
-        private void policies_ColumnHeaderDragCompleted(object sender, DragCompletedEventArgs e)
+        private void policies_ColumnReordered(object sender, DataGridColumnEventArgs e)
         {
+            if (e.Column is DataGridTextColumn)
+            {
+                DataGridTextColumn draggedColumn = (DataGridTextColumn)e.Column;
+                int droppedColumnIndex = draggedColumn.DisplayIndex;
 
+                ViewSearchOptionsDto vsodto = policyViewModel.PolicyColumns.Where(x => x.ColumnName.ToString().ToLower().Trim() == draggedColumn.Header.ToString().ToLower().Trim()).FirstOrDefault();
+
+                int draggedColumnIndex = policies.Columns.IndexOf(policies.Columns.Where(x => x.Header.ToString() == draggedColumn.Header.ToString()).FirstOrDefault());
+                if (draggedColumnIndex > 0
+                    && droppedColumnIndex > 0)
+                {
+                    policyViewModel.PolicyColumns.Remove(vsodto);
+                    vsodto.ColumnOrder = droppedColumnIndex;
+                    policyViewModel.PolicyColumns.Insert(droppedColumnIndex - 1, vsodto);
+                    if (draggedColumnIndex > droppedColumnIndex)
+                    {
+                        ResetPolicyColumnsIndex(droppedColumnIndex, true);
+                    }
+                    else
+                    {
+                        for (int i = droppedColumnIndex - 2; i >= 0; i--)
+                        {
+                            policyViewModel.PolicyColumns[i].ColumnOrder = i + 1;
+                        }
+                    }
+                    policyViewModel.SaveOptionKeyPolicyColumns();
+                    PolicyGridDefaultSetting();
+                    for (int i = 0; i < policies.Columns.Count; i++)
+                    {
+                        ResizePolicyGridColumns(policies.Columns[i].Header.ToString());
+                    }
+                }
+            }
         }
 
         #region Methods
@@ -723,6 +755,6 @@ namespace CMG.UI.View
             }
             policies.Columns.Insert(0, policyEditColumn);
         }
-        #endregion Methods        
+        #endregion Methods 
     }
 }
