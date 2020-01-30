@@ -14,6 +14,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using ToastNotifications.Messages;
 using System.Collections.Generic;
+using CMG.UI.Converter;
 
 namespace CMG.UI.View
 {
@@ -471,6 +472,7 @@ namespace CMG.UI.View
                             policyViewModel.PolicyCollection[i].PolicyNumber = policyViewModel.PolicyCollection[i].PolicyNumber;
                         }
                     }
+                    SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case "Company":
                     bindingPath = "CompanyName";
@@ -481,6 +483,7 @@ namespace CMG.UI.View
                             policyViewModel.PolicyCollection[i].CompanyName = policyViewModel.PolicyCollection[i].CompanyName;
                         }
                     }
+                    SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case "Face Amount":
                     bindingPath = "FaceAmount";
@@ -491,6 +494,7 @@ namespace CMG.UI.View
                             policyViewModel.PolicyCollection[i].FaceAmount = policyViewModel.PolicyCollection[i].FaceAmount;
                         }
                     }
+                    SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case "Payment":
                     bindingPath = "Payment";
@@ -501,6 +505,7 @@ namespace CMG.UI.View
                             policyViewModel.PolicyCollection[i].Payment = policyViewModel.PolicyCollection[i].Payment;
                         }
                     }
+                    SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case "Status":
                     bindingPath = "Status";
@@ -511,6 +516,7 @@ namespace CMG.UI.View
                             policyViewModel.PolicyCollection[i].Status = policyViewModel.PolicyCollection[i].Status;
                         }
                     }
+                    SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case "Frequency":
                     bindingPath = "Frequency";
@@ -521,6 +527,7 @@ namespace CMG.UI.View
                             policyViewModel.PolicyCollection[i].Frequency = policyViewModel.PolicyCollection[i].Frequency;
                         }
                     }
+                    SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case "Type":
                     bindingPath = "Type";
@@ -656,6 +663,29 @@ namespace CMG.UI.View
             dataGridColumn.Binding = new Binding(bindingPath);            
 
             return dataGridColumn;
+        }
+
+        private void SetCellStyle(DataGridTextColumn dataGridColumn, string bindingPath)
+        {
+            dataGridColumn.Binding = new Binding(bindingPath);
+            dataGridColumn.IsReadOnly = true;
+            Style cellStyle = new Style(typeof(DataGridCell));
+            cellStyle.Setters.Add(new Setter(FontWeightProperty, FontWeights.Bold));
+            cellStyle.Setters.Add(new Setter(VerticalAlignmentProperty, VerticalAlignment.Center));
+            cellStyle.Setters.Add(new Setter(HorizontalAlignmentProperty, HorizontalAlignment.Center));
+            cellStyle.Setters.Add(new Setter(BorderThicknessProperty, new Thickness(0)));
+            cellStyle.Setters.Add(new Setter(BorderBrushProperty, Brushes.Transparent));
+            cellStyle.Setters.Add(new Setter(ForegroundProperty, Brushes.Black));
+            if (bindingPath == "CompanyName")
+            {
+                Binding backgroundBinding = new Binding(bindingPath) { Converter = new CompanyCellBackgroundConverter() };
+                cellStyle.Setters.Add(new Setter(BackgroundProperty, backgroundBinding));
+            }
+            else
+            {
+                cellStyle.Setters.Add(new Setter(BackgroundProperty, Brushes.Transparent));
+            }
+            dataGridColumn.CellStyle = cellStyle;
         }
         private void DefaultPolicyGridColumns(List<string> columnNames)
         {

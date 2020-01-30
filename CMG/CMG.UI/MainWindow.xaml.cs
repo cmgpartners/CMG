@@ -54,7 +54,7 @@ namespace CMG.UI
                 
                 var policyViewModel = (PolicyViewModel)_mainViewModel.SelectedViewModel;
                 if(_mainViewModel.SelectedClient == null
-                    ||(_mainViewModel.SelectedClient != null
+                    ||(_mainViewModel.SelectedClient != null && policyViewModel.SelectedClient != null
                        && _mainViewModel.SelectedClient.Keynump != policyViewModel.SelectedClient.Keynump))
                 _mainViewModel.SelectedClient = policyViewModel.SelectedClient;
             }

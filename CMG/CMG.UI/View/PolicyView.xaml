@@ -16,23 +16,23 @@
                 <TextBlock Text="{Binding ColumnName}" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                 <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
                                      Foreground="White" FontSize="14"
-                                     Text="{Binding DataContext.CommanName, RelativeSource={RelativeSource AncestorType=Window}}"  Width="85"></TextBox>
+                                     Text="{Binding DataContext.CommanName, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}"  Width="85"></TextBox>
             </WrapPanel>
         </DataTemplate>
         <DataTemplate x:Key="lastNameTemplate">
             <WrapPanel AllowDrop="True" Orientation="Vertical">
                 <TextBlock Text="Last Name" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                 <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
-                                     Foreground="White" FontSize="14" 
-                                     Text="{Binding DataContext.LastName, RelativeSource={RelativeSource AncestorType=Window}}" Width="85"></TextBox>
+                                     Foreground="White" FontSize="14"
+                                     Text="{Binding DataContext.LastName, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" Width="85"></TextBox>
             </WrapPanel>
         </DataTemplate>
         <DataTemplate x:Key="firstNameTemplate">
             <WrapPanel AllowDrop="True" Orientation="Vertical">
                 <TextBlock Text="First Name" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                 <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
-                                     Foreground="White" FontSize="14"  
-                                     Text="{Binding DataContext.FirstName, RelativeSource={RelativeSource AncestorType=Window}}" MinWidth="85"></TextBox>
+                                     Foreground="White" FontSize="14"
+                                     Text="{Binding DataContext.FirstName, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" MinWidth="85"></TextBox>
             </WrapPanel>
         </DataTemplate>
         <DataTemplate x:Key="entityTypeTemplate">
@@ -83,8 +83,8 @@
             <WrapPanel AllowDrop="True" Orientation="Vertical">
                 <TextBlock Text="Policy Date" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                 <StackPanel Orientation="Horizontal">
-                    <DatePicker Margin="10 6 5 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="80" Foreground="White"/>
-                    <DatePicker Margin="0 6 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="80" Foreground="White"/>
+                    <DatePicker Margin="10 6 5 5" SelectedDate="{Binding DataContext.FromPolicyDate, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="90" Foreground="White"/>
+                    <DatePicker Margin="0 6 15 5" SelectedDate="{Binding DataContext.ToPolicyDate, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="90" Foreground="White"/>
                 </StackPanel>
             </WrapPanel>
         </DataTemplate>
@@ -210,13 +210,13 @@
 
             <Grid Grid.Row="0" Grid.Column="0" Background="#FF252627" x:Name="SearchSliderPannel" ShowGridLines="False">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="75"/>
                     <RowDefinition Height="250"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <DockPanel>
+                <DockPanel >
                     <materialDesign:PackIcon Kind="Search" VerticalAlignment="Center" Margin="20" Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
-                    <TextBlock Text="Search" Margin="0 38 10 10" FontSize="16" Foreground="White" ></TextBlock>
+                    <TextBlock Text="Search" Margin="0 23 10 10" FontSize="16" Foreground="White" ></TextBlock>
                     <Button Background="Transparent" BorderBrush="Transparent" Width="50" HorizontalAlignment="Right" x:Name="ButtonSearchSliderClose" Click="ButtonSearchSliderClose_Click">
                         <materialDesign:PackIcon Kind="ArrowLeftBoldCircleOutline"  VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
                     </Button>
@@ -228,7 +228,8 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <ListView Grid.Row="0" ItemsSource="{Binding SearchOptions, UpdateSourceTrigger=PropertyChanged, IsAsync=True}"  Width="450" x:Name="SearchOptionsList" Height="300" ItemTemplateSelector="{StaticResource searchOptionsSelector}" 
-                                  PreviewMouseLeftButtonDown="SearchOptionsList_PreviewMouseLeftButtonDown" PreviewMouseMove="SearchOptionsList_PreviewMouseMove" Drop="SearchOptionsList_Drop" AllowDrop="True">
+                                  PreviewMouseLeftButtonDown="SearchOptionsList_PreviewMouseLeftButtonDown" PreviewMouseMove="SearchOptionsList_PreviewMouseMove" Drop="SearchOptionsList_Drop" AllowDrop="True" IsTabStop="False" 
+                                  KeyboardNavigation.TabNavigation="Cycle" Focusable="False">
                         <ListView.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel Orientation="Horizontal" Width="450"></WrapPanel>
@@ -295,27 +296,27 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <DockPanel x:Name="SearchBar" Visibility="Collapsed">
-                    <materialDesign:PackIcon Kind="Search" VerticalAlignment="Center" Margin="20" FontWeight="Bold"></materialDesign:PackIcon>
-                    <TextBlock Text="Search" Margin="0 22 10 10" FontSize="16" ></TextBlock>
+                    <materialDesign:PackIcon Kind="Search" VerticalAlignment="Center" Margin="20" FontWeight="Bold" Foreground="White"></materialDesign:PackIcon>
+                    <TextBlock Text="Search" Margin="0 22 10 10" FontSize="16" Foreground="White" ></TextBlock>
                     <Button Background="Transparent" BorderBrush="Transparent" Width="50" x:Name="ButtonSearchSliderOpen" HorizontalAlignment="Left" Click="ButtonSearchSliderOpen_Click">
-                        <materialDesign:PackIcon Kind="ArrowRightBoldCircleOutline" VerticalAlignment="Center"  Foreground="Black" FontWeight="Bold"></materialDesign:PackIcon>
+                        <materialDesign:PackIcon Kind="ArrowRightBoldCircleOutline" VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
                     </Button>
                     <TextBlock Text="|" Margin="0 10 10 10" FontSize="35" Foreground="#FFF0F9FF" FontWeight="Light" Opacity="0.3"></TextBlock>
                 </DockPanel>
                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
-                    <materialDesign:PackIcon Kind="Snowflake" Margin="10 10 0 10" VerticalAlignment="Center"  Foreground="Black" FontWeight="Bold"></materialDesign:PackIcon>
-                    <TextBlock Margin="10 22 10 10" FontSize="16" Foreground="Black" Visibility="{Binding IsClientSelected, Converter={StaticResource VisibilityConverter}}">
+                    <materialDesign:PackIcon Kind="Snowflake" Margin="10 10 0 10" VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
+                    <TextBlock Margin="10 22 10 10" FontSize="16" Foreground="White" Visibility="{Binding IsClientSelected, Converter={StaticResource VisibilityConverter}}">
                         <Run Text="{Binding SelectedClient.ClientType}"/>
                         <Run Text=" : "/>
                         <Run Text="{Binding SelectedClient.CommonName}"/>
                         <Run Text="{Binding SelectedClient.LastName}"/>
                     </TextBlock>
-                    <TextBlock Text="Policy Details" Margin="10 22 10 10" FontSize="16" Foreground="Black" Visibility="{Binding IsPolicyDetailVisible, Converter={StaticResource VisibilityConverter}}"/>
+                    <TextBlock Text="Policy Details" Margin="10 22 10 10" FontSize="16" Foreground="White" Visibility="{Binding IsPolicyDetailVisible, Converter={StaticResource VisibilityConverter}}"/>
                 </StackPanel>
                 <Grid Grid.Row="1" Margin="10 0 10 10" Grid.ColumnSpan="2">
-                    <DataGrid AutoGenerateColumns="True" x:Name="policies" IsReadOnly="False" 
+                    <DataGrid AutoGenerateColumns="True" x:Name="policies" IsReadOnly="True" GridLinesVisibility="None"
                       ItemsSource="{Binding PolicyCollection, UpdateSourceTrigger=PropertyChanged}" ColumnHeaderStyle="{StaticResource HeaderStyle}" RowStyle="{StaticResource GridRowStyle }"
-                      CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="40" SelectedItem="{Binding SelectedPolicy}" 
+                      CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="40" SelectedItem="{Binding SelectedPolicy}"
                       MouseRightButtonUp="Policies_MouseRightButtonUp" AutoGeneratedColumns="Policies_AutoGenerateColumns" ColumnHeaderDragCompleted="policies_ColumnHeaderDragCompleted">
                         <DataGrid.ContextMenu>
                             <ContextMenu x:Name="PolicyContextMenu" DataContext="{Binding Path=PlacementTarget.DataContext, 
@@ -528,7 +529,7 @@
             </Grid>
         </Grid>
 
-        <Grid x:Name="IllustrationSliderPanel" Visibility="Collapsed" Background="#FF9BADB8" HorizontalAlignment="Right">
+        <Grid x:Name="IllustrationSliderPanel" Visibility="Collapsed" Background="#FF444444" HorizontalAlignment="Right">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="26"/>
                 <ColumnDefinition Width="*"/>
@@ -553,18 +554,18 @@
                             <ColumnDefinition Width="100"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
-                            <materialDesign:PackIcon  Kind="LayersTripleOutline"  VerticalAlignment="Center"  Foreground="Black" FontWeight="Bold"></materialDesign:PackIcon>
-                            <TextBlock  Text="Policy Illustration" VerticalAlignment="Center" Margin="10 0 0 0" FontSize="16"/>
+                            <materialDesign:PackIcon  Kind="LayersTripleOutline"  VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
+                            <TextBlock  Text="Policy Illustration" VerticalAlignment="Center" Margin="10 0 0 0" FontSize="16" Foreground="White"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 0 0">
-                            <TextBlock Text="Policy # : " HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="16" ></TextBlock>
-                            <TextBlock Text="{Binding SelectedPolicy.PolicyNumber}" VerticalAlignment="Center" Margin="0 0 20 0" FontSize="16"/>
-                            <TextBlock Text="Policy Date : " VerticalAlignment="Center" FontSize="16"></TextBlock>
-                            <TextBlock Text="{Binding SelectedPolicy.PolicyDate, StringFormat='{}{0: MMM d, yyyy}'}" FontSize="16" VerticalAlignment="Center" Margin="0 0 20 0"/>
+                            <TextBlock Text="Policy # : " HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="16" Foreground="White"></TextBlock>
+                            <TextBlock Text="{Binding SelectedPolicy.PolicyNumber}" VerticalAlignment="Center" Margin="0 0 20 0" FontSize="16" Foreground="White"/>
+                            <TextBlock Text="Policy Date : " VerticalAlignment="Center" FontSize="16" Foreground="White"></TextBlock>
+                            <TextBlock Text="{Binding SelectedPolicy.PolicyDate, StringFormat='{}{0: MMM d, yyyy}'}" FontSize="16" VerticalAlignment="Center" Foreground="White" Margin="0 0 20 0"/>
                         </StackPanel>
                         <StackPanel Grid.Column="2"  HorizontalAlignment="Right" Orientation="Vertical" VerticalAlignment="Center">
-                            <RadioButton Margin="10,5,10,0" GroupName="DividentScale" IsChecked="True" Command="{Binding DividentScaleFilterCommand}" FontSize="14" CommandParameter="false">Primary</RadioButton>
-                            <RadioButton Margin="10,5,10,0" GroupName="DividentScale" Command="{Binding DividentScaleFilterCommand}" FontSize="14" CommandParameter="true">Reduced</RadioButton>
+                            <RadioButton Margin="10,4,10,0" GroupName="DividentScale" IsChecked="True" Command="{Binding DividentScaleFilterCommand}" FontSize="14" CommandParameter="false" Foreground="White">Primary</RadioButton>
+                            <RadioButton Margin="10,3,10,0" GroupName="DividentScale" Command="{Binding DividentScaleFilterCommand}" FontSize="14" CommandParameter="true" Foreground="White">Reduced</RadioButton>
                         </StackPanel>
                     </Grid>
                 <DataGrid AutoGenerateColumns="False" x:Name="illustration" IsReadOnly="False" Grid.Row="1" CanUserReorderColumns="False" 
@@ -713,6 +714,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
+                                <ColumnDefinition Width="25"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Client Notes" FontWeight="Bold" Margin="0 0 0 5"/>
                             <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Right" Orientation="Horizontal">
@@ -728,8 +730,10 @@
                             </StackPanel>
                             <TextBlock Text="{Binding SelectedPolicy.ClientNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Visibility="{Binding IsClientNotesEditVisible, Converter={StaticResource VisibilityConverter}}"/>
                             <TextBox Text="{Binding SelectedPolicy.ClientNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Visibility="{Binding IsClientNotesSaveVisible, Converter={StaticResource VisibilityConverter}}" VerticalAlignment="Top"/>
+                            <Border Grid.Column="2" Margin="10 0 0 0" Grid.RowSpan="2" BorderBrush="Gray" 
+                            BorderThickness="1,0,0,0" Background="{x:Null}" />
                         </Grid>
-                        <Grid Grid.Column="1" Margin="20 10 10 10">
+                        <Grid Grid.Column="1" Margin="0 10 10 10">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30"/>
                                 <RowDefinition/>
@@ -737,6 +741,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
+                                <ColumnDefinition Width="25"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Internal Notes" FontWeight="Bold" Margin="0 0 0 5" Grid.Column="0" Grid.Row="0"/>
                             <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Right" Orientation="Horizontal">
@@ -752,6 +757,8 @@
                             </StackPanel>
                             <TextBlock Text="{Binding SelectedPolicy.InternalNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding IsInternalNotesEditVisible, Converter={StaticResource VisibilityConverter}}"/>
                             <TextBox Text="{Binding SelectedPolicy.InternalNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding IsInternalNotesSaveVisible, Converter={StaticResource VisibilityConverter}}" VerticalAlignment="Top"/>
+                            <Border Grid.Column="2" Margin="10 0 0 0" Grid.RowSpan="2" BorderBrush="Gray" 
+                            BorderThickness="1,0,0,0" Background="{x:Null}" />
                         </Grid>
                         <StackPanel Grid.Column="2">
                             <StackPanel Orientation="Horizontal" Margin="10 50 0 0">
