@@ -23,9 +23,9 @@
                             <ColumnDefinition Width="140"/>
                             <ColumnDefinition Width="230"/>
                             <ColumnDefinition Width="100"/>
-                            <ColumnDefinition Width="70"/>
+                            <ColumnDefinition Width="80"/>
                             <ColumnDefinition Width="150"/>
-                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="100"/>
                             <ColumnDefinition Width="280"/>
                         </Grid.ColumnDefinitions>
                         <Grid>
@@ -33,14 +33,14 @@
                                 <RowDefinition Height="23"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="Policy #" Margin="15 5 0 0" Style="{StaticResource SearchHeaderStyle}"></TextBlock>
+                            <TextBlock Text="Policy #" Margin="15 5 0 0" Style="{StaticResource SearchHeaderStyle}" Foreground="White"></TextBlock>
                             <uc:AutoCompleteBox x:Name="UserControlPolicyNumber" 
                                                 Grid.Row="1"
                                                 Width="100"
-                                                Margin="15 1 0 0"
+                                                Margin="15 1 0 7"
                                                 AutoSuggestionList="{Binding Policies}"
                                                 SelectedValue="{Binding Path=PolicyNumber, UpdateSourceTrigger=PropertyChanged}"
-                                                HorizontalAlignment="Left">
+                                                HorizontalAlignment="Left" Foreground="White" BorderBrush="White" BorderThickness="0 0 0 1">
                             </uc:AutoCompleteBox>
                         </Grid>
                         <Grid Grid.Column="1">
@@ -48,21 +48,21 @@
                                 <RowDefinition Height="23"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="Insured" Margin="0 5 0 0" Style="{StaticResource SearchHeaderStyle}"></TextBlock>
-                            <TextBox Grid.Row="1" Margin="0 0 15 5" Text="{Binding Insured}" MinWidth="100"></TextBox>
+                            <TextBlock Text="Insured" Margin="0 5 0 0" Style="{StaticResource SearchHeaderStyle}" Foreground="White"></TextBlock>
+                            <TextBox Grid.Row="1" Margin="0 0 15 7" Text="{Binding Insured}" MinWidth="100" BorderBrush="White" Foreground="White"></TextBox>
                         </Grid>
                         <Grid Grid.Column="2">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="23"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="Company" Margin="7 5 0 0" Style="{StaticResource SearchHeaderStyle}"></TextBlock>
+                            <TextBlock Text="Company" Margin="7 5 0 0" Style="{StaticResource SearchHeaderStyle}" Foreground="White"></TextBlock>
                             <uc:AutoCompleteBox x:Name="UserControlCompany" 
                                                 Grid.Row="1"
-                                                Margin="5 0 0 0"
+                                                Margin="5 0 0 7"
                                                 AutoSuggestionList="{Binding CompanyNames}"
                                                 SelectedValue="{Binding Path=Company, UpdateSourceTrigger=PropertyChanged}"
-                                                HorizontalAlignment="Left">
+                                                HorizontalAlignment="Left" Foreground="White" BorderBrush="White" BorderThickness="0 0 0 1">
                             </uc:AutoCompleteBox>
                         </Grid>
                         <Grid Grid.Column="3">
@@ -74,16 +74,16 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="Pay Date" Grid.ColumnSpan="1" Margin="15 5 0 0" Style="{StaticResource SearchHeaderStyle}"></TextBlock>
-                            <DatePicker Grid.Row="1" Margin="15 0 15 0" SelectedDate="{Binding FromPayDate}"></DatePicker>
-                            <DatePicker Grid.Row="1" Grid.Column="1" Margin="15 0 15 0"  SelectedDate="{Binding ToPayDate}"></DatePicker>
+                            <TextBlock Text="Pay Date" Grid.ColumnSpan="1" Margin="15 5 0 0" Style="{StaticResource SearchHeaderStyle}" Foreground="White"></TextBlock>
+                            <DatePicker Grid.Row="1" Margin="15 0 15 2" SelectedDate="{Binding FromPayDate}" BorderBrush="White" Foreground="White"></DatePicker>
+                            <DatePicker Grid.Row="1" Grid.Column="1" Margin="15 0 15 2"  SelectedDate="{Binding ToPayDate}" Foreground="White" BorderBrush="White"></DatePicker>
                         </Grid>
                         <Grid Grid.Column="4">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="23"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="Agents" Margin="15 5 0 0" Style="{StaticResource SearchHeaderStyle}"/>
+                            <TextBlock Text="Agents" Margin="15 5 0 0" Style="{StaticResource SearchHeaderStyle}" Foreground="White"/>
                             <ComboBox  Width="100"
                             IsEditable="True"
                             IsTextSearchEnabled="True"
@@ -93,12 +93,13 @@
                             SelectedValuePath="Id"
                             SelectedIndex="{Binding SelecteAgentIndex}"
                             SelectedItem="{Binding Agent, Mode=TwoWay}"
-                            Grid.Row="1" Margin="15 0 15 0" />
+                            Grid.Row="1" Margin="15 0 15 2" BorderBrush="White" Foreground="White" />
                         </Grid>
                         <Grid Grid.Column="5" >
                             <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
-                                <CheckBox Content="FYC" IsChecked="{Binding IsFYC}" Margin="0 12 0 0" FontWeight="Bold" Foreground="Black" ></CheckBox>
-                                <CheckBox Content="Renewals" IsChecked="{Binding IsRenewals}" Margin="0 5 0 0" FontWeight="Bold" Foreground="Black"></CheckBox>
+                                <CheckBox Content="FYC" IsChecked="{Binding IsFYC}" Margin="0 12 0 0" FontWeight="Bold" Foreground="White" BorderBrush="White" >
+                                </CheckBox>
+                                <CheckBox Content="Renewals" IsChecked="{Binding IsRenewals}" Margin="0 5 0 0" FontWeight="Bold" Foreground="White"></CheckBox>
                             </StackPanel>
                         </Grid>
                         <Grid Grid.Column="6">
@@ -106,23 +107,22 @@
                                 <RowDefinition Height="23"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="Comment" Margin="15 5 0 0" Style="{StaticResource SearchHeaderStyle}"></TextBlock>
-                            <TextBox Grid.Row="1" Margin="15 0 15 5" Text="{Binding Comment}"></TextBox>
+                            <TextBlock Text="Comment" Margin="15 5 0 0" Style="{StaticResource SearchHeaderStyle}" Foreground="White"></TextBlock>
+                            <TextBox Grid.Row="1" Margin="15 0 15 7" Text="{Binding Comment}" BorderBrush="White" Foreground="White"></TextBox>
                         </Grid>
                         <Grid Grid.Column="7">
-                            <Button Command="{Binding SearchCommand}" CommandParameter="true" IsDefault="True">
-                                <Image Source="/Asset/Search.png"></Image>
-                            </Button>
+                            <Button Command="{Binding SearchCommand}" CommandParameter="true" IsDefault="True" Content="Search"></Button>
                         </Grid>
                         <Grid Grid.Column="8">
-                            <Button Content="Generate Report" Width="150" HorizontalAlignment="Right" Margin="0 0 15 0" ></Button>
+                            <Button Content="Generate Report" Width="150" HorizontalAlignment="Right" Margin="0 0 0 0" ></Button>
                         </Grid>
                     </Grid>
                 </Grid>
                 <Grid Grid.Row="1">
                     <DataGrid AutoGenerateColumns="False" x:Name="search" IsReadOnly="True" 
                           ItemsSource="{Binding DataCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" 
-                          SelectionUnit="FullRow" RowHeight="50">
+                          SelectionUnit="FullRow" RowHeight="50"
+                          RowStyle="{StaticResource GridRowStyle}">
                         <DataGrid.Columns>
                         <DataGridTemplateColumn>
                             <DataGridTemplateColumn.CellTemplate>

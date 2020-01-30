@@ -58,16 +58,10 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="20"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Grid.ColumnSpan="2" Background="{StaticResource GridBackGround}">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10 0">
-            </StackPanel>
-        </Grid>
-
-        <Grid Grid.Row="1" Grid.Column="0" Background="{StaticResource GridBackGround}">
+        <Grid Grid.Row="0" Grid.Column="0" Background="{StaticResource GridBackGround}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="100"></RowDefinition>
                 <RowDefinition Height="230" x:Name="CollapsibleRow"></RowDefinition>

@@ -19,7 +19,7 @@ namespace CMG.DataAccess.Repository
         }
         public List<PolIll> GetPolicyIllustration(int keynumo, int dividentScale)
         {
-            return Context.PolIll.Where(x => x.Keynumo == keynumo && x.Divscale == dividentScale).ToList();
+            return Context.PolIll.Where(x => x.Keynumo == keynumo && x.Divscale == dividentScale).AsNoTracking().ToList();
         }
         public PolIll GetById(long? id)
         {

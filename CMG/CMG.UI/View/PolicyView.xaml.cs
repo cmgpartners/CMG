@@ -14,6 +14,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using ToastNotifications.Messages;
 using System.Collections.Generic;
+using CMG.UI.Converter;
 
 namespace CMG.UI.View
 {
@@ -85,7 +86,7 @@ namespace CMG.UI.View
         private void ButtonSearchSliderClose_Click(object sender, RoutedEventArgs e)
         {
 
-            var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(450) };
+            var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(550) };
             timer.Start();
             timer.Tick += (sender, args) =>
             {
@@ -104,7 +105,6 @@ namespace CMG.UI.View
         private void ButtonIllustrationOpen_Click(object sender, RoutedEventArgs e)
         {
             IllustrationSliderPanel.Visibility = Visibility.Visible;
-            IllustrationSliderPanel.Width = PolicyMainView.ActualWidth - 100;
             PolicyEdit.Visibility = Visibility.Collapsed;
             PolicyMainView.Opacity = 0.3;
         }
@@ -526,6 +526,7 @@ namespace CMG.UI.View
                             policyViewModel.PolicyCollection[i].PolicyNumber = policyViewModel.PolicyCollection[i].PolicyNumber;
                         }
                     }
+                    SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNameCompany:
                     bindingPath = BindingCompanyName;
@@ -536,6 +537,7 @@ namespace CMG.UI.View
                             policyViewModel.PolicyCollection[i].CompanyName = policyViewModel.PolicyCollection[i].CompanyName;
                         }
                     }
+                    SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNameFaceAmount:
                     bindingPath = BindingFaceAmount;
@@ -546,6 +548,7 @@ namespace CMG.UI.View
                             policyViewModel.PolicyCollection[i].FaceAmount = policyViewModel.PolicyCollection[i].FaceAmount;
                         }
                     }
+                    SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNamePayment:
                     bindingPath = BindingPayment;
@@ -556,6 +559,7 @@ namespace CMG.UI.View
                             policyViewModel.PolicyCollection[i].Payment = policyViewModel.PolicyCollection[i].Payment;
                         }
                     }
+                    SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNameStatus:
                     bindingPath = BindingStatus;
@@ -566,6 +570,7 @@ namespace CMG.UI.View
                             policyViewModel.PolicyCollection[i].Status = policyViewModel.PolicyCollection[i].Status;
                         }
                     }
+                    SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNameFrequency:
                     bindingPath = BindingFrequency;
@@ -576,6 +581,7 @@ namespace CMG.UI.View
                             policyViewModel.PolicyCollection[i].Frequency = policyViewModel.PolicyCollection[i].Frequency;
                         }
                     }
+                    SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNameType:
                     bindingPath = BindingType;
@@ -711,6 +717,29 @@ namespace CMG.UI.View
             dataGridColumn.Binding = new Binding(bindingPath);            
 
             return dataGridColumn;
+        }
+
+        private void SetCellStyle(DataGridTextColumn dataGridColumn, string bindingPath)
+        {
+            dataGridColumn.Binding = new Binding(bindingPath);
+            dataGridColumn.IsReadOnly = true;
+            Style cellStyle = new Style(typeof(DataGridCell));
+            cellStyle.Setters.Add(new Setter(FontWeightProperty, FontWeights.Bold));
+            cellStyle.Setters.Add(new Setter(VerticalAlignmentProperty, VerticalAlignment.Center));
+            cellStyle.Setters.Add(new Setter(HorizontalAlignmentProperty, HorizontalAlignment.Center));
+            cellStyle.Setters.Add(new Setter(BorderThicknessProperty, new Thickness(0)));
+            cellStyle.Setters.Add(new Setter(BorderBrushProperty, Brushes.Transparent));
+            cellStyle.Setters.Add(new Setter(ForegroundProperty, Brushes.Black));
+            if (bindingPath == "CompanyName")
+            {
+                Binding backgroundBinding = new Binding(bindingPath) { Converter = new CompanyCellBackgroundConverter() };
+                cellStyle.Setters.Add(new Setter(BackgroundProperty, backgroundBinding));
+            }
+            else
+            {
+                cellStyle.Setters.Add(new Setter(BackgroundProperty, Brushes.Transparent));
+            }
+            dataGridColumn.CellStyle = cellStyle;
         }
         private void DefaultPolicyGridColumns(List<string> columnNames)
         {

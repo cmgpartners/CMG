@@ -86,6 +86,8 @@ namespace CMG.DataAccess.Repository
                     return PolicyNumberExpression(filterBy.Contains);
                 case "companyname":
                     return CompanyCodeExpression(filterBy.Equal);
+                case "policydate":
+                    return PolicyDateExpression(filterBy.GreaterThan, filterBy.LessThan);
                 default:
                     throw new InvalidOperationException($"Can not filter for criteria: filter by {filterBy.Property}");
             }
@@ -124,11 +126,11 @@ namespace CMG.DataAccess.Repository
         }
         private static Expression<Func<People, bool>> LastNameExpression(string contains)
         {
-            return w => w.Lastname.ToLowerInvariant().StartsWith(contains.ToLowerInvariant());
+            return w => w.Lastname.StartsWith(contains);
         }
         private static Expression<Func<People, bool>> CommonNameExpression(string contains)
         {
-            return w => w.Commname.ToLowerInvariant().StartsWith(contains.ToLowerInvariant());
+            return w => w.Commname.StartsWith(contains);
         }
         private static Expression<Func<People,bool>> EntityTypeExpression(string equals)
         {
@@ -141,6 +143,24 @@ namespace CMG.DataAccess.Repository
         private static Expression<Func<People, bool>> CompanyCodeExpression(string equal)
         {
             return w => w.PeoplePolicys.Any(x => x.Policy.Company == equal);
+        }
+        private static Expression<Func<People, bool>> PolicyDateExpression(string greaterThan, string lessThan)
+        {
+            if (!string.IsNullOrEmpty(greaterThan)
+               && !string.IsNullOrEmpty(lessThan))
+            {
+                return w => w.PeoplePolicys.Any(x => x.Policy.Issuedate >= Convert.ToDateTime(greaterThan) && x.Policy.Issuedate <= Convert.ToDateTime(lessThan));
+            }
+            if (!string.IsNullOrEmpty(greaterThan))
+            {
+                return w => w.PeoplePolicys.Any(x => x.Policy.Issuedate >= Convert.ToDateTime(greaterThan));
+            }
+
+            if (!string.IsNullOrEmpty(lessThan))
+            {
+                return w => w.PeoplePolicys.Any(x => x.Policy.Issuedate <= Convert.ToDateTime(lessThan)); 
+            }
+            return w => true;
         }
     }
 }
