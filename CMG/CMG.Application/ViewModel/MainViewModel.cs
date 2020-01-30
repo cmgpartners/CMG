@@ -174,6 +174,19 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("CompanyName");
             }
         }
+        private DateTime? _frompolicyDate;
+        public DateTime? FromPolicyDate
+        {
+            get { return _frompolicyDate; }
+            set { _frompolicyDate = value; OnPropertyChanged("FromPolicyDate"); }
+        }
+
+        private DateTime? _toPolicyDate;
+        public DateTime? ToPolicyDate
+        {
+            get { return _toPolicyDate; }
+            set { _toPolicyDate = value; OnPropertyChanged("ToPolicyDate"); }
+        }
 
         private ObservableCollection<ViewSearchOptionsDto> _searchOptions;
         public ObservableCollection<ViewSearchOptionsDto> SearchOptions
@@ -469,7 +482,8 @@ namespace CMG.Application.ViewModel
                 && string.IsNullOrEmpty(FirstName)
                 && string.IsNullOrEmpty(CommanName)
                 && string.IsNullOrEmpty(LastName)
-                && string.IsNullOrEmpty(EntityType))
+                && string.IsNullOrEmpty(EntityType)
+                && (FromPolicyDate == null && ToPolicyDate == null))
             {
                 isValid = false;
                 _notifier.ShowError("Enter valid information to search client");
@@ -497,6 +511,16 @@ namespace CMG.Application.ViewModel
                     if (!isValid)
                         _notifier.ShowError("Select valid entity type");
                 }
+                if(FromPolicyDate != null && !DateTime.TryParse(FromPolicyDate.ToString(), out _))
+                {
+                    isValid = false;
+                    _notifier.ShowError("Invalid (from)policy date");
+                }
+                if (ToPolicyDate != null &&  !DateTime.TryParse(ToPolicyDate.ToString(), out _))
+                {
+                    isValid = false;
+                    _notifier.ShowError("Invalid (to)policy date");
+                }
             }
 
             return isValid;
@@ -515,7 +539,7 @@ namespace CMG.Application.ViewModel
             }
             if (!string.IsNullOrEmpty(CommanName))
             {
-                BuildFilterByContains("Commonname", CommanName, searchBy);
+                BuildFilterByContains("CommonName", CommanName, searchBy);
             }
 
             if (!string.IsNullOrEmpty(PolicyNumber))
@@ -538,7 +562,14 @@ namespace CMG.Application.ViewModel
                     BuildFilterByEquals("EntityType", entityTypeCode.Trim(), searchBy);
                 }
             }
-
+            if (FromPolicyDate != null && ToPolicyDate != null)
+            {
+                BuildFilterByRange("PolicyDate", FromPolicyDate.Value.ToShortDateString(), ToPolicyDate.Value.ToShortDateString(), searchBy);
+            }
+            if (FromPolicyDate != null && ToPolicyDate == null)
+            {
+                BuildFilterByRange("PolicyDate", FromPolicyDate.Value.ToShortDateString(), DateTime.Now.ToShortDateString(), searchBy);
+            }
             searchQuery.FilterBy = searchBy;
             return searchQuery;
         }
@@ -554,6 +585,14 @@ namespace CMG.Application.ViewModel
             FilterBy filterBy = new FilterBy();
             filterBy.Property = property;
             filterBy.Equal = value;
+            searchBy.Add(filterBy);
+        }
+        private void BuildFilterByRange(string property, string fromvalue, string toValue, List<FilterBy> searchBy)
+        {
+            FilterBy filterBy = new FilterBy();
+            filterBy.Property = property;
+            filterBy.GreaterThan = fromvalue;
+            filterBy.LessThan = toValue;
             searchBy.Add(filterBy);
         }
         public void SaveSearchOptions()

@@ -16,23 +16,23 @@
                 <TextBlock Text="{Binding ColumnName}" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                 <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
                                      Foreground="White" FontSize="14"
-                                     Text="{Binding DataContext.CommanName, RelativeSource={RelativeSource AncestorType=Window}}"  Width="85"></TextBox>
+                                     Text="{Binding DataContext.CommanName, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}"  Width="85"></TextBox>
             </WrapPanel>
         </DataTemplate>
         <DataTemplate x:Key="lastNameTemplate">
             <WrapPanel AllowDrop="True" Orientation="Vertical">
                 <TextBlock Text="Last Name" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                 <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
-                                     Foreground="White" FontSize="14" 
-                                     Text="{Binding DataContext.LastName, RelativeSource={RelativeSource AncestorType=Window}}" Width="85"></TextBox>
+                                     Foreground="White" FontSize="14"
+                                     Text="{Binding DataContext.LastName, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" Width="85"></TextBox>
             </WrapPanel>
         </DataTemplate>
         <DataTemplate x:Key="firstNameTemplate">
             <WrapPanel AllowDrop="True" Orientation="Vertical">
                 <TextBlock Text="First Name" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                 <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
-                                     Foreground="White" FontSize="14"  
-                                     Text="{Binding DataContext.FirstName, RelativeSource={RelativeSource AncestorType=Window}}" MinWidth="85"></TextBox>
+                                     Foreground="White" FontSize="14"
+                                     Text="{Binding DataContext.FirstName, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" MinWidth="85"></TextBox>
             </WrapPanel>
         </DataTemplate>
         <DataTemplate x:Key="entityTypeTemplate">
@@ -83,8 +83,8 @@
             <WrapPanel AllowDrop="True" Orientation="Vertical">
                 <TextBlock Text="Policy Date" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                 <StackPanel Orientation="Horizontal">
-                    <DatePicker Margin="10 6 5 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="80" Foreground="White"/>
-                    <DatePicker Margin="0 6 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="80" Foreground="White"/>
+                    <DatePicker Margin="10 6 5 5" SelectedDate="{Binding DataContext.FromPolicyDate, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="90" Foreground="White"/>
+                    <DatePicker Margin="0 6 15 5" SelectedDate="{Binding DataContext.ToPolicyDate, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="90" Foreground="White"/>
                 </StackPanel>
             </WrapPanel>
         </DataTemplate>
@@ -99,17 +99,25 @@
             
         </template:SearchOptionsSelector>
 
-        <Storyboard x:Key="SearchSliderOpen">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="SearchSliderPannel">
-                <EasingDoubleKeyFrame KeyTime="0" Value="0"></EasingDoubleKeyFrame>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="450"></EasingDoubleKeyFrame>
-            </DoubleAnimationUsingKeyFrames>
+        <Storyboard x:Key="SearchSliderOpen" TargetProperty="Margin">
+            <ThicknessAnimation Storyboard.TargetName="SearchSliderPannel" Duration="0:0:0.6">
+                <ThicknessAnimation.From>
+                    <Thickness Right="450" Top="0" Bottom="0" Left="0"/>
+                </ThicknessAnimation.From>
+                <ThicknessAnimation.To>
+                    <Thickness Left="0" Top="0" Bottom="0" Right="0"/>
+                </ThicknessAnimation.To>
+            </ThicknessAnimation>
         </Storyboard>
-        <Storyboard x:Key="SearchSliderClose">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="SearchSliderPannel">
-                <EasingDoubleKeyFrame KeyTime="0" Value="450"></EasingDoubleKeyFrame>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"></EasingDoubleKeyFrame>
-            </DoubleAnimationUsingKeyFrames>
+        <Storyboard x:Key="SearchSliderClose" TargetProperty="Margin">
+            <ThicknessAnimation Storyboard.TargetName="SearchSliderPannel" Duration="0:0:0.6">
+                <ThicknessAnimation.From>
+                    <Thickness Left="0" Top="0" Bottom="0" Right="0"/>
+                </ThicknessAnimation.From>
+                <ThicknessAnimation.To>
+                    <Thickness Right="450" Top="0" Bottom="0" Left="0"/>
+                </ThicknessAnimation.To>
+            </ThicknessAnimation>
         </Storyboard>
         <Storyboard x:Key="IllustrationSliderOpen" TargetProperty="Margin">
             <ThicknessAnimation Storyboard.TargetName="IllustrationSliderPanel" Duration="0:0:0.6">
@@ -202,13 +210,13 @@
 
             <Grid Grid.Row="0" Grid.Column="0" Background="#FF252627" x:Name="SearchSliderPannel" ShowGridLines="False">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="75"/>
                     <RowDefinition Height="250"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <DockPanel>
+                <DockPanel >
                     <materialDesign:PackIcon Kind="Search" VerticalAlignment="Center" Margin="20" Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
-                    <TextBlock Text="Search" Margin="0 38 10 10" FontSize="16" Foreground="White" ></TextBlock>
+                    <TextBlock Text="Search" Margin="0 23 10 10" FontSize="16" Foreground="White" ></TextBlock>
                     <Button Background="Transparent" BorderBrush="Transparent" Width="50" HorizontalAlignment="Right" x:Name="ButtonSearchSliderClose" Click="ButtonSearchSliderClose_Click">
                         <materialDesign:PackIcon Kind="ArrowLeftBoldCircleOutline"  VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
                     </Button>
@@ -220,7 +228,8 @@
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <ListView Grid.Row="0" ItemsSource="{Binding SearchOptions, UpdateSourceTrigger=PropertyChanged, IsAsync=True}"  Width="450" x:Name="SearchOptionsList" Height="300" ItemTemplateSelector="{StaticResource searchOptionsSelector}" 
-                                  PreviewMouseLeftButtonDown="SearchOptionsList_PreviewMouseLeftButtonDown" PreviewMouseMove="SearchOptionsList_PreviewMouseMove" Drop="SearchOptionsList_Drop" AllowDrop="True">
+                                  PreviewMouseLeftButtonDown="SearchOptionsList_PreviewMouseLeftButtonDown" PreviewMouseMove="SearchOptionsList_PreviewMouseMove" Drop="SearchOptionsList_Drop" AllowDrop="True" IsTabStop="False" 
+                                  KeyboardNavigation.TabNavigation="Cycle" Focusable="False">
                         <ListView.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel Orientation="Horizontal" Width="450"></WrapPanel>
@@ -287,7 +296,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <DockPanel x:Name="SearchBar" Visibility="Collapsed">
-                    <materialDesign:PackIcon Kind="Search" VerticalAlignment="Center" Margin="20" Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
+                    <materialDesign:PackIcon Kind="Search" VerticalAlignment="Center" Margin="20" FontWeight="Bold" Foreground="White"></materialDesign:PackIcon>
                     <TextBlock Text="Search" Margin="0 22 10 10" FontSize="16" Foreground="White" ></TextBlock>
                     <Button Background="Transparent" BorderBrush="Transparent" Width="50" x:Name="ButtonSearchSliderOpen" HorizontalAlignment="Left" Click="ButtonSearchSliderOpen_Click">
                         <materialDesign:PackIcon Kind="ArrowRightBoldCircleOutline" VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
@@ -295,19 +304,19 @@
                     <TextBlock Text="|" Margin="0 10 10 10" FontSize="35" Foreground="#FFF0F9FF" FontWeight="Light" Opacity="0.3"></TextBlock>
                 </DockPanel>
                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
-                    <materialDesign:PackIcon Kind="Snowflake" Margin="10 10 0 10" VerticalAlignment="Center"  Foreground="Black" FontWeight="Bold"></materialDesign:PackIcon>
-                    <TextBlock Margin="10 22 10 10" FontSize="16" Foreground="Black" Visibility="{Binding IsClientSelected, Converter={StaticResource VisibilityConverter}}">
+                    <materialDesign:PackIcon Kind="Snowflake" Margin="10 10 0 10" VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
+                    <TextBlock Margin="10 22 10 10" FontSize="16" Foreground="White" Visibility="{Binding IsClientSelected, Converter={StaticResource VisibilityConverter}}">
                         <Run Text="{Binding SelectedClient.ClientType}"/>
                         <Run Text=" : "/>
                         <Run Text="{Binding SelectedClient.CommonName}"/>
                         <Run Text="{Binding SelectedClient.LastName}"/>
                     </TextBlock>
-                    <TextBlock Text="Policy Details" Margin="10 22 10 10" FontSize="16" Foreground="Black" Visibility="{Binding IsPolicyDetailVisible, Converter={StaticResource VisibilityConverter}}"/>
+                    <TextBlock Text="Policy Details" Margin="10 22 10 10" FontSize="16" Foreground="White" Visibility="{Binding IsPolicyDetailVisible, Converter={StaticResource VisibilityConverter}}"/>
                 </StackPanel>
                 <Grid Grid.Row="1" Margin="10 0 10 10" Grid.ColumnSpan="2">
-                    <DataGrid AutoGenerateColumns="True" x:Name="policies" IsReadOnly="False" 
-                      ItemsSource="{Binding PolicyCollection, UpdateSourceTrigger=PropertyChanged}" ColumnHeaderStyle="{StaticResource HeaderStyle}" 
-                      CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="40" SelectedItem="{Binding SelectedPolicy}" 
+                    <DataGrid AutoGenerateColumns="True" x:Name="policies" IsReadOnly="True" GridLinesVisibility="None"
+                      ItemsSource="{Binding PolicyCollection, UpdateSourceTrigger=PropertyChanged}" ColumnHeaderStyle="{StaticResource HeaderStyle}" RowStyle="{StaticResource GridRowStyle }"
+                      CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="40" SelectedItem="{Binding SelectedPolicy}"
                       MouseRightButtonUp="Policies_MouseRightButtonUp" AutoGeneratedColumns="Policies_AutoGenerateColumns" ColumnHeaderDragCompleted="policies_ColumnHeaderDragCompleted">
                         <DataGrid.ContextMenu>
                             <ContextMenu x:Name="PolicyContextMenu" DataContext="{Binding Path=PlacementTarget.DataContext, 
@@ -340,7 +349,7 @@
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Background="Transparent" BorderBrush="Transparent" Width="50" x:Name="ButtonPolicyEditOpen" HorizontalAlignment="Left" Click="ButtonPolicyEditOpen_Click">
-                                            <materialDesign:PackIcon Kind="Pencil" VerticalAlignment="Center"  Foreground="#00A3FF" FontWeight="Bold"></materialDesign:PackIcon>
+                                            <materialDesign:PackIcon Kind="Pencil" VerticalAlignment="Center"  Foreground="Black" FontWeight="Bold"></materialDesign:PackIcon>
                                             <Button.Triggers>
                                                 <EventTrigger RoutedEvent="ButtonBase.Click">
                                                     <BeginStoryboard Storyboard="{StaticResource PolicyEditOpen}"></BeginStoryboard>
@@ -367,20 +376,71 @@
                 <Grid Grid.Row="2" Background="White" Margin="0 0 10 10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50"/>
+                        <RowDefinition Height="280"/>
                         <RowDefinition Height="150"/>
                         <RowDefinition Height="175"/>
                         <RowDefinition Height="80"/>
-                        <RowDefinition Height="150"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="175"/>
                     </Grid.RowDefinitions>
-                    <StackPanel Background="LightGray">
+                    <StackPanel Grid.Row="0" Background="LightGray" >
                         <Button Content="View Policy Illustration" Width="200" Margin="10" x:Name="ButtonIllustrationOpen" Click="ButtonIllustrationOpen_Click" Command="{Binding ViewIllustrationCommand}"/>
                     </StackPanel>
-                    <StackPanel Grid.Row="1" Margin="20 10 10 10">
+                    <StackPanel Grid.Row="1" Margin="20 10 10 0">
+                        <TextBlock Text="Relationships" FontWeight="Bold"/>
+                        <DataGrid AutoGenerateColumns="False" x:Name="relationship" IsReadOnly="True" Background="{x:Null}" GridLinesVisibility="None"
+                            HorizontalScrollBarVisibility="Auto" MaxWidth="360" VerticalScrollBarVisibility="Auto" MaxHeight="250"
+                            ColumnHeaderStyle="{StaticResource RelationshipHeaderStyle}" ItemsSource="{Binding SelectedPolicy.PeoplePolicy}" MinRowHeight="25"
+                            SelectionUnit="FullRow">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="Category" Width="85" HeaderStyle="{StaticResource RelationshipFirstColumnHeaderStyle}">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=Category}" Margin="10 0 10 0" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Name" Width="Auto">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=Name}" ></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="" Width="5" >
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Relation" Width="Auto" >
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=Relation}"></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="" Width="5" >
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Split" Width="Auto">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=Split}"></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Margin="20 10 10 10">
+                        <Separator Background="LightGray" Margin="0 10"/>
                         <TextBlock Text="General Notes" FontWeight="Bold" Margin="0 0 0 5"/>
                         <TextBlock Text="{Binding SelectedClient.GeneralNotes}" TextWrapping="Wrap"/>
                     </StackPanel>
-                    <Grid Grid.Row="2" Margin="20 10 10 10" ShowGridLines="False">
+                    <Grid Grid.Row="3" Margin="20 10 10 10" ShowGridLines="False">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="30"/>
@@ -406,7 +466,7 @@
                         <TextBlock Text="{Binding SelectedPolicy.PolicyNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding IsPolicyNotesEditVisible, Converter={StaticResource VisibilityConverter}}"/>
                         <TextBox Text="{Binding SelectedPolicy.PolicyNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding IsPolicyNotesSaveVisible, Converter={StaticResource VisibilityConverter}}" VerticalAlignment="Top"/>
                     </Grid>
-                    <StackPanel Grid.Row="3" Margin="10 10 10 10">
+                    <StackPanel Grid.Row="4" Margin="10 10 10 10">
                         <Separator Background="LightGray" Margin="0 10"/>
                         <Grid Background="LightBlue" Height="70">
                             <Grid.ColumnDefinitions>
@@ -434,7 +494,7 @@
                         </Grid>
 
                     </StackPanel>
-                    <StackPanel Grid.Row="4" Margin="20 10 10 10">
+                    <StackPanel Grid.Row="5" Margin="20 10 10 10">
                         <Separator Background="LightGray" Margin="0 10"/>
                         <TextBlock Text="Agents and Splits" FontWeight="Bold" Margin="0 0 0 10"></TextBlock>
                         <ItemsControl ItemsSource="{Binding SelectedPolicy.PolicyAgent}">
@@ -463,68 +523,16 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </StackPanel>
-                    <StackPanel Grid.Row="5" Margin="20 10 10 10">
-                        <Separator Background="LightGray" Margin="0 10"/>
-                        <TextBlock Text="Relationships" FontWeight="Bold"/>
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" MaxWidth="360" VerticalScrollBarVisibility="Hidden">
-                            <DataGrid AutoGenerateColumns="False" x:Name="relationship" IsReadOnly="True" Background="{x:Null}" GridLinesVisibility="None"
-                          ColumnHeaderStyle="{StaticResource RelationshipHeaderStyle}" ItemsSource="{Binding SelectedPolicy.PeoplePolicy}" MinRowHeight="25"
-                          SelectionUnit="FullRow">
-                                <DataGrid.Columns>
-                                    <DataGridTemplateColumn Header="Category" Width="85" HeaderStyle="{StaticResource RelationshipFirstColumnHeaderStyle}">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding Path=Category}" Margin="10 0 10 0" />
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                    <DataGridTemplateColumn Header="Name" Width="Auto">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding Path=Name}" ></TextBlock>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                    <DataGridTemplateColumn Header="" Width="5" >
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                    <DataGridTemplateColumn Header="Relation" Width="Auto" >
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding Path=Relation}"></TextBlock>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                    <DataGridTemplateColumn Header="" Width="5" >
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                    <DataGridTemplateColumn Header="Split" Width="Auto">
-                                        <DataGridTemplateColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding Path=Split}"></TextBlock>
-                                            </DataTemplate>
-                                        </DataGridTemplateColumn.CellTemplate>
-                                    </DataGridTemplateColumn>
-                                </DataGrid.Columns>
-                            </DataGrid>
-                        </ScrollViewer>
-                    </StackPanel>
+                    
 
                 </Grid>
             </Grid>
         </Grid>
 
-        <Grid x:Name="IllustrationSliderPanel" Visibility="Collapsed" Background="#FF9BADB8" HorizontalAlignment="Right">
+        <Grid x:Name="IllustrationSliderPanel" Visibility="Collapsed" Background="#FF444444" HorizontalAlignment="Right">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="26"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="375"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Background="#00A3FF" VerticalAlignment="Stretch" Margin="0 0 8 0">
                 <Button Background="Transparent" BorderBrush="Transparent" Width="30" Padding="0" HorizontalContentAlignment="Left" HorizontalAlignment="Left" 
@@ -537,6 +545,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="70"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="150"/>
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
@@ -545,29 +554,29 @@
                             <ColumnDefinition Width="100"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
-                            <materialDesign:PackIcon  Kind="LayersTripleOutline"  VerticalAlignment="Center"  Foreground="Black" FontWeight="Bold"></materialDesign:PackIcon>
-                            <TextBlock  Text="Policy Illustration" VerticalAlignment="Center" Margin="10 0 0 0" FontSize="16"/>
+                            <materialDesign:PackIcon  Kind="LayersTripleOutline"  VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
+                            <TextBlock  Text="Policy Illustration" VerticalAlignment="Center" Margin="10 0 0 0" FontSize="16" Foreground="White"/>
                         </StackPanel>
                         <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 0 0">
-                            <TextBlock Text="Policy # : " HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="16" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBlock Text="{Binding SelectedPolicy.PolicyNumber}" VerticalAlignment="Center" Margin="0 0 20 0" FontSize="16"/>
-                            <TextBlock Text="Policy Date : " VerticalAlignment="Center" FontSize="16" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBlock Text="{Binding SelectedPolicy.PolicyDate, StringFormat='{}{0: MMM d, yyyy}'}" FontSize="16" VerticalAlignment="Center" Margin="0 0 20 0"/>
+                            <TextBlock Text="Policy # : " HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="16" Foreground="White"></TextBlock>
+                            <TextBlock Text="{Binding SelectedPolicy.PolicyNumber}" VerticalAlignment="Center" Margin="0 0 20 0" FontSize="16" Foreground="White"/>
+                            <TextBlock Text="Policy Date : " VerticalAlignment="Center" FontSize="16" Foreground="White"></TextBlock>
+                            <TextBlock Text="{Binding SelectedPolicy.PolicyDate, StringFormat='{}{0: MMM d, yyyy}'}" FontSize="16" VerticalAlignment="Center" Foreground="White" Margin="0 0 20 0"/>
                         </StackPanel>
                         <StackPanel Grid.Column="2"  HorizontalAlignment="Right" Orientation="Vertical" VerticalAlignment="Center">
-                            <RadioButton Margin="10,5,10,0" GroupName="DividentScale" IsChecked="True" Command="{Binding DividentScaleFilterCommand}" CommandParameter="false">Primary</RadioButton>
-                            <RadioButton Margin="10,5,10,0" GroupName="DividentScale" Command="{Binding DividentScaleFilterCommand}" CommandParameter="true">Reduced</RadioButton>
+                            <RadioButton Margin="10,4,10,0" GroupName="DividentScale" IsChecked="True" Command="{Binding DividentScaleFilterCommand}" FontSize="14" CommandParameter="false" Foreground="White">Primary</RadioButton>
+                            <RadioButton Margin="10,3,10,0" GroupName="DividentScale" Command="{Binding DividentScaleFilterCommand}" FontSize="14" CommandParameter="true" Foreground="White">Reduced</RadioButton>
                         </StackPanel>
                     </Grid>
                 <DataGrid AutoGenerateColumns="False" x:Name="illustration" IsReadOnly="False" Grid.Row="1" CanUserReorderColumns="False" 
-                    ItemsSource="{Binding PolicyIllustrationCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" 
+                    ItemsSource="{Binding PolicyIllustrationCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" RowStyle="{StaticResource GridRowStyle }" 
                     CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="40" RowHeaderWidth="10" SelectedItem="{Binding SelectedIllustration}">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="" Width="40" HeaderStyle="{StaticResource FirstColumnHeaderStyle }">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Background="Transparent" BorderBrush="Transparent" Width="50" HorizontalAlignment="Left" x:Name="ButtonIllustrationEditOpen" Click="ButtonIllustrationEditOpen_Click">
-                                            <materialDesign:PackIcon Kind="Pencil" VerticalAlignment="Center"  Foreground="#00A3FF" FontWeight="Bold"></materialDesign:PackIcon>
+                                            <materialDesign:PackIcon Kind="Pencil" VerticalAlignment="Center"  Foreground="Black" FontWeight="Bold"></materialDesign:PackIcon>
                                             <Button.Triggers>
                                                 <EventTrigger RoutedEvent="ButtonBase.Click">
                                                     <BeginStoryboard Storyboard="{StaticResource IllustrationEditOpen}"></BeginStoryboard>
@@ -577,45 +586,94 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Year" Width="105" SortMemberPath="CalendarYear" CanUserSort="True">
+                            <DataGridTemplateColumn Header="Year" Width="80" SortMemberPath="CalendarYear" CanUserSort="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=CalendarYear}" Margin="10 0 10 0"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Value Type" Width="150">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="Original"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Annual Deposit" Width="100">
+                            <DataGridTemplateColumn Header="AD" Width="80">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=AnnualDeposit}"></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Cash Value" Width="100">
+                            <DataGridTemplateColumn Header="ADA" Width="80">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=AnnualDepositActual}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="ADR" Width="80">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=AnnualDepositReprojection}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="CV" Width="80">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=CashValue}"></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Death Benefit" Width="120">
+                            <DataGridTemplateColumn Header="CVA" Width="80">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=CashValueActual}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="CVR" Width="80">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=CashValueReprojection}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="DB" Width="80">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=DeathBenefit}"></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Adjusted Cost Base" Width="150">
+                            <DataGridTemplateColumn Header="DBA" Width="80">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=DeathBenefitActual}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="DBR" Width="80">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=DeathBenefitReprojection}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="ACB" Width="80">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=AdjustedCostBase}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="ACBA" Width="80">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=AdjustedCostBaseActual}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="ACBR" Width="80">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=AdjustedCostBaseReprojection}"></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -626,72 +684,29 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Increasing Pay" Width="130">
+                            <DataGridTemplateColumn Header="NCPIA" Width="70">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Increasingpay}"></TextBlock>
+                                        <TextBlock Text="{Binding Path=NCPIActual}"></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Life Pay" Width="100">
+                            <DataGridTemplateColumn Header="NCPIR" Width="70">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=LifePay}"></TextBlock>
+                                        <TextBlock Text="{Binding Path=NCPIReprojection}"></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
-                        <DataGrid.RowDetailsTemplate>
-                            <DataTemplate>
-                                <Grid Width="1065" Margin="100 0 0 0">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="150"/>
-                                        <ColumnDefinition Width="100"/>
-                                        <ColumnDefinition Width="100"/>
-                                        <ColumnDefinition Width="120"/>
-                                        <ColumnDefinition Width="150"/>
-                                        <ColumnDefinition Width="70"/>
-                                        <ColumnDefinition Width="230"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="25"/>
-                                        <RowDefinition Height="25"/>
-                                    </Grid.RowDefinitions>
-                                    <TextBlock Text="Actual" Grid.Row="0" Grid.Column="0"/>
-                                    <TextBlock Text="{Binding AnnualDepositActual}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left"/>
-                                    <TextBlock Text="{Binding CashValueActual}" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left"/>
-                                    <TextBlock Text="{Binding DeathBenefitActual}" Grid.Row="0" Grid.Column="3"/>
-                                    <TextBlock Text="{Binding AdjustedCostBaseActual}" Grid.Row="0" Grid.Column="4" />
-                                    <TextBlock Text="{Binding NCPIActual}" Grid.Row="0" Grid.Column="5"/>
-                                    <TextBlock Width="230" Grid.Row="0" Grid.Column="6"/>
-
-                                    <TextBlock Text="Reprojection" Grid.Row="1" Grid.Column="0"/>
-                                    <TextBlock Text="{Binding AnnualDepositReprojection}" Grid.Row="1" Grid.Column="1"/>
-                                    <TextBlock Text="{Binding CashValueReprojection}" Grid.Row="1" Grid.Column="2"/>
-                                    <TextBlock Text="{Binding DeathBenefitReprojection}" Grid.Row="1" Grid.Column="3"/>
-                                    <TextBlock Text="{Binding AdjustedCostBaseReprojection}" Grid.Row="1" Grid.Column="4"/>
-                                    <TextBlock Text="{Binding NCPIReprojection}" Grid.Row="1" Grid.Column="5"/>
-                                    <TextBlock Width="230" Grid.Row="0" Grid.Column="6"/>
-                                </Grid>
-                            </DataTemplate>
-                        </DataGrid.RowDetailsTemplate>
                     </DataGrid>
-                </Grid>
-            </DockPanel>
-            <DockPanel Grid.Column="2" Margin="10 0 10 10">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="70"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Grid Grid.Row="1" Background="white">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="150"/>
-                            <RowDefinition Height="250"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-
-                        <Grid Grid.Row="0" Margin="20 10 10 10">
+                    <Grid Grid.Row="2" Background="White">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="185"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0" Margin="20 10 10 10">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30"/>
                                 <RowDefinition/>
@@ -699,6 +714,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
+                                <ColumnDefinition Width="25"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Client Notes" FontWeight="Bold" Margin="0 0 0 5"/>
                             <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Right" Orientation="Horizontal">
@@ -714,21 +730,21 @@
                             </StackPanel>
                             <TextBlock Text="{Binding SelectedPolicy.ClientNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Visibility="{Binding IsClientNotesEditVisible, Converter={StaticResource VisibilityConverter}}"/>
                             <TextBox Text="{Binding SelectedPolicy.ClientNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Visibility="{Binding IsClientNotesSaveVisible, Converter={StaticResource VisibilityConverter}}" VerticalAlignment="Top"/>
+                            <Border Grid.Column="2" Margin="10 0 0 0" Grid.RowSpan="2" BorderBrush="Gray" 
+                            BorderThickness="1,0,0,0" Background="{x:Null}" />
                         </Grid>
-                        <Grid Grid.Row="1" Margin="20 10 10 10">
+                        <Grid Grid.Column="1" Margin="0 10 10 10">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="25"/>
                                 <RowDefinition Height="30"/>
                                 <RowDefinition/>
-                                <RowDefinition Height="25"/>
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
+                                <ColumnDefinition Width="25"/>
                             </Grid.ColumnDefinitions>
-                            <Separator Background="LightGray" Margin="0 10" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"/>
-                            <TextBlock Text="Internal Notes" FontWeight="Bold" Margin="0 0 0 5" Grid.Column="0" Grid.Row="1"/>
-                            <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
+                            <TextBlock Text="Internal Notes" FontWeight="Bold" Margin="0 0 0 5" Grid.Column="0" Grid.Row="0"/>
+                            <StackPanel Grid.Column="1" Grid.Row="0" HorizontalAlignment="Right" Orientation="Horizontal">
                                 <Button HorizontalContentAlignment="Left" Height="25" Padding="5" Width="25" Command="{Binding EditInternalNotesCommand}" Visibility="{Binding IsInternalNotesEditVisible, Converter={StaticResource VisibilityConverter}}">
                                     <materialDesign:PackIcon Kind="Pencil" Height="15" Width="15"/>
                                 </Button>
@@ -741,26 +757,21 @@
                             </StackPanel>
                             <TextBlock Text="{Binding SelectedPolicy.InternalNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding IsInternalNotesEditVisible, Converter={StaticResource VisibilityConverter}}"/>
                             <TextBox Text="{Binding SelectedPolicy.InternalNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding IsInternalNotesSaveVisible, Converter={StaticResource VisibilityConverter}}" VerticalAlignment="Top"/>
-                            <Separator Background="LightGray" Margin="0 10" Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2"/>
+                            <Border Grid.Column="2" Margin="10 0 0 0" Grid.RowSpan="2" BorderBrush="Gray" 
+                            BorderThickness="1,0,0,0" Background="{x:Null}" />
                         </Grid>
-                        <Grid Grid.Row="2" Margin="40 10 10 65" VerticalAlignment="Bottom">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Text="Revised By: " Grid.Row="0" Grid.Column="0"/>
-                            <TextBlock Text="Dated : " Grid.Row="0" Grid.Column="1"/>
-                            <TextBlock Text="{Binding SelectedIllustration.ModifiedBy}" Grid.Row="1" Grid.Column="0"/>
-                            <TextBlock Text="{Binding SelectedIllustration.ModifiedDate}" Grid.Row="1" Grid.Column="1"/>
-
-                        </Grid>
+                        <StackPanel Grid.Column="2">
+                            <StackPanel Orientation="Horizontal" Margin="10 50 0 0">
+                                <TextBlock Text="Revised By: "/>
+                                <TextBlock Text="{Binding SelectedIllustration.ModifiedBy}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="10 20 0 0">
+                                <TextBlock Text="Dated : "/>
+                                <TextBlock Text="{Binding SelectedIllustration.ModifiedDate}"/>
+                            </StackPanel>
+                        </StackPanel>
                     </Grid>
                 </Grid>
-
             </DockPanel>
         </Grid>
 
@@ -881,20 +892,6 @@
                 <StackPanel Grid.Column="5" Grid.Row="2" Margin="0 0 10 0">
                     <TextBlock Text="NCPI" Margin="0 5"/>
                     <TextBox Text="{Binding SelectedIllustration.NCPIReprojection, StringFormat='{}{0:#,0.00}'}"/>
-                </StackPanel>
-            </Grid>
-            <Grid Margin="50 5" Grid.Row="3" Grid.Column="0" Width="250" HorizontalAlignment="Left">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <StackPanel Margin="0 0 40 0">
-                    <TextBlock Text="Increasing Pay"/>
-                    <TextBox Text="{Binding SelectedIllustration.Increasingpay, StringFormat='{}{0:#,0.00}'}"/>
-                </StackPanel>
-                <StackPanel Grid.Column="1">
-                    <TextBlock Text="Life Pay"/>
-                    <TextBox Text="{Binding SelectedPolicy.Lifepay, StringFormat='{}{0:#,0.00}'}"/>
                 </StackPanel>
             </Grid>
         </Grid>

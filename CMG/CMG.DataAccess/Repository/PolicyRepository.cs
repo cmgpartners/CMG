@@ -48,7 +48,7 @@ namespace CMG.DataAccess.Repository
                     Agent = a.Agent,
                     Split = a.Split,
                     AgentOrder = a.AgentOrder
-                })
+                }).ToList()
             }).FirstOrDefault();
         }
 
@@ -112,7 +112,7 @@ namespace CMG.DataAccess.Repository
                 }).ToList()
             });
 
-            var totalRecords = result.Count();
+            var totalRecords = 0;
             return new PagedQueryResult<Policys>()
             {
                 Result = result.ToList(),
