@@ -224,6 +224,7 @@ namespace CMG.UI.View
             //setup the drag adorner.
             InitialiseAdorner(listViewItem);
             DataObject data = new DataObject(currentColumn);
+            DragDropEffects de = DragDrop.DoDragDrop(SearchOptionsList, data, DragDropEffects.Move);
             if (_adorner != null)
             {
                 AdornerLayer.GetAdornerLayer(searchOptionsListView).Remove(_adorner);
