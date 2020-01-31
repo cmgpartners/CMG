@@ -24,29 +24,11 @@ namespace CMG.Application.ViewModel
         public readonly IDialogService _dialogService;
         public readonly Notifier _notifier;
 
-        private const string comboFieldNameClientType = "CLIENTTYP";
         private const string comboFieldNamePolicyType = "TYPE";
         private const string comboFieldNameFrequency = "FREQUENCY";
         private const string comboFieldNameStatus = "STATUS";
-        private const string comboFieldNameCompany = "COMPANY";
-        private const string comboFieldNamePStatus = "PSTATUS";
-        private const string comboFieldNameSVCType = "SVC_TYPE";
         private const string comboFieldNameCategory = "CATGRY";
         private const string comboFieldNameCurrency = "CURRENCY";
-
-        private const string ColumnNamePolicyNumber = "PolicyNumber";
-        private const string ColumnNameCompanyName = "CompanyName";
-        private const string ColumnNameFaceAmount = "FaceAmount";
-        private const string ColumnNamePayment = "Payment";
-        private const string ColumnNameStatus = "Status";
-        private const string ColumnNameFrequency = "Frequency";
-        private const string ColumnNameType = "Type";
-        private const string ColumnNamePlanCode = "PlanCode";
-        private const string ColumnNameRating = "Rating";
-        private const string ColumnNameClass = "Class";
-        private const string ColumnNameCurrency = "Currency";
-        private const string ColumnNamePolicyDate = "PolicyDate";
-        private const string ColumnNamePlacedOn = "PlacedOn";
         #endregion
 
         #region Constructor

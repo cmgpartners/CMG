@@ -141,6 +141,7 @@ namespace CMG.UI
             ButtonMenuOpen.Visibility = Visibility.Collapsed;
             ButtonMenuClose.Visibility = Visibility.Visible;
             PolicyMenu.Background = null;
+            FileManagerMenu.Background = null;
             CollapsibleRow.Height = new GridLength(230);
         }
 
@@ -151,6 +152,7 @@ namespace CMG.UI
 
         private void PolicyMenu_Click(object sender, RoutedEventArgs e)
         {
+            FileManagerMenu.Background = null;
             PolicyMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
             CloseCommissionMenu();
             PolicyViewModel policyViewModel;
@@ -185,14 +187,20 @@ namespace CMG.UI
 
         private void FileManagerMenu_Click(object sender, RoutedEventArgs e)
         {
+            PolicyMenu.Background = null;
+            FileManagerMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
+            CloseCommissionMenu();
+            FileManagerViewModel fileManagerViewModel;
             if (_mainViewModel.SelectedViewModel != null
                 && _mainViewModel.SelectedViewModel is PolicyViewModel)
             {
+                fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, ((PolicyViewModel)_mainViewModel.SelectedViewModel).SelectedClient, _dialogService, _notifier);
                 _mainViewModel.SelectedClient = ((PolicyViewModel)_mainViewModel.SelectedViewModel).SelectedClient;
             }
-            FileManagerMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
-            CloseCommissionMenu();
-            FileManagerViewModel fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _dialogService, _notifier);
+            else 
+            {
+                fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _dialogService, _notifier);
+            }
             _mainViewModel.SelectedViewModel = fileManagerViewModel;
             DataContext = _mainViewModel;
         }
