@@ -124,7 +124,6 @@ namespace CMG.UI.View
             IllustrationEdit.Visibility = Visibility.Visible;
             IllustrationEdit.Width = IllustrationSliderPanel.ActualWidth - 300;
             IllustrationSliderPanel.Opacity = 0.6;
-            PolicyMainView.Background = Brushes.Black;
             PolicyMainView.Opacity = 0.05;
         }
         private void ButtonIllustrationEditClose_Click(object sender, RoutedEventArgs e)
