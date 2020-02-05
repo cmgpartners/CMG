@@ -75,8 +75,8 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Pay Date" Grid.ColumnSpan="1" Margin="15 5 0 0" Style="{StaticResource SearchHeaderStyle}" Foreground="White"></TextBlock>
-                            <DatePicker Grid.Row="1" Margin="15 0 15 2" SelectedDate="{Binding FromPayDate}" BorderBrush="White" Foreground="White"></DatePicker>
-                            <DatePicker Grid.Row="1" Grid.Column="1" Margin="15 0 15 2"  SelectedDate="{Binding ToPayDate}" Foreground="White" BorderBrush="White"></DatePicker>
+                            <DatePicker Style="{StaticResource SearchDatePicker}" Grid.Row="1" Margin="15 0 15 2" SelectedDate="{Binding FromPayDate}" BorderBrush="White"></DatePicker>
+                            <DatePicker Style="{StaticResource SearchDatePicker}" Grid.Row="1" Grid.Column="1" Margin="15 0 15 2"  SelectedDate="{Binding ToPayDate}" BorderBrush="White"></DatePicker>
                         </Grid>
                         <Grid Grid.Column="4">
                             <Grid.RowDefinitions>

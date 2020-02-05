@@ -100,6 +100,11 @@ namespace CMG.UI
                     DataContext = _mainViewModel;
                 }
             }
+            if(lstNavigation.SelectedIndex >= 0)
+            {
+                PolicyMenu.Background = null;
+                FileManagerMenu.Background = null;
+            }
         }
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
@@ -140,8 +145,8 @@ namespace CMG.UI
         {
             ButtonMenuOpen.Visibility = Visibility.Collapsed;
             ButtonMenuClose.Visibility = Visibility.Visible;
-            PolicyMenu.Background = null;
             CollapsibleRow.Height = new GridLength(230);
+            lstNavItems.SelectedIndex = -1;
         }
 
         private void ButtonMenuClose_Click(object sender, RoutedEventArgs e)
