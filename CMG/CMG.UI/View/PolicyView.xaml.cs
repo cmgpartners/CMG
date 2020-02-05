@@ -124,7 +124,6 @@ namespace CMG.UI.View
             IllustrationEdit.Visibility = Visibility.Visible;
             IllustrationEdit.Width = IllustrationSliderPanel.ActualWidth - 300;
             IllustrationSliderPanel.Opacity = 0.6;
-            PolicyMainView.Background = Brushes.Black;
             PolicyMainView.Opacity = 0.05;
         }
         private void ButtonIllustrationEditClose_Click(object sender, RoutedEventArgs e)
@@ -216,20 +215,25 @@ namespace CMG.UI.View
         }
         private void BeginDrag(MouseEventArgs e)
         {
-            ListView searchOptionsListView = SearchOptionsList;
-            ListViewItem listViewItem = FindAnchestor<ListViewItem>((DependencyObject)e.OriginalSource);
-            if (listViewItem == null)
-                return;
-
-            var currentColumn = searchOptionsListView.ItemContainerGenerator.ItemFromContainer(listViewItem);
-            //setup the drag adorner.
-            InitialiseAdorner(listViewItem);
-            DataObject data = new DataObject(currentColumn);
-            if (_adorner != null)
+            try
             {
-                AdornerLayer.GetAdornerLayer(searchOptionsListView).Remove(_adorner);
-                _adorner = null;
+                ListView searchOptionsListView = SearchOptionsList;
+                ListViewItem listViewItem = FindAnchestor<ListViewItem>((DependencyObject)e.OriginalSource);
+                if (listViewItem == null)
+                    return;
+
+                var currentColumn = searchOptionsListView.ItemContainerGenerator.ItemFromContainer(listViewItem);
+                //setup the drag adorner.
+                InitialiseAdorner(listViewItem);
+                DataObject data = new DataObject(currentColumn);
+                DragDropEffects de = DragDrop.DoDragDrop(SearchOptionsList, data, DragDropEffects.Move);
+                if (_adorner != null)
+                {
+                    AdornerLayer.GetAdornerLayer(searchOptionsListView).Remove(_adorner);
+                    _adorner = null;
+                }
             }
+            catch { }
         }
         private void InitialiseAdorner(ListViewItem listViewItem)
         {

@@ -75,7 +75,6 @@
                                                   CommandParameter="{Binding}" IsEnabled="{Binding Path=DataContext.SelectedViewModel.IsPasteEnabled, 
                                                                                             RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" />
                                             <MenuItem Header="_Delete" Command="{Binding DataContext.SelectedViewModel.DeleteCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" CommandParameter="{Binding CommissionId}"/>
-
                                         </MenuItem>
                                     </Menu>
                                 </DataTemplate>
@@ -84,7 +83,9 @@
                         <DataGridTemplateColumn Header="Pay Date" Width="90" SortMemberPath="PayDate" CanUserSort="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <DatePicker SelectedDate="{Binding Path=PayDate,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0: MMM d, yyyy}'}"/>
+                                <DatePicker Style="{StaticResource CommissionGridDatePicker}" 
+                                            SelectedDate="{Binding Path=PayDate,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0: MMM d, yyyy}'}" 
+                                            BorderBrush="Black" BorderThickness="0 0 0 1"></DatePicker>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -115,6 +116,24 @@
                                                         SelectedValue="{Binding Path=PolicyNumber, UpdateSourceTrigger=PropertyChanged}"
                                                         Visibility="{Binding IsNew, Converter={StaticResource VisibilityConverter}}"                                                        
                                                         HorizontalAlignment="Left">
+                                        <uc:AutoCompleteBox.Style>
+                                            <Style TargetType="uc:AutoCompleteBox">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="BorderBrush" Value="Black" />
+                                                        <Setter Property="BorderThickness" Value="0 0 0 .5" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="True">
+                                                        <Setter Property="BorderBrush" Value="Black" />
+                                                        <Setter Property="BorderThickness" Value="0 0 0 .5" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsFocused" Value="True">
+                                                        <Setter Property="BorderBrush" Value="Black" />
+                                                        <Setter Property="BorderThickness" Value="0 0 0 .5" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </uc:AutoCompleteBox.Style>
                                     </uc:AutoCompleteBox>
 
                                     <Button Style="{StaticResource AutoCompletePolicyButton}" Content=">>" Visibility="{Binding IsNew, Converter={StaticResource VisibilityConverter}}" Command="{Binding DataContext.SelectedViewModel.PolicyDetailsCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" CommandParameter="{Binding}"></Button>
@@ -175,7 +194,7 @@
                                 <DataTemplate>
                                     <Grid>
                                         <TextBlock Text="{Binding Path=Renewal}" Visibility="{Binding IsNotNew, Converter={StaticResource VisibilityConverter}}"></TextBlock>
-                                        <TextBox Text="{Binding Path=Renewal}" Visibility="{Binding IsNew, Converter={StaticResource VisibilityConverter}}" Width="20" HorizontalAlignment="Left"></TextBox>
+                                        <TextBox Style="{StaticResource CommissionGridTextBoxStyle}" Text="{Binding Path=Renewal}" Visibility="{Binding IsNew, Converter={StaticResource VisibilityConverter}}" Width="20" HorizontalAlignment="Left"></TextBox>
                                     </Grid>
 
                                 </DataTemplate>
@@ -253,7 +272,7 @@
                         <DataGridTemplateColumn Header="Total" HeaderStyle="{StaticResource TotalHeaderStyle}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox TextAlignment="Right" MinWidth="40"  Text="{Binding TotalAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" />
+                                <TextBox TextAlignment="Right" MinWidth="40" Style="{StaticResource CommissionGridTextBoxStyle}"  Text="{Binding TotalAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -275,10 +294,11 @@
                                         </ListView.ItemsPanel>
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
-                                                <Border x:Name="border"
+                                                <Border 
                                                     BorderBrush="{Binding Agent.Color}"
-                                                    BorderThickness="0,0,0,3">
-                                                    <TextBox Text="{Binding Commission, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" MinWidth="30" TextAlignment="Right" Foreground="Black"></TextBox>
+                                                    BorderThickness="0,0,0,3"
+                                                    Margin="0 0 5 0">
+                                                    <TextBox Style="{StaticResource CommissionGridTextBoxStyle}" Text="{Binding Commission, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" CaretBrush="Black" MinWidth="50" TextAlignment="Right" Foreground="Black"></TextBox>
                                                 </Border>
                                             </DataTemplate>
                                         </ListView.ItemTemplate>
@@ -296,7 +316,7 @@
                         <DataGridTemplateColumn Header="Comment" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox TextAlignment="Left" MinWidth="200"  Text="{Binding Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBox Style="{StaticResource CommissionGridTextBoxStyle}" TextAlignment="Left" MinWidth="200"  Text="{Binding Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -306,7 +326,7 @@
                 <TextBlock Text="No records found" 
                        HorizontalAlignment="Center" 
                        VerticalAlignment="Center" 
-                       Visibility="{Binding IsNoRecordFound, Converter={StaticResource VisibilityConverter}}" 
+                       Visibility="{Binding IsNoRecordFound, Converter={StaticResource VisibilityConverter}, UpdateSourceTrigger=PropertyChanged}" 
                        Style="{StaticResource NoRecordsTextBlock}" />
             </Grid>
 

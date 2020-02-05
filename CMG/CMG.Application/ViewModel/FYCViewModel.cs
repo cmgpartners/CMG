@@ -240,6 +240,10 @@ namespace CMG.Application.ViewModel
         public void Add()
         {
             DataCollection.Add(new ViewCommissionDto() { IsNew = true, IsNotNew = false, CommissionId = --newId });
+            if (DataCollection.Count == 1)
+            {
+                DataCollection = DataCollection; //added this assignment as observable is not calling set on add/edit collection
+            }
         }
         public void Delete(object commissionId)
         {
