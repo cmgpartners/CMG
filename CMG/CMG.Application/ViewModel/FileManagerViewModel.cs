@@ -2,11 +2,11 @@
 using CMG.Application.DTO;
 using CMG.DataAccess.Interface;
 using CMG.Service.Interface;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
+using Microsoft.Extensions.Caching.Memory;
+using System.IO;
 using ToastNotifications;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CMG.Application.ViewModel
 {
@@ -20,49 +20,34 @@ namespace CMG.Application.ViewModel
         #endregion Member variables
 
         #region Constructor
-        public FileManagerViewModel(IUnitOfWork unitOfWork, IMapper mapper, IDialogService dialogService = null, Notifier notifier = null)
-            : base(unitOfWork, mapper)
+        public FileManagerViewModel(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCache memoryCache = null, IDialogService dialogService = null, Notifier notifier = null)
+            : base(unitOfWork, mapper, memoryCache)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _notifier = notifier;
             _dialogService = dialogService;
+            SelectedViewModel = this;
         }
-        public FileManagerViewModel(IUnitOfWork unitOfWork, IMapper mapper, ViewClientSearchDto selectedClientInput, IDialogService dialogService = null, Notifier notifier = null)
-            :base(unitOfWork, mapper)
+        public FileManagerViewModel(IUnitOfWork unitOfWork, IMapper mapper, ViewClientSearchDto selectedClientInput, IMemoryCache memoryCache = null, IDialogService dialogService = null, Notifier notifier = null)
+            :base(unitOfWork, mapper, memoryCache)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _notifier = notifier;
             _dialogService = dialogService;
-            PolicySelectedClient = selectedClientInput;
+            SelectedViewModel = this;
         }
         #endregion Constructor
 
-        #region Properties
-        private ObservableCollection<ViewFileManagerDto> _dataCollection;
-        public ObservableCollection<ViewFileManagerDto> DataCollection
+        #region Properties        
+        public List<DriveInfo> MappedDrives 
         {
-            get { return _dataCollection; }
-            set
+            get 
             {
-                _dataCollection = value;
-                OnPropertyChanged("DataCollection");
-            }
-        }
-        private ViewClientSearchDto _policySelectedClient;
-        public ViewClientSearchDto PolicySelectedClient
-        {
-            get { return _policySelectedClient; }
-            set
-            {
-                _policySelectedClient = value;
-                OnPropertyChanged("PolicySelectedClient");
+                return DriveInfo.GetDrives().Where(dr => dr.IsReady == true).ToList(); 
             }
         }
         #endregion properties
-
-        #region Methods
-        #endregion Methods
     }
 }

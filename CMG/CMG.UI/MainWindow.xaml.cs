@@ -156,7 +156,15 @@ namespace CMG.UI
             PolicyMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
             CloseCommissionMenu();
             PolicyViewModel policyViewModel;
-            if (_mainViewModel.SelectedClient != null)
+            if (_mainViewModel.SelectedViewModel != null
+                && _mainViewModel.SelectedViewModel is FileManagerViewModel
+                && ((FileManagerViewModel)_mainViewModel.SelectedViewModel).SelectedClient != null)
+            {
+                policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, ((FileManagerViewModel)_mainViewModel.SelectedViewModel).SelectedClient, _memoryCache, _dialogService, _notifier);
+                policyViewModel.SelectedClient = ((FileManagerViewModel)_mainViewModel.SelectedViewModel).SelectedClient;
+                _mainViewModel.SelectedClient = policyViewModel.SelectedClient;
+            }
+            else if (_mainViewModel.SelectedClient != null)
             {
                 policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, _mainViewModel.SelectedClient, _memoryCache, _dialogService, _notifier);
                 policyViewModel.SelectedClient = _mainViewModel.SelectedClient;
@@ -192,16 +200,26 @@ namespace CMG.UI
             CloseCommissionMenu();
             FileManagerViewModel fileManagerViewModel;
             if (_mainViewModel.SelectedViewModel != null
-                && _mainViewModel.SelectedViewModel is PolicyViewModel)
+                && _mainViewModel.SelectedViewModel is PolicyViewModel
+                && ((PolicyViewModel)_mainViewModel.SelectedViewModel).SelectedClient != null)
             {
-                fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, ((PolicyViewModel)_mainViewModel.SelectedViewModel).SelectedClient, _dialogService, _notifier);
-                _mainViewModel.SelectedClient = ((PolicyViewModel)_mainViewModel.SelectedViewModel).SelectedClient;
+                fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, ((PolicyViewModel)_mainViewModel.SelectedViewModel).SelectedClient, _memoryCache, _dialogService, _notifier);
+                fileManagerViewModel.SelectedClient = ((PolicyViewModel)_mainViewModel.SelectedViewModel).SelectedClient;
+                _mainViewModel.SelectedClient = fileManagerViewModel.SelectedClient;
+            }
+            else if(_mainViewModel.SelectedClient != null)
+            {
+                fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _mainViewModel.SelectedClient, _memoryCache, _dialogService, _notifier);
+                fileManagerViewModel.SelectedClient = _mainViewModel.SelectedClient;
             }
             else 
             {
-                fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _dialogService, _notifier);
+                fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
             }
             _mainViewModel.SelectedViewModel = fileManagerViewModel;
+            fileManagerViewModel.EntityType = _mainViewModel.EntityType;
+            fileManagerViewModel.PolicyNumber = _mainViewModel.PolicyNumber;
+            fileManagerViewModel.CompanyName = _mainViewModel.CompanyName;
             DataContext = _mainViewModel;
         }
     }

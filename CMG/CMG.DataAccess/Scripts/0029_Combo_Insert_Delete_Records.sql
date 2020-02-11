@@ -1,0 +1,33 @@
+IF NOT EXISTS(SELECT TOP 1 * FROM COMBO WHERE DESC_ like '%Agent Of Record%')
+BEGIN
+	INSERT INTO COMBO
+	(
+		FIELDNAME,
+		FLDCODE,
+		DESC_,
+		REV_LOCN,
+		REV_DATE
+	)
+	SELECT
+		'CATGRY',
+		'4',
+		'Agent Of Record',
+		'CM\Rishita',
+		GETDATE()
+END
+
+IF EXISTS(SELECT TOP 1 * FROM COMBO WHERE FIELDNAME like '%CATGRY%' AND DESC_ like '%Internal Agent%')
+BEGIN
+	DELETE FROM COMBO
+	WHERE 
+		FIELDNAME like '%CATGRY%' 
+		AND DESC_ like '%Internal Agent%'
+END
+
+IF EXISTS(SELECT TOP 1 * FROM COMBO WHERE FIELDNAME like '%CATGRY%' AND DESC_ like '%External Agent%')
+BEGIN
+	DELETE FROM COMBO
+	WHERE 
+		FIELDNAME like '%CATGRY%' 
+		AND DESC_ like '%External Agent%'
+END

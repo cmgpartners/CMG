@@ -39,6 +39,7 @@ namespace CMG.Application.ViewModel
             _mapper = mapper;
             _notifier = notifier;
             _dialogService = dialogService;
+            SelectedViewModel = this;
             LoadData();
         }
         
@@ -49,6 +50,7 @@ namespace CMG.Application.ViewModel
             _mapper = mapper;
             _notifier = notifier;
             _dialogService = dialogService;
+            SelectedViewModel = this;
             LoadData();
             
             if (selectedClientInput != null)
