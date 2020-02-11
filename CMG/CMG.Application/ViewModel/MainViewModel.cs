@@ -257,8 +257,12 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("SelectedClient");
                 OnPropertyChanged("IsClientSelected");
                 OnPropertyChanged("IsPolicyDetailVisible");
-                PolicyViewModel pv = new PolicyViewModel(_unitOfWork, _mapper, SelectedClient);
-                PolicyCollection = pv.PolicyCollection;
+                if (SelectedViewModel != null
+                    && SelectedViewModel is PolicyViewModel)
+                {
+                    PolicyViewModel pv = new PolicyViewModel(_unitOfWork, _mapper, SelectedClient);
+                    PolicyCollection = pv.PolicyCollection;
+                }
             }
         }
         private List<string> columnNames;
@@ -616,7 +620,7 @@ namespace CMG.Application.ViewModel
                 _memoryCache.Set(optionsCacheKey, originalSearchOptions);
         }        
         public void GetUserOptions()
-        {            
+        {
             if(_memoryCache != null)
             {
                 List<Options> options = default;

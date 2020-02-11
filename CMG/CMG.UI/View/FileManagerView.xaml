@@ -5,21 +5,120 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:behaviors="clr-namespace:WPFTextBoxAutoComplete;assembly=WPFTextBoxAutoComplete"
+             xmlns:template="clr-namespace:CMG.UI.TemplateSelector"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             xmlns:uc="clr-namespace:CMG.UI.Controls">
+             xmlns:converters="clr-namespace:CMG.UI.Converter" 
+             xmlns:uc="clr-namespace:CMG.UI.Controls"
+             Loaded="UserControl_Loaded">
     <UserControl.Resources>
-        <Storyboard x:Key="SearchSliderOpen">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="SearchSliderPannel">
-                <EasingDoubleKeyFrame KeyTime="0" Value="0"></EasingDoubleKeyFrame>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="450"></EasingDoubleKeyFrame>
-            </DoubleAnimationUsingKeyFrames>
+        <DataTemplate x:Key="commonNameTemplate">
+            <WrapPanel AllowDrop="True" Orientation="Vertical">
+                <TextBlock Text="{Binding ColumnName}" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
+                                     Foreground="White" FontSize="14"
+                                     Text="{Binding DataContext.CommanName, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}"  Width="85"></TextBox>
+            </WrapPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="lastNameTemplate">
+            <WrapPanel AllowDrop="True" Orientation="Vertical">
+                <TextBlock Text="Last Name" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
+                                     Foreground="White" FontSize="14"
+                                     Text="{Binding DataContext.LastName, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" Width="85"></TextBox>
+            </WrapPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="firstNameTemplate">
+            <WrapPanel AllowDrop="True" Orientation="Vertical">
+                <TextBlock Text="First Name" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
+                                     Foreground="White" FontSize="14"
+                                     Text="{Binding DataContext.FirstName, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" MinWidth="85"></TextBox>
+            </WrapPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="entityTypeTemplate">
+            <WrapPanel AllowDrop="True" Orientation="Vertical" x:Name="EntityTypePanel" Loaded="EntityTypePanel_Loaded">
+                <TextBlock Text="{Binding ColumnName}" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                <uc:AutoCompleteBox 
+                                x:Name="UserControlEntityType" 
+                                Foreground="White" 
+                                BorderBrush="#FFCEEAFF" 
+                                BorderThickness="0 0 0 3" 
+                                Margin="10 0 15 5" 
+                                Width="85"
+                                AutoSuggestionList="{Binding DataContext.EntityTypes, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                SelectedValue="{Binding DataContext.EntityType, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
+                </uc:AutoCompleteBox>
+            </WrapPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="policyNumberTemplate" x:Name="policyNumberTemplate">
+            <WrapPanel AllowDrop="True" Orientation="Vertical" Loaded="PolicyNumberPanel_Loaded">
+                <TextBlock Text="Policy #" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                <uc:AutoCompleteBox 
+                                x:Name="UserControlPolicyNumber" 
+                                Foreground="White" 
+                                BorderBrush="#FFCEEAFF" 
+                                BorderThickness="0 0 0 3" 
+                                Margin="10 0 15 0" 
+                                Width="85"
+                                AutoSuggestionList="{Binding DataContext.Policies, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                SelectedValue="{Binding DataContext.PolicyNumber, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
+                </uc:AutoCompleteBox>
+            </WrapPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="companyNameTemplate">
+            <WrapPanel AllowDrop="True" Orientation="Vertical" Loaded="CompanyNamePanel_Loaded">
+                <TextBlock Text="Company" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                <uc:AutoCompleteBox 
+                                AutoSuggestionList="{Binding DataContext.CompanyNames, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                Foreground="White" 
+                                BorderBrush="#FFCEEAFF" 
+                                BorderThickness="0 0 0 3" 
+                                Margin="10 0 15 0"  
+                                Width="85"
+                                SelectedValue="{Binding DataContext.CompanyName, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
+                </uc:AutoCompleteBox>
+            </WrapPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="policyDateTemplate">
+            <WrapPanel AllowDrop="True" Orientation="Vertical">
+                <TextBlock Text="Policy Date" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                <StackPanel Orientation="Horizontal">
+                    <DatePicker Margin="10 6 5 5" SelectedDate="{Binding DataContext.FromPolicyDate, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="90" Foreground="White"/>
+                    <DatePicker Margin="0 6 15 5" SelectedDate="{Binding DataContext.ToPolicyDate, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="90" Foreground="White"/>
+                </StackPanel>
+            </WrapPanel>
+        </DataTemplate>
+        <template:SearchOptionsSelector x:Key="searchOptionsSelector"
+                                    CommonNameTemplate="{StaticResource commonNameTemplate}"
+                                    LastNameTemplate="{StaticResource lastNameTemplate}"
+                                    FirstNameTemplate="{StaticResource firstNameTemplate}"
+                                    EntityTypeTemplate="{StaticResource entityTypeTemplate}"
+                                    PolicyNumberTemplate="{StaticResource policyNumberTemplate}"
+                                    CompanyNameTemplate="{StaticResource companyNameTemplate}"
+                                    PolicyDateTemplate="{StaticResource policyDateTemplate}">
+
+        </template:SearchOptionsSelector>
+
+        <Storyboard x:Key="SearchSliderOpen" TargetProperty="Margin">
+            <ThicknessAnimation Storyboard.TargetName="SearchSliderPannel" Duration="0:0:0.6">
+                <ThicknessAnimation.From>
+                    <Thickness Right="450" Top="0" Bottom="0" Left="0"/>
+                </ThicknessAnimation.From>
+                <ThicknessAnimation.To>
+                    <Thickness Left="0" Top="0" Bottom="0" Right="0"/>
+                </ThicknessAnimation.To>
+            </ThicknessAnimation>
         </Storyboard>
-        <Storyboard x:Key="SearchSliderClose">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="SearchSliderPannel">
-                <EasingDoubleKeyFrame KeyTime="0" Value="450"></EasingDoubleKeyFrame>
-                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"></EasingDoubleKeyFrame>
-            </DoubleAnimationUsingKeyFrames>
+        <Storyboard x:Key="SearchSliderClose" TargetProperty="Margin">
+            <ThicknessAnimation Storyboard.TargetName="SearchSliderPannel" Duration="0:0:0.6">
+                <ThicknessAnimation.From>
+                    <Thickness Left="0" Top="0" Bottom="0" Right="0"/>
+                </ThicknessAnimation.From>
+                <ThicknessAnimation.To>
+                    <Thickness Right="450" Top="0" Bottom="0" Left="0"/>
+                </ThicknessAnimation.To>
+            </ThicknessAnimation>
         </Storyboard>
     </UserControl.Resources>
     <UserControl.Triggers>
@@ -35,109 +134,54 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="450" x:Name="SearchSliderColumn" />
                 <ColumnDefinition Width="*" x:Name="PolicyGridColumn"/>
+                <ColumnDefinition Width="575" x:Name="PolicyDetailColumn"/>
             </Grid.ColumnDefinitions>
 
-            <Grid Grid.Row="0" Grid.Column="0" Background="#FF252627" x:Name="SearchSliderPannel">
+            <Grid Grid.Row="0" Grid.Column="0" Background="#FF252627" x:Name="SearchSliderPannel" ShowGridLines="False">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="100"/>
-                    <RowDefinition Height="300" />
+                    <RowDefinition Height="75"/>
+                    <RowDefinition Height="250"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <DockPanel>
+                <DockPanel >
                     <materialDesign:PackIcon Kind="Search" VerticalAlignment="Center" Margin="20" Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
-                    <TextBlock Text="Search" Margin="0 38 10 10" FontSize="16" Foreground="White" ></TextBlock>
+                    <TextBlock Text="Search" Margin="0 23 10 10" FontSize="16" Foreground="White" ></TextBlock>
                     <Button Background="Transparent" BorderBrush="Transparent" Width="50" HorizontalAlignment="Right" x:Name="ButtonSearchSliderClose" Click="ButtonSearchSliderClose_Click">
                         <materialDesign:PackIcon Kind="ArrowLeftBoldCircleOutline"  VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
                     </Button>
                 </DockPanel>
-                <Grid Grid.Row="1">
+                <Grid Grid.Row="1" ShowGridLines="False">
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition/>
                             <RowDefinition/>
-                            <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="0" Grid.Column="0">
-                            <TextBlock Text="Common Name" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3"  
-                                     Text="{Binding DataContext.CommanName, RelativeSource={RelativeSource AncestorType=Window}}" Foreground="White" FontSize="14" MinWidth="150"></TextBox>
-                        </StackPanel>
-                        <StackPanel Grid.Row="0" Grid.Column="1">
-                            <TextBlock Text="Last Name" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
-                                     Foreground="White" FontSize="14" 
-                                     Text="{Binding DataContext.LastName, RelativeSource={RelativeSource AncestorType=Window}}" MinWidth="150"></TextBox>
-                        </StackPanel>
-                        <StackPanel Grid.Row="0" Grid.Column="2">
-                            <TextBlock Text="First Name" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
-                                     Foreground="White" FontSize="14"  
-                                     Text="{Binding DataContext.FirstName, RelativeSource={RelativeSource AncestorType=Window}}" MinWidth="150"></TextBox>
-                        </StackPanel>
-                        <StackPanel Grid.Row="0" Grid.Column="3">
-                            <TextBlock Text="Entity Type" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <uc:AutoCompleteBox 
-                                x:Name="UserControlEntityType" 
-                                Foreground="White" 
-                                BorderBrush="#FFCEEAFF" 
-                                BorderThickness="0 0 0 3" 
-                                Margin="19 0 10 0" 
-                                AutoSuggestionList="{Binding EntityTypes}" 
-                                SelectedValue="{Binding DataContext.EntityType, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
-                            </uc:AutoCompleteBox>
-                        </StackPanel>
-
-                        <StackPanel Grid.Row="1" Grid.Column="0">
-                            <TextBlock Text="Policy #" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <uc:AutoCompleteBox 
-                                x:Name="UserControlPolicyNumber" 
-                                Foreground="White" 
-                                BorderBrush="#FFCEEAFF" 
-                                BorderThickness="0 0 0 3" 
-                                Margin="19 0 10 0" 
-                                AutoSuggestionList="{Binding Policies}" 
-                                SelectedValue="{Binding DataContext.PolicyNumber, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
-                            </uc:AutoCompleteBox>
-                        </StackPanel>
-                        <StackPanel Grid.Row="1" Grid.Column="1">
-                            <TextBlock Text="Company" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <uc:AutoCompleteBox 
-                                AutoSuggestionList="{Binding CompanyNames}" 
-                                Foreground="White" 
-                                BorderBrush="#FFCEEAFF" 
-                                BorderThickness="0 0 0 3" 
-                                Margin="15 0 10 0"  
-                                SelectedValue="{Binding DataContext.CompanyName, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
-                            </uc:AutoCompleteBox>
-                        </StackPanel>
-
-                        <StackPanel Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2">
-                            <TextBlock Text="Policy Date" Margin="15 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                            <TextBox Margin="15 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Foreground="White" FontSize="14" Text="" MinWidth="150"></TextBox>
-                        </StackPanel>
-
-                        <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Top">
-                            <Button Content="Show Less Options" BorderBrush="Transparent" FontWeight="Regular" FontSize="12" Background="Transparent" HorizontalAlignment="Left"/>
-                            <Button BorderBrush="Transparent" FontWeight="Regular" FontSize="12" Background="Transparent" HorizontalAlignment="Left" Padding="0">
-                                <materialDesign:PackIcon Kind="ArrowUpBoldCircleOutline" VerticalAlignment="Center"  Foreground="White" FontWeight="Bold">
-                                </materialDesign:PackIcon>
-                            </Button>
-                        </StackPanel>
-                        <StackPanel Grid.Row="2" Grid.Column="4">
-                            <Button Content="Search" Width="85" Command="{Binding SearchClientCommand}" IsDefault="True"></Button>
+                        <ListView Grid.Row="0" ItemsSource="{Binding SearchOptions, UpdateSourceTrigger=PropertyChanged, IsAsync=True}"  Width="450" x:Name="SearchOptionsList" Height="300" ItemTemplateSelector="{StaticResource searchOptionsSelector}" 
+                                  PreviewMouseLeftButtonDown="SearchOptionsList_PreviewMouseLeftButtonDown" PreviewMouseMove="SearchOptionsList_PreviewMouseMove" Drop="SearchOptionsList_Drop" AllowDrop="True" IsTabStop="False" 
+                                  KeyboardNavigation.TabNavigation="Cycle" Focusable="False">
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal" Width="450"></WrapPanel>
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Padding" Value="0"/>
+                                    <Setter Property="Margin" Value="0"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="Background" Value="Transparent"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                        <StackPanel Grid.Row="1" Margin="295 10 0 0">
+                            <Button Content="Search" Width="85" Command="{Binding DataContext.SearchClientCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" IsDefault="True"></Button>
                         </StackPanel>
                     </Grid>
                 </Grid>
                 <Grid Grid.Row="2">
                     <DataGrid AutoGenerateColumns="False" x:Name="search" IsReadOnly="True" Background="{x:Null}" GridLinesVisibility="None"
-                          ItemsSource="{Binding ClientCollection}" ColumnHeaderStyle="{StaticResource ClientHeaderStyle}" RowStyle="{StaticResource ClientRowStyle }" 
-                          SelectionUnit="FullRow" SelectedItem="{Binding SelectedClient}">
+                          ItemsSource="{Binding DataContext.ClientCollection, RelativeSource={RelativeSource AncestorType=Window}}" ColumnHeaderStyle="{StaticResource ClientHeaderStyle}" RowStyle="{StaticResource ClientRowStyle }" 
+                          SelectionUnit="FullRow" SelectedItem="{Binding SelectedClient}" SelectionChanged="Search_SelectionChanged">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="Common Name" Width="105" SortMemberPath="CommonName" CanUserSort="True" HeaderStyle="{StaticResource ClientFirstColumnHeaderStyle }">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -181,7 +225,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <DockPanel x:Name="SearchBar" Visibility="Collapsed">
-                    <materialDesign:PackIcon Kind="Search" VerticalAlignment="Center" Margin="20" Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
+                    <materialDesign:PackIcon Kind="Search" VerticalAlignment="Center" Margin="20" FontWeight="Bold" Foreground="White"></materialDesign:PackIcon>
                     <TextBlock Text="Search" Margin="0 22 10 10" FontSize="16" Foreground="White" ></TextBlock>
                     <Button Background="Transparent" BorderBrush="Transparent" Width="50" x:Name="ButtonSearchSliderOpen" HorizontalAlignment="Left" Click="ButtonSearchSliderOpen_Click">
                         <materialDesign:PackIcon Kind="ArrowRightBoldCircleOutline" VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
@@ -189,127 +233,87 @@
                     <TextBlock Text="|" Margin="0 10 10 10" FontSize="35" Foreground="#FFF0F9FF" FontWeight="Light" Opacity="0.3"></TextBlock>
                 </DockPanel>
                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
-                    <materialDesign:PackIcon Kind="Snowflake" Margin="10 10 0 10" VerticalAlignment="Center"  Foreground="Black" FontWeight="Bold"></materialDesign:PackIcon>
-                    <TextBlock Margin="10 22 10 10" FontSize="16" Foreground="Black" Visibility="{Binding IsClientSelected, Converter={StaticResource VisibilityConverter}}">
-                        <Run Text="{Binding SelectedClient.ClientType}"/>
+                    <materialDesign:PackIcon Kind="Folder" Margin="10 10 0 10" VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
+                    <TextBlock Margin="10 22 10 10" FontSize="16" Foreground="White" Visibility="{Binding IsClientSelected, Converter={StaticResource VisibilityConverter}}">
+                        <Run Text="File Explorer"/>
                         <Run Text=" : "/>
                         <Run Text="{Binding SelectedClient.CommonName}"/>
                         <Run Text="{Binding SelectedClient.LastName}"/>
                     </TextBlock>
-                    <TextBlock Text="Policy Details" Margin="10 22 10 10" FontSize="16" Foreground="Black" Visibility="{Binding IsPolicyDetailVisible, Converter={StaticResource VisibilityConverter}}"/>
+                    <TextBlock Text="File Explorer" Margin="10 22 10 10" FontSize="16" Foreground="White" Visibility="{Binding IsPolicyDetailVisible, Converter={StaticResource VisibilityConverter}}"/>
                 </StackPanel>
-                <Grid Grid.Row="1" Margin="10 0 10 10" Grid.ColumnSpan="2">
-                    <DataGrid AutoGenerateColumns="False" x:Name="policies" IsReadOnly="False" 
-                      ItemsSource="{Binding PolicyCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" 
-                      CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="40" SelectedItem="{Binding SelectedPolicy}">
-                        <DataGrid.Columns>                            
-                            <DataGridTemplateColumn Header="Number" Width="105" SortMemberPath="PolicyNumber" CanUserSort="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=PolicyNumber}" Margin="10 0 10 0"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Company" Width="150" SortMemberPath="CompanyName" CanUserSort="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=CompanyName}"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Face Amount" Width="90" SortMemberPath="FaceAmount" CanUserSort="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=FaceAmount}"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Payment" Width="100" SortMemberPath="Payment" CanUserSort="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Payment}"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Status" Width="120" SortMemberPath="Status" CanUserSort="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Status}"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Frequency" Width="80" SortMemberPath="Frequency" CanUserSort="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Frequency}"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Type" Width="70" SortMemberPath="Type" CanUserSort="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Type}"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="PlanCode" Width="130" SortMemberPath="PlanCode" CanUserSort="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=PlanCode}"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Rating" Width="100" SortMemberPath="Rating" CanUserSort="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Rating}"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Class" Width="60" SortMemberPath="Class" CanUserSort="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Class}"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Currency" Width="70" SortMemberPath="Currency" CanUserSort="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Currency}"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Policy Date" Width="100" SortMemberPath="PolicyDate" CanUserSort="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=PolicyDate, StringFormat='{}{0: MMM d, yyyy}'}"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Placed On" Width="100" SortMemberPath="PlacedOn" CanUserSort="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=PlacedOn, StringFormat='{}{0: MMM d, yyyy}'}"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Reprojected On" Width="100" SortMemberPath="ReprojectedOn" CanUserSort="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=ReprojectedOn, StringFormat='{}{0: MMM d, yyyy}'}"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Age" Width="70" SortMemberPath="Age" CanUserSort="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Age}"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                
+                <Grid Grid.Row="2" Margin="10 0 10 10" Grid.ColumnSpan="2" Background="White">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="70"/>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel x:Name="spDrives" 
+                                Grid.Row="0" Grid.Column="0" 
+                                Orientation="Horizontal">
+                    <!--<Button x:Name="btnTest" Visibility="Collapsed">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Gift"/>
+                            <TextBlock x:Name="txtDrive" Text="text"/>
+                        </StackPanel>
+                    </Button>-->
+                    </StackPanel>
+                    <TreeView x:Name="FolderView" Grid.Row="1" Grid.Column="0" SelectedItemChanged="FolderView_SelectedItemChanged" >
+                        <TreeView.Resources>
+                            <Style TargetType="TreeViewItem">
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Padding" Value="3"/>
+                                <Setter Property="HeaderTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="Folder" VerticalAlignment="Center" Foreground="Orange" FontWeight="Bold"></materialDesign:PackIcon>
+                                                <TextBlock VerticalAlignment="Center" Text=" "/>
+                                                <TextBlock VerticalAlignment="Center" Text="{Binding}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="FontWeight" Value="Bold" />
+                                        <Setter Property="BorderBrush" Value="Black" />
+                                        <Setter Property="BorderThickness" Value="1.5" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="False">
+                                        <Setter Property="FontWeight" Value="Normal" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TreeView.Resources>
+                    </TreeView>                    
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="0" Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="2" Background="White" Margin="0 0 10 10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="70"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0">
+                        <Border x:Name="border"
+                                BorderBrush="Black"
+                                BorderThickness="0 0 0 3" Height="70">
+                            <Label x:Name="lblFiles" 
+                                   HorizontalAlignment="Center" VerticalContentAlignment="Center" 
+                                   Content="Files" Style="{StaticResource LabelStyle}" />
+                        </Border>
+                    </StackPanel>
+                        <ListView Grid.Row="1" x:Name="lstFiles" 
+                                  MouseDoubleClick="lstFiles_MouseDoubleClick">                            
+                        </ListView>
                 </Grid>
             </Grid>
         </Grid>
