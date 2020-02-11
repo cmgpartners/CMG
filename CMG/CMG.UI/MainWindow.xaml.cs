@@ -100,6 +100,11 @@ namespace CMG.UI
                     DataContext = _mainViewModel;
                 }
             }
+            if(lstNavigation.SelectedIndex >= 0)
+            {
+                PolicyMenu.Background = null;
+                FileManagerMenu.Background = null;
+            }
         }
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
@@ -140,9 +145,9 @@ namespace CMG.UI
         {
             ButtonMenuOpen.Visibility = Visibility.Collapsed;
             ButtonMenuClose.Visibility = Visibility.Visible;
-            PolicyMenu.Background = null;
             FileManagerMenu.Background = null;
             CollapsibleRow.Height = new GridLength(230);
+            lstNavItems.SelectedIndex = -1;
         }
 
         private void ButtonMenuClose_Click(object sender, RoutedEventArgs e)
@@ -216,6 +221,9 @@ namespace CMG.UI
             {
                 fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
             }
+            FileManagerMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
+            CloseCommissionMenu();
+            FileManagerViewModel fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _dialogService, _notifier);
             _mainViewModel.SelectedViewModel = fileManagerViewModel;
             fileManagerViewModel.EntityType = _mainViewModel.EntityType;
             fileManagerViewModel.PolicyNumber = _mainViewModel.PolicyNumber;

@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:behaviors="clr-namespace:WPFTextBoxAutoComplete;assembly=WPFTextBoxAutoComplete"
              xmlns:template="clr-namespace:CMG.UI.TemplateSelector"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
@@ -67,7 +66,7 @@
         </DataTemplate>
         <DataTemplate x:Key="companyNameTemplate">
             <WrapPanel AllowDrop="True" Orientation="Vertical" Loaded="CompanyNamePanel_Loaded">
-                <TextBlock Text="Company" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                <TextBlock Text="Company" Margin="10 0 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                 <uc:AutoCompleteBox 
                                 AutoSuggestionList="{Binding DataContext.CompanyNames, RelativeSource={RelativeSource AncestorType=Window}}" 
                                 Foreground="White" 
@@ -81,11 +80,13 @@
         </DataTemplate>
         <DataTemplate x:Key="policyDateTemplate">
             <WrapPanel AllowDrop="True" Orientation="Vertical">
-                <TextBlock Text="Policy Date" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                <TextBlock Text="Policy Date" Margin="10 0 0 5" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                 <StackPanel Orientation="Horizontal">
-                    <DatePicker Margin="10 6 5 5" SelectedDate="{Binding DataContext.FromPolicyDate, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="90" Foreground="White"/>
-                    <DatePicker Margin="0 6 15 5" SelectedDate="{Binding DataContext.ToPolicyDate, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="90" Foreground="White"/>
-                </StackPanel>
+                        <DatePicker Margin="10 -3 5 0" Style="{StaticResource PolicyDatePicker}" SelectedDate="{Binding DataContext.FromPolicyDate, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" Width="90" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3">
+                        </DatePicker>
+                    <DatePicker Margin="10 -3 5 0" Style="{StaticResource PolicyDatePicker}" SelectedDate="{Binding DataContext.ToPolicyDate, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" Width="90" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3">
+                        </DatePicker>
+                    </StackPanel>
             </WrapPanel>
         </DataTemplate>
         <template:SearchOptionsSelector x:Key="searchOptionsSelector"
