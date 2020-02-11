@@ -33,12 +33,12 @@
             <Storyboard x:Key="MenuOpen">
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="GridMenu">
                     <EasingDoubleKeyFrame KeyTime="0" Value="0"></EasingDoubleKeyFrame>
-                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="230"></EasingDoubleKeyFrame>
+                    <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="225"></EasingDoubleKeyFrame>
                 </DoubleAnimationUsingKeyFrames>
             </Storyboard>
             <Storyboard x:Key="MenuClose">
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="GridMenu">
-                    <EasingDoubleKeyFrame KeyTime="0" Value="230"></EasingDoubleKeyFrame>
+                    <EasingDoubleKeyFrame KeyTime="0" Value="225"></EasingDoubleKeyFrame>
                     <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"></EasingDoubleKeyFrame>
                 </DoubleAnimationUsingKeyFrames>
             </Storyboard>
@@ -63,35 +63,38 @@
 
         <Grid Grid.Row="0" Grid.Column="0" Background="{StaticResource GridBackGround}">
             <Grid.RowDefinitions>
-                <RowDefinition Height="100"></RowDefinition>
-                <RowDefinition Height="230" x:Name="CollapsibleRow"></RowDefinition>
+                <RowDefinition Height="75"></RowDefinition>
+                <RowDefinition Height="225" x:Name="CollapsibleRow"></RowDefinition>
+                <RowDefinition Height="10"></RowDefinition>
                 <RowDefinition Height="40"></RowDefinition>
+                <RowDefinition Height="10"></RowDefinition>
                 <RowDefinition Height="40"></RowDefinition>
+                <RowDefinition Height="10"></RowDefinition>
                 <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <TextBlock Text="cmg" Style="{StaticResource LogoTextBlock}"></TextBlock>
             </Grid>
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="1" ShowGridLines="False">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="45"/>
                     <RowDefinition Height="*"/>
-                    
                 </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0 0 0 10">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="5"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                    </Grid>
-                    <TextBlock Background="#00A3FF"></TextBlock>
-                    <TextBlock Text="Commissions" Margin="10 10 0 10" VerticalAlignment="Center" Foreground="White" FontSize="14" FontWeight="Bold"></TextBlock>
-                    <Button Background="Transparent" BorderThickness="0" x:Name="ButtonMenuOpen" Visibility="Collapsed" Click="ButtonMenuOpen_Click">
-                        <materialDesign:PackIcon Kind="ArrowBottom" VerticalAlignment="Center"></materialDesign:PackIcon>
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0 0 0 0">
+                    <Button Background="Transparent" BorderThickness="0" x:Name="ButtonMenuOpen" Visibility="Collapsed" Click="ButtonMenuOpen_Click" FontWeight="Regular" Padding="0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Commissions" Margin="15 0 10 0" VerticalAlignment="Center" Foreground="White"></TextBlock>
+                            <materialDesign:PackIcon Kind="ArrowBottom" VerticalAlignment="Center"></materialDesign:PackIcon>
+                        </StackPanel>
+                        
                     </Button>
-                    <Button Background="Transparent" BorderThickness="0" x:Name="ButtonMenuClose" Click="ButtonMenuClose_Click">
-                        <materialDesign:PackIcon Kind="ArrowUp" VerticalAlignment="Center"></materialDesign:PackIcon>
+                    <Button Background="Transparent" BorderThickness="0" Height="45" x:Name="ButtonMenuClose" Click="ButtonMenuClose_Click" FontWeight="Regular" Padding="0" Margin="0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Background="#00A3FF" Text="" Width="5" Height="45" Padding="0" Margin="0 0 0 0"/>
+                            <TextBlock Text="Commissions" Margin="10 0 10 0" VerticalAlignment="Center" Foreground="White"></TextBlock>
+                            <materialDesign:PackIcon Kind="ArrowUp" VerticalAlignment="Center"></materialDesign:PackIcon>    
+                        </StackPanel>
+                        
                     </Button>
                 </StackPanel>
                 <Grid Grid.Row="1" x:Name="GridMenu">
@@ -104,26 +107,26 @@
                         <ListView x:Name="lstNavItems" SelectedIndex="{Binding SelectedIndexLeftNavigation}" SelectionChanged="LstNavItems_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource LeftNavigationListView}">
                             <ListViewItem Height="45">
                                 <StackPanel Orientation="Horizontal">
-                                    <Image Source="/Asset/Renewals.png" Style="{StaticResource ImageIconStyle}" Margin="10"></Image>
-                                    <TextBlock Style="{StaticResource TextBlockStyle}" VerticalAlignment="Center" Text="Renewals" Foreground="#00A3FF"></TextBlock>
+                                    <Image Source="/Asset/Renewals_white.png" Style="{StaticResource ImageIconStyle}" Margin="10"></Image>
+                                    <TextBlock Style="{StaticResource TextBlockStyle}" VerticalAlignment="Center" Text="Renewals" Foreground="White"></TextBlock>
                                 </StackPanel>
                             </ListViewItem>
                             <ListViewItem Height="45">
                                 <StackPanel Orientation="Horizontal">
-                                    <Image Source="/Asset/FYC.png" Style="{StaticResource ImageIconStyle}" Margin="10"></Image>
-                                    <TextBlock Style="{StaticResource TextBlockStyle}" Text="FYC" VerticalAlignment="Center" Foreground="#00A3FF"></TextBlock>
+                                    <Image Source="/Asset/FYC_white.png" Style="{StaticResource ImageIconStyle}" Margin="10"></Image>
+                                    <TextBlock Style="{StaticResource TextBlockStyle}" Text="FYC" VerticalAlignment="Center" Foreground="White"></TextBlock>
                                 </StackPanel>
                             </ListViewItem>
                             <ListViewItem Height="45">
                                 <StackPanel Orientation="Horizontal">
-                                    <Image Source="/Asset/Financial Summary.png" Style="{StaticResource ImageIconStyle}" Margin="10"></Image>
-                                    <TextBlock Style="{StaticResource TextBlockStyle}" Text="Summary" VerticalAlignment="Center" Foreground="#00A3FF"></TextBlock>
+                                    <Image Source="/Asset/Financial Summary_white.png" Style="{StaticResource ImageIconStyle}" Margin="10"></Image>
+                                    <TextBlock Style="{StaticResource TextBlockStyle}" Text="Summary" VerticalAlignment="Center" Foreground="White"></TextBlock>
                                 </StackPanel>
                             </ListViewItem>
                             <ListViewItem Height="45">
                                 <StackPanel Orientation="Horizontal">
-                                    <Image Source="/Asset/Search.png" Style="{StaticResource ImageIconStyle}" Margin="10"></Image>
-                                    <TextBlock Style="{StaticResource TextBlockStyle}" Text="Search" VerticalAlignment="Center" Foreground="#00A3FF"></TextBlock>
+                                    <Image Source="/Asset/Search_white.png" Style="{StaticResource ImageIconStyle}" Margin="10"></Image>
+                                    <TextBlock Style="{StaticResource TextBlockStyle}" Text="Search" VerticalAlignment="Center" Foreground="White"></TextBlock>
                                 </StackPanel>
                             </ListViewItem>
                         </ListView>
@@ -131,12 +134,14 @@
                 </Grid>
             </Grid>
 
-            <Button  Grid.Row="2" Content="Policies" Style="{StaticResource LeftNavMenuButton}" x:Name="PolicyMenu" Width="145"  Click="PolicyMenu_Click"></Button>
             
-            <Button  Grid.Row="3" Content="File Manager" Style="{StaticResource LeftNavMenuButton}" x:Name="FileManagerMenu" Width="145"  Click="FileManagerMenu_Click"></Button>
+                <Button Grid.Row="3"  Content="Policies" Style="{StaticResource LeftNavMenuButton}" x:Name="PolicyMenu" Width="145"  Click="PolicyMenu_Click"></Button>
+            
+            
+            <Button  Grid.Row="5" Content="File Manager" Style="{StaticResource LeftNavMenuButton}" x:Name="FileManagerMenu" Width="145"  Click="FileManagerMenu_Click"></Button>
 
-            <Button Grid.Row="4" Style="{StaticResource LeftNavMenuButton}" Width="145">
-                <Hyperlink  NavigateUri="http://www.google.com" RequestNavigate="Hyperlink_RequestNavigate"  Style="{StaticResource HyperLinkStyle}">
+            <Button Grid.Row="7" Style="{StaticResource LeftNavMenuButton}" Width="145">
+                <Hyperlink  NavigateUri="http://www.google.com" RequestNavigate="Hyperlink_RequestNavigate" Style="{StaticResource HyperLinkStyle}">
                     Salesforce
                 </Hyperlink>
             </Button>

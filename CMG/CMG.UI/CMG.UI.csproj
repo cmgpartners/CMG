@@ -12,8 +12,11 @@
     <None Remove="appsettings.json" />
     <None Remove="Asset\ApplicationIcon.ico" />
     <None Remove="Asset\Financial Summary.png" />
+    <None Remove="Asset\Financial Summary_white.png" />
     <None Remove="Asset\FYC.png" />
+    <None Remove="Asset\FYC_white.png" />
     <None Remove="Asset\Renewals.png" />
+    <None Remove="Asset\Renewals_white.png" />
     <None Remove="Asset\RowSelector.png" />
     <None Remove="Asset\RowSelector2.png" />
     <None Remove="Asset\RowSelectorHover.png" />
@@ -52,11 +55,20 @@
     <Resource Include="Asset\Financial Summary.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Asset\Financial Summary_white.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Asset\FYC.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Asset\ApplicationIcon.ico" />
+    <Resource Include="Asset\FYC_white.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Asset\Renewals.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Asset\Renewals_white.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Asset\RowSelector2.png">

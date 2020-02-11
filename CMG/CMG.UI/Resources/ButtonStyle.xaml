@@ -55,10 +55,9 @@
     <Style x:Key="LeftNavMenuButton" TargetType="Button">
         <Setter Property="BorderBrush" Value="Black"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="FontWeight" Value="Bold"/>
+        
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="Foreground" Value="White"/>
-        <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">

@@ -5,8 +5,8 @@
     
     <Style x:Key="HeaderStyle" TargetType="DataGridColumnHeader">
         <Setter Property="Background" Value="#FFCEEAFF" />
-        <Setter Property="Foreground" Value="Black" />
-        <Setter Property="BorderBrush" Value="#FF1FA5F1" />
+        <Setter Property="Foreground" Value="#003A3C" />
+        <Setter Property="BorderBrush" Value="#FF444444" />
         <Setter Property="BorderThickness" Value="0 0 0 3" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
@@ -36,7 +36,7 @@
                         Value="#00A3FF" />
                 <Setter Property="Opacity" Value="0.9"/>
                 <Setter Property="Foreground" Value="Black"/>
-                <Setter Property="FontWeight" Value="Bold"/>
+                <Setter Property="FontWeight" Value="SemiBold"/>
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="#00A3FF"/>

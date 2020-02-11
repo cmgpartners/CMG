@@ -38,7 +38,7 @@
                 <ComboBox x:Name="cmbYears" ItemsSource="{Binding Years}" SelectedItem="{Binding SelectedYear}" Margin="0 12 0 0" FontWeight="Bold" Foreground="White" BorderBrush="White">
                 </ComboBox>
             </StackPanel>
-            <StackPanel Grid.Column="3" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <StackPanel Grid.Column="3" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Right">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
@@ -59,7 +59,7 @@
                       ItemsSource="{Binding DataCollection}" 
                       ColumnHeaderStyle="{StaticResource HeaderStyle}"
                       RowStyle="{StaticResource GridRowStyle}"
-                      CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="50">
+                      CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="40">
                     <DataGrid.Columns>
                         <DataGridTemplateColumn>
                             <DataGridTemplateColumn.CellTemplate>
@@ -85,7 +85,7 @@
                                 <DataTemplate>
                                 <DatePicker Style="{StaticResource CommissionGridDatePicker}" 
                                             SelectedDate="{Binding Path=PayDate,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0: MMM d, yyyy}'}" 
-                                            BorderBrush="Black" BorderThickness="0 0 0 1"></DatePicker>
+                                            BorderBrush="LightGray" BorderThickness="0 0 0 1"></DatePicker>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -211,11 +211,12 @@
                                         </ListView.ItemsPanel>
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
-                                                <Border CornerRadius="15"
+                                                <Border CornerRadius="10"
                                                 BorderBrush="{Binding Agent.Color}"
                                                 BorderThickness="1"
+                                                Margin="0 0  3 0"
                                                 Background="{Binding Agent.Color}">
-                                                    <Label Content="{Binding Agent.FirstName}" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" Foreground="Black">
+                                                    <Label Content="{Binding Agent.FirstName}" Padding="5 1 5 1" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" Foreground="Black">
                                                         <Label.ContextMenu>
                                                             <ContextMenu Style="{StaticResource ContextMenuItemStyle}" Tag="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
                                                                 <ContextMenu.Items>
@@ -253,8 +254,9 @@
                                             <DataTemplate>
                                                 <Border x:Name="border"
                                                     BorderBrush="{Binding Agent.Color}"
+                                                    Margin="0 0 3 0"
                                                     BorderThickness="0,0,0,3">
-                                                    <Label Content="{Binding Split}" Foreground="Black"></Label>
+                                                    <Label Content="{Binding Split}" Padding="0 0 3 0" Foreground="Black"></Label>
                                                 </Border>
                                             </DataTemplate>
                                         </ListView.ItemTemplate>
@@ -272,7 +274,7 @@
                         <DataGridTemplateColumn Header="Total" HeaderStyle="{StaticResource TotalHeaderStyle}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                <TextBox TextAlignment="Right" MinWidth="40" Style="{StaticResource CommissionGridTextBoxStyle}"  Text="{Binding TotalAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" />
+                                <TextBox TextAlignment="Right" MinWidth="40" Style="{StaticResource CommissionGridTextBoxStyle}" Padding="0 0 3 0"  Text="{Binding TotalAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -297,8 +299,8 @@
                                                 <Border 
                                                     BorderBrush="{Binding Agent.Color}"
                                                     BorderThickness="0,0,0,3"
-                                                    Margin="0 0 5 0">
-                                                    <TextBox Style="{StaticResource CommissionGridTextBoxStyle}" Text="{Binding Commission, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" CaretBrush="Black" MinWidth="50" TextAlignment="Right" Foreground="Black"></TextBox>
+                                                    Margin="0 0 3 0">
+                                                <TextBox Style="{StaticResource CommissionGridTextBoxStyle}" Padding="0 0 3 0" Text="{Binding Commission, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" CaretBrush="Black" MinWidth="50" TextAlignment="Right" Foreground="Black"></TextBox>
                                                 </Border>
                                             </DataTemplate>
                                         </ListView.ItemTemplate>
@@ -316,7 +318,7 @@
                         <DataGridTemplateColumn Header="Comment" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox Style="{StaticResource CommissionGridTextBoxStyle}" TextAlignment="Left" MinWidth="200"  Text="{Binding Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBox Style="{StaticResource CommissionGridTextBoxStyle}" Padding="0 0 3 0" TextAlignment="Left" MinWidth="200"  Text="{Binding Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
