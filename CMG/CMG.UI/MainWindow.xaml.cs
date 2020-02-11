@@ -221,9 +221,6 @@ namespace CMG.UI
             {
                 fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
             }
-            FileManagerMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
-            CloseCommissionMenu();
-            FileManagerViewModel fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _dialogService, _notifier);
             _mainViewModel.SelectedViewModel = fileManagerViewModel;
             fileManagerViewModel.EntityType = _mainViewModel.EntityType;
             fileManagerViewModel.PolicyNumber = _mainViewModel.PolicyNumber;
