@@ -385,7 +385,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50"/>
                         <RowDefinition Height="280"/>
-                        <RowDefinition Height="150"/>
+                        <RowDefinition Height="175"/>
                         <RowDefinition Height="175"/>
                         <RowDefinition Height="80"/>
                         <RowDefinition Height="175"/>
@@ -443,11 +443,32 @@
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>
-                    <StackPanel Grid.Row="2" Margin="20 10 10 10">
-                        <Separator Background="LightGray" Margin="0 10"/>
-                        <TextBlock Text="General Notes" FontWeight="Bold" Margin="0 0 0 5"/>
-                        <TextBlock Text="{Binding SelectedClient.GeneralNotes}" TextWrapping="Wrap"/>
-                    </StackPanel>
+                    <Grid Grid.Row="2" Margin="20 10 10 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Separator Background="LightGray" Margin="0 10" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"/>
+                        <TextBlock Text="General Notes" FontWeight="Bold" Margin="0 0 0 5" Grid.Column="0" Grid.Row="1"/>
+                        <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
+                            <Button HorizontalContentAlignment="Left" Height="25" Padding="5" Width="25" Command="{Binding EditGeneralNotesCommand}" Visibility="{Binding IsGeneralNotesEditVisible, Converter={StaticResource VisibilityConverter}}">
+                                <materialDesign:PackIcon Kind="Pencil" Height="15" Width="15"/>
+                            </Button>
+                            <Button HorizontalContentAlignment="Left" Height="25" Padding="5" Width="25" Command="{Binding SaveGeneralNotesCommand}" Background="#FF57C125" Margin="5 0" BorderBrush="Transparent" Visibility="{Binding IsGeneralNotesSaveVisible, Converter={StaticResource VisibilityConverter}}">
+                                <materialDesign:PackIcon Kind="Check" Height="15" Width="15"/>
+                            </Button>
+                            <Button HorizontalContentAlignment="Left" Height="25" Padding="5" Width="25" Command="{Binding CancelGeneralNotesCommand}" Background="#FFEB7533" BorderBrush="Transparent" Visibility="{Binding IsGeneralNotesSaveVisible, Converter={StaticResource VisibilityConverter}}">
+                                <materialDesign:PackIcon Kind="Close" Height="15" Width="15"/>
+                            </Button>
+                        </StackPanel>
+                        <TextBlock Text="{Binding SelectedClient.GeneralNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding IsGeneralNotesEditVisible, Converter={StaticResource VisibilityConverter}}"/>
+                        <TextBox Text="{Binding SelectedClient.GeneralNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding IsGeneralNotesSaveVisible, Converter={StaticResource VisibilityConverter}}" VerticalAlignment="Top"/>
+                    </Grid>
                     <Grid Grid.Row="3" Margin="20 10 10 10" ShowGridLines="False">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="25"/>
@@ -532,8 +553,6 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </StackPanel>
-                    
-
                 </Grid>
             </Grid>
         </Grid>
