@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.IO;
 using System.Diagnostics;
+using MaterialDesignThemes.Wpf;
 
 namespace CMG.UI.View
 {
@@ -241,6 +242,7 @@ namespace CMG.UI.View
             TextBlock txtBlock = (TextBlock)stackPanel.Children[1];
 
             BindDefaultTreeViewItem(txtBlock.Text, txtBlock.Text);
+            BindFilesToListControl(txtBlock.Text.Trim());
             SelectClientFolder(txtBlock.Text.Trim());
         }
         private void Item_Expanded(object sender, RoutedEventArgs e)
@@ -262,7 +264,7 @@ namespace CMG.UI.View
         {
             StackPanel stackPanel = (StackPanel)((ListView)sender).SelectedItem;
 
-            string path = ((TextBlock)stackPanel.Children[1]).Text;
+            string path = ((TextBlock)stackPanel.Children[2]).Text;
             // Open file
             Process.Start("explorer.exe", path);
         }
@@ -301,7 +303,8 @@ namespace CMG.UI.View
         private void BindFilesToListControl(string path)
         {
             lstFiles.Items.Clear();
-            string[] files = Directory.GetFiles(path);
+            string[] files = Directory.GetFiles(path.Trim());
+            string fileExtension;
             foreach (var file in files)
             {
                 TextBlock txtFileName = new TextBlock();
@@ -309,9 +312,54 @@ namespace CMG.UI.View
                 txtFilePath.Visibility = Visibility.Collapsed;
 
                 txtFileName.Text = new DirectoryInfo(file).Name;
+                txtFileName.Padding = new Thickness(5, 0, 0, 0);
                 txtFilePath.Text = file;
+                fileExtension = new FileInfo(file).Extension.ToLower().Trim();
 
                 StackPanel stackPanel = new StackPanel();
+                stackPanel.Orientation = Orientation.Horizontal;
+
+                PackIcon packIcon = new PackIcon();
+                packIcon.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("Black");
+
+                if (fileExtension == ".docx"
+                    || fileExtension == ".doc"
+                    || fileExtension == ".docm"
+                    || fileExtension == ".dotx"
+                    || fileExtension == ".dotm"
+                    || fileExtension == ".docb")
+                {
+                    packIcon.Kind = PackIconKind.FileWord;                    
+                }
+                else if (fileExtension == ".xlsx"
+                        || fileExtension == ".xls"
+                        || fileExtension == ".xlsm"
+                        || fileExtension == ".xltx"
+                        || fileExtension == ".xltm")
+                {
+                    packIcon.Kind = PackIconKind.FileExcel;
+                }
+                else if (fileExtension == ".pdf"
+                        || fileExtension == ".ps"
+                        || fileExtension == ".eps")
+                {
+                    packIcon.Kind = PackIconKind.FilePdf;
+                }
+
+                else if (fileExtension == ".html"
+                        || fileExtension == ".htm")
+                {
+                    packIcon.Kind = PackIconKind.InternetExplorer;
+                }
+                else if (fileExtension == ".txt")
+                {
+                    packIcon.Kind = PackIconKind.NoteText;
+                }
+                else
+                {
+                    packIcon.Kind = PackIconKind.File;                    
+                }
+                stackPanel.Children.Add(packIcon);
                 stackPanel.Children.Add(txtFileName);
                 stackPanel.Children.Add(txtFilePath);
                 lstFiles.Items.Add(stackPanel);
@@ -319,18 +367,17 @@ namespace CMG.UI.View
         }
         private void SelectClientFolder(string driveName)
         {
-            if (fileManagerViewModel.SelectedClient != null
-                && driveName == "I:\\")
+            if (fileManagerViewModel.SelectedClient != null)
             {
                 var firstName = fileManagerViewModel.SelectedClient.FirstName.Substring(0, 3);
-                var path = "I:\\" + fileManagerViewModel.SelectedClient.FirstName.Substring(0, 1) + "\\" + fileManagerViewModel.SelectedClient.LastName + "." + firstName;
+                var path = driveName + fileManagerViewModel.SelectedClient.LastName.Substring(0, 1) + "\\" + fileManagerViewModel.SelectedClient.LastName + "." + firstName;
 
                 if ((TreeViewItem)FolderView.Items[0] != null)
                 {
                     TreeViewItem treeViewItem = (TreeViewItem)FolderView.Items[0];
                     foreach (TreeViewItem item in treeViewItem.Items)
                     {
-                        if (item.Tag.ToString().Trim() == driveName + fileManagerViewModel.SelectedClient.FirstName.Substring(0, 1).Trim())
+                        if (item.Tag.ToString().Trim() == driveName + fileManagerViewModel.SelectedClient.LastName.Substring(0, 1).Trim())
                         {
                             item.IsExpanded = true;
                             item.IsSelected = true;
@@ -364,9 +411,14 @@ namespace CMG.UI.View
             var directories = new List<String>();
             try
             {
-                var dirs = Directory.GetDirectories(driveName.Trim());
+                string[] dirs = Directory.GetDirectories(driveName.Trim());
                 if (dirs.Length > 0)
-                    directories.AddRange(dirs);
+                foreach (var directory in dirs)
+                {
+                    DirectoryInfo info = new DirectoryInfo(directory.ToString());
+                    if (!info.Attributes.HasFlag(FileAttributes.Hidden))
+                        directories.Add(directory);
+                }
             }
             catch
             {
