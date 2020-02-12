@@ -304,14 +304,14 @@
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0">
                         <Border x:Name="border"
-                                BorderBrush="Black"
+                                BorderBrush="#FF444444"
                                 BorderThickness="0 0 0 3" Height="70">
                             <Label x:Name="lblFiles" 
                                    HorizontalAlignment="Center" VerticalContentAlignment="Center" 
                                    Content="Files" Style="{StaticResource LabelStyle}" />
                         </Border>
                     </StackPanel>
-                        <ListView Grid.Row="1" x:Name="lstFiles" 
+                        <ListView Grid.Row="1" x:Name="lstFiles"
                                   MouseDoubleClick="lstFiles_MouseDoubleClick">                            
                         </ListView>
                 </Grid>
