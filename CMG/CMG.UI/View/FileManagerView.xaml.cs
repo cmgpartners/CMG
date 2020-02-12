@@ -235,8 +235,6 @@ namespace CMG.UI.View
                 string networkDrive = fileManagerViewModel.MappedDrives.Where(x => x.DriveType == DriveType.Network).FirstOrDefault().Name.ToString().Trim();
                 BindDefaultTreeViewItem(networkDrive, networkDrive);
                 BindFilesToListControl(networkDrive);
-                //TreeViewItem treeViewItem = (TreeViewItem)FolderView.Items[0];
-                //treeViewItem.IsSelected = true;
             }
 
        }
