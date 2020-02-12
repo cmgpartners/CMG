@@ -40,7 +40,7 @@
                                                 Margin="15 1 0 7"
                                                 AutoSuggestionList="{Binding Policies}"
                                                 SelectedValue="{Binding Path=PolicyNumber, UpdateSourceTrigger=PropertyChanged}"
-                                                HorizontalAlignment="Left" Foreground="White" BorderBrush="White" BorderThickness="0 0 0 1">
+                                                HorizontalAlignment="Left" Foreground="White" BorderBrush="White" BorderThickness="0 0 0 1" >
                             </uc:AutoCompleteBox>
                         </Grid>
                         <Grid Grid.Column="1">
@@ -49,7 +49,7 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <TextBlock Text="Insured" Margin="0 5 0 0" Style="{StaticResource SearchHeaderStyle}" Foreground="White"></TextBlock>
-                            <TextBox Grid.Row="1" Margin="0 0 15 7" Text="{Binding Insured}" MinWidth="100" BorderBrush="White" Foreground="White"></TextBox>
+                            <TextBox Grid.Row="1" Margin="0 0 15 7" Text="{Binding Insured, UpdateSourceTrigger=PropertyChanged}" MinWidth="100" BorderBrush="White" Foreground="White"></TextBox>
                         </Grid>
                         <Grid Grid.Column="2">
                             <Grid.RowDefinitions>
@@ -75,8 +75,8 @@
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Pay Date" Grid.ColumnSpan="1" Margin="15 5 0 0" Style="{StaticResource SearchHeaderStyle}" Foreground="White"></TextBlock>
-                            <DatePicker Style="{StaticResource SearchDatePicker}" Grid.Row="1" Margin="15 0 15 2" SelectedDate="{Binding FromPayDate}" BorderBrush="White"></DatePicker>
-                            <DatePicker Style="{StaticResource SearchDatePicker}" Grid.Row="1" Grid.Column="1" Margin="15 0 15 2"  SelectedDate="{Binding ToPayDate}" BorderBrush="White"></DatePicker>
+                            <DatePicker Style="{StaticResource SearchDatePicker}" Grid.Row="1" Margin="15 0 15 2" SelectedDate="{Binding FromPayDate, UpdateSourceTrigger=PropertyChanged}" BorderBrush="White"></DatePicker>
+                            <DatePicker Style="{StaticResource SearchDatePicker}" Grid.Row="1" Grid.Column="1" Margin="15 0 15 2"  SelectedDate="{Binding ToPayDate, UpdateSourceTrigger=PropertyChanged}" BorderBrush="White"></DatePicker>
                         </Grid>
                         <Grid Grid.Column="4">
                             <Grid.RowDefinitions>
@@ -97,9 +97,9 @@
                         </Grid>
                         <Grid Grid.Column="5" >
                             <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
-                                <CheckBox Content="FYC" IsChecked="{Binding IsFYC}" Margin="0 12 0 0" FontWeight="Bold" Foreground="White" BorderBrush="White" >
+                                <CheckBox Content="FYC" IsChecked="{Binding IsFYC, UpdateSourceTrigger=PropertyChanged}" Margin="0 12 0 0" FontWeight="Bold" Foreground="White" BorderBrush="White" >
                                 </CheckBox>
-                                <CheckBox Content="Renewals" IsChecked="{Binding IsRenewals}" Margin="0 5 0 0" FontWeight="Bold" Foreground="White"></CheckBox>
+                                <CheckBox Content="Renewals" IsChecked="{Binding IsRenewals, UpdateSourceTrigger=PropertyChanged}" Margin="0 5 0 0" FontWeight="Bold" Foreground="White"></CheckBox>
                             </StackPanel>
                         </Grid>
                         <Grid Grid.Column="6">
@@ -108,7 +108,7 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <TextBlock Text="Comment" Margin="15 5 0 0" Style="{StaticResource SearchHeaderStyle}" Foreground="White"></TextBlock>
-                            <TextBox Grid.Row="1" Margin="15 0 15 7" Text="{Binding Comment}" BorderBrush="White" Foreground="White"></TextBox>
+                            <TextBox Grid.Row="1" Margin="15 0 15 7" Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}" BorderBrush="White" Foreground="White"></TextBox>
                         </Grid>
                         <Grid Grid.Column="7">
                             <Button Command="{Binding SearchCommand}" CommandParameter="true" IsDefault="True" Content="Search"></Button>
@@ -121,7 +121,7 @@
                 <Grid Grid.Row="1">
                     <DataGrid AutoGenerateColumns="False" x:Name="search" IsReadOnly="True" 
                           ItemsSource="{Binding DataCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" 
-                          SelectionUnit="FullRow" RowHeight="50"
+                          SelectionUnit="FullRow" RowHeight="40"
                           RowStyle="{StaticResource GridRowStyle}">
                         <DataGrid.Columns>
                         <DataGridTemplateColumn>
@@ -192,11 +192,12 @@
                                             </ListView.ItemsPanel>
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
-                                                    <Border CornerRadius="15"
+                                                    <Border CornerRadius="10"
                                                 BorderBrush="{Binding Agent.Color}"
                                                 BorderThickness="1"
+                                                Margin="0 0  3 0"
                                                 Background="{Binding Agent.Color}">
-                                                        <Label Content="{Binding Agent.FirstName}" Foreground="Black"></Label>
+                                                        <Label Padding="5 1 5 1" Content="{Binding Agent.FirstName}" Foreground="Black"></Label>
                                                     </Border>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>
@@ -224,8 +225,9 @@
                                                 <DataTemplate>
                                                     <Border x:Name="border"
                                                     BorderBrush="{Binding Agent.Color}"
+                                                    Margin="0 0 3 0"
                                                     BorderThickness="0,0,0,3">
-                                                        <Label Content="{Binding Split}" Foreground="Black"></Label>
+                                                        <Label Padding="0 0 3 0" Content="{Binding Split}" Foreground="Black"></Label>
                                                     </Border>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>
@@ -267,8 +269,9 @@
                                                 <DataTemplate>
                                                     <Border x:Name="border"
                                                     BorderBrush="{Binding Agent.Color}"
+                                                    Margin="0 0 3 0"
                                                     BorderThickness="0,0,0,3">
-                                                        <Label Content="{Binding Commission}" Foreground="Black"></Label>
+                                                        <Label Padding="0 0 3 0" Content="{Binding Commission}" Foreground="Black"></Label>
                                                     </Border>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>

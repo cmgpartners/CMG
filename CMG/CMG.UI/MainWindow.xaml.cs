@@ -145,8 +145,8 @@ namespace CMG.UI
         {
             ButtonMenuOpen.Visibility = Visibility.Collapsed;
             ButtonMenuClose.Visibility = Visibility.Visible;
+            CollapsibleRow.Height = new GridLength(225);
             FileManagerMenu.Background = null;
-            CollapsibleRow.Height = new GridLength(230);
             lstNavItems.SelectedIndex = -1;
         }
 
@@ -194,7 +194,7 @@ namespace CMG.UI
             timer.Tick += (sender, args) =>
             {
                 timer.Stop();
-                CollapsibleRow.Height = new GridLength(40);
+                CollapsibleRow.Height = new GridLength(45);
             };
         }
 

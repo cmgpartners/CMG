@@ -212,10 +212,10 @@
             <Grid Grid.Row="0" Grid.Column="0" Background="#FF252627" x:Name="SearchSliderPannel" ShowGridLines="False">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="75"/>
-                    <RowDefinition Height="250"/>
+                    <RowDefinition Height="245"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <DockPanel >
+                <DockPanel>
                     <materialDesign:PackIcon Kind="Search" VerticalAlignment="Center" Margin="20" Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
                     <TextBlock Text="Search" Margin="0 23 10 10" FontSize="16" Foreground="White" ></TextBlock>
                     <Button Background="Transparent" BorderBrush="Transparent" Width="50" HorizontalAlignment="Right" x:Name="ButtonSearchSliderClose" Click="ButtonSearchSliderClose_Click">
@@ -225,10 +225,10 @@
                 <Grid Grid.Row="1" ShowGridLines="False">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="65"/>
                         </Grid.RowDefinitions>
-                        <ListView Grid.Row="0" ItemsSource="{Binding SearchOptions, UpdateSourceTrigger=PropertyChanged, IsAsync=True}"  Width="450" x:Name="SearchOptionsList" Height="300" ItemTemplateSelector="{StaticResource searchOptionsSelector}" 
+                        <ListView Grid.Row="0" ItemsSource="{Binding SearchOptions, UpdateSourceTrigger=PropertyChanged, IsAsync=True}"  Width="450" x:Name="SearchOptionsList" ItemTemplateSelector="{StaticResource searchOptionsSelector}" 
                                   PreviewMouseLeftButtonDown="SearchOptionsList_PreviewMouseLeftButtonDown" PreviewMouseMove="SearchOptionsList_PreviewMouseMove" Drop="SearchOptionsList_Drop" AllowDrop="True" IsTabStop="False" 
                                   KeyboardNavigation.TabNavigation="Cycle" Focusable="False">
                         <ListView.ItemsPanel>
@@ -251,7 +251,14 @@
                     </Grid>
                 </Grid>
                 <Grid Grid.Row="2">
-                    <DataGrid AutoGenerateColumns="False" x:Name="search" IsReadOnly="True" Background="{x:Null}" GridLinesVisibility="None"
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0">
+                        <TextBlock Grid.Row="0" Text="Results" Foreground="Gray" FontSize="16" Margin="10 0 0 0"/>
+                    </StackPanel>
+                    <DataGrid Grid.Row="1" AutoGenerateColumns="False" x:Name="search" IsReadOnly="True" Background="{x:Null}" GridLinesVisibility="None"
                           ItemsSource="{Binding DataContext.ClientCollection, RelativeSource={RelativeSource AncestorType=Window}}" ColumnHeaderStyle="{StaticResource ClientHeaderStyle}" RowStyle="{StaticResource ClientRowStyle }" 
                           SelectionUnit="FullRow" SelectedItem="{Binding SelectedClient}">
                         <DataGrid.Columns>
@@ -378,7 +385,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50"/>
                         <RowDefinition Height="280"/>
-                        <RowDefinition Height="150"/>
+                        <RowDefinition Height="175"/>
                         <RowDefinition Height="175"/>
                         <RowDefinition Height="80"/>
                         <RowDefinition Height="175"/>
@@ -436,11 +443,32 @@
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>
-                    <StackPanel Grid.Row="2" Margin="20 10 10 10">
-                        <Separator Background="LightGray" Margin="0 10"/>
-                        <TextBlock Text="General Notes" FontWeight="Bold" Margin="0 0 0 5"/>
-                        <TextBlock Text="{Binding SelectedClient.GeneralNotes}" TextWrapping="Wrap"/>
-                    </StackPanel>
+                    <Grid Grid.Row="2" Margin="20 10 10 0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Separator Background="LightGray" Margin="0 10" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"/>
+                        <TextBlock Text="General Notes" FontWeight="Bold" Margin="0 0 0 5" Grid.Column="0" Grid.Row="1"/>
+                        <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
+                            <Button HorizontalContentAlignment="Left" Height="25" Padding="5" Width="25" Command="{Binding EditGeneralNotesCommand}" Visibility="{Binding IsGeneralNotesEditVisible, Converter={StaticResource VisibilityConverter}}">
+                                <materialDesign:PackIcon Kind="Pencil" Height="15" Width="15"/>
+                            </Button>
+                            <Button HorizontalContentAlignment="Left" Height="25" Padding="5" Width="25" Command="{Binding SaveGeneralNotesCommand}" Background="#FF57C125" Margin="5 0" BorderBrush="Transparent" Visibility="{Binding IsGeneralNotesSaveVisible, Converter={StaticResource VisibilityConverter}}">
+                                <materialDesign:PackIcon Kind="Check" Height="15" Width="15"/>
+                            </Button>
+                            <Button HorizontalContentAlignment="Left" Height="25" Padding="5" Width="25" Command="{Binding CancelGeneralNotesCommand}" Background="#FFEB7533" BorderBrush="Transparent" Visibility="{Binding IsGeneralNotesSaveVisible, Converter={StaticResource VisibilityConverter}}">
+                                <materialDesign:PackIcon Kind="Close" Height="15" Width="15"/>
+                            </Button>
+                        </StackPanel>
+                        <TextBlock Text="{Binding SelectedClient.GeneralNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding IsGeneralNotesEditVisible, Converter={StaticResource VisibilityConverter}}"/>
+                        <TextBox Text="{Binding SelectedClient.GeneralNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding IsGeneralNotesSaveVisible, Converter={StaticResource VisibilityConverter}}" VerticalAlignment="Top"/>
+                    </Grid>
                     <Grid Grid.Row="3" Margin="20 10 10 10" ShowGridLines="False">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="25"/>
@@ -509,6 +537,7 @@
                                     <Border CornerRadius="15"
                                                 BorderBrush="{Binding Agent.Color}"
                                                 BorderThickness="1"
+                                                Padding="10 0 0 0"
                                                 Background="{Binding Agent.Color}"
                                                 Margin="5">
                                         <Grid Width="100">
@@ -524,8 +553,6 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </StackPanel>
-                    
-
                 </Grid>
             </Grid>
         </Grid>
@@ -569,7 +596,12 @@
                             <RadioButton Margin="10,3,10,0" GroupName="DividentScale" Command="{Binding DividentScaleFilterCommand}" FontSize="14" CommandParameter="true" Foreground="White">Reduced</RadioButton>
                         </StackPanel>
                     </Grid>
-                <DataGrid AutoGenerateColumns="False" x:Name="illustration" IsReadOnly="False" Grid.Row="1" CanUserReorderColumns="False" 
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition Height="3"/>
+                        </Grid.RowDefinitions>
+                        <DataGrid AutoGenerateColumns="False" x:Name="illustration" IsReadOnly="False" Grid.Row="0" CanUserReorderColumns="False" 
                     ItemsSource="{Binding PolicyIllustrationCollection}" ColumnHeaderStyle="{StaticResource HeaderStyle}" RowStyle="{StaticResource GridRowStyle }" 
                     CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="40" RowHeaderWidth="10" SelectedItem="{Binding SelectedIllustration}">
                         <DataGrid.Columns>
@@ -701,6 +733,8 @@
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
+                        <Border BorderBrush="#FF444444" Grid.Row="1"/>
+                    </Grid>
                     <Grid Grid.Row="2" Background="White">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -793,8 +827,18 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Grid.Row="0" Text="Edit Illustration Details" FontWeight="Bold" VerticalAlignment="Center"/>
                 <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Content="Cancel" Margin="10 0" x:Name="ButtonIllustrationEditClose" Click="ButtonIllustrationEditClose_Click"/>
-                    <Button Content="Save" Command="{Binding SaveIllustrationCommand}" x:Name="ButtonIllustrationEditSave" Click="ButtonIllustrationEditClose_Click"/>
+                    <Button Margin="10 0" x:Name="ButtonIllustrationEditClose" BorderThickness="0" Click="ButtonIllustrationEditClose_Click" Background="Transparent" Foreground="Black">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Close" Margin="0 2 0 0"></materialDesign:PackIcon>
+                            <TextBlock Text="Cancel" Padding="10 0 0 0"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding SaveIllustrationCommand}" x:Name="ButtonIllustrationEditSave" Click="ButtonIllustrationEditClose_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Check" Margin="0 2 0 0"></materialDesign:PackIcon>
+                            <TextBlock Text="Save" Padding="10 0 0 0"/>
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
             </Grid>
             <Grid Margin="50 5" Grid.Row="1" Grid.Column="0">
@@ -912,15 +956,26 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Grid.Row="0" Text="Edit Policy Detail" FontWeight="Bold" VerticalAlignment="Center"/>
                 <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Content="Cancel" Command="{Binding CancelPolicyCommand}" Margin="10 0" x:Name="ButtonPolicyEditClose" Click="ButtonPolicyEditClose_Click"/>
-                    <Button Content="Save" Command="{Binding SavePolicyCommand}" x:Name="ButtonPolicyEditSave" Click="ButtonPolicyEditClose_Click"/>
+                    <Button Command="{Binding CancelPolicyCommand}" Margin="10 0" x:Name="ButtonPolicyEditClose" 
+                            Click="ButtonPolicyEditClose_Click" Background="Transparent" BorderThickness="0" Foreground="Black">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Close" Margin="0 2 0 0"></materialDesign:PackIcon>
+                            <TextBlock Text="Cancel" Padding="10 0 0 0"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Command="{Binding SavePolicyCommand}" x:Name="ButtonPolicyEditSave" Click="ButtonPolicyEditClose_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Check" Margin="0 2 0 0"></materialDesign:PackIcon>
+                            <TextBlock Text="Save" Padding="10 0 0 0"/>
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
             </Grid>
-            <Grid Margin="50 5 50 20" Grid.Row="2" Grid.Column="0">
+            <Grid Margin="50 5 0 0" Grid.Row="2" Grid.Column="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -929,115 +984,107 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <StackPanel Margin="0 0 40 0">
+                <StackPanel Margin="0 0 50 0">
                     <TextBlock Text="Policy #"/>
                     <TextBox Text="{Binding SelectedPolicy.PolicyNumber}" MaxLength="15"/>
                 </StackPanel>
-                <StackPanel Grid.Column="1" Grid.ColumnSpan="2">
+                <StackPanel Grid.Column="1" Grid.ColumnSpan="2" Margin="0 0 50 0">
                     <TextBlock Text="Company Name"/>
                     <ComboBox ItemsSource="{Binding CompanyCollection}" 
                               SelectedValue="{Binding SelectedPolicyCompany}" 
                               DisplayMemberPath="Description" 
                               Foreground="Black"
                               FontSize="13" 
-                              Margin="0 0 17 0" 
                               Style="{StaticResource EditPolicyComboStyle}">
                     </ComboBox>
                 </StackPanel>
 
-                <StackPanel Grid.Column="0" Grid.Row="1" Margin="0 0 10 0">
+                <StackPanel Grid.Column="0" Grid.Row="1" Margin="0 0 50 0">
                     <TextBlock Text="Face Amount" Margin="0 5"/>
                     <TextBox Text="{Binding SelectedPolicy.FaceAmount}"/>
                 </StackPanel>
-                <StackPanel Grid.Column="1" Grid.Row="1" Margin="0 0 10 0">
+                <StackPanel Grid.Column="1" Grid.Row="1" Margin="0 0 50 0">
                     <TextBlock Text="Policy Date" Margin="0 5"/>
                     <DatePicker SelectedDate="{Binding Path=SelectedPolicy.PolicyDate, StringFormat='{}{0: MMM d, yyyy}'}"></DatePicker>
                 </StackPanel>
-                <StackPanel Grid.Column="2" Grid.Row="1" Margin="0 0 10 0">
+                <StackPanel Grid.Column="2" Grid.Row="1" Margin="0 0 50 0">
                     <TextBlock Text="Plan Code" Margin="0 5"/>
                     <TextBox Text="{Binding SelectedPolicy.PlanCode}" MaxLength="20"/>
                 </StackPanel>
 
-                <StackPanel Grid.Column="0" Grid.Row="2" Margin="0 0 10 0">
+                <StackPanel Grid.Column="0" Grid.Row="2" Margin="0 0 50 0">
                     <TextBlock Text="Payment" Margin="0 5"/>
                     <TextBox Text="{Binding SelectedPolicy.Payment}"/>
                 </StackPanel>
-                <StackPanel Grid.Column="1" Grid.Row="2" Margin="0 0 10 0">
+                <StackPanel Grid.Column="1" Grid.Row="2" Margin="0 0 50 0">
                     <TextBlock Text="Placement Date" Margin="0 5"/>                    
                     <DatePicker SelectedDate="{Binding Path=SelectedPolicy.PlacedOn, StringFormat='{}{0: MMM d, yyyy}'}"></DatePicker>
                 </StackPanel>
-                <StackPanel Grid.Column="2" Grid.Row="2" Margin="0 0 10 0">
+                <StackPanel Grid.Column="2" Grid.Row="2" Margin="0 0 50 0">
                     <TextBlock Text="Rating" Margin="0 5"/>
                     <TextBox Text="{Binding SelectedPolicy.Rating}" MaxLength="20"/>
                 </StackPanel>
 
-                <StackPanel Grid.Column="0" Grid.Row="3" Margin="0 0 10 0">
+                <StackPanel Grid.Column="0" Grid.Row="3" Margin="0 0 50 0">
                     <TextBlock Text="Currency" Margin="0 5"/>
                     <ComboBox ItemsSource="{Binding CurrencyCollection}" 
                               SelectedValue="{Binding SelectedPolicyCurrency}" 
                               DisplayMemberPath="Description" 
                               Foreground="Black" 
                               FontSize="13" 
-                              Margin="0 0 17 0" 
                               Style="{StaticResource EditPolicyComboStyle}">
                     </ComboBox>
                 </StackPanel>
-                <StackPanel Grid.Column="1" Grid.Row="3" Margin="0 0 10 0">
+                <StackPanel Grid.Column="1" Grid.Row="3" Margin="0 0 50 0">
                     <TextBlock Text="Reprojection Date" Margin="0 5"/>
                     <DatePicker SelectedDate="{Binding Path=SelectedPolicy.ReprojectedOn, StringFormat='{}{0: MMM d, yyyy}'}"></DatePicker>
                 </StackPanel>
-                <StackPanel Grid.Column="2" Grid.Row="3" Margin="0 0 10 0">
+                <StackPanel Grid.Column="2" Grid.Row="3" Margin="0 0 50 0">
                     <TextBlock Text="Class" Margin="0 5"/>
                     <TextBox Text="{Binding SelectedPolicy.Class}" MaxLength="10"/>
                 </StackPanel>
 
-                <StackPanel Grid.Column="0" Grid.Row="4" Margin="0 0 10 0">
+                <StackPanel Grid.Column="0" Grid.Row="4" Margin="0 0 50 0">
                     <TextBlock Text="Status" Margin="0 5"/>
                     <ComboBox ItemsSource="{Binding StatusTypeCollection}" 
                               SelectedValue="{Binding SelectedPolicyStatus}" 
                               DisplayMemberPath="Description" 
                               Foreground="Black" 
                               FontSize="13" 
-                              Margin="0 0 17 0" 
                               Style="{StaticResource EditPolicyComboStyle}">
                     </ComboBox>
                 </StackPanel>
-                <StackPanel Grid.Column="1" Grid.Row="4" Margin="0 0 10 0">
+                <StackPanel Grid.Column="1" Grid.Row="4" Margin="0 0 50 0">
+                    <TextBlock Text="Frequency" Margin="0 5"/>
+                    <ComboBox ItemsSource="{Binding FrequencyTypeCollection}" 
+                                    SelectedValue="{Binding SelectedPolicyFrequencyType}" 
+                                    DisplayMemberPath="Description" 
+                                    Foreground="Black" 
+                                    FontSize="13" 
+                                    Style="{StaticResource EditPolicyComboStyle}">
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Grid.Column="2" Grid.Row="4" Margin="0 0 50 0">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="40"/>
+                            <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <StackPanel Grid.Column="0" Grid.Row="0">
-                            <TextBlock Text="Frequency" Margin="0 5"/>
-                            <ComboBox ItemsSource="{Binding FrequencyTypeCollection}" 
-                                      SelectedValue="{Binding SelectedPolicyFrequencyType}" 
-                                      DisplayMemberPath="Description" 
-                                      Foreground="Black" 
-                                      FontSize="13" 
-                                      Margin="0 0 17 0" 
-                                      Style="{StaticResource EditPolicyComboStyle}">
-                            </ComboBox>
-                        </StackPanel>
-                        <StackPanel Grid.Column="2" Grid.Row="0">
+                        <StackPanel Grid.Column="0" Margin="0 0 15 0">
                             <TextBlock Text="Age" Margin="0 5"/>
                             <TextBox Text="{Binding SelectedPolicy.Age}" MaxLength="2"/>
                         </StackPanel>
-                    </Grid>
-                </StackPanel>
-                <StackPanel Grid.Column="2" Grid.Row="4" Margin="0 0 10 0">
-                    <TextBlock Text="Type" Margin="0 5"/>
-                    <ComboBox ItemsSource="{Binding PolicyTypeCollection}" 
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="Type" Margin="0 5"/>
+                            <ComboBox ItemsSource="{Binding PolicyTypeCollection}" 
                               SelectedValue="{Binding SelectedPolicyType}" 
                               DisplayMemberPath="Description" 
                               Foreground="Black" 
                               FontSize="13" 
-                              Margin="0 0 17 0" 
                               Style="{StaticResource EditPolicyComboStyle}">
-                    </ComboBox>
+                            </ComboBox>
+                        </StackPanel>
+                    </Grid>
                 </StackPanel>
             </Grid>
         </Grid>

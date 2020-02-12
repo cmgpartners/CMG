@@ -141,6 +141,7 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("SelectedPolicy");
                 GetSelectedPolicyDropdownData();
                 CancelPolicyNotes();
+                CancelGeneralNotes();
             }
         }
         private ViewPolicyListDto _savedPolicyDetail;
@@ -219,6 +220,19 @@ namespace CMG.Application.ViewModel
                 CancelInternalNotes();
             }
         }
+        private bool _isGeneralNotesEditVisible = false;
+        public bool IsGeneralNotesEditVisible
+        {
+            get { return _isGeneralNotesEditVisible; }
+            set { _isGeneralNotesEditVisible = value; OnPropertyChanged("IsGeneralNotesEditVisible"); }
+        }
+
+        private bool _isGeneralNotesSaveVisible = false;
+        public bool IsGeneralNotesSaveVisible
+        {
+            get { return _isGeneralNotesSaveVisible; }
+            set { _isGeneralNotesSaveVisible = value; OnPropertyChanged("IsGeneralNotesSaveVisible"); }
+        }
         private bool _isPolicyNotesEditVisible = false;
         public bool IsPolicyNotesEditVisible
         {
@@ -284,6 +298,18 @@ namespace CMG.Application.ViewModel
         public ICommand CancelPolicyCommand
         {
             get { return CreateCommand(CancelPolicy); }
+        }
+        public ICommand EditGeneralNotesCommand
+        {
+            get { return CreateCommand(EditGeneralNotes); }
+        }
+        public ICommand SaveGeneralNotesCommand
+        {
+            get { return CreateCommand(SaveGeneralNotes); }
+        }
+        public ICommand CancelGeneralNotesCommand
+        {
+            get { return CreateCommand(CancelGeneralNotes); }
         }
         public ICommand EditPolicyNotesCommand
         {
@@ -634,6 +660,41 @@ namespace CMG.Application.ViewModel
                 return false;
             }
             return true;
+        }
+        private void EditGeneralNotes()
+        {
+            IsGeneralNotesEditVisible = false;
+            IsGeneralNotesSaveVisible = true;
+        }
+        private void SaveGeneralNotes()
+        {
+            try
+            {
+                IsGeneralNotesEditVisible = true;
+                IsGeneralNotesSaveVisible = false;
+                if(SelectedClient != null)
+                {
+                    var entity = _unitOfWork.People.GetById(SelectedClient.Keynump);
+                    entity.Pnotes = SelectedClient.GeneralNotes;
+                    _unitOfWork.People.Save(entity);
+                    _unitOfWork.Commit();
+                    _notifier.ShowSuccess("General Notes updated successfully");
+                }
+            }
+            catch
+            {
+                _notifier.ShowError("Error occured while updating general notes");
+            }
+
+        }
+        private void CancelGeneralNotes()
+        {
+            IsGeneralNotesEditVisible = true;
+            IsGeneralNotesSaveVisible = false;
+            var originalClient = _unitOfWork.People.GetById(SelectedClient?.Keynump);
+            if (originalClient != null)
+                SelectedClient.GeneralNotes = originalClient.Pnotes;
+            OnPropertyChanged("SelectedClient");
         }
         private void EditPolicyNotes()
         {

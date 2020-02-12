@@ -162,5 +162,9 @@ namespace CMG.DataAccess.Repository
             }
             return w => true;
         }
+        public People GetById(long? id)
+        {
+            return Context.People.SingleOrDefault(x => x.Keynump == (id ?? 0));
+        }
     }
 }
