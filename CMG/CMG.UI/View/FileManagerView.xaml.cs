@@ -39,8 +39,9 @@ namespace CMG.UI.View
                 if(fileManagerViewModel.SelectedClient != null)
                 {
                     FolderView.Items.Clear();
-                    BindDefaultTreeViewItem("I:\\", "I:\\");
-                    SelectClientFolder("I:\\");
+                    string networkDrive = fileManagerViewModel.MappedDrives.Where(x => x.DriveType == DriveType.Network).FirstOrDefault().Name.ToString().Trim();
+                    BindDefaultTreeViewItem(networkDrive, networkDrive);
+                    SelectClientFolder(networkDrive);
                 }
             }));
         }
@@ -223,14 +224,19 @@ namespace CMG.UI.View
                     nestedTxtBlock.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("Black");
                     nestedStackPanel = new StackPanel();
                     nestedStackPanel.Orientation = Orientation.Horizontal;
-                    nestedStackPanel.Children.Add(new MaterialDesignThemes.Wpf.PackIcon
-                                                    { Kind = MaterialDesignThemes.Wpf.PackIconKind.Computer, 
+                    nestedStackPanel.Children.Add(new PackIcon
+                                                    { Kind = PackIconKind.Computer, 
                                                       Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("Black")
                                                     });
                     nestedStackPanel.Children.Add(nestedTxtBlock);
                     btnDrive.Content = nestedStackPanel;
                     spDrives.Children.Add(btnDrive);
                 }
+                string networkDrive = fileManagerViewModel.MappedDrives.Where(x => x.DriveType == DriveType.Network).FirstOrDefault().Name.ToString().Trim();
+                BindDefaultTreeViewItem(networkDrive, networkDrive);
+                BindFilesToListControl(networkDrive);
+                //TreeViewItem treeViewItem = (TreeViewItem)FolderView.Items[0];
+                //treeViewItem.IsSelected = true;
             }
 
        }
@@ -253,12 +259,10 @@ namespace CMG.UI.View
         private void Search_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             FolderView.Items.Clear();
-            BindDefaultTreeViewItem("I:\\", "I:\\");
             InitializeViewModel();
-            if (fileManagerViewModel != null)
-            {
-                SelectClientFolder("I:\\");
-            }
+            string networkDrive = fileManagerViewModel.MappedDrives.Where(x => x.DriveType == DriveType.Network).FirstOrDefault().Name.ToString().Trim();
+            BindDefaultTreeViewItem(networkDrive, networkDrive);
+            SelectClientFolder(networkDrive);
         }        
         private void lstFiles_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -293,7 +297,8 @@ namespace CMG.UI.View
             {
                 Header = itemHeader,
                 Tag = itemTag,
-                IsExpanded = true
+                IsExpanded = true,
+                IsSelected = true
             };
             item.Expanded += Item_Expanded;
             item.Items.Add(null);
@@ -332,6 +337,7 @@ namespace CMG.UI.View
                     packIcon.Kind = PackIconKind.FileWord;                    
                 }
                 else if (fileExtension == ".xlsx"
+                        || fileExtension == ".csv"
                         || fileExtension == ".xls"
                         || fileExtension == ".xlsm"
                         || fileExtension == ".xltx"
