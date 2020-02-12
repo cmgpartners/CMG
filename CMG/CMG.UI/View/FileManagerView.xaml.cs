@@ -264,7 +264,7 @@ namespace CMG.UI.View
         {
             StackPanel stackPanel = (StackPanel)((ListView)sender).SelectedItem;
 
-            string path = ((TextBlock)stackPanel.Children[1]).Text;
+            string path = ((TextBlock)stackPanel.Children[2]).Text;
             // Open file
             Process.Start("explorer.exe", path);
         }
@@ -349,11 +349,11 @@ namespace CMG.UI.View
                 else if (fileExtension == ".html"
                         || fileExtension == ".htm")
                 {
-                    packIcon.Kind = PackIconKind.OpenInBrowser;
+                    packIcon.Kind = PackIconKind.InternetExplorer;
                 }
                 else if (fileExtension == ".txt")
                 {
-                    packIcon.Kind = PackIconKind.Text;
+                    packIcon.Kind = PackIconKind.NoteText;
                 }
                 else
                 {
