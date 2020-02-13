@@ -227,6 +227,14 @@ namespace CMG.Application.ViewModel
                 _clientCollection = value;
                 OnPropertyChanged("ClientCollection");
                 OnPropertyChanged("IsPaginationVisible");
+                OnPropertyChanged("IsNoClientRecord");
+            }
+        }
+        public bool IsNoClientRecord
+        {
+            get
+            {
+                return ClientCollection != null && ClientCollection.Count == 0;
             }
         }
         private ObservableCollection<ViewPolicyListDto> _policyCollection;

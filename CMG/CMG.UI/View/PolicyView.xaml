@@ -258,41 +258,52 @@
                     <StackPanel Grid.Row="0">
                         <TextBlock Grid.Row="0" Text="Results" Foreground="Gray" FontSize="16" Margin="10 0 0 0"/>
                     </StackPanel>
-                    <DataGrid Grid.Row="1" AutoGenerateColumns="False" x:Name="search" IsReadOnly="True" Background="{x:Null}" GridLinesVisibility="None"
-                          ItemsSource="{Binding DataContext.ClientCollection, RelativeSource={RelativeSource AncestorType=Window}}" ColumnHeaderStyle="{StaticResource ClientHeaderStyle}" RowStyle="{StaticResource ClientRowStyle }" 
-                          SelectionUnit="FullRow" SelectedItem="{Binding SelectedClient}">
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="Common Name" Width="105" SortMemberPath="CommonName" CanUserSort="True" HeaderStyle="{StaticResource ClientFirstColumnHeaderStyle }">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=CommonName}" Margin="10 0 10 0" Foreground="White" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Last Name" Width="100" SortMemberPath="LastName" CanUserSort="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=LastName}" Foreground="White" ></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="First Name" Width="90" SortMemberPath="FirstName" CanUserSort="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=FirstName}" Foreground="White"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Entity Type" Width="200" SortMemberPath="ClientType" CanUserSort="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=ClientType}" Foreground="White"></TextBlock>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
+                    <Grid Grid.Row="1">
+                        <DataGrid AutoGenerateColumns="False" x:Name="search" IsReadOnly="True" Background="{x:Null}" GridLinesVisibility="None"
+                            ItemsSource="{Binding DataContext.ClientCollection, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}" 
+                            ColumnHeaderStyle="{StaticResource ClientHeaderStyle}" RowStyle="{StaticResource ClientRowStyle }" 
+                            SelectionUnit="FullRow" SelectedItem="{Binding SelectedClient}">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="Common Name" Width="105" SortMemberPath="CommonName" CanUserSort="True" HeaderStyle="{StaticResource ClientFirstColumnHeaderStyle }">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=CommonName}" Margin="10 0 10 0" Foreground="White" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Last Name" Width="100" SortMemberPath="LastName" CanUserSort="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=LastName}" Foreground="White" ></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="First Name" Width="90" SortMemberPath="FirstName" CanUserSort="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=FirstName}" Foreground="White"></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Entity Type" Width="200" SortMemberPath="ClientType" CanUserSort="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=ClientType}" Foreground="White"></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <TextBlock Text="No records found" 
+                            HorizontalAlignment="Center" 
+                            VerticalAlignment="Center"
+                            Visibility="{Binding DataContext.IsNoClientRecord, 
+                                            Converter={StaticResource VisibilityConverter}, 
+                                            UpdateSourceTrigger=PropertyChanged,
+                                            RelativeSource={RelativeSource AncestorType=Window}}"
+                            Style="{StaticResource NoRecordsTextBlock}" />
+                    </Grid>                    
+                </Grid>                
             </Grid>
             <Grid Grid.Row="0" Grid.Column="1">
                 <Grid.RowDefinitions>
@@ -324,7 +335,7 @@
                 <Grid Grid.Row="1" Margin="10 0 10 10" Grid.ColumnSpan="2">
                     <DataGrid AutoGenerateColumns="True" x:Name="policies" IsReadOnly="True" GridLinesVisibility="None"
                       ItemsSource="{Binding PolicyCollection, UpdateSourceTrigger=PropertyChanged}" ColumnHeaderStyle="{StaticResource HeaderStyle}" RowStyle="{StaticResource GridRowStyle }"
-                      CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="40" SelectedItem="{Binding SelectedPolicy}"
+                      CanUserAddRows="False" SelectionUnit="FullRow" SelectedItem="{Binding SelectedPolicy}"
                       MouseRightButtonUp="Policies_MouseRightButtonUp" AutoGeneratedColumns="Policies_AutoGenerateColumns" ColumnReordered = "policies_ColumnReordered">
                         <DataGrid.ContextMenu>
                             <ContextMenu x:Name="PolicyContextMenu" DataContext="{Binding Path=PlacementTarget.DataContext, 

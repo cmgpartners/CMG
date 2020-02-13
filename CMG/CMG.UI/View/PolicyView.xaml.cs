@@ -716,6 +716,9 @@ namespace CMG.UI.View
                 default:
                     break;
             }
+            Style elementStyle = new Style(typeof(TextBlock));
+            elementStyle.Setters.Add(new Setter(TextBlock.TextWrappingProperty, TextWrapping.WrapWithOverflow));
+            dataGridColumn.ElementStyle = elementStyle;
             dataGridColumn.Header = columnName;
             if(dataGridColumn.Binding == null)
             dataGridColumn.Binding = new Binding(bindingPath);            
