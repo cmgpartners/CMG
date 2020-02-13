@@ -692,7 +692,7 @@ namespace CMG.Application.ViewModel
             IsGeneralNotesEditVisible = true;
             IsGeneralNotesSaveVisible = false;
             var originalClient = _unitOfWork.People.GetById(SelectedClient?.Keynump);
-            if (originalClient != null)
+            if (originalClient != null && SelectedClient != null)
                 SelectedClient.GeneralNotes = originalClient.Pnotes;
             OnPropertyChanged("SelectedClient");
         }

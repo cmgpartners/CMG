@@ -727,10 +727,10 @@ namespace CMG.UI.View
         {
             dataGridColumn.Binding = new Binding(bindingPath);
             dataGridColumn.IsReadOnly = true;
-            Style cellStyle = new Style(typeof(DataGridCell));
+            Style cellStyle = new Style();
             cellStyle.Setters.Add(new Setter(FontWeightProperty, FontWeights.SemiBold));
-            cellStyle.Setters.Add(new Setter(VerticalAlignmentProperty, VerticalAlignment.Center));
-            cellStyle.Setters.Add(new Setter(HorizontalAlignmentProperty, HorizontalAlignment.Left));
+            cellStyle.Setters.Add(new Setter(VerticalContentAlignmentProperty, VerticalAlignment.Center));
+            cellStyle.Setters.Add(new Setter(HeightProperty, policies.RowHeight));
             cellStyle.Setters.Add(new Setter(BorderThicknessProperty, new Thickness(0)));
             cellStyle.Setters.Add(new Setter(BorderBrushProperty, Brushes.Transparent));
             cellStyle.Setters.Add(new Setter(ForegroundProperty, Brushes.Black));

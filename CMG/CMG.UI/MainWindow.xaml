@@ -133,13 +133,8 @@
                     </StackPanel>
                 </Grid>
             </Grid>
-
-            
-                <Button Grid.Row="3"  Content="Policies" Style="{StaticResource LeftNavMenuButton}" x:Name="PolicyMenu" Width="145"  Click="PolicyMenu_Click"></Button>
-            
-            
+            <Button Grid.Row="3"  Content="Policies" Style="{StaticResource LeftNavMenuButton}" x:Name="PolicyMenu" Width="145"  Click="PolicyMenu_Click"></Button>
             <Button  Grid.Row="5" Content="File Manager" Style="{StaticResource LeftNavMenuButton}" x:Name="FileManagerMenu" Width="145"  Click="FileManagerMenu_Click"></Button>
-
             <Button Grid.Row="7" Style="{StaticResource LeftNavMenuButton}" Width="145">
                 <Hyperlink  NavigateUri="http://www.google.com" RequestNavigate="Hyperlink_RequestNavigate" Style="{StaticResource HyperLinkStyle}">
                     Salesforce
