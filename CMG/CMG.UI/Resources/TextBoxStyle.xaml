@@ -12,9 +12,9 @@
     </Style>
 
     <Style x:Key="CommissionGridTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource MaterialDesignTextBox}">
-        <Setter Property="CaretBrush" Value="Black"></Setter>
+        <Setter Property="CaretBrush" Value="White"></Setter>
         <Setter Property="BorderBrush" Value="LightGray"></Setter>
-        <Setter Property="Padding" Value="0 0 0 5"/>
+        <Setter Property="Padding" Value="0 0 0 0"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
@@ -26,10 +26,10 @@
                             <Setter Property="Opacity" TargetName="border" Value="0.56"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border" Value="Black "/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="LightGray "/>
                         </Trigger>
                         <Trigger Property="IsFocused" Value="true">
-                            <Setter Property="BorderBrush" TargetName="border" Value="Black"/>
+                            <Setter Property="BorderBrush" TargetName="border" Value="LightGray"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

@@ -103,22 +103,15 @@
                                         </TextBlock>
                                         <uc:AutoCompleteBox x:Name="UserControlPolicyNumber" 
                                                             AutoSuggestionList="{Binding DataContext.SelectedViewModel.Policies, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type Window}}}"
-                                                            SelectedValue="{Binding Path=PolicyNumber, UpdateSourceTrigger=PropertyChanged}" 
-                                                            Visibility="{Binding IsNew, Converter={StaticResource VisibilityConverter}}"                                                        
-                                                            HorizontalAlignment="Left">
+                                                            SelectedValue="{Binding Path=PolicyNumber, UpdateSourceTrigger=PropertyChanged}" GotFocus="UserControlPolicyNumber_GotFocus"
+                                                            Visibility="{Binding IsNew, Converter={StaticResource VisibilityConverter}}"                                                         
+                                                            HorizontalAlignment="Left" BorderBrush="LightGray">
                                         <uc:AutoCompleteBox.Style>
                                             <Style TargetType="uc:AutoCompleteBox">
                                                 <Style.Triggers>
                                                     <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter Property="BorderBrush" Value="Black" />
+                                                        <Setter Property="BorderBrush" Value="LightGray" />
                                                         <Setter Property="BorderThickness" Value="0 0 0 .5" />
-                                                    </Trigger>
-                                                    <Trigger Property="IsEnabled" Value="True">
-                                                        <Setter Property="BorderBrush" Value="Black" />
-                                                        <Setter Property="BorderThickness" Value="0 0 0 .5" />
-                                                    </Trigger>
-                                                    <Trigger Property="IsFocused" Value="True">
-                                                        <Setter Property="BorderBrush" Value="Black" />
                                                         <Setter Property="BorderThickness" Value="0 0 0 .5" />
                                                     </Trigger>
                                                 </Style.Triggers>
@@ -263,7 +256,7 @@
                         <DataGridTemplateColumn Header="Total" HeaderStyle="{StaticResource TotalHeaderStyle}">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox TextAlignment="Right" MinWidth="40" Padding="0 0 3 0"  Style="{StaticResource CommissionGridTextBoxStyle}"  Text="{Binding TotalAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" />
+                                    <TextBox TextAlignment="Right" MinWidth="40" Style="{StaticResource CommissionGridTextBoxStyle}"  Text="{Binding TotalAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat='{}{0:#0,#.00}'}" />
                             </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -307,7 +300,7 @@
                         <DataGridTemplateColumn Header="Comment" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox Style="{StaticResource CommissionGridTextBoxStyle}" Padding="0 0 3 0" TextAlignment="Left" MinWidth="200"  Text="{Binding Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBox Style="{StaticResource CommissionGridTextBoxStyle}" TextAlignment="Left" MinWidth="200"  Text="{Binding Comment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>

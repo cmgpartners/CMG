@@ -1,18 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Linq;
-using System.Text;
+﻿using CMG.UI.Controls;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CMG.UI.View
 {
@@ -33,6 +21,13 @@ namespace CMG.UI.View
                 var lastRowItem = renewals.Items[renewals.Items.Count - 1];
                 renewals.ScrollIntoView(lastRowItem);
             }
+        }
+
+        private void UserControlPolicyNumber_GotFocus(object sender, RoutedEventArgs e)
+        {
+            var autoCompleteBox = (AutoCompleteBox)sender;
+            Style textBoxStyle = new Style();
+            autoCompleteBox.autoTextBox.Style = FindResource("CommissionGridTextBoxStyle") as Style;
         }
     }
 }

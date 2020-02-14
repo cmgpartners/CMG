@@ -718,10 +718,13 @@ namespace CMG.UI.View
             }
             Style elementStyle = new Style(typeof(TextBlock));
             elementStyle.Setters.Add(new Setter(TextBlock.TextWrappingProperty, TextWrapping.WrapWithOverflow));
+            elementStyle.Setters.Add(new Setter(VerticalContentAlignmentProperty, VerticalAlignment.Center));
+            elementStyle.Setters.Add(new Setter(VerticalAlignmentProperty, VerticalAlignment.Center));
+
             dataGridColumn.ElementStyle = elementStyle;
             dataGridColumn.Header = columnName;
             if(dataGridColumn.Binding == null)
-            dataGridColumn.Binding = new Binding(bindingPath);            
+            dataGridColumn.Binding = new Binding(bindingPath);
 
             return dataGridColumn;
         }
@@ -730,12 +733,9 @@ namespace CMG.UI.View
         {
             dataGridColumn.Binding = new Binding(bindingPath);
             dataGridColumn.IsReadOnly = true;
-            Style cellStyle = new Style();
-            cellStyle.Setters.Add(new Setter(FontWeightProperty, FontWeights.SemiBold));
-            cellStyle.Setters.Add(new Setter(VerticalContentAlignmentProperty, VerticalAlignment.Center));
-            cellStyle.Setters.Add(new Setter(HeightProperty, policies.RowHeight));
+            Style cellStyle = new Style(typeof(DataGridCell));
+            cellStyle.Setters.Add(new Setter(FontWeightProperty, FontWeights.Bold));
             cellStyle.Setters.Add(new Setter(BorderThicknessProperty, new Thickness(0)));
-            cellStyle.Setters.Add(new Setter(BorderBrushProperty, Brushes.Transparent));
             cellStyle.Setters.Add(new Setter(ForegroundProperty, Brushes.Black));
             if (bindingPath == "CompanyName")
             {

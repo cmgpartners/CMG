@@ -266,8 +266,9 @@
                         </ControlTemplate>
                     </ControlTemplate.Resources>
                     <Grid x:Name="PART_Root">
-                        <Border x:Name="border" Margin="0 0 0 -5" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                        <Border x:Name="border" Margin="0 0 0 -3" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
                             <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                            
                         </Border>
                         <DatePickerTextBox x:Name="PART_TextBox"
                                            Grid.Column="0"
@@ -276,6 +277,7 @@
                                            Padding="0,0,8,0"
                                            VerticalContentAlignment="Center"
                                            Foreground="Black"
+                                           CaretBrush="White"
                                            Style="{DynamicResource MaterialDesignDatePickerTextBox}"
                                            HorizontalAlignment="Stretch"
                                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
