@@ -24,7 +24,7 @@ namespace CMG.UI.Converter
                 case "Great West Life":
                     return Brushes.PeachPuff;
                 case "Manulife":
-                    return Brushes.MediumPurple;
+                    return (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFF0C6FF"));
                 default:
                     return default;
             }
