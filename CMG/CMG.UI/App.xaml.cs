@@ -59,9 +59,11 @@ namespace CMG.UI
                 Environment.Exit(0);
             }
 
-            var configurationBuilder = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json");
+            try
+            {
+                var configurationBuilder = new ConfigurationBuilder()
+                        .SetBasePath(Directory.GetCurrentDirectory())
+                        .AddJsonFile("appsettings.json");
 
                 IConfiguration configuration = configurationBuilder.Build();
                 ServiceCollection serviceCollection = new ServiceCollection();
@@ -71,7 +73,14 @@ namespace CMG.UI
 
                 var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
                 mainWindow.Show();
-            //  }
+                //  }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                App.Current.Shutdown();
+                Environment.Exit(0);
+            }
         }
 
         private void ConfigureServices(IServiceCollection services, IConfiguration configuration)
