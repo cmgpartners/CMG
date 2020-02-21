@@ -102,64 +102,13 @@ namespace CMG.UI
             }
             if(lstNavigation.SelectedIndex >= 0)
             {
-                PolicyMenu.Background = null;
-                FileManagerMenu.Background = null;
+                ResetMenuSelection(true);
             }
         }
-        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
-        {
-            NavigateToSalesforce();
-        }
-        private void Button_NavigationClick(object sender, RoutedEventArgs e)
-        {
-            NavigateToSalesforce();
-        }
-        private void NavigateToSalesforce()
-        {
-            ProcessStartInfo psi = new ProcessStartInfo
-            {
-                FileName = _navigateURL,
-                UseShellExecute = true
-            };
-            Process.Start(psi);
-        }
-        private Notifier InitializeNotifier()
-        {
-            return new Notifier(cfg =>
-            {
-                cfg.PositionProvider = new WindowPositionProvider(
-                    parentWindow: System.Windows.Application.Current.MainWindow,
-                    corner: Corner.TopRight,
-                    offsetX: 10,
-                    offsetY: 10);
-
-                cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
-                    notificationLifetime: TimeSpan.FromSeconds(3),
-                    maximumNotificationCount: MaximumNotificationCount.FromCount(5));
-
-                cfg.Dispatcher = System.Windows.Application.Current.Dispatcher;
-            });
-        }
-
-        private void ButtonMenuOpen_Click(object sender, RoutedEventArgs e)
-        {
-            ButtonMenuOpen.Visibility = Visibility.Collapsed;
-            ButtonMenuClose.Visibility = Visibility.Visible;
-            CollapsibleRow.Height = new GridLength(225);
-            FileManagerMenu.Background = null;
-            lstNavItems.SelectedIndex = -1;
-        }
-
-        private void ButtonMenuClose_Click(object sender, RoutedEventArgs e)
-        {
-            CloseCommissionMenu();
-        }
-
         private void PolicyMenu_Click(object sender, RoutedEventArgs e)
         {
-            FileManagerMenu.Background = null;
+            ResetMenuSelection(false);
             PolicyMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
-            CloseCommissionMenu();
             PolicyViewModel policyViewModel;
             if (_mainViewModel.SelectedViewModel != null
                 && _mainViewModel.SelectedViewModel is FileManagerViewModel
@@ -184,7 +133,86 @@ namespace CMG.UI
             policyViewModel.CompanyName = _mainViewModel.CompanyName;
             DataContext = _mainViewModel;
         }
+        private void FileManagerMenu_Click(object sender, RoutedEventArgs e)
+        {
+            ResetMenuSelection(false);
+            FileManagerMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
+            FileManagerViewModel fileManagerViewModel;
+            if (_mainViewModel.SelectedViewModel != null
+                && _mainViewModel.SelectedViewModel is PolicyViewModel
+                && ((PolicyViewModel)_mainViewModel.SelectedViewModel).SelectedClient != null)
+            {
+                fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, ((PolicyViewModel)_mainViewModel.SelectedViewModel).SelectedClient, _memoryCache, _dialogService, _notifier);
+                fileManagerViewModel.SelectedClient = ((PolicyViewModel)_mainViewModel.SelectedViewModel).SelectedClient;
+                _mainViewModel.SelectedClient = fileManagerViewModel.SelectedClient;
+            }
+            else if (_mainViewModel.SelectedClient != null)
+            {
+                fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _mainViewModel.SelectedClient, _memoryCache, _dialogService, _notifier);
+                fileManagerViewModel.SelectedClient = _mainViewModel.SelectedClient;
+            }
+            else
+            {
+                fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
+            }
+            _mainViewModel.SelectedViewModel = fileManagerViewModel;
+            fileManagerViewModel.EntityType = _mainViewModel.EntityType;
+            fileManagerViewModel.PolicyNumber = _mainViewModel.PolicyNumber;
+            fileManagerViewModel.CompanyName = _mainViewModel.CompanyName;
+            DataContext = _mainViewModel;
+        }
+        private void ConfigurationMenu_Click(object sender, RoutedEventArgs e)
+        {
+            ResetMenuSelection(false);
+            ConfigurationMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
+            ConfigurationViewModel configurationViewModel = new ConfigurationViewModel(_unitOfWork, _mapper, _dialogService, _notifier);
+            _mainViewModel.SelectedViewModel = configurationViewModel;
+            DataContext = _mainViewModel;
+        }
+        private void Salesforce_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            NavigateToSalesforce();
+        }
+        private void ButtonMenuOpen_Click(object sender, RoutedEventArgs e)
+        {
+            ButtonMenuOpen.Visibility = Visibility.Collapsed;
+            ButtonMenuClose.Visibility = Visibility.Visible;
+            CollapsibleRow.Height = new GridLength(225);
+            FileManagerMenu.Background = null;
+            lstNavItems.SelectedIndex = -1;
+        }
+        private void ButtonMenuClose_Click(object sender, RoutedEventArgs e)
+        {
+            CloseCommissionMenu();
+        }
 
+        #region Helper Methods
+        private Notifier InitializeNotifier()
+        {
+            return new Notifier(cfg =>
+            {
+                cfg.PositionProvider = new WindowPositionProvider(
+                    parentWindow: System.Windows.Application.Current.MainWindow,
+                    corner: Corner.TopRight,
+                    offsetX: 10,
+                    offsetY: 10);
+
+                cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
+                    notificationLifetime: TimeSpan.FromSeconds(3),
+                    maximumNotificationCount: MaximumNotificationCount.FromCount(5));
+
+                cfg.Dispatcher = System.Windows.Application.Current.Dispatcher;
+            });
+        }
+        private void NavigateToSalesforce()
+        {
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = _navigateURL,
+                UseShellExecute = true
+            };
+            Process.Start(psi);
+        }
         private void CloseCommissionMenu()
         {
             ButtonMenuOpen.Visibility = Visibility.Visible;
@@ -197,35 +225,21 @@ namespace CMG.UI
                 CollapsibleRow.Height = new GridLength(45);
             };
         }
-
-        private void FileManagerMenu_Click(object sender, RoutedEventArgs e)
+        private void ResetMenuSelection(bool isCommissionMenuSelected)
         {
             PolicyMenu.Background = null;
-            FileManagerMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
-            CloseCommissionMenu();
-            FileManagerViewModel fileManagerViewModel;
-            if (_mainViewModel.SelectedViewModel != null
-                && _mainViewModel.SelectedViewModel is PolicyViewModel
-                && ((PolicyViewModel)_mainViewModel.SelectedViewModel).SelectedClient != null)
+            FileManagerMenu.Background = null;
+            ConfigurationMenu.Background = null;
+            if (!isCommissionMenuSelected)
             {
-                fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, ((PolicyViewModel)_mainViewModel.SelectedViewModel).SelectedClient, _memoryCache, _dialogService, _notifier);
-                fileManagerViewModel.SelectedClient = ((PolicyViewModel)_mainViewModel.SelectedViewModel).SelectedClient;
-                _mainViewModel.SelectedClient = fileManagerViewModel.SelectedClient;
+                CloseCommissionMenu();
             }
-            else if(_mainViewModel.SelectedClient != null)
-            {
-                fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _mainViewModel.SelectedClient, _memoryCache, _dialogService, _notifier);
-                fileManagerViewModel.SelectedClient = _mainViewModel.SelectedClient;
-            }
-            else 
-            {
-                fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
-            }
-            _mainViewModel.SelectedViewModel = fileManagerViewModel;
-            fileManagerViewModel.EntityType = _mainViewModel.EntityType;
-            fileManagerViewModel.PolicyNumber = _mainViewModel.PolicyNumber;
-            fileManagerViewModel.CompanyName = _mainViewModel.CompanyName;
-            DataContext = _mainViewModel;
         }
+        #endregion
+
+
+
+
+
     }
 }

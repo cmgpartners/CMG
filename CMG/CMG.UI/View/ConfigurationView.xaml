@@ -1,0 +1,151 @@
+﻿<UserControl x:Class="CMG.UI.View.ConfigurationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="65"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Configurations" Foreground="White" Margin="0 25 0 0" FontSize="16"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid Margin="0 0 50 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
+                    <materialDesign:PackIcon Kind="Company" Foreground="White" VerticalAlignment="Center"></materialDesign:PackIcon>
+                    <TextBlock Text="Company Configuration" Foreground="White" FontSize="16" Margin="10 13 0 0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right">
+                    <Button Margin="10 0" x:Name="CompanyConfigurationCancel" BorderThickness="0" Background="Transparent" Foreground="White" FontWeight="Regular" Command="{Binding CancelCompanyCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Close" Margin="0 2 0 0"></materialDesign:PackIcon>
+                            <TextBlock Text="Cancel" Padding="10 0 0 0"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="CompanyConfigurationSave" Command="{Binding SaveCompanyCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Check" Margin="0 2 0 0"></materialDesign:PackIcon>
+                            <TextBlock Text="Save" Padding="10 0 0 0" FontWeight="Regular"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                    <DataGrid ItemsSource="{Binding Companies}" AutoGenerateColumns="False" IsReadOnly="False" CanUserReorderColumns="False" 
+                    ColumnHeaderStyle="{StaticResource HeaderStyle}" RowStyle="{StaticResource GridRowStyle }" x:Name="companies"
+                    CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="40" RowHeaderWidth="10">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="" Width="40">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Background="Transparent" BorderBrush="Transparent" Width="50" HorizontalAlignment="Left" x:Name="CompanyDelete" 
+                                                Command="{Binding DataContext.SelectedViewModel.DeleteCompanyCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" CommandParameter="{Binding Id}">
+                                            <materialDesign:PackIcon Kind="Delete" VerticalAlignment="Center"  Foreground="Black" FontWeight="Regular"></materialDesign:PackIcon>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Company" Width="20*" SortMemberPath="Description" CanUserSort="True" HeaderStyle="{StaticResource FirstColumnHeaderStyle }">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged}" Margin="15 0 10 0" Style="{StaticResource CommissionGridTextBoxStyle}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Code" Width="4*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=FieldCode}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+                <Grid Grid.Row="2" Background="#FFCEEAFF" Grid.ColumnSpan="2">
+                    <Button x:Name="CompanyAdd" Content="+" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding AddCompanyCommand}" Click="CompanyAdd_Click"></Button>
+                </Grid>
+            </Grid>
+            <Grid Grid.Column="1" Margin="0 0 50 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0">
+                    <materialDesign:PackIcon Kind="Flag" Foreground="White" VerticalAlignment="Center"></materialDesign:PackIcon>
+                    <TextBlock Text="Status Configuration" Foreground="White" FontSize="16" Margin="10 13 0 0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right">
+                    <Button Margin="10 0" x:Name="StatusConfigurationCancel" BorderThickness="0" Background="Transparent" Foreground="White" FontWeight="Regular" Command="{Binding CancelStatusCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Close" Margin="0 2 0 0"></materialDesign:PackIcon>
+                            <TextBlock Text="Cancel" Padding="10 0 0 0"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="StatusConfigurationSave" Command="{Binding SaveStatusCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Check" Margin="0 2 0 0"></materialDesign:PackIcon>
+                            <TextBlock Text="Save" Padding="10 0 0 0" FontWeight="Regular"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                    <DataGrid ItemsSource="{Binding PolicyStatus}" AutoGenerateColumns="False" IsReadOnly="False" CanUserReorderColumns="False" 
+                    ColumnHeaderStyle="{StaticResource HeaderStyle}" RowStyle="{StaticResource GridRowStyle }" x:Name="status"
+                    CanUserAddRows="False" SelectionUnit="FullRow" RowHeight="40" RowHeaderWidth="10">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="" Width="40">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Background="Transparent" BorderBrush="Transparent" Width="50" HorizontalAlignment="Left" x:Name="StatusDelete" 
+                                                Command="{Binding DataContext.SelectedViewModel.DeleteStatusCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" CommandParameter="{Binding Id}">
+                                            <materialDesign:PackIcon Kind="Delete" VerticalAlignment="Center"  Foreground="Black" FontWeight="Regular"></materialDesign:PackIcon>
+                                        </Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Status" Width="20*" SortMemberPath="Description" CanUserSort="True" HeaderStyle="{StaticResource FirstColumnHeaderStyle }">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged}" Margin="15 0 10 0" Style="{StaticResource CommissionGridTextBoxStyle}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Code" Width="3*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=FieldCode}"></TextBlock>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+                <Grid Grid.Row="2" Background="#FFCEEAFF" Grid.ColumnSpan="2">
+                    <Button x:Name="StatusAdd" Content="+" HorizontalAlignment="Center" VerticalAlignment="Center" Command="{Binding AddStatusCommand}" Click="StatusAdd_Click"></Button>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>
