@@ -239,7 +239,7 @@ namespace CMG.Application.ViewModel
         }
         public void Add()
         {
-            DataCollection.Add(new ViewCommissionDto() { IsNew = true, IsNotNew = false, CommissionId = --newId });
+            DataCollection.Add(new ViewCommissionDto() { IsNew = true, PayDate= new DateTime(SelectedYear, Array.IndexOf(Months.ToArray(), SelectedMonth) + 1, 1), IsNotNew = false, CommissionId = --newId });
             if (DataCollection.Count == 1)
             {
                 DataCollection = DataCollection; //added this assignment as observable is not calling set on add/edit collection
