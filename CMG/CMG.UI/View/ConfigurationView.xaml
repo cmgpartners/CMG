@@ -33,7 +33,7 @@
                     <TextBlock Text="Company Configuration" Foreground="White" FontSize="16" Margin="10 13 0 0"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right">
-                    <Button Margin="10 0" x:Name="CompanyConfigurationCancel" BorderThickness="0" Background="Transparent" Foreground="White" FontWeight="Regular">
+                    <Button Margin="10 0" x:Name="CompanyConfigurationCancel" BorderThickness="0" Background="Transparent" Foreground="White" FontWeight="Regular" Command="{Binding CancelCompanyCommand}">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Close" Margin="0 2 0 0"></materialDesign:PackIcon>
                             <TextBlock Text="Cancel" Padding="10 0 0 0"/>
@@ -97,7 +97,7 @@
                     <TextBlock Text="Status Configuration" Foreground="White" FontSize="16" Margin="10 13 0 0"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right">
-                    <Button Margin="10 0" x:Name="StatusConfigurationCancel" BorderThickness="0" Background="Transparent" Foreground="White" FontWeight="Regular">
+                    <Button Margin="10 0" x:Name="StatusConfigurationCancel" BorderThickness="0" Background="Transparent" Foreground="White" FontWeight="Regular" Command="{Binding CancelStatusCommand}">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Close" Margin="0 2 0 0"></materialDesign:PackIcon>
                             <TextBlock Text="Cancel" Padding="10 0 0 0"/>
