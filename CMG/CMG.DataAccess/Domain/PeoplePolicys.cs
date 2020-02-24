@@ -11,11 +11,6 @@ namespace CMG.DataAccess.Domain
         public string Hname { get; set; }
         public int Keynump { get; set; }
         public string Relatn { get; set; }
-        public string RevLocn { get; set; }
-        public DateTime RevDate { get; set; }
-        public string Cr8Locn { get; set; }
-        public DateTime Cr8Date { get; set; }
-        public bool Del { get; set; }
         public decimal? Split { get; set; }
         public decimal Hsplit { get; set; }
         public string SalesforceId { get; set; }

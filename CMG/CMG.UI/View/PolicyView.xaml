@@ -229,8 +229,8 @@
                             <RowDefinition Height="65"/>
                         </Grid.RowDefinitions>
                         <ListView Grid.Row="0" ItemsSource="{Binding SearchOptions, UpdateSourceTrigger=PropertyChanged, IsAsync=True}"  Width="450" x:Name="SearchOptionsList" ItemTemplateSelector="{StaticResource searchOptionsSelector}" 
-                                  PreviewMouseLeftButtonDown="SearchOptionsList_PreviewMouseLeftButtonDown" PreviewMouseMove="SearchOptionsList_PreviewMouseMove" Drop="SearchOptionsList_Drop" AllowDrop="True" IsTabStop="False" 
-                                  KeyboardNavigation.TabNavigation="Cycle" Focusable="False">
+                                  PreviewMouseLeftButtonDown="SearchOptionsList_PreviewMouseLeftButtonDown" PreviewMouseMove="SearchOptionsList_PreviewMouseMove" Drop="SearchOptionsList_Drop" AllowDrop="True" 
+                                  KeyboardNavigation.TabNavigation="Continue" Focusable="False">
                         <ListView.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel Orientation="Horizontal" Width="450"></WrapPanel>
@@ -242,6 +242,7 @@
                                     <Setter Property="Margin" Value="0"/>
                                     <Setter Property="BorderThickness" Value="0"/>
                                     <Setter Property="Background" Value="Transparent"/>
+                                    <Setter Property="IsTabStop" Value="False" />
                                 </Style>
                             </ListView.ItemContainerStyle>
                     </ListView>

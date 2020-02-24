@@ -328,6 +328,7 @@ namespace CMG.UI.View
             {
                 ResizePolicyGridColumns(policies.Columns[i].Header.ToString());
             }
+            policies.SelectedItem = policies.Items[0];
         }
         private void MenuItemRemoveColumn_Click(object sender, RoutedEventArgs e)
         {
