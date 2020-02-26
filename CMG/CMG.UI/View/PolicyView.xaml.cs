@@ -742,6 +742,7 @@ namespace CMG.UI.View
             {
                 Binding backgroundBinding = new Binding(bindingPath) { Converter = new CompanyCellBackgroundConverter() };
                 cellStyle.Setters.Add(new Setter(BackgroundProperty, backgroundBinding));
+                cellStyle.Setters.Add(new Setter(MarginProperty, new Thickness(0,0,10,0)));
             }
             else
             {

@@ -12,5 +12,6 @@ namespace CMG.Application.DTO
         public string Category { get; set; }
         public string Relation { get; set; }
         public decimal Split { get; set; }
+        public ViewAgentDto Agent { get; set; }
     }
 }

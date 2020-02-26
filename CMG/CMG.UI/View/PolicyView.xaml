@@ -395,15 +395,16 @@
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="2" Background="White" Margin="0 0 10 10">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="280"/>
-                        <RowDefinition Height="175"/>
-                        <RowDefinition Height="175"/>
-                        <RowDefinition Height="80"/>
-                        <RowDefinition Height="175"/>
+                        <RowDefinition Height="47"/>
+                        <RowDefinition Height="250"/>
+                        <RowDefinition Height="150"/>
+                        <RowDefinition Height="150"/>
+                        <RowDefinition Height="85"/>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="150"/>
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Background="LightGray" >
-                        <Button Content="View Policy Illustration" Width="200" Margin="10" x:Name="ButtonIllustrationOpen" Click="ButtonIllustrationOpen_Click" Command="{Binding ViewIllustrationCommand}"/>
+                        <Button Content="View Policy Illustration" Width="200" Margin="7" x:Name="ButtonIllustrationOpen" Click="ButtonIllustrationOpen_Click" Command="{Binding ViewIllustrationCommand}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Margin="20 10 10 0">
                         <TextBlock Text="Relationships" FontWeight="Bold"/>
@@ -478,7 +479,9 @@
                                 <materialDesign:PackIcon Kind="Close" Height="15" Width="15"/>
                             </Button>
                         </StackPanel>
-                        <TextBlock Text="{Binding SelectedClient.GeneralNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding IsGeneralNotesEditVisible, Converter={StaticResource VisibilityConverter}}"/>
+                        <ScrollViewer Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto">
+                            <TextBlock Text="{Binding SelectedClient.GeneralNotes}" TextWrapping="Wrap"  Visibility="{Binding IsGeneralNotesEditVisible, Converter={StaticResource VisibilityConverter}}"/>
+                        </ScrollViewer>
                         <TextBox Text="{Binding SelectedClient.GeneralNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding IsGeneralNotesSaveVisible, Converter={StaticResource VisibilityConverter}}" VerticalAlignment="Top"/>
                     </Grid>
                     <Grid Grid.Row="3" Margin="20 10 10 10" ShowGridLines="False">
@@ -504,10 +507,12 @@
                                 <materialDesign:PackIcon Kind="Close" Height="15" Width="15"/>
                             </Button>
                         </StackPanel>
-                        <TextBlock Text="{Binding SelectedPolicy.PolicyNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding IsPolicyNotesEditVisible, Converter={StaticResource VisibilityConverter}}"/>
+                        <ScrollViewer Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto">
+                        <TextBlock Text="{Binding SelectedPolicy.PolicyNotes}" TextWrapping="Wrap"  Visibility="{Binding IsPolicyNotesEditVisible, Converter={StaticResource VisibilityConverter}}"/>
+                        </ScrollViewer>
                         <TextBox Text="{Binding SelectedPolicy.PolicyNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding IsPolicyNotesSaveVisible, Converter={StaticResource VisibilityConverter}}" VerticalAlignment="Top"/>
                     </Grid>
-                    <StackPanel Grid.Row="4" Margin="10 10 10 10">
+                    <StackPanel Grid.Row="4" Margin="20 10 10 10">
                         <Separator Background="LightGray" Margin="0 10"/>
                         <Grid Background="LightBlue" Height="70">
                             <Grid.ColumnDefinitions>
@@ -535,9 +540,32 @@
                         </Grid>
 
                     </StackPanel>
-                    <StackPanel Grid.Row="5" Margin="20 10 10 10">
+                    <StackPanel Grid.Row="5" Margin="20 0 10 0">
+                        <Separator Background="LightGray" Margin="0 2"/>
+                        <TextBlock Text="Policy Agents" FontWeight="Bold" Margin="0 0 0 10"></TextBlock>
+                        <ItemsControl ItemsSource="{Binding SelectedPolicy.PolicyAgents}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Rows="4" Columns="4" HorizontalAlignment="Left" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border CornerRadius="15"
+                                                BorderBrush="{Binding Agent.Color}"
+                                                BorderThickness="1"
+                                                Padding="10 0 10 0"
+                                                Background="{Binding Agent.Color}"
+                                                Margin="5">
+                                            <TextBlock Text="{Binding Agent.FirstName}" Foreground="Black" Margin="5"/>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                    <StackPanel Grid.Row="6" Margin="20 10 10 10">
                         <Separator Background="LightGray" Margin="0 10"/>
-                        <TextBlock Text="Agents and Splits" FontWeight="Bold" Margin="0 0 0 10"></TextBlock>
+                        <TextBlock Text="Commission Agents" FontWeight="Bold" Margin="0 0 0 10"></TextBlock>
                         <ItemsControl ItemsSource="{Binding SelectedPolicy.PolicyAgent}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
