@@ -213,89 +213,35 @@ namespace CMG.UI.View
             }
 
         }
-        private void BeginDrag(MouseEventArgs e)
+        private void UserControlEntityType_Loaded(object sender, RoutedEventArgs e)
         {
-            try
+            string value = string.Empty;
+            if (policyViewModel != null
+                && !string.IsNullOrEmpty(policyViewModel.EntityType))
             {
-                ListView searchOptionsListView = SearchOptionsList;
-                ListViewItem listViewItem = FindAnchestor<ListViewItem>((DependencyObject)e.OriginalSource);
-                if (listViewItem == null)
-                    return;
-
-                var currentColumn = searchOptionsListView.ItemContainerGenerator.ItemFromContainer(listViewItem);
-                //setup the drag adorner.
-                InitialiseAdorner(listViewItem);
-                DataObject data = new DataObject(currentColumn);
-                DragDropEffects de = DragDrop.DoDragDrop(SearchOptionsList, data, DragDropEffects.Move);
-                if (_adorner != null)
-                {
-                    AdornerLayer.GetAdornerLayer(searchOptionsListView).Remove(_adorner);
-                    _adorner = null;
-                }
+                value = policyViewModel.EntityType;
             }
-            catch { }
+            SetControlValues(sender, value);
         }
-        private void InitialiseAdorner(ListViewItem listViewItem)
+        private void UserControlPolicyNumber_Loaded(object sender, RoutedEventArgs e)
         {
-            VisualBrush brush = new VisualBrush(listViewItem);
-            _adorner = new DragAdorner((UIElement)listViewItem, listViewItem.RenderSize, brush);
-            _adorner.Opacity = 0.5;
-            _layer = AdornerLayer.GetAdornerLayer(SearchOptionsList as Visual);
-            _layer.Add(_adorner);
-        }
-        private static T FindAnchestor<T>(DependencyObject current)
-        where T : DependencyObject
-        {
-            do
+            string value = string.Empty;
+            if (policyViewModel != null
+                && !string.IsNullOrEmpty(policyViewModel.PolicyNumber))
             {
-                if (current is T)
-                {
-                    return (T)current;
-                }
-                current = VisualTreeHelper.GetParent(current);
+                value = policyViewModel.PolicyNumber;
             }
-            while (current != null);
-            return null;
+            SetControlValues(sender, value);
         }
-        private void EntityTypePanel_Loaded(object sender, RoutedEventArgs e)
+        private void UserControlCompanyName_Loaded(object sender, RoutedEventArgs e)
         {
-            WrapPanel entityTypePanel = (WrapPanel)sender;
-            var entityTypeAutoComplete = entityTypePanel.Children.Count > 0 ? (AutoCompleteBox)entityTypePanel.Children[1] : null;
-            if (entityTypeAutoComplete != null)
+            string value = string.Empty;
+            if (policyViewModel != null
+                && !string.IsNullOrEmpty(policyViewModel.CompanyName))
             {
-                if (policyViewModel != null
-                    && !string.IsNullOrEmpty(policyViewModel.EntityType))
-                {
-                    entityTypeAutoComplete.autoTextBox.Text = policyViewModel.EntityType;
-                }
-
+                value = policyViewModel.CompanyName;
             }
-        }
-        private void PolicyNumberPanel_Loaded(object sender, RoutedEventArgs e)
-        {
-            WrapPanel policyNumberPanel = (WrapPanel)sender;
-            var policyNumberAutoComplete = policyNumberPanel.Children.Count > 0 ? (AutoCompleteBox)policyNumberPanel.Children[1] : null;
-            if (policyNumberAutoComplete != null)
-            {
-                if (policyViewModel != null
-                    && !string.IsNullOrEmpty(policyViewModel.PolicyNumber))
-                {
-                    policyNumberAutoComplete.autoTextBox.Text = policyViewModel.PolicyNumber;
-                }
-            }
-        }
-        private void CompanyNamePanel_Loaded(object sender, RoutedEventArgs e)
-        {
-            WrapPanel companyNamePanel = (WrapPanel)sender;
-            var companyNameAutoComplete = companyNamePanel.Children.Count > 0 ? (AutoCompleteBox)companyNamePanel.Children[1] : null;
-            if (companyNameAutoComplete != null)
-            {
-                if (policyViewModel != null
-                    && !string.IsNullOrEmpty(policyViewModel.CompanyName))
-                {
-                    companyNameAutoComplete.autoTextBox.Text = policyViewModel.CompanyName;
-                }
-            }
+            SetControlValues(sender, value);
         }
         private void Policies_AutoGenerateColumns(object sender, EventArgs e)
         {
@@ -729,7 +675,6 @@ namespace CMG.UI.View
 
             return dataGridColumn;
         }
-
         private void SetCellStyle(DataGridTextColumn dataGridColumn, string bindingPath)
         {
             dataGridColumn.Binding = new Binding(bindingPath);
@@ -763,6 +708,63 @@ namespace CMG.UI.View
                 policies.Columns.Insert(a, AddDataGridColumn(columnNames[a]));
             }
             policies.Columns.Insert(0, policyEditColumn);
+        }
+        private void BeginDrag(MouseEventArgs e)
+        {
+            try
+            {
+                ListView searchOptionsListView = SearchOptionsList;
+                ListViewItem listViewItem = FindAnchestor<ListViewItem>((DependencyObject)e.OriginalSource);
+                if (listViewItem == null)
+                    return;
+
+                var currentColumn = searchOptionsListView.ItemContainerGenerator.ItemFromContainer(listViewItem);
+                //setup the drag adorner.
+                InitialiseAdorner(listViewItem);
+                DataObject data = new DataObject(currentColumn);
+                DragDropEffects de = DragDrop.DoDragDrop(SearchOptionsList, data, DragDropEffects.Move);
+                if (_adorner != null)
+                {
+                    AdornerLayer.GetAdornerLayer(searchOptionsListView).Remove(_adorner);
+                    _adorner = null;
+                }
+            }
+            catch { }
+        }
+        private void InitialiseAdorner(ListViewItem listViewItem)
+        {
+            VisualBrush brush = new VisualBrush(listViewItem);
+            _adorner = new DragAdorner((UIElement)listViewItem, listViewItem.RenderSize, brush);
+            _adorner.Opacity = 0.5;
+            _layer = AdornerLayer.GetAdornerLayer(SearchOptionsList as Visual);
+            _layer.Add(_adorner);
+        }
+        private static T FindAnchestor<T>(DependencyObject current)
+        where T : DependencyObject
+        {
+            do
+            {
+                if (current is T)
+                {
+                    return (T)current;
+                }
+                current = VisualTreeHelper.GetParent(current);
+            }
+            while (current != null);
+            return null;
+        }
+        private void SetControlValues(object sender, string value)
+        {
+            AutoCompleteBox autoCompleteBox = (AutoCompleteBox)sender;
+            if (autoCompleteBox != null)
+            {
+                autoCompleteBox.autoTextBox.Text = value;
+            }
+            var searchOption = (ViewSearchOptionsDto)autoCompleteBox.DataContext;
+            if (searchOption.ColumnOrder == 0)
+            {
+                autoCompleteBox.autoTextBox.Focus();
+            }
         }
         #endregion Methods 
     }

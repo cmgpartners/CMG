@@ -66,44 +66,35 @@ namespace CMG.UI.View
             SearchSliderColumn.Width = new GridLength(450);
             searchBarColumn.Width = new GridLength(0);
         }
-        private void EntityTypePanel_Loaded(object sender, RoutedEventArgs e)
+        private void UserControlEntityType_Loaded(object sender, RoutedEventArgs e)
         {
-            WrapPanel entityTypePanel = (WrapPanel)sender;
-            var entityTypeAutoComplete = entityTypePanel.Children.Count > 0 ? (AutoCompleteBox)entityTypePanel.Children[1] : null;
-            if (entityTypeAutoComplete != null)
+            string value = string.Empty;
+            if (fileManagerViewModel != null
+                && !string.IsNullOrEmpty(fileManagerViewModel.EntityType))
             {
-                if (fileManagerViewModel != null
-                    && !string.IsNullOrEmpty(fileManagerViewModel.EntityType))
-                {
-                    entityTypeAutoComplete.autoTextBox.Text = fileManagerViewModel.EntityType;
-                }
+                value = fileManagerViewModel.EntityType;
             }
+            SetControlValues(sender, value);
         }
-        private void PolicyNumberPanel_Loaded(object sender, RoutedEventArgs e)
+        private void UserControlPolicyNumber_Loaded(object sender, RoutedEventArgs e)
         {
-            WrapPanel policyNumberPanel = (WrapPanel)sender;
-            var policyNumberAutoComplete = policyNumberPanel.Children.Count > 0 ? (AutoCompleteBox)policyNumberPanel.Children[1] : null;
-            if (policyNumberAutoComplete != null)
+            string value = string.Empty;
+            if (fileManagerViewModel != null
+                && !string.IsNullOrEmpty(fileManagerViewModel.PolicyNumber))
             {
-                if (fileManagerViewModel != null
-                    && !string.IsNullOrEmpty(fileManagerViewModel.PolicyNumber))
-                {
-                    policyNumberAutoComplete.autoTextBox.Text = fileManagerViewModel.PolicyNumber;
-                }
+                value = fileManagerViewModel.PolicyNumber;
             }
+            SetControlValues(sender, value);
         }
-        private void CompanyNamePanel_Loaded(object sender, RoutedEventArgs e)
+        private void UserControlCompanyName_Loaded(object sender, RoutedEventArgs e)
         {
-            WrapPanel companyNamePanel = (WrapPanel)sender;
-            var companyNameAutoComplete = companyNamePanel.Children.Count > 0 ? (AutoCompleteBox)companyNamePanel.Children[1] : null;
-            if (companyNameAutoComplete != null)
+            string value = string.Empty;
+            if (fileManagerViewModel != null
+                && !string.IsNullOrEmpty(fileManagerViewModel.CompanyName))
             {
-                if (fileManagerViewModel != null
-                    && !string.IsNullOrEmpty(fileManagerViewModel.CompanyName))
-                {
-                    companyNameAutoComplete.autoTextBox.Text = fileManagerViewModel.CompanyName;
-                }
+                value = fileManagerViewModel.CompanyName;
             }
+            SetControlValues(sender, value);
         }
         private void SearchOptionsList_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -196,6 +187,7 @@ namespace CMG.UI.View
             //setup the drag adorner.
             InitialiseAdorner(listViewItem);
             DataObject data = new DataObject(currentColumn);
+            DragDropEffects de = DragDrop.DoDragDrop(SearchOptionsList, data, DragDropEffects.Move);
             if (_adorner != null)
             {
                 AdornerLayer.GetAdornerLayer(searchOptionsListView).Remove(_adorner);
@@ -441,6 +433,19 @@ namespace CMG.UI.View
                 subItem.Expanded += Item_Expanded;
                 item.Items.Add(subItem);
             });
+        }
+        private void SetControlValues(object sender, string value)
+        {
+            AutoCompleteBox autoCompleteBox = (AutoCompleteBox)sender;
+            if (autoCompleteBox != null)
+            {
+                autoCompleteBox.autoTextBox.Text = value;
+            }
+            var searchOption = (ViewSearchOptionsDto)autoCompleteBox.DataContext;
+            if (searchOption.ColumnOrder == 0)
+            {
+                autoCompleteBox.autoTextBox.Focus();
+            }
         }
         #endregion Methods
     }
