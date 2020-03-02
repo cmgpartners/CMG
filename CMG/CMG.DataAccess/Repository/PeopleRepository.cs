@@ -138,27 +138,27 @@ namespace CMG.DataAccess.Repository
         }
         private static Expression<Func<People, bool>> PolicyNumberExpression(string contains)
         {
-            return w => w.PeoplePolicys.Any(x => x.Policy.Policynum == contains);
+            return w => w.PeoplePolicys.Any(x => x.Policy.Policynum == contains && x.Del == false);
         }
         private static Expression<Func<People, bool>> CompanyCodeExpression(string equal)
         {
-            return w => w.PeoplePolicys.Any(x => x.Policy.Company == equal);
+            return w => w.PeoplePolicys.Any(x => x.Policy.Company == equal && x.Del == false);
         }
         private static Expression<Func<People, bool>> PolicyDateExpression(string greaterThan, string lessThan)
         {
             if (!string.IsNullOrEmpty(greaterThan)
                && !string.IsNullOrEmpty(lessThan))
             {
-                return w => w.PeoplePolicys.Any(x => x.Policy.Issuedate >= Convert.ToDateTime(greaterThan) && x.Policy.Issuedate <= Convert.ToDateTime(lessThan));
+                return w => w.PeoplePolicys.Any(x => x.Policy.Issuedate >= Convert.ToDateTime(greaterThan) && x.Policy.Issuedate <= Convert.ToDateTime(lessThan) && x.Del == false);
             }
             if (!string.IsNullOrEmpty(greaterThan))
             {
-                return w => w.PeoplePolicys.Any(x => x.Policy.Issuedate >= Convert.ToDateTime(greaterThan));
+                return w => w.PeoplePolicys.Any(x => x.Policy.Issuedate >= Convert.ToDateTime(greaterThan) && x.Del == false);
             }
 
             if (!string.IsNullOrEmpty(lessThan))
             {
-                return w => w.PeoplePolicys.Any(x => x.Policy.Issuedate <= Convert.ToDateTime(lessThan)); 
+                return w => w.PeoplePolicys.Any(x => x.Policy.Issuedate <= Convert.ToDateTime(lessThan) && x.Del == false); 
             }
             return w => true;
         }

@@ -68,5 +68,6 @@ namespace CMG.DataAccess.Domain
         public virtual ICollection<PolIll> PolIll { get; set; }
         public virtual ICollection<PolicyAgent> PolicyAgent { get; set; }
         public virtual ICollection<PeoplePolicys> PeoplePolicys { get; set; } = new List<PeoplePolicys>();
+        public virtual ICollection<BusinessPolicys> BusinessPolicys { get; set; } = new List<BusinessPolicys>();
     }
 }

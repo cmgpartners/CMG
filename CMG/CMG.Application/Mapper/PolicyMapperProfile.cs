@@ -29,11 +29,11 @@ namespace CMG.Application.Mapper
                 .ForMember(des => des.PolicyNotes, mo => mo.MapFrom(src => src.Comment))
                 .ForMember(des => des.ClientNotes, mo => mo.MapFrom(src => src.NoteCli))
                 .ForMember(des => des.InternalNotes, mo => mo.MapFrom(src => src.NoteInt))
-                .ForMember(des => des.PeoplePolicy, mo => mo.MapFrom(src => src.PeoplePolicys))
                 .ForMember(des => des.ModifiedDate, mo => mo.MapFrom(src => src.RevDate))
                 .ForMember(des => des.ModifiedBy, mo => mo.MapFrom(src => src.RevLocn))
                 .ForMember(des => des.CreatedDate, mo => mo.MapFrom(src => src.Cr8Date))
-                .ForMember(des => des.CreatedBy, mo => mo.MapFrom(src => src.Cr8Locn));
+                .ForMember(des => des.CreatedBy, mo => mo.MapFrom(src => src.Cr8Locn))
+                .AfterMap(AfterMapPolicysToRelationship);            
 
             CreateMap<ViewPolicyListDto, Policys>()
                 .ForMember(des => des.Keynumo, mo => mo.MapFrom(src => src.Id))
@@ -54,25 +54,50 @@ namespace CMG.Application.Mapper
                 .ForMember(des => des.Comment, mo => mo.MapFrom(src => src.PolicyNotes))
                 .ForMember(des => des.NoteCli, mo => mo.MapFrom(src => src.ClientNotes))
                 .ForMember(des => des.NoteInt, mo => mo.MapFrom(src => src.InternalNotes))
-                .ForMember(des => des.PeoplePolicys, mo => mo.MapFrom(src => src.PeoplePolicy))
                 .ForMember(des => des.RevDate, mo => mo.MapFrom(src => src.ModifiedDate))
                 .ForMember(des => des.RevLocn, mo => mo.MapFrom(src => src.ModifiedBy))
                 .ForMember(des => des.Cr8Date, mo => mo.MapFrom(src => src.CreatedDate))
                 .ForMember(des => des.Cr8Locn, mo => mo.MapFrom(src => src.CreatedBy));
 
             CreateMap<PeoplePolicys, ViewPeoplePolicyDto>()
-                .ForMember(des => des.PeopleId, mo => mo.MapFrom(src => src.Keynump))
+                .ForMember(des => des.RelationshipId, mo => mo.MapFrom(src => src.Keynuml))
+                .ForMember(des => des.PeopleOrBusinessId, mo => mo.MapFrom(src => src.Keynump))
                 .ForMember(des => des.PolicyId, mo => mo.MapFrom(src => src.Keynumo))
+                .ForMember(des => des.IsBusiness, mo => mo.MapFrom(src => src.Bus))
                 .ForMember(des => des.Name, mo => mo.MapFrom(src => src.Hname.Trim()))
                 .ForMember(des => des.Category, mo => mo.MapFrom(src => src.Catgry.Trim()))
-                .ForMember(des => des.Relation, mo => mo.MapFrom(src => src.Relatn.Trim()));
+                .ForMember(des => des.Relation, mo => mo.MapFrom(src => src.Relatn.Trim()))
+                .ForMember(des => des.IsDeleted, mo => mo.MapFrom(src => src.Del));
 
-            CreateMap<ViewPeoplePolicyDto, PeoplePolicys>()
-                .ForMember(des => des.Keynump, mo => mo.MapFrom(src => src.PeopleId))
+            CreateMap<BusinessPolicys, ViewPeoplePolicyDto>()
+                .ForMember(des => des.RelationshipId, mo => mo.MapFrom(src => src.Keynum))
+                .ForMember(des => des.PeopleOrBusinessId, mo => mo.MapFrom(src => src.Keynumb))
+                .ForMember(des => des.PolicyId, mo => mo.MapFrom(src => src.Keynumo))
+                .ForMember(des => des.IsBusiness, mo => mo.MapFrom(src => src.Bus))
+                .ForMember(des => des.Name, mo => mo.MapFrom(src => src.Hnamec.Trim()))
+                .ForMember(des => des.Category, mo => mo.MapFrom(src => src.Catgry.Trim()))
+                .ForMember(des => des.Relation, mo => mo.MapFrom(src => src.Relatn.Trim()))
+                .ForMember(des => des.IsDeleted, mo => mo.MapFrom(src => src.Del));
+
+            CreateMap<ViewPeoplePolicyDto, BusinessPolicys>()
+                .ForMember(des => des.Keynum, mo => mo.MapFrom(src => src.RelationshipId))
+                .ForMember(des => des.Keynumb, mo => mo.MapFrom(src => src.PeopleOrBusinessId))
                 .ForMember(des => des.Keynumo, mo => mo.MapFrom(src => src.PolicyId))
+                .ForMember(des => des.Bus, mo => mo.MapFrom(src => src.IsBusiness))
                 .ForMember(des => des.Hname, mo => mo.MapFrom(src => src.Name.Trim()))
                 .ForMember(des => des.Catgry, mo => mo.MapFrom(src => src.Category.Trim()))
-                .ForMember(des => des.Relatn, mo => mo.MapFrom(src => src.Relation.Trim()));
+                .ForMember(des => des.Relatn, mo => mo.MapFrom(src => src.Relation.Trim()))
+                .ForMember(des => des.Del, mo => mo.MapFrom(src => src.IsDeleted));
+
+            CreateMap<ViewPeoplePolicyDto, PeoplePolicys>()
+                .ForMember(des => des.Keynuml, mo => mo.MapFrom(src => src.RelationshipId)) //Rishita
+                .ForMember(des => des.Keynump, mo => mo.MapFrom(src => src.PeopleOrBusinessId))
+                .ForMember(des => des.Keynumo, mo => mo.MapFrom(src => src.PolicyId))
+                .ForMember(des => des.Bus, mo => mo.MapFrom(src => src.IsBusiness))
+                .ForMember(des => des.Hname, mo => mo.MapFrom(src => src.Name.Trim()))
+                .ForMember(des => des.Catgry, mo => mo.MapFrom(src => src.Category.Trim()))
+                .ForMember(des => des.Relatn, mo => mo.MapFrom(src => src.Relation.Trim()))
+                .ForMember(des => des.Del, mo => mo.MapFrom(src => src.IsDeleted));
 
             CreateMap<Policys, ViewPolicyDto>()
                .ForMember(des => des.PolicyId, mo => mo.MapFrom(src => src.Keynumo))
@@ -90,6 +115,40 @@ namespace CMG.Application.Mapper
 
             CreateMap<ViewPolicyAgentDto, ViewAgentCommissionDto>()
             .ForMember(des => des.Id, mo => mo.Ignore());           
+        }
+        private void AfterMapPolicysToRelationship(Policys src, ViewPolicyListDto des)
+        {
+            if (src.PeoplePolicys != null
+                && src.BusinessPolicys != null)
+            {
+                int totalCount = src.PeoplePolicys.Count + src.BusinessPolicys.Count;
+                int a = 0;
+                for (int i = 0; i < src.PeoplePolicys.Count; i++)
+                {
+                    des.PeoplePolicy.Add(new ViewPeoplePolicyDto());
+                    des.PeoplePolicy.ElementAt(i).RelationshipId = src.PeoplePolicys.ElementAt(i).Keynuml;
+                    des.PeoplePolicy.ElementAt(i).PeopleOrBusinessId = src.PeoplePolicys.ElementAt(i).Keynump;
+                    des.PeoplePolicy.ElementAt(i).PolicyId = src.PeoplePolicys.ElementAt(i).Keynumo;
+                    des.PeoplePolicy.ElementAt(i).IsBusiness = src.PeoplePolicys.ElementAt(i).Bus;
+                    des.PeoplePolicy.ElementAt(i).Name = src.PeoplePolicys.ElementAt(i).Hname.Trim();
+                    des.PeoplePolicy.ElementAt(i).Category = src.PeoplePolicys.ElementAt(i).Catgry.Trim();
+                    des.PeoplePolicy.ElementAt(i).Relation = src.PeoplePolicys.ElementAt(i).Relatn.Trim();
+                    des.PeoplePolicy.ElementAt(i).IsDeleted = src.PeoplePolicys.ElementAt(i).Del;
+                }
+                for (int i = src.PeoplePolicys.Count; i < totalCount; i++)
+                {
+                    des.PeoplePolicy.Add(new ViewPeoplePolicyDto());
+                    des.PeoplePolicy.ElementAt(i).RelationshipId = src.BusinessPolicys.ElementAt(a).Keynum;
+                    des.PeoplePolicy.ElementAt(i).PeopleOrBusinessId = src.BusinessPolicys.ElementAt(a).Keynumb;
+                    des.PeoplePolicy.ElementAt(i).PolicyId = src.BusinessPolicys.ElementAt(a).Keynumo;
+                    des.PeoplePolicy.ElementAt(i).IsBusiness = src.BusinessPolicys.ElementAt(a).Bus;
+                    des.PeoplePolicy.ElementAt(i).Name = src.BusinessPolicys.ElementAt(a).Hname.Trim();
+                    des.PeoplePolicy.ElementAt(i).Category = src.BusinessPolicys.ElementAt(a).Catgry.Trim();
+                    des.PeoplePolicy.ElementAt(i).Relation = src.BusinessPolicys.ElementAt(a).Relatn.Trim();
+                    des.PeoplePolicy.ElementAt(i).IsDeleted = src.BusinessPolicys.ElementAt(a).Del;
+                    a++;
+                }
+            }
         }
     }
 }

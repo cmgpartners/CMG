@@ -37,16 +37,40 @@ namespace CMG.Application.ViewModel
             _notifier = notifier;
             _dialogService = dialogService;
             SelectedViewModel = this;
+            if (selectedClientInput != null)
+            {
+                SelectedClient = selectedClientInput;
+            }
         }
         #endregion Constructor
 
-        #region Properties        
+        #region Properties
+        public bool IsPolicyDetailVisible
+        {
+            get { return SelectedClient == null ? true : false; }
+        }
         public List<DriveInfo> MappedDrives 
         {
             get 
             {
                 return DriveInfo.GetDrives().Where(dr => dr.IsReady == true).ToList(); 
             }
+        }
+        private ViewClientSearchDto _selectedClient;
+        public ViewClientSearchDto SelectedClient
+        {
+            get { return _selectedClient; }
+            set
+            {
+                _selectedClient = value;
+                OnPropertyChanged("SelectedClient");
+                OnPropertyChanged("IsPolicyDetailVisible");
+                OnPropertyChanged("IsClientSelected");
+            }
+        }
+        public bool IsClientSelected
+        {
+            get { return SelectedClient != null ? true : false; }
         }
         #endregion properties
     }
