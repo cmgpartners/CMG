@@ -50,6 +50,10 @@ namespace CMG.Application.ViewModel
         private const string ColumnNameClientNotes = "Client Notes";
         private const string ColumnNameInternalNotes = "Internal Notes";
         private const string ColumnNameAge = "Age";
+        private const string ColumnNameInsured = "Insured";
+        private const string ColumnNameBeneficiary = "Beneficiary";
+        private const string ColumnNameOwner = "Owner";
+
         #endregion MemberVariables
 
         #region Constructor
@@ -102,7 +106,7 @@ namespace CMG.Application.ViewModel
         public List<ViewComboDto> ClientTypeCollection
         {
             get { return _clientTypeCollection; }
-            set { _clientTypeCollection = value; }
+            set { _clientTypeCollection = value; OnPropertyChanged("ClientTypeCollection"); }
         }
 
         private string _lastName;
@@ -152,16 +156,6 @@ namespace CMG.Application.ViewModel
             {
                 _policyNumber = value;
                 OnPropertyChanged("PolicyNumber");
-            }
-        }
-        private string _entityType;
-        public string EntityType
-        {
-            get { return _entityType; }
-            set
-            {
-                _entityType = value;
-                OnPropertyChanged("EntityType");
             }
         }
         private string _companyName;
@@ -321,16 +315,6 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("Policies");
             }
         }        
-        private List<string> _entityTypes;
-        public List<string> EntityTypes
-        {
-            get { return _entityTypes; }
-            set
-            {
-                _entityTypes = value;
-                OnPropertyChanged("EntityTypes");
-            }
-        }
         private List<ViewComboDto> _combo;
         public List<ViewComboDto> Combo
         {
@@ -451,6 +435,9 @@ namespace CMG.Application.ViewModel
             ColumnNames.Add(ColumnNamePolicyNotes);
             ColumnNames.Add(ColumnNameClientNotes);
             ColumnNames.Add(ColumnNameInternalNotes);
+            ColumnNames.Add(ColumnNameInsured);
+            ColumnNames.Add(ColumnNameBeneficiary);
+            ColumnNames.Add(ColumnNameOwner);
         }
         public void GetComboData()
         {
@@ -459,6 +446,7 @@ namespace CMG.Application.ViewModel
             PersonStatusCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNamePStatus).ToList();
             SVCTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameSVCType).ToList();
             ClientTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameClientType).ToList();
+            ClientTypeCollection.Insert(0, new ViewComboDto() { });
             CompanyCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameCompany).ToList();
         }
         public void GetAutoSuggestionLists()
@@ -467,7 +455,6 @@ namespace CMG.Application.ViewModel
             var temppolicies = policies.Select(r => _mapper.Map<ViewPolicyListDto>(r)).ToList();
             Policies = temppolicies.Select(r => r.PolicyNumber).ToList();
             CompanyNames = CompanyCollection.Select(x => x.Description.Trim()).ToList();
-            EntityTypes = ClientTypeCollection.Select(r => r.Description).ToList();
         }
         private void Search()
         {           
@@ -494,7 +481,7 @@ namespace CMG.Application.ViewModel
                 && string.IsNullOrEmpty(FirstName)
                 && string.IsNullOrEmpty(CommanName)
                 && string.IsNullOrEmpty(LastName)
-                && string.IsNullOrEmpty(EntityType)
+                && (SelectedClientType == null || (SelectedClientType != null && SelectedClientType.Id == 0))
                 && (FromPolicyDate == null && ToPolicyDate == null))
             {
                 isValid = false;
@@ -515,13 +502,6 @@ namespace CMG.Application.ViewModel
                     isValid = Policies.Any(x => x.ToLower().Equals(PolicyNumber.ToLower().Trim()));
                     if (!isValid)
                         _notifier.ShowError("Select valid Policy number");
-                }
-
-                if (!string.IsNullOrEmpty(EntityType))
-                {
-                    isValid = EntityTypes.Any(x => x.ToLower().Equals(EntityType.ToLower().Trim()));
-                    if (!isValid)
-                        _notifier.ShowError("Select valid entity type");
                 }
                 if(FromPolicyDate != null && !DateTime.TryParse(FromPolicyDate.ToString(), out _))
                 {
@@ -566,13 +546,9 @@ namespace CMG.Application.ViewModel
                     BuildFilterByEquals("CompanyName", companyCode.Trim(), searchBy);
                 }
             }
-            if (!string.IsNullOrEmpty(EntityType))
+            if (SelectedClientType != null && SelectedClientType.Id > 0)
             {
-                var entityTypeCode = ClientTypeCollection.Where(c => c.Description.ToLower() == EntityType.Trim().ToLower()).FirstOrDefault()?.FieldCode;
-                if (!string.IsNullOrEmpty(entityTypeCode))
-                {
-                    BuildFilterByEquals("EntityType", entityTypeCode.Trim(), searchBy);
-                }
+                BuildFilterByEquals("EntityType", SelectedClientType.FieldCode.Trim(), searchBy);
             }
             if (FromPolicyDate != null && ToPolicyDate != null)
             {

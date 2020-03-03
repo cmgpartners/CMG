@@ -24,6 +24,9 @@ namespace CMG.Application.DTO
         public string PolicyNotes { get; set; }
         public string ClientNotes { get; set; }
         public string InternalNotes { get; set; }
+        public string Beneficiary { get; set; }
+        public string Owner { get; set; }
+        public string Insured { get; set; }
         public DateTime ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
         public DateTime CreatedDate { get; set; }

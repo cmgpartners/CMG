@@ -66,16 +66,6 @@ namespace CMG.UI.View
             SearchSliderColumn.Width = new GridLength(450);
             searchBarColumn.Width = new GridLength(0);
         }
-        private void UserControlEntityType_Loaded(object sender, RoutedEventArgs e)
-        {
-            string value = string.Empty;
-            if (fileManagerViewModel != null
-                && !string.IsNullOrEmpty(fileManagerViewModel.EntityType))
-            {
-                value = fileManagerViewModel.EntityType;
-            }
-            SetControlValues(sender, value);
-        }
         private void UserControlPolicyNumber_Loaded(object sender, RoutedEventArgs e)
         {
             string value = string.Empty;

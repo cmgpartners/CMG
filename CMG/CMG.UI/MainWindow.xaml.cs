@@ -128,7 +128,6 @@ namespace CMG.UI
                 policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
             }
             _mainViewModel.SelectedViewModel = policyViewModel;
-            policyViewModel.EntityType = _mainViewModel.EntityType;
             policyViewModel.PolicyNumber = _mainViewModel.PolicyNumber;
             policyViewModel.CompanyName = _mainViewModel.CompanyName;
             DataContext = _mainViewModel;
@@ -156,7 +155,6 @@ namespace CMG.UI
                 fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
             }
             _mainViewModel.SelectedViewModel = fileManagerViewModel;
-            fileManagerViewModel.EntityType = _mainViewModel.EntityType;
             fileManagerViewModel.PolicyNumber = _mainViewModel.PolicyNumber;
             fileManagerViewModel.CompanyName = _mainViewModel.CompanyName;
             DataContext = _mainViewModel;

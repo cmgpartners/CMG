@@ -93,6 +93,9 @@ namespace CMG.DataAccess.Repository
                 NoteInt = x.NoteInt,
                 Issuedate = x.Issuedate,
                 Dateplaced = x.Dateplaced,
+                Benef = x.Benef,
+                Owner = x.Owner,
+                Insur = x.Insur,
                 PeoplePolicys = x.PeoplePolicys.Where(x => !excludeCategoryList.Contains(x.Catgry)).Select(a => new PeoplePolicys
                 {
                     Keynump = a.Keynump,

@@ -39,17 +39,9 @@
         <DataTemplate x:Key="entityTypeTemplate">
             <WrapPanel AllowDrop="True" Orientation="Vertical" x:Name="EntityTypePanel">
                 <TextBlock Text="{Binding ColumnName}" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                <uc:AutoCompleteBox 
-                                x:Name="UserControlEntityType" 
-                                Foreground="White" 
-                                BorderBrush="#FFCEEAFF" 
-                                BorderThickness="0 0 0 3" 
-                                Margin="10 0 15 5" 
-                                Width="85"
-                                Loaded="UserControlEntityType_Loaded"
-                                AutoSuggestionList="{Binding DataContext.EntityTypes, RelativeSource={RelativeSource AncestorType=Window}}" 
-                                SelectedValue="{Binding DataContext.EntityType, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
-                </uc:AutoCompleteBox>
+                <ComboBox ItemsSource="{Binding DataContext.ClientTypeCollection, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}" 
+                          SelectedValue="{Binding DataContext.SelectedClientType, RelativeSource={RelativeSource AncestorType=Window}}" DisplayMemberPath="Description" Foreground="White" FontSize="13" Margin="10 0 15 5" Style="{StaticResource EntityTypeStyle}">
+                </ComboBox>
             </WrapPanel>
         </DataTemplate>
         <DataTemplate x:Key="policyNumberTemplate" x:Name="policyNumberTemplate">
@@ -88,8 +80,8 @@
             <WrapPanel AllowDrop="True" Orientation="Vertical">
                 <TextBlock Text="Policy Date" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                 <StackPanel Orientation="Horizontal">
-                    <DatePicker Margin="10 6 5 5" SelectedDate="{Binding DataContext.FromPolicyDate, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="90" Foreground="White"/>
-                    <DatePicker Margin="0 6 15 5" SelectedDate="{Binding DataContext.ToPolicyDate, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="90" Foreground="White"/>
+                    <DatePicker Margin="10 0 5 5" SelectedDate="{Binding DataContext.FromPolicyDate, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="90" Foreground="White"/>
+                    <DatePicker Margin="10 0 5 5" SelectedDate="{Binding DataContext.ToPolicyDate, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" Width="90" Foreground="White"/>
                 </StackPanel>
             </WrapPanel>
         </DataTemplate>
@@ -162,20 +154,12 @@
                         </Grid.RowDefinitions>
                         <ListView Grid.Row="0" ItemsSource="{Binding SearchOptions, UpdateSourceTrigger=PropertyChanged, IsAsync=True}"  Width="450" x:Name="SearchOptionsList" Height="300" ItemTemplateSelector="{StaticResource searchOptionsSelector}" 
                                   PreviewMouseLeftButtonDown="SearchOptionsList_PreviewMouseLeftButtonDown" PreviewMouseMove="SearchOptionsList_PreviewMouseMove" Drop="SearchOptionsList_Drop" AllowDrop="True" IsTabStop="False" 
-                                  KeyboardNavigation.TabNavigation="Cycle" Focusable="False">
+                                  KeyboardNavigation.TabNavigation="Cycle" Focusable="False" ItemContainerStyle="{StaticResource SearchOptionsListView}">
                             <ListView.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <WrapPanel Orientation="Horizontal" Width="450"></WrapPanel>
                                 </ItemsPanelTemplate>
                             </ListView.ItemsPanel>
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
-                                    <Setter Property="Padding" Value="0"/>
-                                    <Setter Property="Margin" Value="0"/>
-                                    <Setter Property="BorderThickness" Value="0"/>
-                                    <Setter Property="Background" Value="Transparent"/>
-                                </Style>
-                            </ListView.ItemContainerStyle>
                         </ListView>
                         <StackPanel Grid.Row="1" Margin="295 10 0 0">
                             <Button Content="Search" Width="85" Command="{Binding DataContext.SearchClientCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" IsDefault="True"></Button>
