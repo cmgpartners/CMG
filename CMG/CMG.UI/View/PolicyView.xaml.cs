@@ -229,16 +229,6 @@ namespace CMG.UI.View
             }
             SetControlValues(sender, value);
         }
-        private void UserControlCompanyName_Loaded(object sender, RoutedEventArgs e)
-        {
-            string value = string.Empty;
-            if (policyViewModel != null
-                && !string.IsNullOrEmpty(policyViewModel.CompanyName))
-            {
-                value = policyViewModel.CompanyName;
-            }
-            SetControlValues(sender, value);
-        }
         private void Policies_AutoGenerateColumns(object sender, EventArgs e)
         {
             ctxMenu = new ContextMenu();

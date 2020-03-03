@@ -511,11 +511,11 @@ namespace CMG.Application.ViewModel
                 entity.PolicyAgent = null;
                 entity.PolicyAgents = null;
                 entity.PeoplePolicys = null;
-                entity.Status = SelectedPolicyStatus != null ? SelectedPolicyStatus.FieldCode.Trim() : SelectedPolicy.Status.Substring(0, 1);
-                entity.Frequency = SelectedPolicyFrequencyType != null ? SelectedPolicyFrequencyType.FieldCode.Trim() : SelectedPolicy.Frequency.Substring(0, 1);
-                entity.Type = SelectedPolicyType != null ? SelectedPolicyType.FieldCode.Trim() : SelectedPolicy.Type.Substring(0, 1);
-                entity.Company = SelectedPolicyCompany != null ? SelectedPolicyCompany.FieldCode.Trim() : SelectedPolicy.CompanyName.Substring(0, 1);
-                entity.Currency = SelectedPolicyCurrency != null ? SelectedPolicyCurrency.FieldCode.Trim() : SelectedPolicy.Currency.Substring(0, 3);
+                entity.Status = SelectedPolicyStatus != null ? SelectedPolicyStatus.FieldCode.Trim() : string.Empty;
+                entity.Frequency = SelectedPolicyFrequencyType != null ? SelectedPolicyFrequencyType.FieldCode.Trim() : string.Empty;
+                entity.Type = SelectedPolicyType != null ? SelectedPolicyType.FieldCode.Trim() : string.Empty;
+                entity.Company = SelectedPolicyCompany != null ? SelectedPolicyCompany.FieldCode.Trim() : string.Empty;
+                entity.Currency = SelectedPolicyCurrency != null ? SelectedPolicyCurrency.FieldCode.Trim() : string.Empty;
                 entity.IssueAge = SelectedPolicy.Age.ToString();
 
                 _unitOfWork.Policies.Save(entity);
@@ -595,7 +595,7 @@ namespace CMG.Application.ViewModel
         private bool IsValidPolicy()
         {
             DateTime date = new DateTime();
-            if (string.IsNullOrEmpty(SelectedPolicy.CompanyName.Trim()))
+            if (SelectedPolicyCompany == null || (SelectedPolicyCompany != null && SelectedPolicyCompany.Id == 0))
             {
                 _notifier.ShowError("Company name is invalid");
                 return false;

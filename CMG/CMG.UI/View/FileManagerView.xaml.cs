@@ -76,16 +76,6 @@ namespace CMG.UI.View
             }
             SetControlValues(sender, value);
         }
-        private void UserControlCompanyName_Loaded(object sender, RoutedEventArgs e)
-        {
-            string value = string.Empty;
-            if (fileManagerViewModel != null
-                && !string.IsNullOrEmpty(fileManagerViewModel.CompanyName))
-            {
-                value = fileManagerViewModel.CompanyName;
-            }
-            SetControlValues(sender, value);
-        }
         private void SearchOptionsList_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             startPoint = e.GetPosition(null);

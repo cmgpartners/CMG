@@ -40,7 +40,7 @@
             <WrapPanel AllowDrop="True" Orientation="Vertical" x:Name="EntityTypePanel">
                 <TextBlock Text="{Binding ColumnName}" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                 <ComboBox ItemsSource="{Binding DataContext.ClientTypeCollection, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}" 
-                          SelectedValue="{Binding DataContext.SelectedClientType, RelativeSource={RelativeSource AncestorType=Window}}" DisplayMemberPath="Description" Foreground="White" FontSize="13" Margin="10 0 15 5" Style="{StaticResource EntityTypeStyle}">
+                          SelectedValue="{Binding DataContext.EntityType, RelativeSource={RelativeSource AncestorType=Window}}" DisplayMemberPath="Description" Foreground="White" FontSize="13" Margin="10 0 15 5" Style="{StaticResource EntityTypeStyle}">
                 </ComboBox>
             </WrapPanel>
         </DataTemplate>
@@ -63,17 +63,9 @@
         <DataTemplate x:Key="companyNameTemplate">
             <WrapPanel AllowDrop="True" Orientation="Vertical">
                 <TextBlock Text="Company" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                <uc:AutoCompleteBox 
-                                x:Name="UserControlCompanyName"
-                                AutoSuggestionList="{Binding DataContext.CompanyNames, RelativeSource={RelativeSource AncestorType=Window}}" 
-                                Foreground="White" 
-                                BorderBrush="#FFCEEAFF" 
-                                BorderThickness="0 0 0 3" 
-                                Margin="10 0 15 5"  
-                                Width="85"
-                                Loaded="UserControlCompanyName_Loaded"
-                                SelectedValue="{Binding DataContext.CompanyName, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
-                </uc:AutoCompleteBox>
+                <ComboBox ItemsSource="{Binding DataContext.CompanyCollection, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}" 
+                          SelectedValue="{Binding DataContext.CompanyName, RelativeSource={RelativeSource AncestorType=Window}}" DisplayMemberPath="Description" Foreground="White" FontSize="13" Margin="10 0 15 5" Style="{StaticResource EntityTypeStyle}">
+                </ComboBox>
             </WrapPanel>
         </DataTemplate>
         <DataTemplate x:Key="policyDateTemplate">

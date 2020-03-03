@@ -96,12 +96,6 @@ namespace CMG.Application.ViewModel
             }
         }
 
-        private List<string> _companyNames;
-        public List<string> CompanyNames
-        {
-            get { return _companyNames; }
-            set { _companyNames = value; }
-        }
         private List<ViewComboDto> _clientTypeCollection;
         public List<ViewComboDto> ClientTypeCollection
         {
@@ -158,8 +152,18 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("PolicyNumber");
             }
         }
-        private string _companyName;
-        public string CompanyName
+        private ViewComboDto _entityType;
+        public ViewComboDto EntityType
+        {
+            get { return _entityType; }
+            set
+            {
+                _entityType = value;
+                OnPropertyChanged("EntityType");
+            }
+        }
+        private ViewComboDto _companyName;
+        public ViewComboDto CompanyName
         {
             get { return _companyName; }
             set
@@ -276,17 +280,7 @@ namespace CMG.Application.ViewModel
                 columnNames = value;
                 OnPropertyChanged("ColumnNames");
             }
-        }
-        private ViewComboDto _selectedClientType;
-        public ViewComboDto SelectedClientType
-        {
-            get { return _selectedClientType; }
-            set
-            {
-                _selectedClientType = value;
-                OnPropertyChanged("SelectedClientType");
-            }
-        }
+        }    
         private List<ViewComboDto> _personStatusCollection;
         public List<ViewComboDto> PersonStatusCollection
         {
@@ -445,16 +439,16 @@ namespace CMG.Application.ViewModel
             Combo = combo.Select(r => _mapper.Map<ViewComboDto>(r)).ToList();
             PersonStatusCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNamePStatus).ToList();
             SVCTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameSVCType).ToList();
-            ClientTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameClientType).ToList();
+            ClientTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameClientType).OrderBy(c => c.Description).ToList();
             ClientTypeCollection.Insert(0, new ViewComboDto() { });
-            CompanyCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameCompany).ToList();
+            CompanyCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameCompany).OrderBy(c => c.Description).ToList();
+            CompanyCollection.Insert(0, new ViewComboDto() { Description = string.Empty });
         }
         public void GetAutoSuggestionLists()
         {
             var policies = _unitOfWork.Policies.GetAllPolicyNumber();
             var temppolicies = policies.Select(r => _mapper.Map<ViewPolicyListDto>(r)).ToList();
             Policies = temppolicies.Select(r => r.PolicyNumber).ToList();
-            CompanyNames = CompanyCollection.Select(x => x.Description.Trim()).ToList();
         }
         private void Search()
         {           
@@ -476,12 +470,12 @@ namespace CMG.Application.ViewModel
         private bool IsValidSearchCriteria()
         {
             bool isValid = true;
-            if (string.IsNullOrEmpty(CompanyName)
+            if ((CompanyName == null || (CompanyName != null && CompanyName.Id == 0))
                 && string.IsNullOrEmpty(PolicyNumber)
                 && string.IsNullOrEmpty(FirstName)
                 && string.IsNullOrEmpty(CommanName)
                 && string.IsNullOrEmpty(LastName)
-                && (SelectedClientType == null || (SelectedClientType != null && SelectedClientType.Id == 0))
+                && (EntityType == null || (EntityType != null && EntityType.Id == 0))
                 && (FromPolicyDate == null && ToPolicyDate == null))
             {
                 isValid = false;
@@ -490,13 +484,6 @@ namespace CMG.Application.ViewModel
 
             if (isValid)
             {
-                if (!string.IsNullOrEmpty(CompanyName))
-                {
-                    isValid = CompanyNames.Any(x => x.ToLower().Equals(CompanyName.ToString().ToLower().Trim()));
-                    if (!isValid)
-                        _notifier.ShowError("Select valid company name");
-                }
-
                 if (!string.IsNullOrEmpty(PolicyNumber))
                 {
                     isValid = Policies.Any(x => x.ToLower().Equals(PolicyNumber.ToLower().Trim()));
@@ -538,17 +525,13 @@ namespace CMG.Application.ViewModel
             {
                 BuildFilterByContains("PolicyNumber", PolicyNumber.Trim(), searchBy);
             }
-            if (!string.IsNullOrEmpty(CompanyName))
+            if (CompanyName != null && CompanyName.Id > 0)
             {
-                var companyCode = CompanyCollection.Where(c => c.Description.ToLower() == CompanyName.Trim().ToLower()).FirstOrDefault()?.FieldCode;
-                if (!string.IsNullOrEmpty(companyCode))
-                {
-                    BuildFilterByEquals("CompanyName", companyCode.Trim(), searchBy);
-                }
+                BuildFilterByEquals("CompanyName", CompanyName.FieldCode.Trim(), searchBy);
             }
-            if (SelectedClientType != null && SelectedClientType.Id > 0)
+            if (EntityType != null && EntityType.Id > 0)
             {
-                BuildFilterByEquals("EntityType", SelectedClientType.FieldCode.Trim(), searchBy);
+                BuildFilterByEquals("EntityType", EntityType.FieldCode.Trim(), searchBy);
             }
             if (FromPolicyDate != null && ToPolicyDate != null)
             {

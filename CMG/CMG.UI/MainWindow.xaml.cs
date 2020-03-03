@@ -129,7 +129,6 @@ namespace CMG.UI
             }
             _mainViewModel.SelectedViewModel = policyViewModel;
             policyViewModel.PolicyNumber = _mainViewModel.PolicyNumber;
-            policyViewModel.CompanyName = _mainViewModel.CompanyName;
             DataContext = _mainViewModel;
         }
         private void FileManagerMenu_Click(object sender, RoutedEventArgs e)
@@ -156,7 +155,6 @@ namespace CMG.UI
             }
             _mainViewModel.SelectedViewModel = fileManagerViewModel;
             fileManagerViewModel.PolicyNumber = _mainViewModel.PolicyNumber;
-            fileManagerViewModel.CompanyName = _mainViewModel.CompanyName;
             DataContext = _mainViewModel;
         }
         private void ConfigurationMenu_Click(object sender, RoutedEventArgs e)
