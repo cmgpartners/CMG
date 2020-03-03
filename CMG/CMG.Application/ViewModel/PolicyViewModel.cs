@@ -371,10 +371,6 @@ namespace CMG.Application.ViewModel
             set
             {
                 _selectedClient = value;
-                if(value == null && ClientCollection.Count > 0)
-                {
-                    _selectedClient = ClientCollection[0];
-                }
                 OnPropertyChanged("SelectedClient");
                 OnPropertyChanged("IsClientSelected");
                 OnPropertyChanged("IsPolicyDetailVisible");
@@ -1036,6 +1032,10 @@ namespace CMG.Application.ViewModel
                         _unitOfWork.Commit();
                         var deletedPerson = ClientCollection.Where(x => x.Keynump == selectedRelationship.PeopleOrBusinessId).FirstOrDefault();
                         ClientCollection.Remove(deletedPerson);
+                        if (SelectedClient == null)
+                        {
+                            SelectedClient = ClientCollection[0];
+                        }
                     }
                     SelectedPolicy.PeoplePolicy.Remove(selectedRelationship);
                 }
