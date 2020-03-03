@@ -92,14 +92,29 @@ namespace CMG.DataAccess.Repository
                 NoteInt = x.NoteInt, 
                 Issuedate =x.Issuedate,
                 Dateplaced = x.Dateplaced,
-                PeoplePolicys = x.PeoplePolicys.Where(x => !excludeCategoryList.Contains(x.Catgry)).Select(a => new PeoplePolicys
+                PeoplePolicys = x.PeoplePolicys.Where(x => !excludeCategoryList.Contains(x.Catgry) && x.Del == false).Select(a => new PeoplePolicys
                 {
+                    Keynuml = a.Keynuml,
                     Keynump = a.Keynump,
                     Keynumo = a.Keynumo,
                     Hname = a.Hname,
                     Catgry = a.Catgry,
                     Relatn = a.Relatn,
-                    Split = a.Split
+                    Split = a.Split,
+                    Bus = a.Bus,
+                    Del = a.Del                   
+                }).ToList(),
+                BusinessPolicys = x.BusinessPolicys.Where(x => x.Del == false).Select(a => new BusinessPolicys
+                {
+                    Keynum = a.Keynum,
+                    Keynumb = a.Keynumb,
+                    Keynumo = a.Keynumo,
+                    Hname = a.Hnamec,
+                    Catgry = a.Catgry,
+                    Relatn = a.Relatn,
+                    Split = a.Split,
+                    Bus = a.Bus,
+                    Del = a.Del
                 }).ToList(),
                 PolicyAgent = x.PolicyAgent.Select(p => new PolicyAgent
                 {

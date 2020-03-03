@@ -2,6 +2,8 @@
 {
     public static class Enums
     {
+        public static string AgentCategories = "0, 1, 4, 5, 6";
+
         public enum AgentEnum
         {
             Peter = 1,

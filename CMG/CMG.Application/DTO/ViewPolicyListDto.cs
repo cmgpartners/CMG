@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace CMG.Application.DTO
 {
@@ -29,6 +30,6 @@ namespace CMG.Application.DTO
         public DateTime CreatedDate { get; set; }
         public string CreatedBy { get; set; }
         public ICollection<ViewPolicyAgentDto> PolicyAgent { get; set; } = new List<ViewPolicyAgentDto>();
-        public ICollection<ViewPeoplePolicyDto> PeoplePolicy { get; set; } = new List<ViewPeoplePolicyDto>();
+        public ObservableCollection<ViewRelationshipDto> Relationships { get; set; } = new ObservableCollection<ViewRelationshipDto>();
     }
 }
