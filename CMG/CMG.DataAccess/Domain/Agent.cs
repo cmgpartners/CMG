@@ -12,5 +12,7 @@ namespace CMG.DataAccess.Domain
         public string AgentCode { get; set; }
         public string Color { get; set; }
         public bool IsExternal { get; set; }
+        public int? Keynump { get; set; }
+        public int? keynumb { get; set; }
     }
 }

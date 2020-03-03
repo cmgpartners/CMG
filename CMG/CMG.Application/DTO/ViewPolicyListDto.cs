@@ -25,11 +25,15 @@ namespace CMG.Application.DTO
         public string PolicyNotes { get; set; }
         public string ClientNotes { get; set; }
         public string InternalNotes { get; set; }
+        public string Beneficiary { get; set; }
+        public string Owner { get; set; }
+        public string Insured { get; set; }
         public DateTime ModifiedDate { get; set; }
         public string ModifiedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public string CreatedBy { get; set; }
         public ICollection<ViewPolicyAgentDto> PolicyAgent { get; set; } = new List<ViewPolicyAgentDto>();
         public ObservableCollection<ViewRelationshipDto> Relationships { get; set; } = new ObservableCollection<ViewRelationshipDto>();
+        public ICollection<ViewRelationshipDto> PolicyAgents { get; set; } = new List<ViewRelationshipDto>();
     }
 }

@@ -66,42 +66,21 @@ namespace CMG.UI.View
             SearchSliderColumn.Width = new GridLength(450);
             searchBarColumn.Width = new GridLength(0);
         }
-        private void EntityTypePanel_Loaded(object sender, RoutedEventArgs e)
+        private void UserControlPolicyNumber_Loaded(object sender, RoutedEventArgs e)
         {
-            WrapPanel entityTypePanel = (WrapPanel)sender;
-            var entityTypeAutoComplete = entityTypePanel.Children.Count > 0 ? (AutoCompleteBox)entityTypePanel.Children[1] : null;
-            if (entityTypeAutoComplete != null)
+            if (fileManagerViewModel != null
+                && !string.IsNullOrEmpty(fileManagerViewModel.PolicyNumber))
             {
-                if (fileManagerViewModel != null
-                    && !string.IsNullOrEmpty(fileManagerViewModel.EntityType))
+
+                AutoCompleteBox autoCompleteBox = (AutoCompleteBox)sender;
+                if (autoCompleteBox != null)
                 {
-                    entityTypeAutoComplete.autoTextBox.Text = fileManagerViewModel.EntityType;
+                    autoCompleteBox.autoTextBox.Text = fileManagerViewModel.PolicyNumber;
                 }
-            }
-        }
-        private void PolicyNumberPanel_Loaded(object sender, RoutedEventArgs e)
-        {
-            WrapPanel policyNumberPanel = (WrapPanel)sender;
-            var policyNumberAutoComplete = policyNumberPanel.Children.Count > 0 ? (AutoCompleteBox)policyNumberPanel.Children[1] : null;
-            if (policyNumberAutoComplete != null)
-            {
-                if (fileManagerViewModel != null
-                    && !string.IsNullOrEmpty(fileManagerViewModel.PolicyNumber))
+                var searchOption = (ViewSearchOptionsDto)autoCompleteBox.DataContext;
+                if (searchOption.ColumnOrder == 0)
                 {
-                    policyNumberAutoComplete.autoTextBox.Text = fileManagerViewModel.PolicyNumber;
-                }
-            }
-        }
-        private void CompanyNamePanel_Loaded(object sender, RoutedEventArgs e)
-        {
-            WrapPanel companyNamePanel = (WrapPanel)sender;
-            var companyNameAutoComplete = companyNamePanel.Children.Count > 0 ? (AutoCompleteBox)companyNamePanel.Children[1] : null;
-            if (companyNameAutoComplete != null)
-            {
-                if (fileManagerViewModel != null
-                    && !string.IsNullOrEmpty(fileManagerViewModel.CompanyName))
-                {
-                    companyNameAutoComplete.autoTextBox.Text = fileManagerViewModel.CompanyName;
+                    autoCompleteBox.autoTextBox.Focus();
                 }
             }
         }
@@ -196,6 +175,7 @@ namespace CMG.UI.View
             //setup the drag adorner.
             InitialiseAdorner(listViewItem);
             DataObject data = new DataObject(currentColumn);
+            DragDropEffects de = DragDrop.DoDragDrop(SearchOptionsList, data, DragDropEffects.Move);
             if (_adorner != null)
             {
                 AdornerLayer.GetAdornerLayer(searchOptionsListView).Remove(_adorner);

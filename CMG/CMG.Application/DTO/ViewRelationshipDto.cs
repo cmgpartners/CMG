@@ -12,7 +12,8 @@ namespace CMG.Application.DTO
         public string Category { get; set; }
         public string Relation { get; set; }
         public decimal Split { get; set; }
-        public bool IsDeleted { get; set; }
+        public ViewAgentDto Agent { get; set; }
+        public bool? IsDeleted { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string CreatedBy { get; set; }
         public string ModifiedBy { get; set; }
