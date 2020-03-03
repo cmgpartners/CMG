@@ -943,7 +943,7 @@ namespace CMG.Application.ViewModel
             DateTime date = new DateTime();
             if (SelectedPolicyCompany == null || (SelectedPolicyCompany != null && SelectedPolicyCompany.Id == 0))
             {
-                _notifier.ShowError("Company name is invalid");
+                _notifier.ShowError("Please select company name");
                 return false;
             }
             if (!decimal.TryParse(SelectedPolicy.FaceAmount.ToString(), out decimal faceAmount))
