@@ -29,7 +29,7 @@ namespace CMG.Application.DTO
         public string ModifiedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public string CreatedBy { get; set; }
-        public ICollection<ViewPolicyAgentDto> PolicyAgent { get; set; } = new List<ViewPolicyAgentDto>(); // PolicyAgents
-        public ObservableCollection<ViewRelationshipDto> PeoplePolicy { get; set; } = new ObservableCollection<ViewRelationshipDto>(); //Relationships
+        public ICollection<ViewPolicyAgentDto> PolicyAgent { get; set; } = new List<ViewPolicyAgentDto>();
+        public ObservableCollection<ViewRelationshipDto> Relationships { get; set; } = new ObservableCollection<ViewRelationshipDto>();
     }
 }

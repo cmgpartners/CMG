@@ -125,27 +125,27 @@ namespace CMG.Application.Mapper
                 int a = 0;
                 for (int i = 0; i < src.PeoplePolicys.Count; i++)
                 {
-                    des.PeoplePolicy.Add(new ViewRelationshipDto());
-                    des.PeoplePolicy.ElementAt(i).RelationshipId = src.PeoplePolicys.ElementAt(i).Keynuml;
-                    des.PeoplePolicy.ElementAt(i).PeopleOrBusinessId = src.PeoplePolicys.ElementAt(i).Keynump;
-                    des.PeoplePolicy.ElementAt(i).PolicyId = src.PeoplePolicys.ElementAt(i).Keynumo;
-                    des.PeoplePolicy.ElementAt(i).IsBusiness = src.PeoplePolicys.ElementAt(i).Bus;
-                    des.PeoplePolicy.ElementAt(i).Name = src.PeoplePolicys.ElementAt(i).Hname.Trim();
-                    des.PeoplePolicy.ElementAt(i).Category = src.PeoplePolicys.ElementAt(i).Catgry.Trim();
-                    des.PeoplePolicy.ElementAt(i).Relation = src.PeoplePolicys.ElementAt(i).Relatn.Trim();
-                    des.PeoplePolicy.ElementAt(i).IsDeleted = src.PeoplePolicys.ElementAt(i).Del;
+                    des.Relationships.Add(new ViewRelationshipDto());
+                    des.Relationships.ElementAt(i).RelationshipId = src.PeoplePolicys.ElementAt(i).Keynuml;
+                    des.Relationships.ElementAt(i).PeopleOrBusinessId = src.PeoplePolicys.ElementAt(i).Keynump;
+                    des.Relationships.ElementAt(i).PolicyId = src.PeoplePolicys.ElementAt(i).Keynumo;
+                    des.Relationships.ElementAt(i).IsBusiness = src.PeoplePolicys.ElementAt(i).Bus;
+                    des.Relationships.ElementAt(i).Name = src.PeoplePolicys.ElementAt(i).Hname.Trim();
+                    des.Relationships.ElementAt(i).Category = src.PeoplePolicys.ElementAt(i).Catgry.Trim();
+                    des.Relationships.ElementAt(i).Relation = src.PeoplePolicys.ElementAt(i).Relatn.Trim();
+                    des.Relationships.ElementAt(i).IsDeleted = src.PeoplePolicys.ElementAt(i).Del;
                 }
                 for (int i = src.PeoplePolicys.Count; i < totalCount; i++)
                 {
-                    des.PeoplePolicy.Add(new ViewRelationshipDto());
-                    des.PeoplePolicy.ElementAt(i).RelationshipId = src.BusinessPolicys.ElementAt(a).Keynum;
-                    des.PeoplePolicy.ElementAt(i).PeopleOrBusinessId = src.BusinessPolicys.ElementAt(a).Keynumb;
-                    des.PeoplePolicy.ElementAt(i).PolicyId = src.BusinessPolicys.ElementAt(a).Keynumo;
-                    des.PeoplePolicy.ElementAt(i).IsBusiness = src.BusinessPolicys.ElementAt(a).Bus;
-                    des.PeoplePolicy.ElementAt(i).Name = src.BusinessPolicys.ElementAt(a).Hname.Trim();
-                    des.PeoplePolicy.ElementAt(i).Category = src.BusinessPolicys.ElementAt(a).Catgry.Trim();
-                    des.PeoplePolicy.ElementAt(i).Relation = src.BusinessPolicys.ElementAt(a).Relatn.Trim();
-                    des.PeoplePolicy.ElementAt(i).IsDeleted = src.BusinessPolicys.ElementAt(a).Del;
+                    des.Relationships.Add(new ViewRelationshipDto());
+                    des.Relationships.ElementAt(i).RelationshipId = src.BusinessPolicys.ElementAt(a).Keynum;
+                    des.Relationships.ElementAt(i).PeopleOrBusinessId = src.BusinessPolicys.ElementAt(a).Keynumb;
+                    des.Relationships.ElementAt(i).PolicyId = src.BusinessPolicys.ElementAt(a).Keynumo;
+                    des.Relationships.ElementAt(i).IsBusiness = src.BusinessPolicys.ElementAt(a).Bus;
+                    des.Relationships.ElementAt(i).Name = src.BusinessPolicys.ElementAt(a).Hname.Trim();
+                    des.Relationships.ElementAt(i).Category = src.BusinessPolicys.ElementAt(a).Catgry.Trim();
+                    des.Relationships.ElementAt(i).Relation = src.BusinessPolicys.ElementAt(a).Relatn.Trim();
+                    des.Relationships.ElementAt(i).IsDeleted = src.BusinessPolicys.ElementAt(a).Del;
                     a++;
                 }
             }

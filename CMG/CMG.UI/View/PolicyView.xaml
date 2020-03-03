@@ -445,7 +445,7 @@
                             </Button.Triggers>
                         </Button>
                         <DataGrid x:Name="relationship" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
-                            ItemsSource="{Binding SelectedPolicy.PeoplePolicy}" MinRowHeight="25"
+                            ItemsSource="{Binding SelectedPolicy.Relationships}" MinRowHeight="25"
                             AutoGenerateColumns="False" IsReadOnly="True" Background="{x:Null}" GridLinesVisibility="None"
                             HorizontalScrollBarVisibility="Auto" MaxWidth="360" VerticalScrollBarVisibility="Auto" MaxHeight="250"
                             ColumnHeaderStyle="{StaticResource RelationshipHeaderStyle}" 
@@ -1316,7 +1316,7 @@
                                             <Grid Grid.Row="3">
                                                 <StackPanel HorizontalAlignment="Left">
                                                     <TextBlock Text="Relation"/>
-                                                    <TextBox Width="150" Text="{Binding PersonRelation}" />
+                                                    <TextBox Width="150" Text="{Binding PersonRelation}" MaxLength="10" />
                                                 </StackPanel>
                                             </Grid>
                                             <Grid Grid.Row="4">
@@ -1433,7 +1433,7 @@
                                             <Grid Grid.Row="3">
                                                 <StackPanel HorizontalAlignment="Left">
                                                     <TextBlock Text="Relation"/>
-                                                    <TextBox Width="150" Text="{Binding BusinessRelation}" />
+                                                    <TextBox Width="150" Text="{Binding BusinessRelation}" MaxLength="10" />
                                                 </StackPanel>
                                             </Grid>
                                             <Grid Grid.Row="4">

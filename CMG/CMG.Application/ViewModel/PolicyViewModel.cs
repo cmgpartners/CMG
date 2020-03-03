@@ -744,7 +744,7 @@ namespace CMG.Application.ViewModel
                     x.Frequency = string.IsNullOrEmpty(x.Frequency.Trim()) ? "" : FrequencyTypeCollection.Where(c => c.FieldCode == x.Frequency.Trim()).FirstOrDefault()?.Description;
                     x.Status = string.IsNullOrEmpty(x.Status.Trim()) ? "" : StatusTypeCollection.Where(c => c.FieldCode == x.Status.Trim()).FirstOrDefault()?.Description;
                     x.CompanyName = string.IsNullOrEmpty(x.CompanyName.Trim()) ? "" : CompanyCollection.Where(c => c.FieldCode == x.CompanyName.Trim()).FirstOrDefault()?.Description;
-                    x.PeoplePolicy = new ObservableCollection<ViewRelationshipDto>(x.PeoplePolicy.Select(
+                    x.Relationships = new ObservableCollection<ViewRelationshipDto>(x.Relationships.Select(
                         p =>
                         {
                             p.Category = string.IsNullOrEmpty(p.Category.Trim()) ? "" : CategoryCollection.Where(c => c.FieldCode == p.Category.Trim()).FirstOrDefault()?.Description;
@@ -1017,13 +1017,14 @@ namespace CMG.Application.ViewModel
             {
                 if (inputParameter != null)
                 {
-                    ViewRelationshipDto selectedRelationship = SelectedPolicy.PeoplePolicy.Where(x => x.RelationshipId == (int)inputParameter).FirstOrDefault();
+                    ViewRelationshipDto selectedRelationship = SelectedPolicy.Relationships.Where(x => x.RelationshipId == (int)inputParameter).FirstOrDefault();
                     if (selectedRelationship.IsBusiness)
                     {
                         var entity = _unitOfWork.BusinessPolicy.GetById(selectedRelationship.RelationshipId);
                         entity.Del = true;
                         _unitOfWork.BusinessPolicy.Save(entity);
                         _unitOfWork.Commit();
+                        GetPolicyCollection();
                     }
                     else
                     {
@@ -1145,9 +1146,10 @@ namespace CMG.Application.ViewModel
             var entity = _mapper.Map<BusinessPolicys>(SelectedBusinessRelation);
             entity.Islinked = IsBusinessLinked;
             entity.Hname = SelectedBusinessRelation.BusinessName;
-            entity.Catgry = SelectedBusinessCategory != null ? SelectedBusinessCategory.FieldCode.Trim() : SelectedBusinessCategory.Description.Substring(0, 1);
+            entity.Catgry = SelectedBusinessCategory != null ? SelectedBusinessCategory.FieldCode.Trim() : string.Empty;
             entity.Keynumo = SelectedPolicy.Id;
             entity.Keynum = _unitOfWork.BusinessPolicy.GetMaxKeynum() + 1;
+            entity.Relatn = BusinessRelation;
             entity.Bus = true;
 
             _unitOfWork.BusinessPolicy.Add(entity);
