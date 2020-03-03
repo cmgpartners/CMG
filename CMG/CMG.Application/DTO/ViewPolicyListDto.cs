@@ -34,6 +34,6 @@ namespace CMG.Application.DTO
         public string CreatedBy { get; set; }
         public ICollection<ViewPolicyAgentDto> PolicyAgent { get; set; } = new List<ViewPolicyAgentDto>();
         public ObservableCollection<ViewRelationshipDto> Relationships { get; set; } = new ObservableCollection<ViewRelationshipDto>();
-        public ICollection<ViewPeoplePolicyDto> PolicyAgents { get; set; } = new List<ViewPeoplePolicyDto>();
+        public ICollection<ViewRelationshipDto> PolicyAgents { get; set; } = new List<ViewRelationshipDto>();
     }
 }

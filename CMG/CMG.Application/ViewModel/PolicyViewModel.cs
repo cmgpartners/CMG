@@ -776,7 +776,7 @@ namespace CMG.Application.ViewModel
                     x.PolicyAgents = x.PolicyAgents.Select(
                          a =>
                          {
-                             var agent = AgentCollection.Where(agent => agent.Keynump == a.PeopleId).FirstOrDefault();
+                             var agent = AgentCollection.Where(agent => agent.Keynump == a.PeopleOrBusinessId).FirstOrDefault();
                              if(agent != null)
                              {
                                  a.Agent = agent;

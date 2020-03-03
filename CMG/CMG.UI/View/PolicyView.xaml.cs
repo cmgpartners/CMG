@@ -242,9 +242,18 @@ namespace CMG.UI.View
             if (policyViewModel != null
                 && !string.IsNullOrEmpty(policyViewModel.PolicyNumber))
             {
-                value = policyViewModel.PolicyNumber;
+
+                AutoCompleteBox autoCompleteBox = (AutoCompleteBox)sender;
+                if (autoCompleteBox != null)
+                {
+                    autoCompleteBox.autoTextBox.Text = policyViewModel.PolicyNumber;
+                }
+                var searchOption = (ViewSearchOptionsDto)autoCompleteBox.DataContext;
+                if (searchOption.ColumnOrder == 0)
+                {
+                    autoCompleteBox.autoTextBox.Focus();
+                }
             }
-            SetControlValues(sender, value);
         }
         private void Policies_AutoGenerateColumns(object sender, EventArgs e)
         {
@@ -809,19 +818,7 @@ namespace CMG.UI.View
             while (current != null);
             return null;
         }
-        private void SetControlValues(object sender, string value)
-        {
-            AutoCompleteBox autoCompleteBox = (AutoCompleteBox)sender;
-            if (autoCompleteBox != null)
-            {
-                autoCompleteBox.autoTextBox.Text = value;
-            }
-            var searchOption = (ViewSearchOptionsDto)autoCompleteBox.DataContext;
-            if (searchOption.ColumnOrder == 0)
-            {
-                autoCompleteBox.autoTextBox.Focus();
-            }
-        }
+       
         #endregion Methods
     }
 }

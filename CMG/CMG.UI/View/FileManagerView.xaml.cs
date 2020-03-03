@@ -68,13 +68,21 @@ namespace CMG.UI.View
         }
         private void UserControlPolicyNumber_Loaded(object sender, RoutedEventArgs e)
         {
-            string value = string.Empty;
             if (fileManagerViewModel != null
                 && !string.IsNullOrEmpty(fileManagerViewModel.PolicyNumber))
             {
-                value = fileManagerViewModel.PolicyNumber;
+
+                AutoCompleteBox autoCompleteBox = (AutoCompleteBox)sender;
+                if (autoCompleteBox != null)
+                {
+                    autoCompleteBox.autoTextBox.Text = fileManagerViewModel.PolicyNumber;
+                }
+                var searchOption = (ViewSearchOptionsDto)autoCompleteBox.DataContext;
+                if (searchOption.ColumnOrder == 0)
+                {
+                    autoCompleteBox.autoTextBox.Focus();
+                }
             }
-            SetControlValues(sender, value);
         }
         private void SearchOptionsList_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -413,19 +421,6 @@ namespace CMG.UI.View
                 subItem.Expanded += Item_Expanded;
                 item.Items.Add(subItem);
             });
-        }
-        private void SetControlValues(object sender, string value)
-        {
-            AutoCompleteBox autoCompleteBox = (AutoCompleteBox)sender;
-            if (autoCompleteBox != null)
-            {
-                autoCompleteBox.autoTextBox.Text = value;
-            }
-            var searchOption = (ViewSearchOptionsDto)autoCompleteBox.DataContext;
-            if (searchOption.ColumnOrder == 0)
-            {
-                autoCompleteBox.autoTextBox.Focus();
-            }
         }
         #endregion Methods
     }
