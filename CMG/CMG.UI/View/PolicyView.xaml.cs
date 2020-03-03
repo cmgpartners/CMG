@@ -161,6 +161,23 @@ namespace CMG.UI.View
                 PolicyMainView.Opacity = 1;
             };
         }
+        private void ButtonAddRelationship_Click(object sender, RoutedEventArgs e)
+        {
+            AddRelationship.Visibility = Visibility.Visible;
+            AddRelationship.Width = 1000;
+            PolicyMainView.Opacity = 0.05;
+        }
+        private void ButtonAddRelationshipClose_Click(object sender, RoutedEventArgs e)
+        {
+            var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(600) };
+            timer.Start();
+            timer.Tick += (sender, args) =>
+            {
+                timer.Stop();
+                AddRelationship.Visibility = Visibility.Collapsed;
+                PolicyMainView.Opacity = 1;
+            };
+        }
         private void SearchOptionsList_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             startPoint = e.GetPosition(null);
@@ -805,6 +822,6 @@ namespace CMG.UI.View
                 autoCompleteBox.autoTextBox.Focus();
             }
         }
-        #endregion Methods 
+        #endregion Methods
     }
 }

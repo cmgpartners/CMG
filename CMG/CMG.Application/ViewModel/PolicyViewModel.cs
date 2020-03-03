@@ -13,6 +13,8 @@ using ToastNotifications;
 using ToastNotifications.Messages;
 using Microsoft.Extensions.Caching.Memory;
 using System.Data;
+using CMG.Service;
+using static CMG.Common.Enums;
 
 namespace CMG.Application.ViewModel
 {
@@ -29,6 +31,8 @@ namespace CMG.Application.ViewModel
         private const string comboFieldNameStatus = "STATUS";
         private const string comboFieldNameCategory = "CATGRY";
         private const string comboFieldNameCurrency = "CURRENCY";
+        List<string> agentCategories = AgentCategories.Split(',').Select(x => x.Trim()).ToList();
+
         #endregion
 
         #region Constructor
@@ -55,13 +59,45 @@ namespace CMG.Application.ViewModel
             
             if (selectedClientInput != null)
             {
-                PolicySelectedClient = selectedClientInput;
+                SelectedClient = selectedClientInput;
                 GetPolicyCollection();
             }
         }
         #endregion Constructor
 
         #region Properties
+        private ObservableCollection<ViewPolicyListDto> _policyCollection;
+        public ObservableCollection<ViewPolicyListDto> PolicyCollection
+        {
+            get { return _policyCollection; }
+            set
+            {
+                _policyCollection = value;
+                OnPropertyChanged("PolicyCollection");
+                OnPropertyChanged("IsNoRecordFound");
+            }
+        }
+        public bool IsNoRecordFound
+        {
+            get
+            {
+                return PolicyCollection != null && PolicyCollection.Count == 0;
+            }
+        }
+        public bool IsBusinessRecordFound
+        {
+            get
+            {
+                return BusinessRelationshipCollection != null && BusinessRelationshipCollection.Count == 0;
+            }
+        }
+        public bool IsPersonRecordFound
+        {
+            get
+            {
+                return PersonRelationshipCollection != null && PersonRelationshipCollection.Count == 0;
+            }
+        }
         private ObservableCollection<ViewPolicyIllustrationDto> _policyIllustrationCollection;
         public ObservableCollection<ViewPolicyIllustrationDto> PolicyIllustrationCollection
         {
@@ -93,7 +129,213 @@ namespace CMG.Application.ViewModel
             get { return _currencyCollection; }
             set { _currencyCollection = value; }
         }
+        private string _relationCommonName;
+        public string RelationCommonName 
+        {
+            get { return _relationCommonName; } 
+            set
+            {
+                _relationCommonName = value;
+                OnPropertyChanged("RelationCommonName");
+            }
+        }
+        private string _relationLastName;
+        public string RelationLastName
+        {
+            get { return _relationLastName; }
+            set
+            {
+                _relationLastName = value;
+                OnPropertyChanged("RelationLastName");
+            }
+        }
+        private string _relationFirstName;
+        public string RelationFirstName
+        {
+            get { return _relationFirstName; }
+            set
+            {
+                _relationFirstName = value;
+                OnPropertyChanged("RelationFirstName");
+            }
+        }
+        private string _relationEntityType;
+        public string RelationEntityType
+        {
+            get { return _relationEntityType; }
+            set
+            {
+                _relationEntityType = value;
+                OnPropertyChanged("RelationEntityType");
+            }
+        }
+        private DateTime? _relationBirthDate;
+        public DateTime? RelationBirthDate
+        {
+            get { return _relationBirthDate; }
+            set
+            {
+                _relationBirthDate = value;
+                OnPropertyChanged("RelationBirthDate");
+            }
+        }
+        private string _relationBusinessName;
+        public string RelationBusinessName
+        {
+            get { return _relationBusinessName; }
+            set
+            {
+                _relationBusinessName = value;
+                OnPropertyChanged("RelationBusinessName");
+            }
+        }
+        private string _relationBusinessStreet;
+        public string RelationBusinessStreet
+        {
+            get { return _relationBusinessStreet; }
+            set
+            {
+                _relationBusinessStreet = value;
+                OnPropertyChanged("RelationBusinessStreet");
+            }
+        }
+        private ObservableCollection<ViewBusinessRelationDto> _businessRelationshipCollection;
+        public ObservableCollection<ViewBusinessRelationDto> BusinessRelationshipCollection
+        {
+            get { return _businessRelationshipCollection; }
+            set
+            {
+                _businessRelationshipCollection = value;
+                OnPropertyChanged("BusinessRelationshipCollection");
+                OnPropertyChanged("IsBusinessRecordFound");
+            }
+        }
+        private ViewBusinessRelationDto _selectedBusinessRelation;
+        public ViewBusinessRelationDto SelectedBusinessRelation
+        {
+            get { return _selectedBusinessRelation; }
+            set
+            {
+                _selectedBusinessRelation = value;
+                OnPropertyChanged("SelectedBusinessRelation");
+                IsBusinessLinked = true;
+                BusinessRelation = string.Empty;
+                SelectedBusinessCategory = null;
+            }
+        }
+        private ObservableCollection<ViewClientSearchDto> _personRelationshipCollection;
+        public ObservableCollection<ViewClientSearchDto> PersonRelationshipCollection
+        {
+            get { return _personRelationshipCollection; }
+            set 
+            { 
+                _personRelationshipCollection = value;
+                OnPropertyChanged("PersonRelationshipCollection");
+                OnPropertyChanged("IsPersonRecordFound");
+            }
+        }
+        private ViewClientSearchDto _selectedPersonRelation;
+        public ViewClientSearchDto SelectedPersonRelation
+        {
+            get { return _selectedPersonRelation; }
+            set
+            {
+                _selectedPersonRelation = value;
+                OnPropertyChanged("SelectedPersonRelation");
+                IsPersonLinked = true;
+                if (SelectedPersonRelation != null)
+                {
+                    SelectedPersonName = SelectedPersonRelation.CommonName + ", " + SelectedPersonRelation.LastName;
+                }
+                PersonRelation = string.Empty;
+                SelectedPersonCategory = null;
+            }
+        }
+        private string _personRelation;
+        public string PersonRelation
+        {
+            get
+            {
+                return _personRelation;
+            }
+            set
+            {
+                _personRelation = value;
+                OnPropertyChanged("PersonRelation");
+            }
+        }
+        private string _businessRelation;
+        public string BusinessRelation
+        {
+            get
+            {
+                return _businessRelation;
+            }
+            set
+            {
+                _businessRelation = value;
+                OnPropertyChanged("BusinessRelation");
+            }
+        }
 
+        private ViewComboDto _selectedPersonCategory;
+        public ViewComboDto SelectedPersonCategory
+        {
+            get { return _selectedPersonCategory; }
+            set
+            {
+                _selectedPersonCategory = value;
+                OnPropertyChanged("SelectedPersonCategory");
+            }
+        }
+
+        private ViewComboDto _selectedBusinessCategory;
+        public ViewComboDto SelectedBusinessCategory
+        {
+            get { return _selectedBusinessCategory; }
+            set
+            {
+                _selectedBusinessCategory = value;
+                OnPropertyChanged("SelectedBusinessCategory");
+            }
+        }
+        private bool _isPersonLinked;
+        public bool IsPersonLinked
+        {
+            get
+            {
+                return _isPersonLinked;
+            }
+            set
+            {
+                _isPersonLinked = value;
+                OnPropertyChanged("IsPersonLinked");
+            }
+        }
+        private string _selectedPersopnName;
+        public string SelectedPersonName 
+        {
+            get { return _selectedPersopnName; }
+            set
+            {
+                _selectedPersopnName = value;
+                OnPropertyChanged("SelectedPersonName");
+            }
+        }
+
+        private bool _isBusinessLinked;
+        public bool IsBusinessLinked
+        {
+            get
+            {
+                return _isBusinessLinked;
+            }
+            set
+            {
+                _isBusinessLinked = value;
+                OnPropertyChanged("IsBusinessLinked");
+            }
+        }
         private List<ViewComboDto> _statusTypeCollection;
         public List<ViewComboDto> StatusTypeCollection
         {
@@ -133,11 +375,36 @@ namespace CMG.Application.ViewModel
             set
             {
                 _selectedPolicy = value;
+                OnPropertyChanged("IsAddRelationshipVisible");
                 OnPropertyChanged("SelectedPolicy");
                 GetSelectedPolicyDropdownData();
                 CancelPolicyNotes();
                 CancelGeneralNotes();
             }
+        }
+        private ViewClientSearchDto _selectedClient;
+        public ViewClientSearchDto SelectedClient
+        {
+            get { return _selectedClient; }
+            set
+            {
+                _selectedClient = value;
+                OnPropertyChanged("SelectedClient");
+                OnPropertyChanged("IsClientSelected");
+                OnPropertyChanged("IsPolicyDetailVisible");
+                if (SelectedClient != null)
+                {
+                    GetPolicyCollection();
+                }
+            }
+        }
+        public bool IsPolicyDetailVisible
+        {
+            get { return SelectedClient == null ? true : false; }
+        }
+        public bool IsClientSelected
+        {
+            get { return SelectedClient != null ? true : false; }
         }
         private ViewPolicyListDto _savedPolicyDetail;
         public ViewPolicyListDto SavedPolicyDetail
@@ -267,6 +534,14 @@ namespace CMG.Application.ViewModel
             get { return _isInternalNotesSaveVisible; }
             set { _isInternalNotesSaveVisible = value; OnPropertyChanged("IsInternalNotesSaveVisible"); }
         }
+
+        public bool IsAddRelationshipVisible
+        {
+            get
+            {
+                return SelectedPolicy != null;
+            }
+        }
         private DataTable policyTable;
         public DataTable PolicyTable
         {
@@ -277,6 +552,53 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("PolicyTable");
             }
         }
+
+        private string _personCommonName;
+        public string PersonCommonName
+        {
+            get { return _personCommonName; }
+            set
+            {
+                _personCommonName = value;
+                OnPropertyChanged("PersonCommonName");
+            }
+        }
+
+        private string _personLastName;
+        public string PersonLastName
+        {
+            get { return _personLastName; }
+            set
+            {
+                _personLastName = value;
+                OnPropertyChanged("PersonLastName");
+            }
+        }
+        private string _personFirstName;
+        public string PersonFirstName
+        {
+            get { return _personFirstName; }
+            set 
+            { 
+                _personFirstName = value;
+                OnPropertyChanged("PersonFirstName");
+            }
+        }
+
+
+        private ObservableCollection<ViewClientSearchDto> _clientCollection;
+        public ObservableCollection<ViewClientSearchDto> ClientCollection
+        {
+            get { return _clientCollection; }
+            set
+            {
+                _clientCollection = value;
+                OnPropertyChanged("ClientCollection");
+                OnPropertyChanged("IsPaginationVisible");
+                OnPropertyChanged("IsNoClientRecord");
+            }
+        }
+
         #region command properties
         public ICommand ViewIllustrationCommand
         {
@@ -301,6 +623,31 @@ namespace CMG.Application.ViewModel
         public ICommand SaveGeneralNotesCommand
         {
             get { return CreateCommand(SaveGeneralNotes); }
+        }
+        public ICommand SearchPeopleRelationshipCommand
+        {
+            get { return CreateCommand(SearchPeopleRelationship); }
+        }
+        public ICommand SearchBusinessRelationshipCommand
+        {
+            get { return CreateCommand(SearchBusinessRelationship); }
+        }
+        public ICommand AddRelationshipCommand
+        {
+            get { return CreateCommand(AddRelationship); }
+        }
+        public ICommand SavePeopleRelationshipCommand
+        {
+            get { return CreateCommand(SavePeopleRelationship); }
+        }
+        public ICommand SaveBusinessCommand
+        {
+            get { return CreateCommand(SaveBusiness); }
+        }
+        
+        public ICommand DeleteRelationshipCommand
+        {
+            get { return CreateCommand(DeleteRelationship); }
         }
         public ICommand CancelGeneralNotesCommand
         {
@@ -345,11 +692,11 @@ namespace CMG.Application.ViewModel
         public ICommand DividentScaleFilterCommand
         {
             get { return CreateCommand(DividentScaleFilter); }
-        }
+        }        
         #endregion command properties
         #endregion Properties
 
-        #region Methods        
+        #region Methods
         private void GetSelectedPolicyDropdownData()
         {
             if (SelectedPolicy != null)
@@ -366,7 +713,8 @@ namespace CMG.Application.ViewModel
             PolicyTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNamePolicyType).ToList();
             FrequencyTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameFrequency).ToList();
             StatusTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameStatus).ToList();
-            CategoryCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameCategory).ToList();
+            CategoryCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameCategory
+                                            && !agentCategories.Contains(x.FieldCode)).ToList();
             CurrencyCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameCurrency).ToList();
         }
         private void GetAgents()
@@ -403,11 +751,9 @@ namespace CMG.Application.ViewModel
         }
         private void GetPolicyCollection()
         {
-            if (PolicySelectedClient != null)
-            {
                 SearchQuery searchQuery = new SearchQuery();
                 List<FilterBy> searchBy = new List<FilterBy>();
-                BuildFilterByEquals("keynump", PolicySelectedClient.Keynump.ToString(), searchBy);
+                BuildFilterByEquals("keynump", SelectedClient.Keynump.ToString(), searchBy);
                 searchQuery.FilterBy = searchBy;
 
                 var dataSearchBy = _unitOfWork.Policies.Find(searchQuery);
@@ -420,13 +766,13 @@ namespace CMG.Application.ViewModel
                     x.Frequency = string.IsNullOrEmpty(x.Frequency.Trim()) ? "" : FrequencyTypeCollection.Where(c => c.FieldCode == x.Frequency.Trim()).FirstOrDefault()?.Description;
                     x.Status = string.IsNullOrEmpty(x.Status.Trim()) ? "" : StatusTypeCollection.Where(c => c.FieldCode == x.Status.Trim()).FirstOrDefault()?.Description;
                     x.CompanyName = string.IsNullOrEmpty(x.CompanyName.Trim()) ? "" : CompanyCollection.Where(c => c.FieldCode == x.CompanyName.Trim()).FirstOrDefault()?.Description;
-                    x.PeoplePolicy = x.PeoplePolicy.Select(
+                    x.Relationships = new ObservableCollection<ViewRelationshipDto>(x.Relationships.Select(
                         p =>
                         {
                             p.Category = string.IsNullOrEmpty(p.Category.Trim()) ? "" : CategoryCollection.Where(c => c.FieldCode == p.Category.Trim()).FirstOrDefault()?.Description;
                             return p;
                         }
-                    ).ToList();
+                    ).ToList());
                     x.PolicyAgents = x.PolicyAgents.Select(
                          a =>
                          {
@@ -455,7 +801,6 @@ namespace CMG.Application.ViewModel
                         SelectedPolicy = PolicyCollection.Where(x => x.Id == SavedPolicyDetail.Id).FirstOrDefault();
                     }
                 }
-            }
         }
         private void ViewIllustration(object dividentScale)
         {
@@ -511,6 +856,7 @@ namespace CMG.Application.ViewModel
                 entity.PolicyAgent = null;
                 entity.PolicyAgents = null;
                 entity.PeoplePolicys = null;
+                entity.BusinessPolicys = null;
                 entity.Status = SelectedPolicyStatus != null ? SelectedPolicyStatus.FieldCode.Trim() : string.Empty;
                 entity.Frequency = SelectedPolicyFrequencyType != null ? SelectedPolicyFrequencyType.FieldCode.Trim() : string.Empty;
                 entity.Type = SelectedPolicyType != null ? SelectedPolicyType.FieldCode.Trim() : string.Empty;
@@ -700,7 +1046,155 @@ namespace CMG.Application.ViewModel
             {
                 _notifier.ShowError("Error occured while updating general notes");
             }
+        }
+        private void DeleteRelationship(object inputParameter)
+        {
+            SavedPolicyDetail = SelectedPolicy;
+            var result = _dialogService.ShowMessageBox("Are you sure you want to delete the record?");
+            if (result == DialogServiceLibrary.MessageBoxResult.Yes)
+            {
+                if (inputParameter != null)
+                {
+                    ViewRelationshipDto selectedRelationship = SelectedPolicy.Relationships.Where(x => x.RelationshipId == (int)inputParameter).FirstOrDefault();
+                    if (selectedRelationship.IsBusiness)
+                    {
+                        var entity = _unitOfWork.BusinessPolicy.GetById(selectedRelationship.RelationshipId);
+                        entity.Del = true;
+                        _unitOfWork.BusinessPolicy.Save(entity);
+                        _unitOfWork.Commit();
+                        GetPolicyCollection();
+                    }
+                    else
+                    {
+                        var entity = _unitOfWork.PeoplePolicy.GetById(selectedRelationship.RelationshipId);
+                        entity.Del = true;
+                        _unitOfWork.PeoplePolicy.Save(entity);
+                        _unitOfWork.Commit();
+                        var deletedPerson = ClientCollection.Where(x => x.Keynump == selectedRelationship.PeopleOrBusinessId).FirstOrDefault();
+                        ClientCollection.Remove(deletedPerson);
+                        if (SelectedClient == null)
+                        {
+                            SelectedClient = ClientCollection[0];
+                        }
+                    }
+                }
+            }
+        }
+        private void SearchPeopleRelationship()
+        {
+            SearchQuery searchQuery = BuildSearchQuery();
+            if((searchQuery.FilterBy?.Count ?? 0) > 0)
+            {
+                var people = _unitOfWork.People.Find(searchQuery);
+                var dataCollection = new ObservableCollection<ViewClientSearchDto>(people.Result.Select(r => _mapper.Map<ViewClientSearchDto>(r)).ToList());
+                PersonRelationshipCollection = new ObservableCollection<ViewClientSearchDto>(dataCollection.Select(x =>
+                {
+                    x.ClientType = string.IsNullOrEmpty(x.ClientType.Trim()) ? "" : ClientTypeCollection.Where(c => c.FieldCode == x.ClientType.Trim()).FirstOrDefault()?.Description;
+                    return x;
+                }));
+            }
+        }
+        private void SearchBusinessRelationship()
+        {
+            SearchQuery searchQuery = BuildSearchQuery();
+            if ((searchQuery.FilterBy?.Count ?? 0) > 0)
+            {
+                var business = _unitOfWork.Business.Find(searchQuery);
+                var dataCollection = new ObservableCollection<ViewBusinessRelationDto>(business.Result.Select(r => _mapper.Map<ViewBusinessRelationDto>(r)).ToList());
+                BusinessRelationshipCollection = new ObservableCollection<ViewBusinessRelationDto>(dataCollection.Select(r => _mapper.Map<ViewBusinessRelationDto>(r)).ToList());
+            }
+        }
+        private SearchQuery BuildSearchQuery()
+        {
+            SearchQuery searchQuery = new SearchQuery();
+            List<FilterBy> searchBy = new List<FilterBy>();
+            if (!string.IsNullOrEmpty(RelationCommonName))
+            {
+                BuildFilterByContains("CommonName", RelationCommonName, searchBy);
+            }
+            if (!string.IsNullOrEmpty(RelationLastName))
+            {
+                BuildFilterByContains("LastName", RelationLastName, searchBy);
+            }
+            if (!string.IsNullOrEmpty(RelationFirstName))
+            {
+                BuildFilterByContains("FirstName", RelationFirstName, searchBy);
+            }
+            if (!string.IsNullOrEmpty(RelationEntityType))
+            {
+                var entityTypeCode = ClientTypeCollection.Where(c => c.Description.ToLower() == RelationEntityType.Trim().ToLower()).FirstOrDefault()?.FieldCode;
+                if (!string.IsNullOrEmpty(entityTypeCode))
+                {
+                    BuildFilterByEquals("EntityType", entityTypeCode.Trim(), searchBy);
+                }
+            }
+            if (RelationBirthDate != null && RelationBirthDate != new DateTime())
+            {
+                BuildFilterByRange("PolicyDate", FromPolicyDate.Value.ToShortDateString(), ToPolicyDate.Value.ToShortDateString(), searchBy);
+            }
+            if (!string.IsNullOrEmpty(RelationBusinessName))
+            {
+                BuildFilterByContains("BusinessName", RelationBusinessName, searchBy);
+            }
+            if (!string.IsNullOrEmpty(RelationBusinessStreet))
+            {
+                BuildFilterByContains("BusinessAddress", RelationBusinessStreet, searchBy);
+            }
+            searchQuery.FilterBy = searchBy;
+            return searchQuery;
+        }
+        private void AddRelationship()
+        {
+            var peopleCollection = _unitOfWork.PeopleRelation.GetById(SelectedClient.Keynump);
+            var dataCollection = new ObservableCollection<ViewClientSearchDto>(peopleCollection.Select(r => _mapper.Map<ViewClientSearchDto>(r)).ToList());
+            
+            PersonRelationshipCollection = new ObservableCollection<ViewClientSearchDto>(dataCollection.Select(x => 
+            { 
+                x.ClientType = string.IsNullOrEmpty(x.ClientType.Trim()) ? "" : ClientTypeCollection.Where(c => c.FieldCode == x.ClientType.Trim()).FirstOrDefault()?.Description;
+                return x;
+            }));
 
+            var businessCollection = _unitOfWork.BusinessRelation.GetById(SelectedClient.Keynump);
+            BusinessRelationshipCollection = new ObservableCollection<ViewBusinessRelationDto>(businessCollection.Select(r => _mapper.Map<ViewBusinessRelationDto>(r)).ToList());
+        }
+        private void SavePeopleRelationship()
+        {
+            var entity = _mapper.Map<PeoplePolicys>(SelectedPersonRelation);
+            entity.Islinked = IsPersonLinked;
+            entity.Hname = SelectedPersonName;
+            entity.Catgry = SelectedPersonCategory != null ? SelectedPersonCategory.FieldCode.Trim() : string.Empty;
+            entity.Keynumo = SelectedPolicy.Id;
+            entity.Keynuml = _unitOfWork.PeoplePolicy.GetMaxKeynuml() + 1;
+            entity.Relatn = PersonRelation;
+            entity.Bus = false;
+
+            _unitOfWork.PeoplePolicy.Add(entity);
+            _unitOfWork.Commit();
+            _notifier.ShowSuccess("Added successfully");
+            PolicySelectedClient = SelectedClient;
+            
+            SavedPolicyDetail = SelectedPolicy;
+            GetPolicyCollection();
+            var personAdded = _unitOfWork.People.GetById(SelectedPersonRelation.Keynump);
+            ClientCollection.Add(_mapper.Map<ViewClientSearchDto>(personAdded));
+            ClientCollection = new ObservableCollection<ViewClientSearchDto>(ClientCollection.OrderBy(x => x.CommonName).OrderBy(x => x.LastName).OrderBy(x => x.FirstName));
+        }
+        private void SaveBusiness()
+        {
+            var entity = _mapper.Map<BusinessPolicys>(SelectedBusinessRelation);
+            entity.Islinked = IsBusinessLinked;
+            entity.Hname = SelectedBusinessRelation.BusinessName;
+            entity.Catgry = SelectedBusinessCategory != null ? SelectedBusinessCategory.FieldCode.Trim() : string.Empty;
+            entity.Keynumo = SelectedPolicy.Id;
+            entity.Keynum = _unitOfWork.BusinessPolicy.GetMaxKeynum() + 1;
+            entity.Relatn = BusinessRelation;
+            entity.Bus = true;
+
+            _unitOfWork.BusinessPolicy.Add(entity);
+            _unitOfWork.Commit();
+            _notifier.ShowSuccess("Added successfully");
+            SavedPolicyDetail = SelectedPolicy;
+            GetPolicyCollection();
         }
         private void CancelGeneralNotes()
         {
@@ -795,7 +1289,6 @@ namespace CMG.Application.ViewModel
                 SelectedPolicy.InternalNotes = originalPolicy.NoteInt;
             OnPropertyChanged("SelectedPolicy");
         }
-
         private void SaveNotes(string noteType)
         {
             try

@@ -47,17 +47,7 @@ namespace CMG.UI
         private void LstNavItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ListView lstNavigation = (ListView)sender;
-
-            if (_mainViewModel.SelectedViewModel != null
-                && _mainViewModel.SelectedViewModel is PolicyViewModel)
-            {
-                
-                var policyViewModel = (PolicyViewModel)_mainViewModel.SelectedViewModel;
-                if(_mainViewModel.SelectedClient == null
-                    ||(_mainViewModel.SelectedClient != null && policyViewModel.SelectedClient != null
-                       && _mainViewModel.SelectedClient.Keynump != policyViewModel.SelectedClient.Keynump))
-                _mainViewModel.SelectedClient = policyViewModel.SelectedClient;
-            }
+            GetSelectedClient();
             if (lstNavigation.SelectedIndex == 0)
             {
                 _mainViewModel.SelectedIndexLeftNavigation = (int)LeftNavigation.Renewals;
@@ -103,55 +93,32 @@ namespace CMG.UI
             if(lstNavigation.SelectedIndex >= 0)
             {
                 ResetMenuSelection(true);
-            }
+            }           
         }
         private void PolicyMenu_Click(object sender, RoutedEventArgs e)
         {
+            GetSelectedClient();
             ResetMenuSelection(false);
             PolicyMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
-            PolicyViewModel policyViewModel;
-            if (_mainViewModel.SelectedViewModel != null
-                && _mainViewModel.SelectedViewModel is FileManagerViewModel
-                && ((FileManagerViewModel)_mainViewModel.SelectedViewModel).SelectedClient != null)
+            PolicyViewModel policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
+            if (_mainViewModel.MainSelectedClient != null)
             {
-                policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, ((FileManagerViewModel)_mainViewModel.SelectedViewModel).SelectedClient, _memoryCache, _dialogService, _notifier);
-                policyViewModel.SelectedClient = ((FileManagerViewModel)_mainViewModel.SelectedViewModel).SelectedClient;
-                _mainViewModel.SelectedClient = policyViewModel.SelectedClient;
+                policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, _mainViewModel.MainSelectedClient, _memoryCache, _dialogService, _notifier);
             }
-            else if (_mainViewModel.SelectedClient != null)
-            {
-                policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, _mainViewModel.SelectedClient, _memoryCache, _dialogService, _notifier);
-                policyViewModel.SelectedClient = _mainViewModel.SelectedClient;
-            }
-            else
-            {
-                policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
-            }
+            policyViewModel.ClientCollection = _mainViewModel.ClientCollection;
             _mainViewModel.SelectedViewModel = policyViewModel;
             policyViewModel.PolicyNumber = _mainViewModel.PolicyNumber;
             DataContext = _mainViewModel;
         }
         private void FileManagerMenu_Click(object sender, RoutedEventArgs e)
         {
+            GetSelectedClient();
             ResetMenuSelection(false);
-            FileManagerMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
-            FileManagerViewModel fileManagerViewModel;
-            if (_mainViewModel.SelectedViewModel != null
-                && _mainViewModel.SelectedViewModel is PolicyViewModel
-                && ((PolicyViewModel)_mainViewModel.SelectedViewModel).SelectedClient != null)
+            FileManagerMenu.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A3FF");
+            FileManagerViewModel fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
+            if (_mainViewModel.MainSelectedClient != null)
             {
-                fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, ((PolicyViewModel)_mainViewModel.SelectedViewModel).SelectedClient, _memoryCache, _dialogService, _notifier);
-                fileManagerViewModel.SelectedClient = ((PolicyViewModel)_mainViewModel.SelectedViewModel).SelectedClient;
-                _mainViewModel.SelectedClient = fileManagerViewModel.SelectedClient;
-            }
-            else if (_mainViewModel.SelectedClient != null)
-            {
-                fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _mainViewModel.SelectedClient, _memoryCache, _dialogService, _notifier);
-                fileManagerViewModel.SelectedClient = _mainViewModel.SelectedClient;
-            }
-            else
-            {
-                fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
+                fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _mainViewModel.MainSelectedClient, _memoryCache, _dialogService, _notifier);
             }
             _mainViewModel.SelectedViewModel = fileManagerViewModel;
             fileManagerViewModel.PolicyNumber = _mainViewModel.PolicyNumber;
@@ -159,11 +126,26 @@ namespace CMG.UI
         }
         private void ConfigurationMenu_Click(object sender, RoutedEventArgs e)
         {
+            GetSelectedClient();
             ResetMenuSelection(false);
-            ConfigurationMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
+            ConfigurationMenu.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A3FF");
             ConfigurationViewModel configurationViewModel = new ConfigurationViewModel(_unitOfWork, _mapper, _dialogService, _notifier);
             _mainViewModel.SelectedViewModel = configurationViewModel;
-            DataContext = _mainViewModel;
+            DataContext = _mainViewModel;            
+        }
+        private void GetSelectedClient()
+        {
+            if(_mainViewModel.SelectedViewModel != null
+                && _mainViewModel.SelectedViewModel is PolicyViewModel)
+            {
+                _mainViewModel.ClientCollection = ((PolicyViewModel)_mainViewModel.SelectedViewModel).ClientCollection;
+                _mainViewModel.MainSelectedClient = ((PolicyViewModel)_mainViewModel.SelectedViewModel).SelectedClient;
+            }
+            else if(_mainViewModel.SelectedViewModel != null
+                && _mainViewModel.SelectedViewModel is FileManagerViewModel)
+            {
+                _mainViewModel.MainSelectedClient = ((FileManagerViewModel)_mainViewModel.SelectedViewModel).SelectedClient;
+            }
         }
         private void Salesforce_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
@@ -232,10 +214,5 @@ namespace CMG.UI
             }
         }
         #endregion
-
-
-
-
-
     }
 }

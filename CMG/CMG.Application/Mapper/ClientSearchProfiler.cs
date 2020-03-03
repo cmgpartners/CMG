@@ -18,6 +18,8 @@ namespace CMG.Application.Mapper
                 .ForMember(des => des.Smoker, src => src.MapFrom(src => src.Smoker.ToString().Trim() == "Y" ? "Yes" : "No"))
                 .ForMember(des => des.Status, src => src.MapFrom(src => src.Pstatus.Trim()))
                 .ForMember(des => des.GeneralNotes, src => src.MapFrom(src => src.Pnotes.Trim()));
+
+            CreateMap<ViewClientSearchDto, PeoplePolicys>();
         }
     }
 }

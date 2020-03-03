@@ -26,15 +26,9 @@ namespace CMG.UI
         protected void OnStartUp(object sernder, StartupEventArgs e)
         {
             Mutex myMutex;
-            //Process proc = Process.GetCurrentProcess();
-            //int count = Process.GetProcesses().Where(p=> 
-            //    p.ProcessName == proc.ProcessName).Count();
-
-            //if (count <= 1)
-            //{
-            bool aIsNewInstance;
-            myMutex = new Mutex(true, "CMG.UI", out aIsNewInstance);
-            if (!aIsNewInstance)
+            bool isNewInstance;
+            myMutex = new Mutex(false, "CMG.UI", out isNewInstance);
+            if (!isNewInstance)
             {
                 App.Current.Shutdown();
             }
@@ -73,7 +67,6 @@ namespace CMG.UI
 
                 var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
                 mainWindow.Show();
-                //  }
             }
             catch (Exception ex)
             {
@@ -100,6 +93,7 @@ namespace CMG.UI
                 mc.AddProfile(new WithdrawalMapperProfile());
                 mc.AddProfile(new ComboMapperProfile());
                 mc.AddProfile(new ClientSearchProfiler());
+                mc.AddProfile(new BusinessRelationMapperProfile());
                 mc.AddProfile(new PolicyIllustrationMapperProfile());
             });
             IMapper mapper = mappingConfig.CreateMapper();

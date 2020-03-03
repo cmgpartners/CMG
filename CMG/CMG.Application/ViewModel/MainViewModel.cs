@@ -66,10 +66,16 @@ namespace CMG.Application.ViewModel
             GetUserOptions();
             LoadData();
         }
-     
+
         #endregion Constructor
 
         #region Properties
+        private ViewClientSearchDto _mainSelectedClient;
+        public ViewClientSearchDto MainSelectedClient
+        {
+            get { return _mainSelectedClient; }
+            set { _mainSelectedClient = value; }
+        }
         private object selectedViewModel;
         public object SelectedViewModel
         {
@@ -206,15 +212,6 @@ namespace CMG.Application.ViewModel
                 _policyColumns = value;
                 OnPropertyChanged("PolicyColumns");
             }
-        }
-
-        public bool IsClientSelected
-        {
-            get { return SelectedClient != null ? true : false; }
-        }
-        public bool IsPolicyDetailVisible
-        {
-            get { return SelectedClient == null ? true : false; }
         }        
         private ObservableCollection<ViewClientSearchDto> _clientCollection;
         public ObservableCollection<ViewClientSearchDto> ClientCollection
@@ -233,42 +230,6 @@ namespace CMG.Application.ViewModel
             get
             {
                 return ClientCollection != null && ClientCollection.Count == 0;
-            }
-        }
-        private ObservableCollection<ViewPolicyListDto> _policyCollection;
-        public ObservableCollection<ViewPolicyListDto> PolicyCollection
-        {
-            get { return _policyCollection; }
-            set
-            {
-                _policyCollection = value;
-                OnPropertyChanged("PolicyCollection");
-                OnPropertyChanged("IsNoRecordFound");
-            }
-        }
-        public bool IsNoRecordFound
-        {
-            get
-            {
-                return PolicyCollection != null && PolicyCollection.Count == 0;
-            }            
-        }
-        private ViewClientSearchDto _selectedClient;
-        public ViewClientSearchDto SelectedClient
-        {
-            get { return _selectedClient; }
-            set
-            {
-                _selectedClient = value;
-                OnPropertyChanged("SelectedClient");
-                OnPropertyChanged("IsClientSelected");
-                OnPropertyChanged("IsPolicyDetailVisible");
-                if (SelectedViewModel != null
-                    && SelectedViewModel is PolicyViewModel)
-                {
-                    PolicyViewModel pv = new PolicyViewModel(_unitOfWork, _mapper, SelectedClient);
-                    PolicyCollection = pv.PolicyCollection;
-                }
             }
         }
         private List<string> columnNames;
@@ -349,7 +310,7 @@ namespace CMG.Application.ViewModel
         }
         public ICommand SearchClientCommand
         {
-            get { return CreateCommand(Search); }
+            get { return CreateCommand(SearchClient); }
         }        
         public void SearchPolicy(object parameter)
         {
@@ -450,7 +411,7 @@ namespace CMG.Application.ViewModel
             var temppolicies = policies.Select(r => _mapper.Map<ViewPolicyListDto>(r)).ToList();
             Policies = temppolicies.Select(r => r.PolicyNumber).ToList();
         }
-        private void Search()
+        private void SearchClient()
         {           
             if (IsValidSearchCriteria())
             {
@@ -465,6 +426,12 @@ namespace CMG.Application.ViewModel
                     x.SVCType = string.IsNullOrEmpty(x.SVCType.Trim()) ? "" : SVCTypeCollection.Where(c => c.FieldCode == x.SVCType.Trim()).FirstOrDefault()?.Description;
                     return x;
                 }));
+                if(SelectedViewModel is PolicyViewModel)
+                {
+                    var policyViewModel = (PolicyViewModel)SelectedViewModel;
+                    policyViewModel.ClientCollection = ClientCollection;
+                    policyViewModel.SelectedClient = ClientCollection[0];
+                }
             }
         }
         private bool IsValidSearchCriteria()
