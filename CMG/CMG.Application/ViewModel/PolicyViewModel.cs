@@ -1011,6 +1011,7 @@ namespace CMG.Application.ViewModel
         }
         private void DeleteRelationship(object inputParameter)
         {
+            SavedPolicyDetail = SelectedPolicy;
             var result = _dialogService.ShowMessageBox("Are you sure you want to delete the record?");
             if (result == DialogServiceLibrary.MessageBoxResult.Yes)
             {
@@ -1037,7 +1038,6 @@ namespace CMG.Application.ViewModel
                             SelectedClient = ClientCollection[0];
                         }
                     }
-                    SelectedPolicy.PeoplePolicy.Remove(selectedRelationship);
                 }
             }
         }
