@@ -1277,9 +1277,15 @@
                                                 </DataGridTemplateColumn>
                                             </DataGrid.Columns>
                                         </DataGrid>
+                                        <TextBlock Text="No records found" 
+                                                    HorizontalAlignment="Center" 
+                                                    VerticalAlignment="Center" 
+                                                    Style="{StaticResource NoRecordsTextBlock}" 
+                                                    Visibility="{Binding IsPersonRecordFound, Converter={StaticResource VisibilityConverter}, 
+                                                                         UpdateSourceTrigger=PropertyChanged}"/>
                                     </Grid>
                                     <Grid Grid.Column="1" Grid.Row="0">
-                                        <Grid>
+                                        <Grid Margin="20 0 0 0">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="60"/>
                                                 <RowDefinition Height="40"/>
@@ -1301,7 +1307,7 @@
                                                 </StackPanel>
                                             </Grid>
                                             <Grid Grid.Row="1">
-                                                <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                                                <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Margin="0 10 0 0">
                                                     <TextBlock Text="Linked"/>
                                                     <CheckBox IsChecked="{Binding IsPersonLinked, UpdateSourceTrigger=PropertyChanged}" Margin="10 0 0 0"/>
                                                 </StackPanel>
@@ -1314,7 +1320,7 @@
                                                 </StackPanel>
                                             </Grid>
                                             <Grid Grid.Row="3">
-                                                <StackPanel HorizontalAlignment="Left">
+                                                <StackPanel HorizontalAlignment="Left" Margin="0 10 0 0">
                                                     <TextBlock Text="Relation"/>
                                                     <TextBox Width="150" Text="{Binding PersonRelation}" MaxLength="10" />
                                                 </StackPanel>
@@ -1394,9 +1400,15 @@
                                                 </DataGridTemplateColumn>
                                             </DataGrid.Columns>
                                         </DataGrid>
+                                        <TextBlock Text="No records found" 
+                                                    HorizontalAlignment="Center" 
+                                                    VerticalAlignment="Center" 
+                                                    Style="{StaticResource NoRecordsTextBlock}" 
+                                                    Visibility="{Binding IsBusinessRecordFound, Converter={StaticResource VisibilityConverter}, 
+                                                                         UpdateSourceTrigger=PropertyChanged}"/>
                                     </Grid>
                                     <Grid Grid.Column="1" Grid.Row="0">
-                                        <Grid>
+                                        <Grid Margin="20 0 0 0">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="60"/>
                                                 <RowDefinition Height="40"/>
@@ -1418,7 +1430,7 @@
                                                 </StackPanel>
                                             </Grid>
                                             <Grid Grid.Row="1">
-                                                <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                                                <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Margin="0 10 0 0">
                                                     <TextBlock Text="Linked"/>
                                                     <CheckBox IsChecked="{Binding IsBusinessLinked, UpdateSourceTrigger=PropertyChanged}" Margin="10 0 0 0"/>
                                                 </StackPanel>
@@ -1431,7 +1443,7 @@
                                                 </StackPanel>
                                             </Grid>
                                             <Grid Grid.Row="3">
-                                                <StackPanel HorizontalAlignment="Left">
+                                                <StackPanel HorizontalAlignment="Left" Margin="0 10 0 0">
                                                     <TextBlock Text="Relation"/>
                                                     <TextBox Width="150" Text="{Binding BusinessRelation}" MaxLength="10" />
                                                 </StackPanel>

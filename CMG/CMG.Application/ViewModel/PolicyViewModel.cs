@@ -84,6 +84,20 @@ namespace CMG.Application.ViewModel
                 return PolicyCollection != null && PolicyCollection.Count == 0;
             }
         }
+        public bool IsBusinessRecordFound
+        {
+            get
+            {
+                return BusinessRelationshipCollection != null && BusinessRelationshipCollection.Count == 0;
+            }
+        }
+        public bool IsPersonRecordFound
+        {
+            get
+            {
+                return PersonRelationshipCollection != null && PersonRelationshipCollection.Count == 0;
+            }
+        }
         private ObservableCollection<ViewPolicyIllustrationDto> _policyIllustrationCollection;
         public ObservableCollection<ViewPolicyIllustrationDto> PolicyIllustrationCollection
         {
@@ -200,6 +214,7 @@ namespace CMG.Application.ViewModel
             {
                 _businessRelationshipCollection = value;
                 OnPropertyChanged("BusinessRelationshipCollection");
+                OnPropertyChanged("IsBusinessRecordFound");
             }
         }
         private ViewBusinessRelationDto _selectedBusinessRelation;
@@ -223,6 +238,7 @@ namespace CMG.Application.ViewModel
             { 
                 _personRelationshipCollection = value;
                 OnPropertyChanged("PersonRelationshipCollection");
+                OnPropertyChanged("IsPersonRecordFound");
             }
         }
         private ViewClientSearchDto _selectedPersonRelation;
