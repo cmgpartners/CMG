@@ -744,7 +744,7 @@ namespace CMG.Application.ViewModel
                     x.Frequency = string.IsNullOrEmpty(x.Frequency.Trim()) ? "" : FrequencyTypeCollection.Where(c => c.FieldCode == x.Frequency.Trim()).FirstOrDefault()?.Description;
                     x.Status = string.IsNullOrEmpty(x.Status.Trim()) ? "" : StatusTypeCollection.Where(c => c.FieldCode == x.Status.Trim()).FirstOrDefault()?.Description;
                     x.CompanyName = string.IsNullOrEmpty(x.CompanyName.Trim()) ? "" : CompanyCollection.Where(c => c.FieldCode == x.CompanyName.Trim()).FirstOrDefault()?.Description;
-                    x.PeoplePolicy = new ObservableCollection<ViewPeoplePolicyDto>(x.PeoplePolicy.Select(
+                    x.PeoplePolicy = new ObservableCollection<ViewRelationshipDto>(x.PeoplePolicy.Select(
                         p =>
                         {
                             p.Category = string.IsNullOrEmpty(p.Category.Trim()) ? "" : CategoryCollection.Where(c => c.FieldCode == p.Category.Trim()).FirstOrDefault()?.Description;
@@ -1017,7 +1017,7 @@ namespace CMG.Application.ViewModel
             {
                 if (inputParameter != null)
                 {
-                    ViewPeoplePolicyDto selectedRelationship = SelectedPolicy.PeoplePolicy.Where(x => x.RelationshipId == (int)inputParameter).FirstOrDefault();
+                    ViewRelationshipDto selectedRelationship = SelectedPolicy.PeoplePolicy.Where(x => x.RelationshipId == (int)inputParameter).FirstOrDefault();
                     if (selectedRelationship.IsBusiness)
                     {
                         var entity = _unitOfWork.BusinessPolicy.GetById(selectedRelationship.RelationshipId);

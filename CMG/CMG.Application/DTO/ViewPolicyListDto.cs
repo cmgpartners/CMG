@@ -30,6 +30,6 @@ namespace CMG.Application.DTO
         public DateTime CreatedDate { get; set; }
         public string CreatedBy { get; set; }
         public ICollection<ViewPolicyAgentDto> PolicyAgent { get; set; } = new List<ViewPolicyAgentDto>(); // PolicyAgents
-        public ObservableCollection<ViewPeoplePolicyDto> PeoplePolicy { get; set; } = new ObservableCollection<ViewPeoplePolicyDto>(); //Relationships
+        public ObservableCollection<ViewRelationshipDto> PeoplePolicy { get; set; } = new ObservableCollection<ViewRelationshipDto>(); //Relationships
     }
 }

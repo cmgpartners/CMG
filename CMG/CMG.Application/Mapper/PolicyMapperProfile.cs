@@ -59,7 +59,7 @@ namespace CMG.Application.Mapper
                 .ForMember(des => des.Cr8Date, mo => mo.MapFrom(src => src.CreatedDate))
                 .ForMember(des => des.Cr8Locn, mo => mo.MapFrom(src => src.CreatedBy));
 
-            CreateMap<PeoplePolicys, ViewPeoplePolicyDto>()
+            CreateMap<PeoplePolicys, ViewRelationshipDto>()
                 .ForMember(des => des.RelationshipId, mo => mo.MapFrom(src => src.Keynuml))
                 .ForMember(des => des.PeopleOrBusinessId, mo => mo.MapFrom(src => src.Keynump))
                 .ForMember(des => des.PolicyId, mo => mo.MapFrom(src => src.Keynumo))
@@ -69,7 +69,7 @@ namespace CMG.Application.Mapper
                 .ForMember(des => des.Relation, mo => mo.MapFrom(src => src.Relatn.Trim()))
                 .ForMember(des => des.IsDeleted, mo => mo.MapFrom(src => src.Del));
 
-            CreateMap<BusinessPolicys, ViewPeoplePolicyDto>()
+            CreateMap<BusinessPolicys, ViewRelationshipDto>()
                 .ForMember(des => des.RelationshipId, mo => mo.MapFrom(src => src.Keynum))
                 .ForMember(des => des.PeopleOrBusinessId, mo => mo.MapFrom(src => src.Keynumb))
                 .ForMember(des => des.PolicyId, mo => mo.MapFrom(src => src.Keynumo))
@@ -79,7 +79,7 @@ namespace CMG.Application.Mapper
                 .ForMember(des => des.Relation, mo => mo.MapFrom(src => src.Relatn.Trim()))
                 .ForMember(des => des.IsDeleted, mo => mo.MapFrom(src => src.Del));
 
-            CreateMap<ViewPeoplePolicyDto, BusinessPolicys>()
+            CreateMap<ViewRelationshipDto, BusinessPolicys>()
                 .ForMember(des => des.Keynum, mo => mo.MapFrom(src => src.RelationshipId))
                 .ForMember(des => des.Keynumb, mo => mo.MapFrom(src => src.PeopleOrBusinessId))
                 .ForMember(des => des.Keynumo, mo => mo.MapFrom(src => src.PolicyId))
@@ -89,7 +89,7 @@ namespace CMG.Application.Mapper
                 .ForMember(des => des.Relatn, mo => mo.MapFrom(src => src.Relation.Trim()))
                 .ForMember(des => des.Del, mo => mo.MapFrom(src => src.IsDeleted));
 
-            CreateMap<ViewPeoplePolicyDto, PeoplePolicys>()
+            CreateMap<ViewRelationshipDto, PeoplePolicys>()
                 .ForMember(des => des.Keynuml, mo => mo.MapFrom(src => src.RelationshipId)) //Rishita
                 .ForMember(des => des.Keynump, mo => mo.MapFrom(src => src.PeopleOrBusinessId))
                 .ForMember(des => des.Keynumo, mo => mo.MapFrom(src => src.PolicyId))
@@ -125,7 +125,7 @@ namespace CMG.Application.Mapper
                 int a = 0;
                 for (int i = 0; i < src.PeoplePolicys.Count; i++)
                 {
-                    des.PeoplePolicy.Add(new ViewPeoplePolicyDto());
+                    des.PeoplePolicy.Add(new ViewRelationshipDto());
                     des.PeoplePolicy.ElementAt(i).RelationshipId = src.PeoplePolicys.ElementAt(i).Keynuml;
                     des.PeoplePolicy.ElementAt(i).PeopleOrBusinessId = src.PeoplePolicys.ElementAt(i).Keynump;
                     des.PeoplePolicy.ElementAt(i).PolicyId = src.PeoplePolicys.ElementAt(i).Keynumo;
@@ -137,7 +137,7 @@ namespace CMG.Application.Mapper
                 }
                 for (int i = src.PeoplePolicys.Count; i < totalCount; i++)
                 {
-                    des.PeoplePolicy.Add(new ViewPeoplePolicyDto());
+                    des.PeoplePolicy.Add(new ViewRelationshipDto());
                     des.PeoplePolicy.ElementAt(i).RelationshipId = src.BusinessPolicys.ElementAt(a).Keynum;
                     des.PeoplePolicy.ElementAt(i).PeopleOrBusinessId = src.BusinessPolicys.ElementAt(a).Keynumb;
                     des.PeoplePolicy.ElementAt(i).PolicyId = src.BusinessPolicys.ElementAt(a).Keynumo;

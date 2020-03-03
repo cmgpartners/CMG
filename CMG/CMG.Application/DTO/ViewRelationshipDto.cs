@@ -4,10 +4,10 @@ using System.Text;
 
 namespace CMG.Application.DTO
 {
-    public class ViewPeoplePolicyDto // ViewRelationshipDto
+    public class ViewRelationshipDto
     {
         public int RelationshipId { get; set; }
-        public int PeopleOrBusinessId { get; set; } // PeopleOrBusinessId
+        public int PeopleOrBusinessId { get; set; }
         public bool IsBusiness { get; set; }
         public int PolicyId { get; set; }
         public string Name { get; set; }
