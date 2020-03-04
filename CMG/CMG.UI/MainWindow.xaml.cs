@@ -107,9 +107,7 @@ namespace CMG.UI
             }
             policyViewModel.ClientCollection = _mainViewModel.ClientCollection;
             _mainViewModel.SelectedViewModel = policyViewModel;
-            policyViewModel.EntityType = _mainViewModel.EntityType;
             policyViewModel.PolicyNumber = _mainViewModel.PolicyNumber;
-            policyViewModel.CompanyName = _mainViewModel.CompanyName;
             DataContext = _mainViewModel;
         }
         private void FileManagerMenu_Click(object sender, RoutedEventArgs e)
@@ -124,9 +122,7 @@ namespace CMG.UI
             }
             fileManagerViewModel.ClientCollection = _mainViewModel.ClientCollection;
             _mainViewModel.SelectedViewModel = fileManagerViewModel;
-            fileManagerViewModel.EntityType = _mainViewModel.EntityType;
             fileManagerViewModel.PolicyNumber = _mainViewModel.PolicyNumber;
-            fileManagerViewModel.CompanyName = _mainViewModel.CompanyName;
             DataContext = _mainViewModel;
         }
         private void ConfigurationMenu_Click(object sender, RoutedEventArgs e)

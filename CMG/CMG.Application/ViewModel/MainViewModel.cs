@@ -50,6 +50,10 @@ namespace CMG.Application.ViewModel
         private const string ColumnNameClientNotes = "Client Notes";
         private const string ColumnNameInternalNotes = "Internal Notes";
         private const string ColumnNameAge = "Age";
+        private const string ColumnNameInsured = "Insured";
+        private const string ColumnNameBeneficiary = "Beneficiary";
+        private const string ColumnNameOwner = "Owner";
+
         #endregion MemberVariables
 
         #region Constructor
@@ -98,17 +102,11 @@ namespace CMG.Application.ViewModel
             }
         }
 
-        private List<string> _companyNames;
-        public List<string> CompanyNames
-        {
-            get { return _companyNames; }
-            set { _companyNames = value; }
-        }
         private List<ViewComboDto> _clientTypeCollection;
         public List<ViewComboDto> ClientTypeCollection
         {
             get { return _clientTypeCollection; }
-            set { _clientTypeCollection = value; }
+            set { _clientTypeCollection = value; OnPropertyChanged("ClientTypeCollection"); }
         }
 
         private string _lastName;
@@ -160,8 +158,8 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("PolicyNumber");
             }
         }
-        private string _entityType;
-        public string EntityType
+        private ViewComboDto _entityType;
+        public ViewComboDto EntityType
         {
             get { return _entityType; }
             set
@@ -170,8 +168,8 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("EntityType");
             }
         }
-        private string _companyName;
-        public string CompanyName
+        private ViewComboDto _companyName;
+        public ViewComboDto CompanyName
         {
             get { return _companyName; }
             set
@@ -243,17 +241,7 @@ namespace CMG.Application.ViewModel
                 columnNames = value;
                 OnPropertyChanged("ColumnNames");
             }
-        }
-        private ViewComboDto _selectedClientType;
-        public ViewComboDto SelectedClientType
-        {
-            get { return _selectedClientType; }
-            set
-            {
-                _selectedClientType = value;
-                OnPropertyChanged("SelectedClientType");
-            }
-        }
+        }    
         private List<ViewComboDto> _personStatusCollection;
         public List<ViewComboDto> PersonStatusCollection
         {
@@ -282,16 +270,6 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("Policies");
             }
         }        
-        private List<string> _entityTypes;
-        public List<string> EntityTypes
-        {
-            get { return _entityTypes; }
-            set
-            {
-                _entityTypes = value;
-                OnPropertyChanged("EntityTypes");
-            }
-        }
         private List<ViewComboDto> _combo;
         public List<ViewComboDto> Combo
         {
@@ -412,6 +390,9 @@ namespace CMG.Application.ViewModel
             ColumnNames.Add(ColumnNamePolicyNotes);
             ColumnNames.Add(ColumnNameClientNotes);
             ColumnNames.Add(ColumnNameInternalNotes);
+            ColumnNames.Add(ColumnNameInsured);
+            ColumnNames.Add(ColumnNameBeneficiary);
+            ColumnNames.Add(ColumnNameOwner);
         }
         public void GetComboData()
         {
@@ -419,16 +400,16 @@ namespace CMG.Application.ViewModel
             Combo = combo.Select(r => _mapper.Map<ViewComboDto>(r)).ToList();
             PersonStatusCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNamePStatus).ToList();
             SVCTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameSVCType).ToList();
-            ClientTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameClientType).ToList();
-            CompanyCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameCompany).ToList();
+            ClientTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameClientType).OrderBy(c => c.Description).ToList();
+            ClientTypeCollection.Insert(0, new ViewComboDto() { });
+            CompanyCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameCompany).OrderBy(c => c.Description).ToList();
+            CompanyCollection.Insert(0, new ViewComboDto() { Description = string.Empty });
         }
         public void GetAutoSuggestionLists()
         {
             var policies = _unitOfWork.Policies.GetAllPolicyNumber();
             var temppolicies = policies.Select(r => _mapper.Map<ViewPolicyListDto>(r)).ToList();
             Policies = temppolicies.Select(r => r.PolicyNumber).ToList();
-            CompanyNames = CompanyCollection.Select(x => x.Description.Trim()).ToList();
-            EntityTypes = ClientTypeCollection.Select(r => r.Description).ToList();
         }
         private void SearchClient()
         {           
@@ -462,12 +443,12 @@ namespace CMG.Application.ViewModel
         private bool IsValidSearchCriteria()
         {
             bool isValid = true;
-            if (string.IsNullOrEmpty(CompanyName)
+            if ((CompanyName == null || (CompanyName != null && CompanyName.Id == 0))
                 && string.IsNullOrEmpty(PolicyNumber)
                 && string.IsNullOrEmpty(FirstName)
                 && string.IsNullOrEmpty(CommanName)
                 && string.IsNullOrEmpty(LastName)
-                && string.IsNullOrEmpty(EntityType)
+                && (EntityType == null || (EntityType != null && EntityType.Id == 0))
                 && (FromPolicyDate == null && ToPolicyDate == null))
             {
                 isValid = false;
@@ -476,25 +457,11 @@ namespace CMG.Application.ViewModel
 
             if (isValid)
             {
-                if (!string.IsNullOrEmpty(CompanyName))
-                {
-                    isValid = CompanyNames.Any(x => x.ToLower().Equals(CompanyName.ToString().ToLower().Trim()));
-                    if (!isValid)
-                        _notifier.ShowError("Select valid company name");
-                }
-
                 if (!string.IsNullOrEmpty(PolicyNumber))
                 {
                     isValid = Policies.Any(x => x.ToLower().Equals(PolicyNumber.ToLower().Trim()));
                     if (!isValid)
                         _notifier.ShowError("Select valid Policy number");
-                }
-
-                if (!string.IsNullOrEmpty(EntityType))
-                {
-                    isValid = EntityTypes.Any(x => x.ToLower().Equals(EntityType.ToLower().Trim()));
-                    if (!isValid)
-                        _notifier.ShowError("Select valid entity type");
                 }
                 if(FromPolicyDate != null && !DateTime.TryParse(FromPolicyDate.ToString(), out _))
                 {
@@ -531,21 +498,13 @@ namespace CMG.Application.ViewModel
             {
                 BuildFilterByContains("PolicyNumber", PolicyNumber.Trim(), searchBy);
             }
-            if (!string.IsNullOrEmpty(CompanyName))
+            if (CompanyName != null && CompanyName.Id > 0)
             {
-                var companyCode = CompanyCollection.Where(c => c.Description.ToLower() == CompanyName.Trim().ToLower()).FirstOrDefault()?.FieldCode;
-                if (!string.IsNullOrEmpty(companyCode))
-                {
-                    BuildFilterByEquals("CompanyName", companyCode.Trim(), searchBy);
-                }
+                BuildFilterByEquals("CompanyName", CompanyName.FieldCode.Trim(), searchBy);
             }
-            if (!string.IsNullOrEmpty(EntityType))
+            if (EntityType != null && EntityType.Id > 0)
             {
-                var entityTypeCode = ClientTypeCollection.Where(c => c.Description.ToLower() == EntityType.Trim().ToLower()).FirstOrDefault()?.FieldCode;
-                if (!string.IsNullOrEmpty(entityTypeCode))
-                {
-                    BuildFilterByEquals("EntityType", entityTypeCode.Trim(), searchBy);
-                }
+                BuildFilterByEquals("EntityType", EntityType.FieldCode.Trim(), searchBy);
             }
             if (FromPolicyDate != null && ToPolicyDate != null)
             {

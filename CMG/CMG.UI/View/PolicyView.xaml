@@ -13,78 +13,68 @@
         <DataTemplate x:Key="commonNameTemplate">
             <WrapPanel AllowDrop="True" Orientation="Vertical">
                 <TextBlock Text="{Binding ColumnName}" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
-                                     Foreground="White" FontSize="14"
-                                     Text="{Binding DataContext.CommanName, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}"  Width="85"></TextBox>
+                <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3"  
+                                     Foreground="White" FontSize="14" Style="{StaticResource SearchOptionsTextBoxStyle}"
+                                     Text="{Binding DataContext.CommanName, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}"  Width="85">
+                </TextBox>
             </WrapPanel>
         </DataTemplate>
         <DataTemplate x:Key="lastNameTemplate">
             <WrapPanel AllowDrop="True" Orientation="Vertical">
                 <TextBlock Text="Last Name" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                 <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
-                                     Foreground="White" FontSize="14"
-                                     Text="{Binding DataContext.LastName, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" Width="85"></TextBox>
+                                     Foreground="White" FontSize="14" Style="{StaticResource SearchOptionsTextBoxStyle}"
+                                     Text="{Binding DataContext.LastName, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" Width="85">
+                </TextBox>
             </WrapPanel>
         </DataTemplate>
         <DataTemplate x:Key="firstNameTemplate">
             <WrapPanel AllowDrop="True" Orientation="Vertical">
                 <TextBlock Text="First Name" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                 <TextBox Margin="10 0 15 5" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3" 
-                                     Foreground="White" FontSize="14"
+                                     Foreground="White" FontSize="14" Style="{StaticResource SearchOptionsTextBoxStyle}"
                                      Text="{Binding DataContext.FirstName, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" MinWidth="85"></TextBox>
             </WrapPanel>
         </DataTemplate>
         <DataTemplate x:Key="entityTypeTemplate">
-            <WrapPanel AllowDrop="True" Orientation="Vertical" x:Name="EntityTypePanel" Loaded="EntityTypePanel_Loaded">
+            <WrapPanel AllowDrop="True" Orientation="Vertical" x:Name="EntityTypePanel">
                 <TextBlock Text="{Binding ColumnName}" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                <uc:AutoCompleteBox 
-                                x:Name="UserControlEntityType" 
-                                Foreground="White" 
-                                BorderBrush="#FFCEEAFF" 
-                                BorderThickness="0 0 0 3" 
-                                Margin="10 0 15 5" 
-                                Width="85"
-                                AutoSuggestionList="{Binding DataContext.EntityTypes, RelativeSource={RelativeSource AncestorType=Window}}" 
-                                SelectedValue="{Binding DataContext.EntityType, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
-                </uc:AutoCompleteBox>
+                <ComboBox ItemsSource="{Binding DataContext.ClientTypeCollection, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}" 
+                          SelectedValue="{Binding DataContext.EntityType, RelativeSource={RelativeSource AncestorType=Window}}" DisplayMemberPath="Description" Foreground="White" FontSize="13" Margin="10 0 15 5" Style="{StaticResource EntityTypeStyle}">
+                </ComboBox>
             </WrapPanel>
         </DataTemplate>
         <DataTemplate x:Key="policyNumberTemplate" x:Name="policyNumberTemplate">
-            <WrapPanel AllowDrop="True" Orientation="Vertical" Loaded="PolicyNumberPanel_Loaded">
+            <WrapPanel AllowDrop="True" Orientation="Vertical">
                 <TextBlock Text="Policy #" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                 <uc:AutoCompleteBox 
                                 x:Name="UserControlPolicyNumber" 
                                 Foreground="White" 
                                 BorderBrush="#FFCEEAFF" 
                                 BorderThickness="0 0 0 3" 
-                                Margin="10 0 15 0" 
+                                Margin="10 0 15 5" 
                                 Width="85"
+                                Loaded="UserControlPolicyNumber_Loaded"
                                 AutoSuggestionList="{Binding DataContext.Policies, RelativeSource={RelativeSource AncestorType=Window}}" 
                                 SelectedValue="{Binding DataContext.PolicyNumber, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
                 </uc:AutoCompleteBox>
             </WrapPanel>
         </DataTemplate>
         <DataTemplate x:Key="companyNameTemplate">
-            <WrapPanel AllowDrop="True" Orientation="Vertical" Loaded="CompanyNamePanel_Loaded">
-                <TextBlock Text="Company" Margin="10 0 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
-                <uc:AutoCompleteBox 
-                                AutoSuggestionList="{Binding DataContext.CompanyNames, RelativeSource={RelativeSource AncestorType=Window}}" 
-                                Foreground="White" 
-                                BorderBrush="#FFCEEAFF" 
-                                BorderThickness="0 0 0 3" 
-                                Margin="10 0 15 0"  
-                                Width="85"
-                                SelectedValue="{Binding DataContext.CompanyName, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}">
-                </uc:AutoCompleteBox>
+            <WrapPanel AllowDrop="True" Orientation="Vertical">
+                <TextBlock Text="Company" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                <ComboBox ItemsSource="{Binding DataContext.CompanyCollection, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}" 
+                          SelectedValue="{Binding DataContext.CompanyName, RelativeSource={RelativeSource AncestorType=Window}}" DisplayMemberPath="Description" Foreground="White" FontSize="13" Margin="10 0 15 5" Style="{StaticResource EntityTypeStyle}">
+                </ComboBox>
             </WrapPanel>
         </DataTemplate>
         <DataTemplate x:Key="policyDateTemplate">
             <WrapPanel AllowDrop="True" Orientation="Vertical">
-                <TextBlock Text="Policy Date" Margin="10 0 0 5" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                <TextBlock Text="Policy Date" Margin="10 5 0 5" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                 <StackPanel Orientation="Horizontal">
-                        <DatePicker Margin="10 -3 5 0" Style="{StaticResource PolicyDatePicker}" SelectedDate="{Binding DataContext.FromPolicyDate, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" Width="90" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3">
+                        <DatePicker Margin="10 -4 5 0" Style="{StaticResource PolicyDatePicker}" SelectedDate="{Binding DataContext.FromPolicyDate, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" Width="90" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3">
                         </DatePicker>
-                    <DatePicker Margin="10 -3 5 0" Style="{StaticResource PolicyDatePicker}" SelectedDate="{Binding DataContext.ToPolicyDate, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" Width="90" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3">
+                    <DatePicker Margin="10 -4 5 0" Style="{StaticResource PolicyDatePicker}" SelectedDate="{Binding DataContext.ToPolicyDate, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}" Width="90" BorderBrush="#FFCEEAFF" BorderThickness="0 0 0 3">
                         </DatePicker>
                     </StackPanel>
             </WrapPanel>
@@ -249,21 +239,13 @@
                             <RowDefinition Height="65"/>
                         </Grid.RowDefinitions>
                         <ListView Grid.Row="0" ItemsSource="{Binding SearchOptions, UpdateSourceTrigger=PropertyChanged, IsAsync=True}"  Width="450" x:Name="SearchOptionsList" ItemTemplateSelector="{StaticResource searchOptionsSelector}" 
-                                  PreviewMouseLeftButtonDown="SearchOptionsList_PreviewMouseLeftButtonDown" PreviewMouseMove="SearchOptionsList_PreviewMouseMove" Drop="SearchOptionsList_Drop" AllowDrop="True" IsTabStop="False" 
-                                  KeyboardNavigation.TabNavigation="Cycle" Focusable="False">
+                                  PreviewMouseLeftButtonDown="SearchOptionsList_PreviewMouseLeftButtonDown" PreviewMouseMove="SearchOptionsList_PreviewMouseMove" Drop="SearchOptionsList_Drop" AllowDrop="True" 
+                                  KeyboardNavigation.TabNavigation="Continue" Focusable="False" ItemContainerStyle="{StaticResource SearchOptionsListView}">
                         <ListView.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel Orientation="Horizontal" Width="450"></WrapPanel>
                             </ItemsPanelTemplate>
                         </ListView.ItemsPanel>
-                            <ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
-                                    <Setter Property="Padding" Value="0"/>
-                                    <Setter Property="Margin" Value="0"/>
-                                    <Setter Property="BorderThickness" Value="0"/>
-                                    <Setter Property="Background" Value="Transparent"/>
-                                </Style>
-                            </ListView.ItemContainerStyle>
                     </ListView>
                     <StackPanel Grid.Row="1" Margin="295 10 0 0">
                             <Button Content="Search" Width="85" Command="{Binding DataContext.SearchClientCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" IsDefault="True"></Button>
@@ -407,23 +389,25 @@
                            Style="{StaticResource NoRecordsTextBlock}" />
                 </Grid>
             </Grid>
-            <Grid Grid.Row="0" Grid.Column="2">
+            <Grid Grid.Row="0" Grid.Column="2" Margin="0 0 10 0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="70"/>
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Grid Grid.Row="2" Background="White" Margin="0 0 10 10">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="280"/>
-                        <RowDefinition Height="175"/>
-                        <RowDefinition Height="175"/>
-                        <RowDefinition Height="80"/>
-                        <RowDefinition Height="175"/>
-                    </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0" Background="LightGray" >
-                        <Button Content="View Policy Illustration" Width="200" Margin="10" x:Name="ButtonIllustrationOpen" Click="ButtonIllustrationOpen_Click" Command="{Binding ViewIllustrationCommand}"/>
-                    </StackPanel>
+                <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <Grid Background="White" Margin="0 0 0 10">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="47"/>
+                            <RowDefinition Height="250"/>
+                            <RowDefinition Height="150"/>
+                            <RowDefinition Height="150"/>
+                            <RowDefinition Height="85"/>
+                            <RowDefinition Height="100"/>
+                            <RowDefinition Height="150"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Background="LightGray" >
+                            <Button Content="View Policy Illustration" Width="200" Margin="7" x:Name="ButtonIllustrationOpen" Click="ButtonIllustrationOpen_Click" Command="{Binding ViewIllustrationCommand}"/>
+                        </StackPanel>
                     <Grid Grid.Row="1" Margin="20 10 10 0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="25"/>
@@ -450,7 +434,7 @@
                             HorizontalScrollBarVisibility="Auto" MaxWidth="360" VerticalScrollBarVisibility="Auto" MaxHeight="250"
                             ColumnHeaderStyle="{StaticResource RelationshipHeaderStyle}" 
                             SelectionUnit="FullRow">
-                            <DataGrid.Columns>
+                                <DataGrid.Columns>
                                 <DataGridTemplateColumn>
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
@@ -462,161 +446,189 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="Category" Width="85" HeaderStyle="{StaticResource RelationshipFirstColumnHeaderStyle}">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Path=Category}" Margin="10 0 10 0" />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="Name" Width="Auto">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Path=Name}" ></TextBlock>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="" Width="5" >
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="Relation" Width="Auto" >
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Path=Relation}"></TextBlock>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="" Width="5" >
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="Split" Width="Auto">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Path=Split}"></TextBlock>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
+                                    <DataGridTemplateColumn Header="Category" Width="85" HeaderStyle="{StaticResource RelationshipFirstColumnHeaderStyle}">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Path=Category}" Margin="10 0 10 0" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="Name" Width="Auto">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Path=Name}" ></TextBlock>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="" Width="5" >
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="Relation" Width="Auto" >
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Path=Relation}"></TextBlock>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="" Width="5" >
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Header="Split" Width="Auto">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Path=Split}"></TextBlock>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
                     </Grid>
-                    <Grid Grid.Row="2" Margin="20 10 10 0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="25"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Separator Background="LightGray" Margin="0 10" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"/>
-                        <TextBlock Text="General Notes" FontWeight="Bold" Margin="0 0 0 5" Grid.Column="0" Grid.Row="1"/>
-                        <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
-                            <Button HorizontalContentAlignment="Left" Height="25" Padding="5" Width="25" Command="{Binding EditGeneralNotesCommand}" Visibility="{Binding IsGeneralNotesEditVisible, Converter={StaticResource VisibilityConverter}}">
-                                <materialDesign:PackIcon Kind="Pencil" Height="15" Width="15"/>
-                            </Button>
-                            <Button HorizontalContentAlignment="Left" Height="25" Padding="5" Width="25" 
-                                    Command="{Binding SaveGeneralNotesCommand}" Background="#FF57C125" Margin="5 0" BorderBrush="Transparent" Visibility="{Binding IsGeneralNotesSaveVisible, Converter={StaticResource VisibilityConverter}}">
-                                <materialDesign:PackIcon Kind="Check" Height="15" Width="15"/>
-                            </Button>
-                            <Button HorizontalContentAlignment="Left" Height="25" Padding="5" Width="25" Command="{Binding CancelGeneralNotesCommand}" Background="#FFEB7533" BorderBrush="Transparent" Visibility="{Binding IsGeneralNotesSaveVisible, Converter={StaticResource VisibilityConverter}}">
-                                <materialDesign:PackIcon Kind="Close" Height="15" Width="15"/>
-                            </Button>
-                        </StackPanel>
-                        <TextBlock Text="{Binding SelectedClient.GeneralNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding IsGeneralNotesEditVisible, Converter={StaticResource VisibilityConverter}}"/>
-                        <TextBox Text="{Binding SelectedClient.GeneralNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding IsGeneralNotesSaveVisible, Converter={StaticResource VisibilityConverter}}" VerticalAlignment="Top"/>
-                    </Grid>
-                    <Grid Grid.Row="3" Margin="20 10 10 10" ShowGridLines="False">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="25"/>
-                            <RowDefinition Height="30"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Separator Background="LightGray" Margin="0 10" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"/>
-                        <TextBlock Text="Policy Notes" FontWeight="Bold" Margin="0 0 0 5" Grid.Column="0" Grid.Row="1"/>
-                        <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
-                            <Button HorizontalContentAlignment="Left" Height="25" Padding="5" Width="25" Command="{Binding EditPolicyNotesCommand}" Visibility="{Binding IsPolicyNotesEditVisible, Converter={StaticResource VisibilityConverter}}">
-                                <materialDesign:PackIcon Kind="Pencil" Height="15" Width="15"/>
-                            </Button>
-                            <Button HorizontalContentAlignment="Left" Height="25" Padding="5" Width="25" Command="{Binding SavePolicyNotesCommand}" Background="#FF57C125" Margin="5 0" BorderBrush="Transparent" Visibility="{Binding IsPolicyNotesSaveVisible, Converter={StaticResource VisibilityConverter}}">
-                                <materialDesign:PackIcon Kind="Check" Height="15" Width="15"/>
-                            </Button>
-                            <Button HorizontalContentAlignment="Left" Height="25" Padding="5" Width="25" Command="{Binding CancelPolicyNotesCommand}" Background="#FFEB7533" BorderBrush="Transparent" Visibility="{Binding IsPolicyNotesSaveVisible, Converter={StaticResource VisibilityConverter}}">
-                                <materialDesign:PackIcon Kind="Close" Height="15" Width="15"/>
-                            </Button>
-                        </StackPanel>
-                        <TextBlock Text="{Binding SelectedPolicy.PolicyNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding IsPolicyNotesEditVisible, Converter={StaticResource VisibilityConverter}}"/>
-                        <TextBox Text="{Binding SelectedPolicy.PolicyNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding IsPolicyNotesSaveVisible, Converter={StaticResource VisibilityConverter}}" VerticalAlignment="Top"/>
-                    </Grid>
-                    <StackPanel Grid.Row="4" Margin="10 10 10 10">
-                        <Separator Background="LightGray" Margin="0 10"/>
-                        <Grid Background="LightBlue" Height="70">
+                        <Grid Grid.Row="2" Margin="20 10 10 0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="25"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Separator Background="LightGray" Margin="0 10" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"/>
+                            <TextBlock Text="General Notes" FontWeight="Bold" Margin="0 0 0 5" Grid.Column="0" Grid.Row="1"/>
+                            <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
+                                <Button HorizontalContentAlignment="Left" Height="25" Padding="5" Width="25" Command="{Binding EditGeneralNotesCommand}" Visibility="{Binding IsGeneralNotesEditVisible, Converter={StaticResource VisibilityConverter}}">
+                                    <materialDesign:PackIcon Kind="Pencil" Height="15" Width="15"/>
+                                </Button>
+                            <Button HorizontalContentAlignment="Left" Height="25" Padding="5" Width="25" 
+                                    Command="{Binding SaveGeneralNotesCommand}" Background="#FF57C125" Margin="5 0" BorderBrush="Transparent" Visibility="{Binding IsGeneralNotesSaveVisible, Converter={StaticResource VisibilityConverter}}">
+                                    <materialDesign:PackIcon Kind="Check" Height="15" Width="15"/>
+                                </Button>
+                                <Button HorizontalContentAlignment="Left" Height="25" Padding="5" Width="25" Command="{Binding CancelGeneralNotesCommand}" Background="#FFEB7533" BorderBrush="Transparent" Visibility="{Binding IsGeneralNotesSaveVisible, Converter={StaticResource VisibilityConverter}}">
+                                    <materialDesign:PackIcon Kind="Close" Height="15" Width="15"/>
+                                </Button>
+                            </StackPanel>
+                            <ScrollViewer Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto">
+                                <TextBlock Text="{Binding SelectedClient.GeneralNotes}" TextWrapping="Wrap"  Visibility="{Binding IsGeneralNotesEditVisible, Converter={StaticResource VisibilityConverter}}"/>
+                            </ScrollViewer>
+                            <TextBox Text="{Binding SelectedClient.GeneralNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding IsGeneralNotesSaveVisible, Converter={StaticResource VisibilityConverter}}" VerticalAlignment="Top"/>
+                        </Grid>
+                        <Grid Grid.Row="3" Margin="20 10 10 10" ShowGridLines="False">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="25"/>
+                                <RowDefinition Height="30"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <StackPanel Margin="5">
-                                <TextBlock Text="Birthday"/>
-                                <TextBlock Text="{Binding SelectedClient.BirthDate, StringFormat='{}{0: MM/dd/yyyy}'}"/>
+                            <Separator Background="LightGray" Margin="0 10" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"/>
+                            <TextBlock Text="Policy Notes" FontWeight="Bold" Margin="0 0 0 5" Grid.Column="0" Grid.Row="1"/>
+                            <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal">
+                                <Button HorizontalContentAlignment="Left" Height="25" Padding="5" Width="25" Command="{Binding EditPolicyNotesCommand}" Visibility="{Binding IsPolicyNotesEditVisible, Converter={StaticResource VisibilityConverter}}">
+                                    <materialDesign:PackIcon Kind="Pencil" Height="15" Width="15"/>
+                                </Button>
+                                <Button HorizontalContentAlignment="Left" Height="25" Padding="5" Width="25" Command="{Binding SavePolicyNotesCommand}" Background="#FF57C125" Margin="5 0" BorderBrush="Transparent" Visibility="{Binding IsPolicyNotesSaveVisible, Converter={StaticResource VisibilityConverter}}">
+                                    <materialDesign:PackIcon Kind="Check" Height="15" Width="15"/>
+                                </Button>
+                                <Button HorizontalContentAlignment="Left" Height="25" Padding="5" Width="25" Command="{Binding CancelPolicyNotesCommand}" Background="#FFEB7533" BorderBrush="Transparent" Visibility="{Binding IsPolicyNotesSaveVisible, Converter={StaticResource VisibilityConverter}}">
+                                    <materialDesign:PackIcon Kind="Close" Height="15" Width="15"/>
+                                </Button>
                             </StackPanel>
-                            <StackPanel Grid.Column="1" Margin="5">
-                                <TextBlock Text="Smoker" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{Binding SelectedClient.Smoker}" HorizontalAlignment="Center"/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="2" Margin="5">
-                                <TextBlock Text="Status" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{Binding SelectedClient.Status}" HorizontalAlignment="Center"/>
-                            </StackPanel>
-                            <StackPanel Grid.Column="3" Margin="5">
-                                <TextBlock Text="SVC Type" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{Binding SelectedClient.SVCType}" HorizontalAlignment="Center"/>
-                            </StackPanel>
+                            <ScrollViewer Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto">
+                                <TextBlock Text="{Binding SelectedPolicy.PolicyNotes}" TextWrapping="Wrap"  Visibility="{Binding IsPolicyNotesEditVisible, Converter={StaticResource VisibilityConverter}}"/>
+                            </ScrollViewer>
+                            <TextBox Text="{Binding SelectedPolicy.PolicyNotes}" TextWrapping="Wrap" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Visibility="{Binding IsPolicyNotesSaveVisible, Converter={StaticResource VisibilityConverter}}" VerticalAlignment="Top"/>
                         </Grid>
+                        <StackPanel Grid.Row="4" Margin="20 10 10 10">
+                            <Separator Background="LightGray" Margin="0 10"/>
+                            <Grid Background="LightBlue" Height="70">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Margin="5">
+                                    <TextBlock Text="Birthday"/>
+                                    <TextBlock Text="{Binding SelectedClient.BirthDate, StringFormat='{}{0: MM/dd/yyyy}'}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Margin="5">
+                                    <TextBlock Text="Smoker" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding SelectedClient.Smoker}" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" Margin="5">
+                                    <TextBlock Text="Status" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding SelectedClient.Status}" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="3" Margin="5">
+                                    <TextBlock Text="SVC Type" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding SelectedClient.SVCType}" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Grid>
 
-                    </StackPanel>
-                    <StackPanel Grid.Row="5" Margin="20 10 10 10">
-                        <Separator Background="LightGray" Margin="0 10"/>
-                        <TextBlock Text="Agents and Splits" FontWeight="Bold" Margin="0 0 0 10"></TextBlock>
-                        <ItemsControl ItemsSource="{Binding SelectedPolicy.PolicyAgent}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <UniformGrid Rows="4" Columns="2" HorizontalAlignment="Left" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border CornerRadius="15"
+                        </StackPanel>
+                        <StackPanel Grid.Row="5" Margin="20 0 10 0">
+                            <Separator Background="LightGray" Margin="0 2"/>
+                            <TextBlock Text="Policy Agents" FontWeight="Bold" Margin="0 0 0 10"></TextBlock>
+                            <ItemsControl ItemsSource="{Binding SelectedPolicy.PolicyAgents}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Rows="4" Columns="4" HorizontalAlignment="Left" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border CornerRadius="15"
+                                                BorderBrush="{Binding Agent.Color}"
+                                                BorderThickness="1"
+                                                Padding="10 0 10 0"
+                                                Background="{Binding Agent.Color}"
+                                                Margin="5">
+                                            <TextBlock Text="{Binding Agent.FirstName}" Foreground="Black" Margin="5"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                        <StackPanel Grid.Row="6" Margin="20 10 10 10">
+                            <Separator Background="LightGray" Margin="0 10"/>
+                            <TextBlock Text="Commission Agents" FontWeight="Bold" Margin="0 0 0 10"></TextBlock>
+                            <ItemsControl ItemsSource="{Binding SelectedPolicy.PolicyAgent}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Rows="4" Columns="2" HorizontalAlignment="Left" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border CornerRadius="15"
                                                 BorderBrush="{Binding Agent.Color}"
                                                 BorderThickness="1"
                                                 Padding="10 0 0 0"
                                                 Background="{Binding Agent.Color}"
                                                 Margin="5">
-                                        <Grid Width="100">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition/>
-                                                <ColumnDefinition/>
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Grid.Column="0" Text="{Binding Agent.FirstName}" Foreground="Black" Margin="5"/>
-                                            <TextBlock Grid.Column="1"  Text="{Binding Split, StringFormat='{}{0:#,#.00}'}" Foreground="Black" Margin="5"/>
-                                        </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
-                </Grid>
+                                            <Grid Width="100">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0" Text="{Binding Agent.FirstName}" Foreground="Black" Margin="5"/>
+                                                <TextBlock Grid.Column="1"  Text="{Binding Split, StringFormat='{}{0:#,#.00}'}" Foreground="Black" Margin="5"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Grid>
+                </ScrollViewer>
             </Grid>
         </Grid>
 
@@ -692,105 +704,105 @@
                             <DataGridTemplateColumn Header="AD" Width="80">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=AnnualDeposit}"></TextBlock>
+                                            <TextBlock Text="{Binding Path=AnnualDeposit, StringFormat='{}{0:#,#}'}" HorizontalAlignment="Right"></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="ADA" Width="80">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=AnnualDepositActual}"></TextBlock>
+                                            <TextBlock Text="{Binding Path=AnnualDepositActual, StringFormat='{}{0:#,#}'}" HorizontalAlignment="Right"></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="ADR" Width="80">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=AnnualDepositReprojection}"></TextBlock>
+                                            <TextBlock Text="{Binding Path=AnnualDepositReprojection, StringFormat='{}{0:#,#}'}" HorizontalAlignment="Right"></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="CV" Width="80">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=CashValue}"></TextBlock>
+                                            <TextBlock Text="{Binding Path=CashValue, StringFormat='{}{0:#,#}'}" HorizontalAlignment="Right"></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="CVA" Width="80">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=CashValueActual}"></TextBlock>
+                                            <TextBlock Text="{Binding Path=CashValueActual, StringFormat='{}{0:#,#}'}" HorizontalAlignment="Right"></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="CVR" Width="80">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=CashValueReprojection}"></TextBlock>
+                                            <TextBlock Text="{Binding Path=CashValueReprojection, StringFormat='{}{0:#,#}'}" HorizontalAlignment="Right"></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="DB" Width="80">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=DeathBenefit}"></TextBlock>
+                                            <TextBlock Text="{Binding Path=DeathBenefit, StringFormat='{}{0:#,#}'}" HorizontalAlignment="Right"></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="DBA" Width="80">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=DeathBenefitActual}"></TextBlock>
+                                            <TextBlock Text="{Binding Path=DeathBenefitActual, StringFormat='{}{0:#,#}'}" HorizontalAlignment="Right"></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="DBR" Width="80">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=DeathBenefitReprojection}"></TextBlock>
+                                            <TextBlock Text="{Binding Path=DeathBenefitReprojection, StringFormat='{}{0:#,#}'}" HorizontalAlignment="Right"></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="ACB" Width="80">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=AdjustedCostBase}"></TextBlock>
+                                            <TextBlock Text="{Binding Path=AdjustedCostBase, StringFormat='{}{0:#,#}'}" HorizontalAlignment="Right"></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="ACBA" Width="80">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=AdjustedCostBaseActual}"></TextBlock>
+                                            <TextBlock Text="{Binding Path=AdjustedCostBaseActual, StringFormat='{}{0:#,#}'}" HorizontalAlignment="Right"></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="ACBR" Width="80">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=AdjustedCostBaseReprojection}"></TextBlock>
+                                            <TextBlock Text="{Binding Path=AdjustedCostBaseReprojection,StringFormat='{}{0:#,#}'}" HorizontalAlignment="Right"></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="NCPI" Width="70">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=NCPI}"></TextBlock>
+                                            <TextBlock Text="{Binding Path=NCPI,StringFormat='{}{0:#,#}'}" HorizontalAlignment="Right"></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="NCPIA" Width="70">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=NCPIActual}"></TextBlock>
+                                            <TextBlock Text="{Binding Path=NCPIActual,StringFormat='{}{0:#,#}'}" HorizontalAlignment="Right"></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="NCPIR" Width="70">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=NCPIReprojection}"></TextBlock>
+                                            <TextBlock Text="{Binding Path=NCPIReprojection,StringFormat='{}{0:#,#}'}" HorizontalAlignment="Right"></TextBlock>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

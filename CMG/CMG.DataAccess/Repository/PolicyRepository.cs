@@ -14,6 +14,7 @@ namespace CMG.DataAccess.Repository
         #region Member variables
         private readonly pb2Context _context;
         private string excludeCategory = "0, 1, 2, 3";
+        private string policyAgentCategories = "0, 1, 4, 5";
         #endregion Member variables
         public PolicyRepository(pb2Context context) : base(context)
         {
@@ -89,10 +90,13 @@ namespace CMG.DataAccess.Repository
                 IssueAge = x.IssueAge,
                 Comment = x.Comment,
                 NoteCli = x.NoteCli,
-                NoteInt = x.NoteInt, 
-                Issuedate =x.Issuedate,
+                NoteInt = x.NoteInt,
+                Issuedate = x.Issuedate,
                 Dateplaced = x.Dateplaced,
-                PeoplePolicys = x.PeoplePolicys.Where(x => !excludeCategoryList.Contains(x.Catgry) && x.Del == false).Select(a => new PeoplePolicys
+                Benef = x.Benef,
+                Owner = x.Owner,
+                Insur = x.Insur,
+		PeoplePolicys = x.PeoplePolicys.Where(x => !excludeCategoryList.Contains(x.Catgry) && x.Del == false).Select(a => new PeoplePolicys
                 {
                     Keynuml = a.Keynuml,
                     Keynump = a.Keynump,
@@ -124,6 +128,15 @@ namespace CMG.DataAccess.Repository
                     Split = p.Split,
                     AgentOrder = p.AgentOrder,
                     IsDeleted = p.IsDeleted
+                }).ToList(),
+                PolicyAgents = x.PeoplePolicys.Where(x => policyAgentCategories.Contains(x.Catgry)).Select(a => new PeoplePolicys
+                {
+                    Keynump = a.Keynump,
+                    Keynumo = a.Keynumo,
+                    Hname = a.Hname,
+                    Catgry = a.Catgry,
+                    Relatn = a.Relatn,
+                    Split = a.Split
                 }).ToList()
             });
 

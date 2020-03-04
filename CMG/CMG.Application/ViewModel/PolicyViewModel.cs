@@ -109,13 +109,6 @@ namespace CMG.Application.ViewModel
             }
         }
 
-        private List<ViewComboDto> _combo;
-        public List<ViewComboDto> Combo
-        {
-            get { return _combo; }
-            set { _combo = value; }
-        }
-
         private List<ViewComboDto> _policyTypeCollection;
         public List<ViewComboDto> PolicyTypeCollection
         {
@@ -365,7 +358,16 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("PolicySelectedClient");
             }
         }
-
+        private List<ViewAgentDto> _agentCollection;
+        public List<ViewAgentDto> AgentCollection
+        {
+            get { return _agentCollection; }
+            set
+            {
+                _agentCollection = value;
+                OnPropertyChanged("AgentCollection");
+            }
+        }
         private ViewPolicyListDto _selectedPolicy;
         public ViewPolicyListDto SelectedPolicy
         {
@@ -706,10 +708,8 @@ namespace CMG.Application.ViewModel
                 SelectedPolicyCurrency = CurrencyCollection.Where(x => x.Description.Trim() == SelectedPolicy.Currency.Trim()).FirstOrDefault();
             }
         }
-        private void GetComboData()
+        private new void GetComboData()
         {
-            var combo = _unitOfWork.Combo.All();
-            Combo = combo.Select(r => _mapper.Map<ViewComboDto>(r)).ToList();
             PolicyTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNamePolicyType).ToList();
             FrequencyTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameFrequency).ToList();
             StatusTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameStatus).ToList();
@@ -717,9 +717,15 @@ namespace CMG.Application.ViewModel
                                             && !agentCategories.Contains(x.FieldCode)).ToList();
             CurrencyCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameCurrency).ToList();
         }
-        private void LoadData()
+        private void GetAgents()
+        {
+            var agents = _unitOfWork.Agents.All();
+            AgentCollection = agents.Select(a => _mapper.Map<ViewAgentDto>(a)).ToList();
+        }
+        private new void LoadData()
         {
             GetComboData();
+            GetAgents();
         }        
         private void BuildFilterByContains(string property, string value, List<FilterBy> searchBy)
         {
@@ -767,6 +773,23 @@ namespace CMG.Application.ViewModel
                             return p;
                         }
                     ).ToList());
+                    x.PolicyAgents = x.PolicyAgents.Select(
+                         a =>
+                         {
+                             var agent = AgentCollection.Where(agent => agent.Keynump == a.PeopleOrBusinessId).FirstOrDefault();
+                             if(agent != null)
+                             {
+                                 a.Agent = agent;
+                             }
+                             else
+                             {
+                                 string[] agentName = a.Name.Split(" ");
+                                 agentName = agentName.Length > 0 ? agentName[0].Split(",") : default;
+                                 a.Agent = new ViewAgentDto() { FirstName = agentName.Length > 0 ? agentName[0] : string.Empty, Color = "#D3D3D3" };
+                             }
+                             return a;
+                         }
+                        ).ToList();
                     return x;
                 }).OrderByDescending(o => o.PolicyDate));
 
@@ -829,23 +852,22 @@ namespace CMG.Application.ViewModel
                 && IsValidPolicy())
             {
                 var originalEntity = _unitOfWork.Policies.GetById(SelectedPolicy.Id);
-                originalEntity.PolicyAgent = null;
-                SelectedPolicy.PolicyAgent = null;
                 var entity = _mapper.Map(SelectedPolicy, originalEntity);
+                entity.PolicyAgent = null;
+                entity.PolicyAgents = null;
                 entity.PeoplePolicys = null;
                 entity.BusinessPolicys = null;
-                entity.Status = SelectedPolicyStatus != null ? SelectedPolicyStatus.FieldCode.Trim() : SelectedPolicy.Status.Substring(0, 1);
-                entity.Frequency = SelectedPolicyFrequencyType != null ? SelectedPolicyFrequencyType.FieldCode.Trim() : SelectedPolicy.Frequency.Substring(0, 1);
-                entity.Type = SelectedPolicyType != null ? SelectedPolicyType.FieldCode.Trim() : SelectedPolicy.Type.Substring(0, 1);
-                entity.Company = SelectedPolicyCompany != null ? SelectedPolicyCompany.FieldCode.Trim() : SelectedPolicy.CompanyName.Substring(0, 1);
-                entity.Currency = SelectedPolicyCurrency != null ? SelectedPolicyCurrency.FieldCode.Trim() : SelectedPolicy.Currency.Substring(0, 3);
+                entity.Status = SelectedPolicyStatus != null ? SelectedPolicyStatus.FieldCode.Trim() : string.Empty;
+                entity.Frequency = SelectedPolicyFrequencyType != null ? SelectedPolicyFrequencyType.FieldCode.Trim() : string.Empty;
+                entity.Type = SelectedPolicyType != null ? SelectedPolicyType.FieldCode.Trim() : string.Empty;
+                entity.Company = SelectedPolicyCompany != null ? SelectedPolicyCompany.FieldCode.Trim() : string.Empty;
+                entity.Currency = SelectedPolicyCurrency != null ? SelectedPolicyCurrency.FieldCode.Trim() : string.Empty;
                 entity.IssueAge = SelectedPolicy.Age.ToString();
 
                 _unitOfWork.Policies.Save(entity);
                 _unitOfWork.Commit();
 
-                var updatedEntity = _unitOfWork.Policies.GetById(entity.Keynumo);
-                SelectedPolicy = _mapper.Map<ViewPolicyListDto>(updatedEntity);
+                SelectedPolicy = _mapper.Map<ViewPolicyListDto>(originalEntity);
                 SavedPolicyDetail = SelectedPolicy;
                 PolicySelectedClient = SelectedClient;
                 GetPolicyCollection();
@@ -919,9 +941,9 @@ namespace CMG.Application.ViewModel
         private bool IsValidPolicy()
         {
             DateTime date = new DateTime();
-            if (string.IsNullOrEmpty(SelectedPolicy.CompanyName.Trim()))
+            if (SelectedPolicyCompany == null || (SelectedPolicyCompany != null && SelectedPolicyCompany.Id == 0))
             {
-                _notifier.ShowError("Company name is invalid");
+                _notifier.ShowError("Please select company name");
                 return false;
             }
             if (!decimal.TryParse(SelectedPolicy.FaceAmount.ToString(), out decimal faceAmount))

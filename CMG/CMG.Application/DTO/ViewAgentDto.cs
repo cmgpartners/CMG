@@ -15,5 +15,7 @@ namespace CMG.Application.DTO
         public bool IsDeleted { get; set; }
         public string CurrentUser { get; set; }
         public bool IsChecked { get; set; }
+        public int Keynump { get; set; }
+        public int keynumb { get; set; }
     }
 }

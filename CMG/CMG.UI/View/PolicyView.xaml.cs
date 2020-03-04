@@ -49,6 +49,9 @@ namespace CMG.UI.View
         private const string ColumnNamePolicyNotes = "Policy Notes";
         private const string ColumnNameClientNotes = "Client Notes";
         private const string ColumnNameInternalNotes = "Internal Notes";
+        private const string ColumnNameBeneficiary = "Beneficiary";
+        private const string ColumnNameInsured = "Insured";
+        private const string ColumnNameOwner = "Owner";
         private const string MenuItemAddColumns = "Add Columns";
         private const string MenuItemRemove = "Remove";
 
@@ -70,6 +73,9 @@ namespace CMG.UI.View
         private const string BindingPolicyNotes = "PolicyNotes";
         private const string BindingClientNotes = "ClientNotes";
         private const string BindingInternalNotes = "InternalNotes";
+        private const string BindingBeneficiary = "Beneficiary";
+        private const string BindingInsured = "Insured";
+        private const string BindingOwner = "Owner";
         #endregion
 
         public PolicyView()
@@ -230,87 +236,22 @@ namespace CMG.UI.View
             }
 
         }
-        private void BeginDrag(MouseEventArgs e)
+        private void UserControlPolicyNumber_Loaded(object sender, RoutedEventArgs e)
         {
-            try
+            string value = string.Empty;
+            if (policyViewModel != null
+                && !string.IsNullOrEmpty(policyViewModel.PolicyNumber))
             {
-                ListView searchOptionsListView = SearchOptionsList;
-                ListViewItem listViewItem = FindAnchestor<ListViewItem>((DependencyObject)e.OriginalSource);
-                if (listViewItem == null)
-                    return;
 
-                var currentColumn = searchOptionsListView.ItemContainerGenerator.ItemFromContainer(listViewItem);
-                //setup the drag adorner.
-                InitialiseAdorner(listViewItem);
-                DataObject data = new DataObject(currentColumn);
-                DragDropEffects de = DragDrop.DoDragDrop(SearchOptionsList, data, DragDropEffects.Move);
-                if (_adorner != null)
+                AutoCompleteBox autoCompleteBox = (AutoCompleteBox)sender;
+                if (autoCompleteBox != null)
                 {
-                    AdornerLayer.GetAdornerLayer(searchOptionsListView).Remove(_adorner);
-                    _adorner = null;
+                    autoCompleteBox.autoTextBox.Text = policyViewModel.PolicyNumber;
                 }
-            }
-            catch { }
-        }
-        private void InitialiseAdorner(ListViewItem listViewItem)
-        {
-            VisualBrush brush = new VisualBrush(listViewItem);
-            _adorner = new DragAdorner((UIElement)listViewItem, listViewItem.RenderSize, brush);
-            _adorner.Opacity = 0.5;
-            _layer = AdornerLayer.GetAdornerLayer(SearchOptionsList as Visual);
-            _layer.Add(_adorner);
-        }
-        private static T FindAnchestor<T>(DependencyObject current)
-        where T : DependencyObject
-        {
-            do
-            {
-                if (current is T)
+                var searchOption = (ViewSearchOptionsDto)autoCompleteBox.DataContext;
+                if (searchOption.ColumnOrder == 0)
                 {
-                    return (T)current;
-                }
-                current = VisualTreeHelper.GetParent(current);
-            }
-            while (current != null);
-            return null;
-        }
-        private void EntityTypePanel_Loaded(object sender, RoutedEventArgs e)
-        {
-            WrapPanel entityTypePanel = (WrapPanel)sender;
-            var entityTypeAutoComplete = entityTypePanel.Children.Count > 0 ? (AutoCompleteBox)entityTypePanel.Children[1] : null;
-            if (entityTypeAutoComplete != null)
-            {
-                if (policyViewModel != null
-                    && !string.IsNullOrEmpty(policyViewModel.EntityType))
-                {
-                    entityTypeAutoComplete.autoTextBox.Text = policyViewModel.EntityType;
-                }
-
-            }
-        }
-        private void PolicyNumberPanel_Loaded(object sender, RoutedEventArgs e)
-        {
-            WrapPanel policyNumberPanel = (WrapPanel)sender;
-            var policyNumberAutoComplete = policyNumberPanel.Children.Count > 0 ? (AutoCompleteBox)policyNumberPanel.Children[1] : null;
-            if (policyNumberAutoComplete != null)
-            {
-                if (policyViewModel != null
-                    && !string.IsNullOrEmpty(policyViewModel.PolicyNumber))
-                {
-                    policyNumberAutoComplete.autoTextBox.Text = policyViewModel.PolicyNumber;
-                }
-            }
-        }
-        private void CompanyNamePanel_Loaded(object sender, RoutedEventArgs e)
-        {
-            WrapPanel companyNamePanel = (WrapPanel)sender;
-            var companyNameAutoComplete = companyNamePanel.Children.Count > 0 ? (AutoCompleteBox)companyNamePanel.Children[1] : null;
-            if (companyNameAutoComplete != null)
-            {
-                if (policyViewModel != null
-                    && !string.IsNullOrEmpty(policyViewModel.CompanyName))
-                {
-                    companyNameAutoComplete.autoTextBox.Text = policyViewModel.CompanyName;
+                    autoCompleteBox.autoTextBox.Focus();
                 }
             }
         }
@@ -345,6 +286,8 @@ namespace CMG.UI.View
             {
                 ResizePolicyGridColumns(policies.Columns[i].Header.ToString());
             }
+            if(policies.Items.Count > 0)
+                policies.SelectedItem = policies.Items[0];
         }
         private void MenuItemRemoveColumn_Click(object sender, RoutedEventArgs e)
         {
@@ -468,7 +411,7 @@ namespace CMG.UI.View
                     break;
                 case ColumnNameFaceAmount:
                 case ColumnNamePayment:
-                    SetPolicyGridColumnWidth(columnName, 110);
+                    SetPolicyGridColumnWidth(columnName, 90);
                     break;
                 case ColumnNameFrequency:
                 case ColumnNameType:
@@ -482,6 +425,7 @@ namespace CMG.UI.View
                 case ColumnNamePlacedOn:
                 case ColumnNameReprojectedOn:
                 case ColumnNameStatus:
+                case ColumnNameInsured:
                     SetPolicyGridColumnWidth(columnName, 100);
                     break;
                 case ColumnNameAge:
@@ -490,6 +434,9 @@ namespace CMG.UI.View
                 case ColumnNamePolicyNotes:
                 case ColumnNameClientNotes:
                 case ColumnNameInternalNotes:
+                case ColumnNameBeneficiary:
+                case ColumnNameOwner:
+
                     SetPolicyGridColumnWidth(columnName, 150);
                     break;
                 default:
@@ -730,6 +677,36 @@ namespace CMG.UI.View
                         }
                     }
                     break;
+                case ColumnNameOwner:
+                    bindingPath = BindingOwner;
+                    if (policyViewModel.PolicyCollection != null)
+                    {
+                        for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
+                        {
+                            policyViewModel.PolicyCollection[i].Owner = policyViewModel.PolicyCollection[i].Owner;
+                        }
+                    }
+                    break;
+                case ColumnNameBeneficiary:
+                    bindingPath = BindingBeneficiary;
+                    if (policyViewModel.PolicyCollection != null)
+                    {
+                        for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
+                        {
+                            policyViewModel.PolicyCollection[i].Beneficiary = policyViewModel.PolicyCollection[i].Beneficiary;
+                        }
+                    }
+                    break;
+                case ColumnNameInsured:
+                    bindingPath = BindingInsured;
+                    if (policyViewModel.PolicyCollection != null)
+                    {
+                        for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
+                        {
+                            policyViewModel.PolicyCollection[i].Insured = policyViewModel.PolicyCollection[i].Insured;
+                        }
+                    }
+                    break;
                 default:
                     break;
             }
@@ -737,6 +714,13 @@ namespace CMG.UI.View
             elementStyle.Setters.Add(new Setter(TextBlock.TextWrappingProperty, TextWrapping.WrapWithOverflow));
             elementStyle.Setters.Add(new Setter(VerticalContentAlignmentProperty, VerticalAlignment.Center));
             elementStyle.Setters.Add(new Setter(VerticalAlignmentProperty, VerticalAlignment.Center));
+            if(columnName == ColumnNameFaceAmount || columnName == ColumnNamePayment)
+            {
+                elementStyle.Setters.Add(new Setter(HorizontalAlignmentProperty, HorizontalAlignment.Right));
+                Style headerStyle = new Style(typeof(DataGridColumnHeader), (Style)FindResource("HeaderStyle"));
+                headerStyle.Setters.Add(new Setter(HorizontalAlignmentProperty, HorizontalAlignment.Center));
+                dataGridColumn.HeaderStyle = headerStyle;
+            }
 
             dataGridColumn.ElementStyle = elementStyle;
             dataGridColumn.Header = columnName;
@@ -747,21 +731,33 @@ namespace CMG.UI.View
         }
         private void SetCellStyle(DataGridTextColumn dataGridColumn, string bindingPath)
         {
-            dataGridColumn.Binding = new Binding(bindingPath);
+            var binding = new Binding(bindingPath);
             dataGridColumn.IsReadOnly = true;
             Style cellStyle = new Style(typeof(DataGridCell));
             cellStyle.Setters.Add(new Setter(FontWeightProperty, FontWeights.Bold));
             cellStyle.Setters.Add(new Setter(BorderThicknessProperty, new Thickness(0)));
             cellStyle.Setters.Add(new Setter(ForegroundProperty, Brushes.Black));
-            if (bindingPath == "CompanyName")
+            if (bindingPath == BindingCompanyName)
             {
                 Binding backgroundBinding = new Binding(bindingPath) { Converter = new CompanyCellBackgroundConverter() };
                 cellStyle.Setters.Add(new Setter(BackgroundProperty, backgroundBinding));
+                cellStyle.Setters.Add(new Setter(MarginProperty, new Thickness(0,0,10,0)));
             }
             else
             {
                 cellStyle.Setters.Add(new Setter(BackgroundProperty, Brushes.Transparent));
             }
+            if(bindingPath == BindingFaceAmount)
+            {
+                binding.StringFormat = "#,#";
+                cellStyle.Setters.Add(new Setter(MarginProperty, new Thickness(0, 0, 10, 0)));
+            }
+            if(bindingPath == BindingPayment)
+            {
+                binding.StringFormat = "#,#.00";
+                cellStyle.Setters.Add(new Setter(MarginProperty, new Thickness(0, 0, 10, 0)));
+            }
+            dataGridColumn.Binding = binding;
             dataGridColumn.CellStyle = cellStyle;
         }
         private void DefaultPolicyGridColumns(List<string> columnNames)
@@ -778,6 +774,51 @@ namespace CMG.UI.View
             }
             policies.Columns.Insert(0, policyEditColumn);
         }
+        private void BeginDrag(MouseEventArgs e)
+        {
+            try
+            {
+                ListView searchOptionsListView = SearchOptionsList;
+                ListViewItem listViewItem = FindAnchestor<ListViewItem>((DependencyObject)e.OriginalSource);
+                if (listViewItem == null)
+                    return;
+
+                var currentColumn = searchOptionsListView.ItemContainerGenerator.ItemFromContainer(listViewItem);
+                //setup the drag adorner.
+                InitialiseAdorner(listViewItem);
+                DataObject data = new DataObject(currentColumn);
+                DragDropEffects de = DragDrop.DoDragDrop(SearchOptionsList, data, DragDropEffects.Move);
+                if (_adorner != null)
+                {
+                    AdornerLayer.GetAdornerLayer(searchOptionsListView).Remove(_adorner);
+                    _adorner = null;
+                }
+            }
+            catch { }
+        }
+        private void InitialiseAdorner(ListViewItem listViewItem)
+        {
+            VisualBrush brush = new VisualBrush(listViewItem);
+            _adorner = new DragAdorner((UIElement)listViewItem, listViewItem.RenderSize, brush);
+            _adorner.Opacity = 0.5;
+            _layer = AdornerLayer.GetAdornerLayer(SearchOptionsList as Visual);
+            _layer.Add(_adorner);
+        }
+        private static T FindAnchestor<T>(DependencyObject current)
+        where T : DependencyObject
+        {
+            do
+            {
+                if (current is T)
+                {
+                    return (T)current;
+                }
+                current = VisualTreeHelper.GetParent(current);
+            }
+            while (current != null);
+            return null;
+        }
+       
         #endregion Methods
     }
 }
