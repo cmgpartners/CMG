@@ -188,9 +188,12 @@
                     </StackPanel>
                     <Grid Grid.Row="1">
                         <DataGrid AutoGenerateColumns="False" x:Name="search" IsReadOnly="True" Background="{x:Null}" GridLinesVisibility="None"
-                          ItemsSource="{Binding DataContext.ClientCollection, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}" 
-                          ColumnHeaderStyle="{StaticResource ClientHeaderStyle}" RowStyle="{StaticResource ClientRowStyle }" 
-                          SelectionUnit="FullRow" SelectedItem="{Binding SelectedClient}" SelectionChanged="Search_SelectionChanged">
+                          ItemsSource="{Binding DataContext.SelectedViewModel.ClientCollection, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}" 
+                          ColumnHeaderStyle="{StaticResource ClientHeaderStyle}" RowStyle="{StaticResource ClientRowStyle }"
+                          SelectionChanged="Search_SelectionChanged"
+                          SelectionUnit="FullRow" SelectedItem="{Binding DataContext.SelectedViewModel.SelectedClient, 
+                                                                         UpdateSourceTrigger=PropertyChanged, 
+                                                                         RelativeSource={RelativeSource AncestorType=Window}}">
                             <DataGrid.Columns>
                                 <DataGridTemplateColumn Header="Common Name" Width="105" SortMemberPath="CommonName" CanUserSort="True" HeaderStyle="{StaticResource ClientFirstColumnHeaderStyle }">
                                     <DataGridTemplateColumn.CellTemplate>
