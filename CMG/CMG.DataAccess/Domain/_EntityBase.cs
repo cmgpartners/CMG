@@ -11,6 +11,6 @@ namespace CMG.DataAccess.Domain
         public string Cr8Locn { get; set; }
         public DateTime RevDate { get; set; }
         public string RevLocn { get; set; }
-        public bool? Del { get; set; }
+        public bool Del { get; set; } = false;
     }
 }
