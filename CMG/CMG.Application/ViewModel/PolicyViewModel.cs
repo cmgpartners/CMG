@@ -348,16 +348,6 @@ namespace CMG.Application.ViewModel
             get { return _categoryCollection; }
             set { _categoryCollection = value; }
         }
-        private ViewClientSearchDto _policySelectedClient;
-        public ViewClientSearchDto PolicySelectedClient
-        {
-            get { return _policySelectedClient; }
-            set
-            {
-                _policySelectedClient = value;
-                OnPropertyChanged("PolicySelectedClient");
-            }
-        }
         private List<ViewAgentDto> _agentCollection;
         public List<ViewAgentDto> AgentCollection
         {
@@ -751,56 +741,56 @@ namespace CMG.Application.ViewModel
         }
         private void GetPolicyCollection()
         {
-                SearchQuery searchQuery = new SearchQuery();
-                List<FilterBy> searchBy = new List<FilterBy>();
-                BuildFilterByEquals("keynump", SelectedClient.Keynump.ToString(), searchBy);
-                searchQuery.FilterBy = searchBy;
+            SearchQuery searchQuery = new SearchQuery();
+            List<FilterBy> searchBy = new List<FilterBy>();
+            BuildFilterByEquals("keynump", SelectedClient.Keynump.ToString(), searchBy);
+            searchQuery.FilterBy = searchBy;
 
-                var dataSearchBy = _unitOfWork.Policies.Find(searchQuery);
+            var dataSearchBy = _unitOfWork.Policies.Find(searchQuery);
 
-                var policyCollection = dataSearchBy.Result.Select(r => _mapper.Map<ViewPolicyListDto>(r));
+            var policyCollection = dataSearchBy.Result.Select(r => _mapper.Map<ViewPolicyListDto>(r));
 
-                PolicyCollection = new ObservableCollection<ViewPolicyListDto>(policyCollection.Select(x =>
-                {
-                    x.Type = string.IsNullOrEmpty(x.Type.Trim()) ? "" : PolicyTypeCollection.Where(c => c.FieldCode == x.Type.Trim()).FirstOrDefault()?.Description;
-                    x.Frequency = string.IsNullOrEmpty(x.Frequency.Trim()) ? "" : FrequencyTypeCollection.Where(c => c.FieldCode == x.Frequency.Trim()).FirstOrDefault()?.Description;
-                    x.Status = string.IsNullOrEmpty(x.Status.Trim()) ? "" : StatusTypeCollection.Where(c => c.FieldCode == x.Status.Trim()).FirstOrDefault()?.Description;
-                    x.CompanyName = string.IsNullOrEmpty(x.CompanyName.Trim()) ? "" : CompanyCollection.Where(c => c.FieldCode == x.CompanyName.Trim()).FirstOrDefault()?.Description;
-                    x.Relationships = new ObservableCollection<ViewRelationshipDto>(x.Relationships.Select(
-                        p =>
-                        {
-                            p.Category = string.IsNullOrEmpty(p.Category.Trim()) ? "" : CategoryCollection.Where(c => c.FieldCode == p.Category.Trim()).FirstOrDefault()?.Description;
-                            return p;
-                        }
-                    ).ToList());
-                    x.PolicyAgents = x.PolicyAgents.Select(
-                         a =>
-                         {
-                             var agent = AgentCollection.Where(agent => agent.Keynump == a.PeopleOrBusinessId).FirstOrDefault();
-                             if(agent != null)
-                             {
-                                 a.Agent = agent;
-                             }
-                             else
-                             {
-                                 string[] agentName = a.Name.Split(" ");
-                                 agentName = agentName.Length > 0 ? agentName[0].Split(",") : default;
-                                 a.Agent = new ViewAgentDto() { FirstName = agentName.Length > 0 ? agentName[0] : string.Empty, Color = "#D3D3D3" };
-                             }
-                             return a;
-                         }
-                        ).ToList();
-                    return x;
-                }).OrderByDescending(o => o.PolicyDate));
-
-                if (PolicyCollection.Count > 0)
-                {
-                    if (SavedPolicyDetail != null
-                        && PolicyCollection.Where(x => x.Id == SavedPolicyDetail.Id).FirstOrDefault() != null)
+            PolicyCollection = new ObservableCollection<ViewPolicyListDto>(policyCollection.Select(x =>
+            {
+                x.Type = string.IsNullOrEmpty(x.Type.Trim()) ? "" : PolicyTypeCollection.Where(c => c.FieldCode == x.Type.Trim()).FirstOrDefault()?.Description;
+                x.Frequency = string.IsNullOrEmpty(x.Frequency.Trim()) ? "" : FrequencyTypeCollection.Where(c => c.FieldCode == x.Frequency.Trim()).FirstOrDefault()?.Description;
+                x.Status = string.IsNullOrEmpty(x.Status.Trim()) ? "" : StatusTypeCollection.Where(c => c.FieldCode == x.Status.Trim()).FirstOrDefault()?.Description;
+                x.CompanyName = string.IsNullOrEmpty(x.CompanyName.Trim()) ? "" : CompanyCollection.Where(c => c.FieldCode == x.CompanyName.Trim()).FirstOrDefault()?.Description;
+                x.Relationships = new ObservableCollection<ViewRelationshipDto>(x.Relationships.Select(
+                    p =>
                     {
-                        SelectedPolicy = PolicyCollection.Where(x => x.Id == SavedPolicyDetail.Id).FirstOrDefault();
+                        p.Category = string.IsNullOrEmpty(p.Category.Trim()) ? "" : CategoryCollection.Where(c => c.FieldCode == p.Category.Trim()).FirstOrDefault()?.Description;
+                        return p;
                     }
+                ).ToList());
+                x.PolicyAgents = x.PolicyAgents.Select(
+                        a =>
+                        {
+                            var agent = AgentCollection.Where(agent => agent.Keynump == a.PeopleOrBusinessId).FirstOrDefault();
+                            if(agent != null)
+                            {
+                                a.Agent = agent;
+                            }
+                            else
+                            {
+                                string[] agentName = a.Name.Split(" ");
+                                agentName = agentName.Length > 0 ? agentName[0].Split(",") : default;
+                                a.Agent = new ViewAgentDto() { FirstName = agentName.Length > 0 ? agentName[0] : string.Empty, Color = "#D3D3D3" };
+                            }
+                            return a;
+                        }
+                    ).ToList();
+                return x;
+            }).OrderByDescending(o => o.PolicyDate));
+
+            if (PolicyCollection.Count > 0)
+            {
+                if (SavedPolicyDetail != null
+                    && PolicyCollection.Where(x => x.Id == SavedPolicyDetail.Id).FirstOrDefault() != null)
+                {
+                    SelectedPolicy = PolicyCollection.Where(x => x.Id == SavedPolicyDetail.Id).FirstOrDefault();
                 }
+            }
         }
         private void ViewIllustration(object dividentScale)
         {
@@ -836,12 +826,11 @@ namespace CMG.Application.ViewModel
         }
         private void CancelPolicy()
         {
-            PolicySelectedClient = SelectedClient;
             if (SelectedPolicy != null)
             {
                 SavedPolicyDetail = SelectedPolicy;
             }
-            if (PolicySelectedClient != null)
+            if (SelectedClient != null)
             {
                 GetPolicyCollection();
             }
@@ -869,7 +858,6 @@ namespace CMG.Application.ViewModel
 
                 SelectedPolicy = _mapper.Map<ViewPolicyListDto>(originalEntity);
                 SavedPolicyDetail = SelectedPolicy;
-                PolicySelectedClient = SelectedClient;
                 GetPolicyCollection();
                 _notifier.ShowSuccess("Policy updated successfully");
             }
@@ -1171,11 +1159,11 @@ namespace CMG.Application.ViewModel
             entity.Keynuml = _unitOfWork.PeoplePolicy.GetMaxKeynuml() + 1;
             entity.Relatn = PersonRelation;
             entity.Bus = false;
+            entity.Del = false;
 
             _unitOfWork.PeoplePolicy.Add(entity);
             _unitOfWork.Commit();
             _notifier.ShowSuccess("Added successfully");
-            PolicySelectedClient = SelectedClient;
             
             SavedPolicyDetail = SelectedPolicy;
             GetPolicyCollection();
@@ -1193,6 +1181,7 @@ namespace CMG.Application.ViewModel
             entity.Keynum = _unitOfWork.BusinessPolicy.GetMaxKeynum() + 1;
             entity.Relatn = BusinessRelation;
             entity.Bus = true;
+            entity.Del = false;
 
             _unitOfWork.BusinessPolicy.Add(entity);
             _unitOfWork.Commit();
