@@ -120,6 +120,7 @@ namespace CMG.UI
             {
                 fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _mainViewModel.MainSelectedClient, _memoryCache, _dialogService, _notifier);
             }
+            fileManagerViewModel.ClientCollection = _mainViewModel.ClientCollection;
             _mainViewModel.SelectedViewModel = fileManagerViewModel;
             fileManagerViewModel.PolicyNumber = _mainViewModel.PolicyNumber;
             DataContext = _mainViewModel;
@@ -144,6 +145,7 @@ namespace CMG.UI
             else if(_mainViewModel.SelectedViewModel != null
                 && _mainViewModel.SelectedViewModel is FileManagerViewModel)
             {
+                _mainViewModel.ClientCollection = ((FileManagerViewModel)_mainViewModel.SelectedViewModel).ClientCollection;
                 _mainViewModel.MainSelectedClient = ((FileManagerViewModel)_mainViewModel.SelectedViewModel).SelectedClient;
             }
         }

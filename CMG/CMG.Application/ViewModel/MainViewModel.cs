@@ -426,11 +426,17 @@ namespace CMG.Application.ViewModel
                     x.SVCType = string.IsNullOrEmpty(x.SVCType.Trim()) ? "" : SVCTypeCollection.Where(c => c.FieldCode == x.SVCType.Trim()).FirstOrDefault()?.Description;
                     return x;
                 }));
-                if(SelectedViewModel is PolicyViewModel)
+                if (SelectedViewModel is PolicyViewModel)
                 {
                     var policyViewModel = (PolicyViewModel)SelectedViewModel;
                     policyViewModel.ClientCollection = ClientCollection;
                     policyViewModel.SelectedClient = ClientCollection[0];
+                }
+                else if (SelectedViewModel is FileManagerViewModel)
+                {
+                    var fileManagerViewModel = (FileManagerViewModel)SelectedViewModel;
+                    fileManagerViewModel.ClientCollection = ClientCollection;
+                    fileManagerViewModel.SelectedClient = ClientCollection[0];
                 }
             }
         }
