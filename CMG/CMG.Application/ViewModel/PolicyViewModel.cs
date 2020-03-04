@@ -1064,6 +1064,10 @@ namespace CMG.Application.ViewModel
                         {
                             SelectedClient = ClientCollection[0];
                         }
+                        else
+                        {
+                            GetPolicyCollection();
+                        }
                     }
                 }
             }

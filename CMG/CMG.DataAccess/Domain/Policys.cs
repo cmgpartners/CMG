@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CMG.DataAccess.Domain
 {
@@ -69,6 +70,7 @@ namespace CMG.DataAccess.Domain
         public virtual ICollection<PolicyAgent> PolicyAgent { get; set; }
         public virtual ICollection<PeoplePolicys> PeoplePolicys { get; set; } = new List<PeoplePolicys>();
         public virtual ICollection<BusinessPolicys> BusinessPolicys { get; set; } = new List<BusinessPolicys>();
+        [NotMapped]
         public virtual ICollection<PeoplePolicys> PolicyAgents { get; set; } = new List<PeoplePolicys>();
     }
 }
