@@ -34,14 +34,14 @@ namespace CMG.DataAccess.Repository
 
         public Policys FindByPolicyNumber(string policyNumber)
         {
-            var query = Context.Policys.Where(p => p.Policynum == policyNumber).AsQueryable().Include(x => x.PolicyAgent).ThenInclude(x => x.Agent);
+            var query = Context.Policys.Where(p => p.Policynum == policyNumber).AsQueryable().Include(x => x.CommissionAgents).ThenInclude(x => x.Agent);
             return query.Select(x => new Policys
             {
                 Keynumo = x.Keynumo,
                 Policynum = x.Policynum,
                 Company = x.Company,
                 Insur = x.Insur,
-                PolicyAgent = x.PolicyAgent.Select(a => new PolicyAgent
+                CommissionAgents = x.CommissionAgents.Select(a => new PolicyAgent
                 {
                     Id = a.Id,
                     PolicyId = a.PolicyId,
@@ -56,7 +56,7 @@ namespace CMG.DataAccess.Repository
         public IQueryResult<Policys> Find(ISearchCriteria criteria)
         {
             var excludeCategoryList = excludeCategory.Split(',').Select(x => x.Trim()).ToList();
-            var query = Context.Policys.Include(x => x.PeoplePolicys).Include(p => p.PolicyAgent).ThenInclude(a => a.Agent);
+            var query = Context.Policys.Include(x => x.PeoplePolicys).Include(p => p.CommissionAgents).ThenInclude(a => a.Agent);
 
             IQueryable<Policys> queryable = query;
             if ((criteria.FilterBy?.Count() ?? 0) > 0)
@@ -120,7 +120,7 @@ namespace CMG.DataAccess.Repository
                     Bus = a.Bus,
                     Del = a.Del
                 }).ToList(),
-                PolicyAgent = x.PolicyAgent.Select(p => new PolicyAgent
+                CommissionAgents = x.CommissionAgents.Select(p => new PolicyAgent
                 {
                     Id = p.Id,
                     AgentId = p.AgentId,

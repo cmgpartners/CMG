@@ -2390,7 +2390,7 @@ namespace CMG.DataAccess.Domain
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Policy)
-                    .WithMany(p => p.PolicyAgent)
+                    .WithMany(p => p.CommissionAgents)
                     .HasForeignKey(d => d.PolicyId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Policies_PolicyAgent");

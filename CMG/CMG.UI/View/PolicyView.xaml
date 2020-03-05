@@ -600,7 +600,7 @@
                         <StackPanel Grid.Row="6" Margin="20 10 10 10">
                             <Separator Background="LightGray" Margin="0 10"/>
                             <TextBlock Text="Commission Agents" FontWeight="Bold" Margin="0 0 0 10"></TextBlock>
-                            <ItemsControl ItemsSource="{Binding SelectedPolicy.PolicyAgent}">
+                            <ItemsControl ItemsSource="{Binding SelectedPolicy.CommissionAgents}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <UniformGrid Rows="4" Columns="2" HorizontalAlignment="Left" />

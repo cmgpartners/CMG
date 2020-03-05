@@ -842,7 +842,7 @@ namespace CMG.Application.ViewModel
             {
                 var originalEntity = _unitOfWork.Policies.GetById(SelectedPolicy.Id);
                 var entity = _mapper.Map(SelectedPolicy, originalEntity);
-                entity.PolicyAgent = null;
+                entity.CommissionAgents = null;
                 entity.PolicyAgents = null;
                 entity.PeoplePolicys = null;
                 entity.BusinessPolicys = null;

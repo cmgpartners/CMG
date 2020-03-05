@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CMG.Application.DTO
 {
-    public class ViewPolicyAgentDto
+    public class ViewCommissionAgentDto
     {
         public int Id { get; set; }
         public int PolicyId { get; set; }
