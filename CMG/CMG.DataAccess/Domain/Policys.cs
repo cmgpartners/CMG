@@ -11,7 +11,7 @@ namespace CMG.DataAccess.Domain
         {
             Commissions = new HashSet<Comm>();
             PolIll = new HashSet<PolIll>();
-            PolicyAgent = new HashSet<PolicyAgent>();
+            CommissionAgents = new HashSet<PolicyAgent>();
         }
         [Key]
         public int Keynumo { get; set; }
@@ -67,7 +67,7 @@ namespace CMG.DataAccess.Domain
 
         public virtual IEnumerable<Comm> Commissions { get; set; }
         public virtual ICollection<PolIll> PolIll { get; set; }
-        public virtual ICollection<PolicyAgent> PolicyAgent { get; set; }
+        public virtual ICollection<PolicyAgent> CommissionAgents { get; set; } // renamed variable name to commissionagents as this requirement change at the end of project
         public virtual ICollection<PeoplePolicys> PeoplePolicys { get; set; } = new List<PeoplePolicys>();
         public virtual ICollection<BusinessPolicys> BusinessPolicys { get; set; } = new List<BusinessPolicys>();
         [NotMapped]

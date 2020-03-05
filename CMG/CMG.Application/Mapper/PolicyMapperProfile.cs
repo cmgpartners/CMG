@@ -106,17 +106,16 @@ namespace CMG.Application.Mapper
                .ForMember(des => des.PolicyId, mo => mo.MapFrom(src => src.Keynumo))
                .ForMember(des => des.PolicyNumber, mo => mo.MapFrom(src => src.Policynum))
                .ForMember(des => des.CompanyName, mo => mo.MapFrom(src => src.Company))
-               .ForMember(des => des.InsuredName, mo => mo.MapFrom(src => src.Insur))
-               .ForMember(des => des.PolicyAgents, mo => mo.MapFrom(src => src.PolicyAgent));
+               .ForMember(des => des.InsuredName, mo => mo.MapFrom(src => src.Insur));
 
-            CreateMap<PolicyAgent, ViewPolicyAgentDto>()
+            CreateMap<PolicyAgent, ViewCommissionAgentDto>()
               .ForMember(des => des.Split, mo => mo.MapFrom(src => src.Split.HasValue ? (decimal)src.Split.Value : 0))
               .ReverseMap();
 
             CreateMap<ViewPolicyDto, ViewCommissionDto>()
-             .ForMember(des => des.AgentCommissions, mo => mo.MapFrom(src => src.PolicyAgents));
+             .ForMember(des => des.AgentCommissions, mo => mo.MapFrom(src => src.CommissionAgents));
 
-            CreateMap<ViewPolicyAgentDto, ViewAgentCommissionDto>()
+            CreateMap<ViewCommissionAgentDto, ViewAgentCommissionDto>()
             .ForMember(des => des.Id, mo => mo.Ignore());           
         }
         private void AfterMapPolicysToRelationship(Policys src, ViewPolicyListDto des)

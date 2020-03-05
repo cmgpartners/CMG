@@ -10,6 +10,6 @@ namespace CMG.Application.DTO
         public string PolicyNumber { get; set; }
         public string CompanyName { get; set; }
         public string InsuredName { get; set; }
-        public ICollection<ViewPolicyAgentDto> PolicyAgents { get; set; } = new List<ViewPolicyAgentDto>();
+        public ICollection<ViewCommissionAgentDto> CommissionAgents { get; set; } = new List<ViewCommissionAgentDto>();
     }
 }

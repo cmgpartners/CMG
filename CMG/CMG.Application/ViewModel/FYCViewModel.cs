@@ -282,12 +282,12 @@ namespace CMG.Application.ViewModel
                 policyDto = _mapper.Map<ViewPolicyDto>(policy);
                 if (policyDto != null)
                 {
-                    List<ViewAgentCommissionDto> agnetCommissions = new List<ViewAgentCommissionDto>();
+                    List<ViewAgentCommissionDto> agentCommissions = new List<ViewAgentCommissionDto>();
                     var currentCommission = DataCollection.Where(comm => comm.CommissionId == ((ViewCommissionDto)currentItem).CommissionId).SingleOrDefault();
                     if (currentCommission != null)
                     {
                         var mappedCurrrentItem = _mapper.Map(policyDto, currentCommission);
-                        agnetCommissions = mappedCurrrentItem.AgentCommissions.ToList();
+                        agentCommissions = mappedCurrrentItem.AgentCommissions.ToList();
                         var index = DataCollection.IndexOf(currentCommission);
                         DataCollection[index] = new ViewCommissionDto()
                         {
@@ -296,7 +296,7 @@ namespace CMG.Application.ViewModel
                             CommissionId = mappedCurrrentItem.CommissionId,
                             IsNew = true,
                             PolicyId = mappedCurrrentItem.PolicyId,
-                            AgentCommissions = agnetCommissions,
+                            AgentCommissions = agentCommissions,
                             PayDate = currentCommission.PayDate,
                             PolicyNumber = currentCommission.PolicyNumber,
                             IsNotNew = false,
