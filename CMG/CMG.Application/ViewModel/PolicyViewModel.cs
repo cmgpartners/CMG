@@ -1060,7 +1060,8 @@ namespace CMG.Application.ViewModel
                         _unitOfWork.Commit();
                         var deletedPerson = ClientCollection.Where(x => x.Keynump == selectedRelationship.PeopleOrBusinessId).FirstOrDefault();
                         ClientCollection.Remove(deletedPerson);
-                        if (SelectedClient == null)
+                        if (SelectedClient == null
+                            && ClientCollection.Count > 0)
                         {
                             SelectedClient = ClientCollection[0];
                         }

@@ -430,13 +430,19 @@ namespace CMG.Application.ViewModel
                 {
                     var policyViewModel = (PolicyViewModel)SelectedViewModel;
                     policyViewModel.ClientCollection = ClientCollection;
-                    policyViewModel.SelectedClient = ClientCollection[0];
+                    if (ClientCollection.Count > 0)
+                    {
+                        policyViewModel.SelectedClient = ClientCollection[0];
+                    }
                 }
                 else if (SelectedViewModel is FileManagerViewModel)
                 {
                     var fileManagerViewModel = (FileManagerViewModel)SelectedViewModel;
                     fileManagerViewModel.ClientCollection = ClientCollection;
-                    fileManagerViewModel.SelectedClient = ClientCollection[0];
+                    if (ClientCollection.Count > 0)
+                    {
+                        fileManagerViewModel.SelectedClient = ClientCollection[0];
+                    }
                 }
             }
         }
