@@ -213,15 +213,15 @@ namespace CMG.UI.View
                     btnDrive.Content = nestedStackPanel;
                     spDrives.Children.Add(btnDrive);
                 }
-                string networkDrive = fileManagerViewModel.MappedDrives.Where(x => x.DriveType == DriveType.Network).FirstOrDefault().Name.ToString().Trim();
-                BindDefaultTreeViewItem(networkDrive, networkDrive);
-                BindFilesToListControl(networkDrive);
+                FindClientFodlerFromDrives();
             }
        }
         private void BtnDrive_Click(object sender, RoutedEventArgs e)
         {
+            ChangeButtonBackground("White");
             FolderView.Items.Clear();
             Button button = (Button)sender;
+            button.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A3FF");
             StackPanel stackPanel = (StackPanel)button.Content;
             TextBlock txtBlock = (TextBlock)stackPanel.Children[1];
 
@@ -261,6 +261,13 @@ namespace CMG.UI.View
         #endregion Events
 
         #region Methods
+        private void ChangeButtonBackground(string color)
+        {
+            foreach (Button button in spDrives.Children)
+            {
+                button.Background = (SolidColorBrush)new BrushConverter().ConvertFrom(color);
+            }
+        }
         private void InitializeViewModel()
         {
             if (fileManagerViewModel == null
@@ -351,6 +358,7 @@ namespace CMG.UI.View
         }
         private void FindClientFodlerFromDrives()
         {
+            ChangeButtonBackground("White");
             isFolderFound = false;
             FolderView.Items.Clear();
             List<string> drives = fileManagerViewModel.MappedDrives.Select(x => x.Name).ToList();
@@ -362,6 +370,15 @@ namespace CMG.UI.View
                     BindDefaultTreeViewItem(drives[i], drives[i]);
                     SelectClientFolder(drives[i]);
                 }
+                if(isFolderFound)
+                {
+                    if (spDrives.Children.Count > 0)
+                    {
+                        Button button = (Button)spDrives.Children[i];
+                        button.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A3FF");
+                    }
+                    break;
+                }
             }
             if(!isFolderFound)
             {
@@ -369,6 +386,13 @@ namespace CMG.UI.View
                 string networkDrive = fileManagerViewModel.MappedDrives.Where(x => x.DriveType == DriveType.Network).FirstOrDefault().Name.ToString().Trim();
                 BindDefaultTreeViewItem(networkDrive, networkDrive);
                 BindFilesToListControl(networkDrive);
+                SelectClientFolder(networkDrive);
+                int index = fileManagerViewModel.MappedDrives.FindIndex(x => x.Name == networkDrive);
+                if (spDrives.Children.Count > 0)
+                {
+                    Button button = (Button)spDrives.Children[index];
+                    button.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A3FF");
+                }
             }
         }
         private void SelectClientFolder(string driveName)
