@@ -27,6 +27,7 @@ namespace CMG.UI.View
         private AdornerLayer _layer;
         private Point startPoint;
         private FileManagerViewModel fileManagerViewModel;
+        private bool isFolderFound;
         #endregion Member variables
 
         #region Constructor
@@ -41,7 +42,7 @@ namespace CMG.UI.View
                     FolderView.Items.Clear();
                     string networkDrive = fileManagerViewModel.MappedDrives.Where(x => x.DriveType == DriveType.Network).FirstOrDefault().Name.ToString().Trim();
                     BindDefaultTreeViewItem(networkDrive, networkDrive);
-                    SelectClientFolder(networkDrive);
+                    FindClientFodlerFromDrives();
                 }
             }));
         }
@@ -216,7 +217,6 @@ namespace CMG.UI.View
                 BindDefaultTreeViewItem(networkDrive, networkDrive);
                 BindFilesToListControl(networkDrive);
             }
-
        }
         private void BtnDrive_Click(object sender, RoutedEventArgs e)
         {
@@ -240,8 +240,8 @@ namespace CMG.UI.View
             InitializeViewModel();
             string networkDrive = fileManagerViewModel.MappedDrives.Where(x => x.DriveType == DriveType.Network).FirstOrDefault().Name.ToString().Trim();
             BindDefaultTreeViewItem(networkDrive, networkDrive);
-            SelectClientFolder(networkDrive);
-        }        
+            FindClientFodlerFromDrives();
+        }
         private void lstFiles_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             StackPanel stackPanel = (StackPanel)((ListView)sender).SelectedItem;
@@ -349,6 +349,28 @@ namespace CMG.UI.View
                 lstFiles.Items.Add(stackPanel);
             }
         }
+        private void FindClientFodlerFromDrives()
+        {
+            isFolderFound = false;
+            FolderView.Items.Clear();
+            List<string> drives = fileManagerViewModel.MappedDrives.Select(x => x.Name).ToList();
+            for (int i = 0; i < drives.Count; i++)
+            {
+                if(!isFolderFound)
+                {
+                    FolderView.Items.Clear();
+                    BindDefaultTreeViewItem(drives[i], drives[i]);
+                    SelectClientFolder(drives[i]);
+                }
+            }
+            if(!isFolderFound)
+            {
+                FolderView.Items.Clear();
+                string networkDrive = fileManagerViewModel.MappedDrives.Where(x => x.DriveType == DriveType.Network).FirstOrDefault().Name.ToString().Trim();
+                BindDefaultTreeViewItem(networkDrive, networkDrive);
+                BindFilesToListControl(networkDrive);
+            }
+        }
         private void SelectClientFolder(string driveName)
         {
             if (fileManagerViewModel.SelectedClient != null)
@@ -377,6 +399,7 @@ namespace CMG.UI.View
                                         nested.IsSelected = true;
                                         BindTreeviewItems(nested);
                                         BindFilesToListControl(nested.Tag.ToString());
+                                        isFolderFound = true;
                                     }
                                 }
                             }
