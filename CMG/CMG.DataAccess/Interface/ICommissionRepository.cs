@@ -9,6 +9,5 @@ namespace CMG.DataAccess.Interface
         IQueryResult<Comm> Find(ISearchCriteria criteria);
         Comm Find(long? id);
         List<Comm> GetRenewals(string yrmo);
-        
     }
 }

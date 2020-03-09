@@ -227,6 +227,5 @@ namespace CMG.DataAccess.Repository
         {
             return w => (w.Comment ?? string.Empty).ToLowerInvariant().Contains(contains.ToLowerInvariant());
         }
-        
     }
 }
