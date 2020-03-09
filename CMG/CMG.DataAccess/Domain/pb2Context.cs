@@ -43,6 +43,7 @@ namespace CMG.DataAccess.Domain
         public virtual DbSet<Withd> Withd { get; set; }
 
         public virtual DbSet<Options> Options { get; set; }
+        public virtual DbQuery<DBTablePermissions> TablePermissions { get; set; }
 
         // Unable to generate entity type for table 'dbo.KEY_TABLE'. Please see the warning messages.
         // Unable to generate entity type for table 'dbo.TEMPLATES1'. Please see the warning messages.

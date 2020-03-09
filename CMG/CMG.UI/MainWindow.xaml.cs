@@ -42,7 +42,14 @@ namespace CMG.UI
             _notifier = InitializeNotifier();
             InitializeComponent();
             _mainViewModel = new MainViewModel(_unitOfWork, _mapper, _memoryCache, _notifier);
-            lstNavItems.SelectedItem = lstNavItems.Items[0];
+            if (_mainViewModel.HasCommissionAccess)
+                lstNavItems.SelectedItem = lstNavItems.Items[0];
+            else
+            {
+                PolicyMenu_Click(new object(), new RoutedEventArgs());
+                CommissionHeaderRow.Height = new GridLength(0);
+                CollapsibleRow.Height = new GridLength(0);
+            }
         }
         private void LstNavItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -202,7 +209,8 @@ namespace CMG.UI
             timer.Tick += (sender, args) =>
             {
                 timer.Stop();
-                CollapsibleRow.Height = new GridLength(45);
+                if(_mainViewModel.HasCommissionAccess)
+                    CollapsibleRow.Height = new GridLength(45);
             };
         }
         private void ResetMenuSelection(bool isCommissionMenuSelected)

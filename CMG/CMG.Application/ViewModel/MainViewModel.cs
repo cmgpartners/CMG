@@ -31,6 +31,7 @@ namespace CMG.Application.ViewModel
         private const string comboFieldNameSVCType = "SVC_TYPE";
         private const string comboFieldNameClientType = "CLIENTTYP";
         private const string comboFieldNameCompany = "COMPANY";
+        private const string commissionAccessCacheKey = "CommissionAccess";
 
         private const string ColumnNamePolicyNumber = "Policy Number";
         private const string ColumnNameCompany = "Company";
@@ -64,6 +65,7 @@ namespace CMG.Application.ViewModel
             _memoryCache = memoryCache;
             _notifier = notifier;
             GetUserOptions();
+            CheckCommissionAccess();
             LoadData();
         }
 
@@ -84,7 +86,7 @@ namespace CMG.Application.ViewModel
             set { selectedViewModel = value; OnPropertyChanged("SelectedViewModel"); }
         }
 
-        private int selectedIndexLeftNavigation;
+        private int selectedIndexLeftNavigation = -1;
         public int SelectedIndexLeftNavigation
         {
             get { return selectedIndexLeftNavigation; }
@@ -276,6 +278,8 @@ namespace CMG.Application.ViewModel
             get { return _combo; }
             set { _combo = value; }
         }
+        public bool HasCommissionAccess { get; set; }
+        
         #endregion Properties
 
         #region Methods
@@ -558,7 +562,22 @@ namespace CMG.Application.ViewModel
             _unitOfWork.Commit();
             if(_memoryCache != null)
                 _memoryCache.Set(optionsCacheKey, originalSearchOptions);
-        }        
+        }     
+        
+        public void CheckCommissionAccess()
+        {
+            if(_memoryCache != null)
+            {
+                if(!_memoryCache.TryGetValue(commissionAccessCacheKey, out bool hasCommissionAccess))
+                {
+                    HasCommissionAccess = _unitOfWork.HasCommissionAccess();
+                }
+                else
+                {
+                    HasCommissionAccess = hasCommissionAccess;
+                }
+            }
+        }
         public void GetUserOptions()
         {
             if(_memoryCache != null)
