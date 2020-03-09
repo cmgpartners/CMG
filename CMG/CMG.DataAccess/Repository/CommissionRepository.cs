@@ -95,7 +95,6 @@ namespace CMG.DataAccess.Repository
                 TotalRecords = totalRecords
             };
         }
-
         private static Expression<Func<Comm, bool>> GetPredicate(ISearchCriteria criteria)
         {
             Expression<Func<Comm, bool>> predicate = null;
@@ -113,7 +112,6 @@ namespace CMG.DataAccess.Repository
             }
             return predicate;
         }
-
         private IQueryable<Comm> OrderByPredicate(IQueryable<Comm> query, SortBy criteriaSortBy)
         {
             bool DescendingOrder = criteriaSortBy.DescendingOrder.HasValue && criteriaSortBy.DescendingOrder.Value;
@@ -162,7 +160,6 @@ namespace CMG.DataAccess.Repository
             }
 
         }
-
         private static Expression<Func<Comm, bool>> FilterByClausure(FilterBy filterBy)
         {
             switch (filterBy.Property.ToLower())
@@ -186,7 +183,6 @@ namespace CMG.DataAccess.Repository
                     throw new InvalidOperationException($"Can not filter for criteria: filter by {filterBy.Property}");
             }
         }
-
         private static Expression<Func<Comm, bool>> DateRangeExpression(string greaterThan, string lessThan)
         {
             if(!string.IsNullOrEmpty(greaterThan)
@@ -207,27 +203,22 @@ namespace CMG.DataAccess.Repository
             }
             return w => true;
         }
-
         private static Expression<Func<Comm, bool>> PolicyNumberExpression(string contains)
         {
             return w => w.Policy.Policynum.ToLowerInvariant().Contains(contains.ToLowerInvariant());
         }
-
         private static Expression<Func<Comm, bool>> InsuredNameExpession(string contains)
         {
             return w => w.Insured.ToLowerInvariant().Contains(contains.ToLowerInvariant());
         }
-
         private static Expression<Func<Comm, bool>> CompanyNameExpession(string contains)
         {
             return w => w.Policy.Company.ToLowerInvariant().Contains(contains.ToLowerInvariant());
         }
-
         private static Expression<Func<Comm, bool>> AgentExpression(string equals)
         {
             return w => w.AgentCommissions.Any(x => x.AgentId == Convert.ToInt32(equals));
         }
-
         private static Expression<Func<Comm, bool>> RenewalOrFYCExpression(string equal)
         {
             return w => w.Commtype.Equals(equal.Trim());
@@ -236,6 +227,5 @@ namespace CMG.DataAccess.Repository
         {
             return w => (w.Comment ?? string.Empty).ToLowerInvariant().Contains(contains.ToLowerInvariant());
         }
-
     }
 }

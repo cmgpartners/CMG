@@ -7,9 +7,7 @@ namespace CMG.DataAccess.Interface
     public interface ICommissionRepository : IRepository<Comm>
     {
         IQueryResult<Comm> Find(ISearchCriteria criteria);
-
         Comm Find(long? id);
-
         List<Comm> GetRenewals(string yrmo);
     }
 }
