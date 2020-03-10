@@ -7,6 +7,7 @@ using System.IO;
 using ToastNotifications;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace CMG.Application.ViewModel
 {
@@ -16,7 +17,7 @@ namespace CMG.Application.ViewModel
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IDialogService _dialogService;
-        private readonly Notifier _notifier;
+        public readonly Notifier _notifier;
         #endregion Member variables
 
         #region Constructor
@@ -28,6 +29,7 @@ namespace CMG.Application.ViewModel
             _notifier = notifier;
             _dialogService = dialogService;
             SelectedViewModel = this;
+            FilesCollection = new ObservableCollection<ViewFilesDto>();
         }
         public FileManagerViewModel(IUnitOfWork unitOfWork, IMapper mapper, ViewClientSearchDto selectedClientInput, IMemoryCache memoryCache = null, IDialogService dialogService = null, Notifier notifier = null)
             :base(unitOfWork, mapper, memoryCache)
@@ -37,6 +39,7 @@ namespace CMG.Application.ViewModel
             _notifier = notifier;
             _dialogService = dialogService;
             SelectedViewModel = this;
+            FilesCollection = new ObservableCollection<ViewFilesDto>();
             if (selectedClientInput != null)
             {
                 SelectedClient = selectedClientInput;
@@ -71,6 +74,25 @@ namespace CMG.Application.ViewModel
         public bool IsClientSelected
         {
             get { return SelectedClient != null ? true : false; }
+        }
+        
+        private ObservableCollection<ViewFilesDto> _filesCollection;
+        public ObservableCollection<ViewFilesDto> FilesCollection 
+        {
+            get { return _filesCollection; }
+            set
+            {
+                _filesCollection = value;
+                OnPropertyChanged("FilesCollection");
+                OnPropertyChanged("IsNoFile");
+            }
+        }
+        public bool IsNoFile
+        {
+            get
+            {
+                return FilesCollection != null && FilesCollection.Count == 0;
+            }
         }
         #endregion properties
     }
