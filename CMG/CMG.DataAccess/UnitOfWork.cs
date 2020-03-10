@@ -5,6 +5,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Threading.Tasks;
 using CMG.DataAccess.Repository;
+using Microsoft.EntityFrameworkCore;
+using System.Data;
+using System.Linq;
 
 namespace CMG.DataAccess
 {
@@ -121,6 +124,23 @@ namespace CMG.DataAccess
                     _isDisposed = true;
                 }
             }
+        }
+
+        public bool HasCommissionAccess()
+        {
+            var result = _context.TablePermissions.FromSql("EXEC sp_table_privileges @table_name = 'COMM';").ToList();
+            if(result != null && result.Count > 0)
+            {
+                result = result.Where(r => r.Grantee != "dbo").ToList();
+                if(result != null && result.Count > 0)
+                {
+                    if (result.Any(r => (r.Privilege == "INSERT" && r.Is_Grantable == "YES") && (r.Privilege == "UPDATE" && r.Is_Grantable == "YES") && (r.Privilege == "DELETE" && r.Is_Grantable == "YES")))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 }

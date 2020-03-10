@@ -23,5 +23,6 @@ namespace CMG.DataAccess.Interface
 
         void Commit();
         void SaveChanges();
+        public bool HasCommissionAccess();
     }
 }
