@@ -448,6 +448,15 @@ namespace CMG.Application.ViewModel
                         fileManagerViewModel.SelectedClient = ClientCollection[0];
                     }
                 }
+                else if (SelectedViewModel is PeopleViewModel)
+                {
+                    var peopleViewModel = (PeopleViewModel)SelectedViewModel;
+                    peopleViewModel.ClientCollection = ClientCollection;
+                    if (ClientCollection.Count > 0)
+                    {
+                        peopleViewModel.SelectedClient = ClientCollection[0];
+                    }
+                }
             }
         }
         private bool IsValidSearchCriteria()
@@ -569,7 +578,6 @@ namespace CMG.Application.ViewModel
             if(_memoryCache != null)
                 _memoryCache.Set(optionsCacheKey, originalSearchOptions);
         }     
-        
         public void CheckCommissionAccess()
         {
             if(_memoryCache != null)

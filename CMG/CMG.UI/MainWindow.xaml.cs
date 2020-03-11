@@ -46,7 +46,7 @@ namespace CMG.UI
                 lstNavItems.SelectedItem = lstNavItems.Items[0];
             else
             {
-                PolicyMenu_Click(new object(), new RoutedEventArgs());
+                PeopleMenu_Click(new object(), new RoutedEventArgs());
                 CommissionHeaderRow.Height = new GridLength(0);
                 CollapsibleRow.Height = new GridLength(0);
             }
@@ -141,21 +141,22 @@ namespace CMG.UI
             _mainViewModel.SelectedViewModel = configurationViewModel;
             DataContext = _mainViewModel;            
         }
-        private void GetSelectedClient()
+        private void PeopleMenu_Click(object sender, RoutedEventArgs e)
         {
-            if(_mainViewModel.SelectedViewModel != null
-                && _mainViewModel.SelectedViewModel is PolicyViewModel)
+            GetSelectedClient();
+            ResetMenuSelection(false);
+            PeopleMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
+            PeopleViewModel peopleViewModel = new PeopleViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
+            if (_mainViewModel.MainSelectedClient != null)
             {
-                _mainViewModel.ClientCollection = ((PolicyViewModel)_mainViewModel.SelectedViewModel).ClientCollection;
-                _mainViewModel.MainSelectedClient = ((PolicyViewModel)_mainViewModel.SelectedViewModel).SelectedClient;
+                peopleViewModel = new PeopleViewModel(_unitOfWork, _mapper, _mainViewModel.MainSelectedClient, _memoryCache, _dialogService, _notifier);
             }
-            else if(_mainViewModel.SelectedViewModel != null
-                && _mainViewModel.SelectedViewModel is FileManagerViewModel)
-            {
-                _mainViewModel.ClientCollection = ((FileManagerViewModel)_mainViewModel.SelectedViewModel).ClientCollection;
-                _mainViewModel.MainSelectedClient = ((FileManagerViewModel)_mainViewModel.SelectedViewModel).SelectedClient;
-            }
+            peopleViewModel.ClientCollection = _mainViewModel.ClientCollection;
+            _mainViewModel.SelectedViewModel = peopleViewModel;
+            peopleViewModel.PolicyNumber = _mainViewModel.PolicyNumber;
+            DataContext = _mainViewModel;
         }
+       
         private void Salesforce_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             NavigateToSalesforce();
@@ -218,11 +219,35 @@ namespace CMG.UI
             PolicyMenu.Background = null;
             FileManagerMenu.Background = null;
             ConfigurationMenu.Background = null;
+            PeopleMenu.Background = null;
             if (!isCommissionMenuSelected)
             {
                 CloseCommissionMenu();
             }
         }
+        private void GetSelectedClient()
+        {
+            if (_mainViewModel.SelectedViewModel != null
+                && _mainViewModel.SelectedViewModel is PolicyViewModel)
+            {
+                _mainViewModel.ClientCollection = ((PolicyViewModel)_mainViewModel.SelectedViewModel).ClientCollection;
+                _mainViewModel.MainSelectedClient = ((PolicyViewModel)_mainViewModel.SelectedViewModel).SelectedClient;
+            }
+            else if (_mainViewModel.SelectedViewModel != null
+                && _mainViewModel.SelectedViewModel is FileManagerViewModel)
+            {
+                _mainViewModel.ClientCollection = ((FileManagerViewModel)_mainViewModel.SelectedViewModel).ClientCollection;
+                _mainViewModel.MainSelectedClient = ((FileManagerViewModel)_mainViewModel.SelectedViewModel).SelectedClient;
+            }
+            else if (_mainViewModel.SelectedViewModel != null
+                && _mainViewModel.SelectedViewModel is PeopleViewModel)
+            {
+                _mainViewModel.ClientCollection = ((PeopleViewModel)_mainViewModel.SelectedViewModel).ClientCollection;
+                _mainViewModel.MainSelectedClient = ((PeopleViewModel)_mainViewModel.SelectedViewModel).SelectedClient;
+            }
+        }
         #endregion
+
+
     }
 }
