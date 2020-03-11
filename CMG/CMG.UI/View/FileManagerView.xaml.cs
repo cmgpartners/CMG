@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Diagnostics;
 using MaterialDesignThemes.Wpf;
+using ToastNotifications.Messages;
 
 namespace CMG.UI.View
 {
@@ -40,8 +41,15 @@ namespace CMG.UI.View
                 {
                     FolderView.Items.Clear();
                     string networkDrive = fileManagerViewModel.MappedDrives.Where(x => x.DriveType == DriveType.Network).FirstOrDefault().Name.ToString().Trim();
-                    BindDefaultTreeViewItem(networkDrive, networkDrive);
-                    FindClientFolderFromDrives();
+                    if (!string.IsNullOrEmpty(networkDrive))
+                    {
+                        BindDefaultTreeViewItem(networkDrive, networkDrive);
+                        FindClientFolderFromDrives();
+                    }
+                    else
+                    {
+                        fileManagerViewModel._notifier.ShowError("Please map Netwrok drive");
+                    }
                 }
             }));
         }
@@ -225,7 +233,6 @@ namespace CMG.UI.View
             TextBlock txtBlock = (TextBlock)stackPanel.Children[1];
 
             BindDefaultTreeViewItem(txtBlock.Text, txtBlock.Text);
-            BindFilesToListControl(txtBlock.Text.Trim());
             SelectClientFolder(txtBlock.Text.Trim());
         }
         private void Item_Expanded(object sender, RoutedEventArgs e)
@@ -238,24 +245,28 @@ namespace CMG.UI.View
             FolderView.Items.Clear();
             InitializeViewModel();
             string networkDrive = fileManagerViewModel.MappedDrives.Where(x => x.DriveType == DriveType.Network).FirstOrDefault().Name.ToString().Trim();
-            BindDefaultTreeViewItem(networkDrive, networkDrive);
-            FindClientFolderFromDrives();
-        }
-        private void lstFiles_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            StackPanel stackPanel = (StackPanel)((ListView)sender).SelectedItem;
-
-            string path = ((TextBlock)stackPanel.Children[2]).Text;
-            // Open file
-            Process.Start("explorer.exe", path);
+            if (!string.IsNullOrEmpty(networkDrive))
+            {
+                BindDefaultTreeViewItem(networkDrive, networkDrive);
+                FindClientFolderFromDrives();
+            }
+            else
+            {
+                fileManagerViewModel._notifier.ShowError("Please map Netwrok drive");
+            }
         }
         private void FolderView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             TreeViewItem tvi = (TreeViewItem)((TreeView)sender).SelectedItem;
             if (tvi != null)
             {
-                BindFilesToListControl(tvi.Tag.ToString());
+                BindFileCollection(tvi.Tag.ToString());
             }
+        }
+        private void Files_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            ViewFilesDto item = (ViewFilesDto)((DataGrid)sender).CurrentItem;
+            Process.Start("explorer.exe", item.Path);
         }
         #endregion Events
 
@@ -289,72 +300,69 @@ namespace CMG.UI.View
             FolderView.Items.Add(item);
             BindTreeviewItems((TreeViewItem)FolderView.Items[0]);
         }
-        private void BindFilesToListControl(string path)
+        private void BindFileCollection(string path)
         {
-            lstFiles.Items.Clear();
+            fileManagerViewModel.FilesCollection = new ObservableCollection<ViewFilesDto>();
+            ViewFilesDto viewFilesDto;
             string[] files = Directory.GetFiles(path.Trim());
-            string fileExtension;
+            FileInfo fi;
             foreach (var file in files)
             {
-                TextBlock txtFileName = new TextBlock();
-                TextBlock txtFilePath = new TextBlock();
-                txtFilePath.Visibility = Visibility.Collapsed;
-
-                txtFileName.Text = new DirectoryInfo(file).Name;
-                txtFileName.Padding = new Thickness(5, 0, 0, 0);
-                txtFilePath.Text = file;
-                fileExtension = new FileInfo(file).Extension.ToLower().Trim();
-
-                StackPanel stackPanel = new StackPanel();
-                stackPanel.Orientation = Orientation.Horizontal;
-
-                PackIcon packIcon = new PackIcon();
-                packIcon.Foreground = (SolidColorBrush)new BrushConverter().ConvertFrom("Black");
-
-                if (fileExtension == ".docx"
+                fi = new FileInfo(file); 
+                viewFilesDto = new ViewFilesDto();
+                viewFilesDto.Name = new DirectoryInfo(file).Name;
+                viewFilesDto.Path = file;
+                viewFilesDto.IconType = GetIconType(fi.Extension.Trim().ToLower());
+                viewFilesDto.Size = file.Length;
+                viewFilesDto.ModifiedDateTime = fi.LastWriteTime;
+                fileManagerViewModel.FilesCollection.Add(viewFilesDto);
+            }
+            fileManagerViewModel.FilesCollection = fileManagerViewModel.FilesCollection;
+        }
+        private string GetIconType(string fileExtension)
+        {
+            string result = string.Empty;
+            if (fileExtension == ".docx"
                     || fileExtension == ".doc"
                     || fileExtension == ".docm"
                     || fileExtension == ".dotx"
                     || fileExtension == ".dotm"
                     || fileExtension == ".docb")
-                {
-                    packIcon.Kind = PackIconKind.FileWord;                    
-                }
-                else if (fileExtension == ".xlsx"
+            {
+                result = PackIconKind.FileWord.ToString();
+            }
+            else if (fileExtension == ".xlsx"
                         || fileExtension == ".csv"
                         || fileExtension == ".xls"
                         || fileExtension == ".xlsm"
                         || fileExtension == ".xltx"
                         || fileExtension == ".xltm")
-                {
-                    packIcon.Kind = PackIconKind.FileExcel;
-                }
-                else if (fileExtension == ".pdf"
-                        || fileExtension == ".ps"
-                        || fileExtension == ".eps")
-                {
-                    packIcon.Kind = PackIconKind.FilePdf;
-                }
-
-                else if (fileExtension == ".html"
-                        || fileExtension == ".htm")
-                {
-                    packIcon.Kind = PackIconKind.InternetExplorer;
-                }
-                else if (fileExtension == ".txt")
-                {
-                    packIcon.Kind = PackIconKind.NoteText;
-                }
-                else
-                {
-                    packIcon.Kind = PackIconKind.File;                    
-                }
-                stackPanel.Children.Add(packIcon);
-                stackPanel.Children.Add(txtFileName);
-                stackPanel.Children.Add(txtFilePath);
-                lstFiles.Items.Add(stackPanel);
+            {
+                result = PackIconKind.FileExcel.ToString();
             }
-        }
+            else if (fileExtension == ".pdf"
+                    || fileExtension == ".ps"
+                    || fileExtension == ".eps")
+            {
+                result = PackIconKind.FilePdf.ToString();
+            }
+
+            else if (fileExtension == ".html"
+                    || fileExtension == ".htm")
+            {
+                result = PackIconKind.InternetExplorer.ToString();
+            }
+            else if (fileExtension == ".txt")
+            {
+                result = PackIconKind.NoteText.ToString();
+            }
+            else
+            {
+                result = PackIconKind.File.ToString();
+            }
+
+            return result;
+        }        
         private void FindClientFolderFromDrives()
         {
             bool isPathExists = false;
@@ -383,14 +391,22 @@ namespace CMG.UI.View
             if (!isPathExists)
             {
                 string networkDrive = fileManagerViewModel.MappedDrives.Where(x => x.DriveType == DriveType.Network).FirstOrDefault().Name.ToString().Trim();
-                BindDefaultTreeViewItem(networkDrive, networkDrive);
-                BindFilesToListControl(networkDrive);
-                SelectClientFolder(networkDrive);
-                int index = fileManagerViewModel.MappedDrives.FindIndex(x => x.Name == networkDrive);
-                if (spDrives.Children.Count > 0)
+                if (!string.IsNullOrEmpty(networkDrive))
                 {
-                    Button button = (Button)spDrives.Children[index];
-                    button.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A3FF");
+                    BindDefaultTreeViewItem(networkDrive, networkDrive);
+                    BindFileCollection(networkDrive);
+
+                    SelectClientFolder(networkDrive);
+                    int index = fileManagerViewModel.MappedDrives.FindIndex(x => x.Name == networkDrive);
+                    if (spDrives.Children.Count > 0)
+                    {
+                        Button button = (Button)spDrives.Children[index];
+                        button.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A3FF");
+                    }
+                }
+                else
+                {
+                    fileManagerViewModel._notifier.ShowError("Please map Netwrok drive");
                 }
             }
         }
@@ -421,7 +437,7 @@ namespace CMG.UI.View
                                         nested.IsExpanded = true;
                                         nested.IsSelected = true;
                                         BindTreeviewItems(nested);
-                                        BindFilesToListControl(nested.Tag.ToString());
+                                        BindFileCollection(nested.Tag.ToString());
                                     }
                                 }
                             }
