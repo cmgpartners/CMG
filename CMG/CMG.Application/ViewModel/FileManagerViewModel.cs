@@ -21,17 +21,7 @@ namespace CMG.Application.ViewModel
         #endregion Member variables
 
         #region Constructor
-        public FileManagerViewModel(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCache memoryCache = null, IDialogService dialogService = null, Notifier notifier = null)
-            : base(unitOfWork, mapper, memoryCache)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _notifier = notifier;
-            _dialogService = dialogService;
-            SelectedViewModel = this;
-            FilesCollection = new ObservableCollection<ViewFilesDto>();
-        }
-        public FileManagerViewModel(IUnitOfWork unitOfWork, IMapper mapper, ViewClientSearchDto selectedClientInput, IMemoryCache memoryCache = null, IDialogService dialogService = null, Notifier notifier = null)
+        public FileManagerViewModel(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCache memoryCache = null, IDialogService dialogService = null, Notifier notifier = null, ViewClientSearchDto selectedClientInput=null)
             :base(unitOfWork, mapper, memoryCache)
         {
             _unitOfWork = unitOfWork;

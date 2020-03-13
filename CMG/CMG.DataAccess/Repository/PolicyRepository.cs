@@ -31,6 +31,18 @@ namespace CMG.DataAccess.Repository
 
             return result;
         }
+        public ICollection<Policys> GetAutoSuggestionData()
+        {
+            var result = _context.Policys.Select(x => new Policys
+            {
+                Keynumo = x.Keynumo,
+                Plancode = x.Plancode,
+                Class = x.Class,
+                Risk = x.Risk
+            }).ToList();
+
+            return result;
+        }
 
         public Policys FindByPolicyNumber(string policyNumber)
         {

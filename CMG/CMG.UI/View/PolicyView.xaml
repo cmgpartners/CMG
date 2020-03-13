@@ -1084,7 +1084,15 @@
                 </StackPanel>
                 <StackPanel Grid.Column="2" Grid.Row="1" Margin="0 0 50 0">
                     <TextBlock Text="Plan Code" Margin="0 5"/>
-                    <TextBox Text="{Binding SelectedPolicy.PlanCode}" MaxLength="20"/>
+                    <uc:AutoCompleteBox 
+                                x:Name="UserControlPlanCode" 
+                                Foreground="Black" 
+                                BorderBrush="#FFCEEAFF" 
+                                BorderThickness="0 0 0 3"
+                                Width="auto"
+                                AutoSuggestionList="{Binding DataContext.SelectedViewModel.PlanCodes, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                SelectedValue="{Binding DataContext.SelectedViewModel.SelectedPolicy.PlanCode, RelativeSource={RelativeSource AncestorType=Window}}">
+                    </uc:AutoCompleteBox>
                 </StackPanel>
 
                 <StackPanel Grid.Column="0" Grid.Row="2" Margin="0 0 50 0">
@@ -1097,7 +1105,15 @@
                 </StackPanel>
                 <StackPanel Grid.Column="2" Grid.Row="2" Margin="0 0 50 0">
                     <TextBlock Text="Rating" Margin="0 5"/>
-                    <TextBox Text="{Binding SelectedPolicy.Rating}" MaxLength="20"/>
+                    <uc:AutoCompleteBox 
+                                x:Name="UserControlRating" 
+                                Foreground="Black" 
+                                BorderBrush="#FFCEEAFF" 
+                                BorderThickness="0 0 0 3"
+                                Width="auto"
+                                AutoSuggestionList="{Binding DataContext.SelectedViewModel.Ratings, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                SelectedValue="{Binding DataContext.SelectedViewModel.SelectedPolicy.Rating, RelativeSource={RelativeSource AncestorType=Window}}">
+                    </uc:AutoCompleteBox>
                 </StackPanel>
 
                 <StackPanel Grid.Column="0" Grid.Row="3" Margin="0 0 50 0">
@@ -1116,7 +1132,15 @@
                 </StackPanel>
                 <StackPanel Grid.Column="2" Grid.Row="3" Margin="0 0 50 0">
                     <TextBlock Text="Class" Margin="0 5"/>
-                    <TextBox Text="{Binding SelectedPolicy.Class}" MaxLength="10"/>
+                    <uc:AutoCompleteBox 
+                                x:Name="UserControlClass" 
+                                Foreground="Black" 
+                                BorderBrush="#FFCEEAFF" 
+                                BorderThickness="0 0 0 3"
+                                Width="auto"
+                                AutoSuggestionList="{Binding DataContext.SelectedViewModel.Classes, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                SelectedValue="{Binding DataContext.SelectedViewModel.SelectedPolicy.Class, RelativeSource={RelativeSource AncestorType=Window}}">
+                    </uc:AutoCompleteBox>
                 </StackPanel>
 
                 <StackPanel Grid.Column="0" Grid.Row="4" Margin="0 0 50 0">

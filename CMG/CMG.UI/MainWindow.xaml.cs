@@ -107,10 +107,14 @@ namespace CMG.UI
             GetSelectedClient();
             ResetMenuSelection(false);
             PolicyMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
-            PolicyViewModel policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
+            PolicyViewModel policyViewModel;
             if (_mainViewModel.MainSelectedClient != null)
             {
-                policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, _mainViewModel.MainSelectedClient, _memoryCache, _dialogService, _notifier);
+                policyViewModel = new PolicyViewModel(_unitOfWork, _mapper,  _memoryCache, _dialogService, _notifier, _mainViewModel.MainSelectedClient);
+            }
+            else
+            {
+                policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
             }
             policyViewModel.ClientCollection = _mainViewModel.ClientCollection;
             _mainViewModel.SelectedViewModel = policyViewModel;
@@ -122,10 +126,14 @@ namespace CMG.UI
             GetSelectedClient();
             ResetMenuSelection(false);
             FileManagerMenu.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A3FF");
-            FileManagerViewModel fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
+            FileManagerViewModel fileManagerViewModel;
             if (_mainViewModel.MainSelectedClient != null)
             {
-                fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _mainViewModel.MainSelectedClient, _memoryCache, _dialogService, _notifier);
+                fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier, _mainViewModel.MainSelectedClient);
+            }
+            else
+            {
+                fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
             }
             fileManagerViewModel.ClientCollection = _mainViewModel.ClientCollection;
             _mainViewModel.SelectedViewModel = fileManagerViewModel;
@@ -146,10 +154,14 @@ namespace CMG.UI
             GetSelectedClient();
             ResetMenuSelection(false);
             PeopleMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
-            PeopleViewModel peopleViewModel = new PeopleViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
+            PeopleViewModel peopleViewModel;
             if (_mainViewModel.MainSelectedClient != null)
             {
-                peopleViewModel = new PeopleViewModel(_unitOfWork, _mapper, _mainViewModel.MainSelectedClient, _memoryCache, _dialogService, _notifier);
+                peopleViewModel = new PeopleViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier, _mainViewModel.MainSelectedClient);
+            }
+            else
+            {
+                peopleViewModel = new PeopleViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
             }
             peopleViewModel.ClientCollection = _mainViewModel.ClientCollection;
             _mainViewModel.SelectedViewModel = peopleViewModel;

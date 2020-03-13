@@ -19,17 +19,7 @@ namespace CMG.Application.ViewModel
         #endregion
 
         #region Constructor
-        public PeopleViewModel(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCache memoryCache = null, IDialogService dialogService = null, Notifier notifier = null)
-            : base(unitOfWork, mapper, memoryCache)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _notifier = notifier;
-            _dialogService = dialogService;
-            SelectedViewModel = this;
-            LoadData();
-        }
-        public PeopleViewModel(IUnitOfWork unitOfWork, IMapper mapper, ViewClientSearchDto selectedClientInput, IMemoryCache memoryCache = null, IDialogService dialogService = null, Notifier notifier = null)
+        public PeopleViewModel(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCache memoryCache = null, IDialogService dialogService = null, Notifier notifier = null, ViewClientSearchDto selectedClientInput = null)
                : base(unitOfWork, mapper, memoryCache)
         {
             _unitOfWork = unitOfWork;
@@ -37,8 +27,6 @@ namespace CMG.Application.ViewModel
             _notifier = notifier;
             _dialogService = dialogService;
             SelectedViewModel = this;
-            LoadData();
-
             if (selectedClientInput != null)
             {
                 SelectedClient = selectedClientInput;
