@@ -36,18 +36,7 @@ namespace CMG.Application.ViewModel
         #endregion
 
         #region Constructor
-        public PolicyViewModel(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCache memoryCache = null, IDialogService dialogService = null, Notifier notifier = null)
-            : base(unitOfWork, mapper, memoryCache)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _notifier = notifier;
-            _dialogService = dialogService;
-            SelectedViewModel = this;
-            LoadData();
-        }
-        
-        public PolicyViewModel(IUnitOfWork unitOfWork, IMapper mapper, ViewClientSearchDto selectedClientInput, IMemoryCache memoryCache = null, IDialogService dialogService = null, Notifier notifier = null)
+        public PolicyViewModel(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCache memoryCache = null, IDialogService dialogService = null, Notifier notifier = null, ViewClientSearchDto selectedClientInput = null)
                : base(unitOfWork, mapper, memoryCache)
         {
             _unitOfWork = unitOfWork;
@@ -56,7 +45,6 @@ namespace CMG.Application.ViewModel
             _dialogService = dialogService;
             SelectedViewModel = this;
             LoadData();
-            
             if (selectedClientInput != null)
             {
                 SelectedClient = selectedClientInput;
@@ -588,6 +576,36 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("IsNoClientRecord");
             }
         }
+        private List<string> _planCodes;
+        public List<string> PlanCodes
+        {
+            get { return _planCodes; }
+            set
+            {
+                _planCodes = value;
+                OnPropertyChanged("PlanCodes");
+            }
+        }
+        private List<string> _classes;
+        public List<string> Classes
+        {
+            get { return _classes; }
+            set
+            {
+                _classes = value;
+                OnPropertyChanged("Classes");
+            }
+        }
+        private List<string> _ratings;
+        public List<string> Ratings
+        {
+            get { return _ratings; }
+            set
+            {
+                _ratings = value;
+                OnPropertyChanged("Ratings");
+            }
+        }
 
         #region command properties
         public ICommand ViewIllustrationCommand
@@ -712,10 +730,19 @@ namespace CMG.Application.ViewModel
             var agents = _unitOfWork.Agents.All();
             AgentCollection = agents.Select(a => _mapper.Map<ViewAgentDto>(a)).ToList();
         }
+        private void GetAutoSuggestionList()
+        {
+            var policies = _unitOfWork.Policies.GetAutoSuggestionData();
+            var policyList = policies.Select(r => _mapper.Map<ViewPolicyListDto>(r)).ToList();
+            PlanCodes = policyList.Where(r => !string.IsNullOrEmpty(r.PlanCode)).GroupBy(r => r.PlanCode).Select(r => r.First().PlanCode).ToList();
+            Classes = policyList.Where(r => !string.IsNullOrEmpty(r.Class)).GroupBy(r => r.Class).Select(r => r.First().Class).ToList();
+            Ratings = policyList.Where(r => !string.IsNullOrEmpty(r.Rating)).GroupBy(r => r.Rating).Select(r => r.First().Rating).ToList();
+        }
         private new void LoadData()
         {
             GetComboData();
             GetAgents();
+            GetAutoSuggestionList();
         }        
         private void BuildFilterByContains(string property, string value, List<FilterBy> searchBy)
         {
@@ -789,6 +816,10 @@ namespace CMG.Application.ViewModel
                     && PolicyCollection.Where(x => x.Id == SavedPolicyDetail.Id).FirstOrDefault() != null)
                 {
                     SelectedPolicy = PolicyCollection.Where(x => x.Id == SavedPolicyDetail.Id).FirstOrDefault();
+                }
+                else
+                {
+                    SelectedPolicy = PolicyCollection[0];
                 }
             }
         }
@@ -939,8 +970,8 @@ namespace CMG.Application.ViewModel
                 _notifier.ShowError("Faceamount is invalid");
                 return false;
             }
-            if (!DateTime.TryParse(SelectedPolicy.PolicyDate.ToString(), out DateTime policyDate)
-                || policyDate == date)
+            if (SelectedPolicy.PolicyDate != null
+               && !DateTime.TryParse(SelectedPolicy.PolicyDate.ToString(), out DateTime policyDate))
             {
                 _notifier.ShowError("Policy date is invalid");
                 return false;

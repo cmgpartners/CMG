@@ -516,6 +516,15 @@ namespace CMG.Application.ViewModel
                         fileManagerViewModel.SelectedClient = ClientCollection[0];
                     }
                 }
+                else if (SelectedViewModel is PeopleViewModel)
+                {
+                    var peopleViewModel = (PeopleViewModel)SelectedViewModel;
+                    peopleViewModel.ClientCollection = ClientCollection;
+                    if (ClientCollection.Count > 0)
+                    {
+                        peopleViewModel.SelectedClient = ClientCollection[0];
+                    }
+                }
             }
         }
         private bool IsValidSearchCriteria()

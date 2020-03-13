@@ -33,6 +33,9 @@
             <DataTemplate DataType="{x:Type viewModels:ConfigurationViewModel}">
                 <views:ConfigurationView DataContext="{Binding }"></views:ConfigurationView>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:PeopleViewModel}">
+                <views:PeopleView DataContext="{Binding }"></views:PeopleView>
+            </DataTemplate>
             <Storyboard x:Key="MenuOpen">
                 <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="GridMenu">
                     <EasingDoubleKeyFrame KeyTime="0" Value="0"></EasingDoubleKeyFrame>
@@ -68,6 +71,8 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="75"></RowDefinition>
                 <RowDefinition Height="225" x:Name="CollapsibleRow"></RowDefinition>
+                <RowDefinition Height="10"></RowDefinition>
+                <RowDefinition Height="40"></RowDefinition>
                 <RowDefinition Height="10"></RowDefinition>
                 <RowDefinition Height="40"></RowDefinition>
                 <RowDefinition Height="10"></RowDefinition>
@@ -138,10 +143,11 @@
                     </StackPanel>
                 </Grid>
             </Grid>
-            <Button Grid.Row="3"  Content="Policies" Style="{StaticResource LeftNavMenuButton}" x:Name="PolicyMenu" Width="145"  Click="PolicyMenu_Click"></Button>
-            <Button  Grid.Row="5" Content="File Manager" Style="{StaticResource LeftNavMenuButton}" x:Name="FileManagerMenu" Width="145"  Click="FileManagerMenu_Click"></Button>
-            <Button  Grid.Row="7" Content="Configuration" Style="{StaticResource LeftNavMenuButton}" x:Name="ConfigurationMenu" Width="145"  Click="ConfigurationMenu_Click"></Button>
-            <Button Grid.Row="9" Style="{StaticResource LeftNavMenuButton}" Width="145">
+            <Button Grid.Row="3"  Content="People" Style="{StaticResource LeftNavMenuButton}" x:Name="PeopleMenu" Width="145"  Click="PeopleMenu_Click"></Button>
+            <Button Grid.Row="5"  Content="Policies" Style="{StaticResource LeftNavMenuButton}" x:Name="PolicyMenu" Width="145"  Click="PolicyMenu_Click"></Button>
+            <Button  Grid.Row="7" Content="File Manager" Style="{StaticResource LeftNavMenuButton}" x:Name="FileManagerMenu" Width="145"  Click="FileManagerMenu_Click"></Button>
+            <Button  Grid.Row="9" Content="Configuration" Style="{StaticResource LeftNavMenuButton}" x:Name="ConfigurationMenu" Width="145"  Click="ConfigurationMenu_Click"></Button>
+            <Button Grid.Row="11" Style="{StaticResource LeftNavMenuButton}" Width="145">
                 <Hyperlink  NavigateUri="http://www.google.com" RequestNavigate="Salesforce_RequestNavigate" Style="{StaticResource HyperLinkStyle}">
                     Salesforce
                 </Hyperlink>
