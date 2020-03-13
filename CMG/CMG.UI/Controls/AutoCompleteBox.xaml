@@ -11,7 +11,7 @@
                     VerticalAlignment="Center"
                     HorizontalAlignment="Center">
             <TextBox x:Name="autoTextBox"
-                             MinWidth="130"
+                             MinWidth="200"
 		                     HorizontalAlignment="Stretch"
                              FontSize="13"
                              Padding="0 0 0 0"

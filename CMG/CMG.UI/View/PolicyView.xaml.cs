@@ -149,6 +149,13 @@ namespace CMG.UI.View
             PolicyEdit.Visibility = Visibility.Visible;
             PolicyEdit.Width = 700;
             PolicyMainView.Opacity = 0.05;
+            string value = string.Empty;
+            UserControlPlanCode.autoTextBox.Text = policyViewModel?.SelectedPolicy?.PlanCode;
+            UserControlClass.autoTextBox.Text = policyViewModel?.SelectedPolicy?.Class;
+            UserControlRating.autoTextBox.Text = policyViewModel?.SelectedPolicy?.Rating;
+            SetAutomCompleteStyle(UserControlPlanCode);
+            SetAutomCompleteStyle(UserControlClass);
+            SetAutomCompleteStyle(UserControlRating);
         }
         private void ButtonPolicyEditClose_Click(object sender, RoutedEventArgs e)
         {
@@ -818,7 +825,15 @@ namespace CMG.UI.View
             while (current != null);
             return null;
         }
-       
+
+        private void SetAutomCompleteStyle(AutoCompleteBox autoCompleteBox)
+        {
+            autoCompleteBox.autoList.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFFFFF"));
+            autoCompleteBox.autoList.Foreground = (SolidColorBrush)(new BrushConverter().ConvertFrom("#000000"));
+            autoCompleteBox.autoList.BorderThickness = new Thickness(1, 0, 1, 1);
+            autoCompleteBox.autoList.BorderBrush = (SolidColorBrush)(new BrushConverter().ConvertFrom("#808080"));
+            autoCompleteBox.autoList.Width = autoCompleteBox.autoTextBox.MinWidth - 34;
+        }
         #endregion Methods
     }
 }

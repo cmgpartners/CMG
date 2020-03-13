@@ -46,7 +46,7 @@ namespace CMG.UI
                 lstNavItems.SelectedItem = lstNavItems.Items[0];
             else
             {
-                PolicyMenu_Click(new object(), new RoutedEventArgs());
+                PeopleMenu_Click(new object(), new RoutedEventArgs());
                 CommissionHeaderRow.Height = new GridLength(0);
                 CollapsibleRow.Height = new GridLength(0);
             }
@@ -107,10 +107,14 @@ namespace CMG.UI
             GetSelectedClient();
             ResetMenuSelection(false);
             PolicyMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
-            PolicyViewModel policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
+            PolicyViewModel policyViewModel;
             if (_mainViewModel.MainSelectedClient != null)
             {
-                policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, _mainViewModel.MainSelectedClient, _memoryCache, _dialogService, _notifier);
+                policyViewModel = new PolicyViewModel(_unitOfWork, _mapper,  _memoryCache, _dialogService, _notifier, _mainViewModel.MainSelectedClient);
+            }
+            else
+            {
+                policyViewModel = new PolicyViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
             }
             policyViewModel.ClientCollection = _mainViewModel.ClientCollection;
             _mainViewModel.SelectedViewModel = policyViewModel;
@@ -122,10 +126,14 @@ namespace CMG.UI
             GetSelectedClient();
             ResetMenuSelection(false);
             FileManagerMenu.Background = (SolidColorBrush)new BrushConverter().ConvertFrom("#00A3FF");
-            FileManagerViewModel fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
+            FileManagerViewModel fileManagerViewModel;
             if (_mainViewModel.MainSelectedClient != null)
             {
-                fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _mainViewModel.MainSelectedClient, _memoryCache, _dialogService, _notifier);
+                fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier, _mainViewModel.MainSelectedClient);
+            }
+            else
+            {
+                fileManagerViewModel = new FileManagerViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
             }
             fileManagerViewModel.ClientCollection = _mainViewModel.ClientCollection;
             _mainViewModel.SelectedViewModel = fileManagerViewModel;
@@ -141,21 +149,26 @@ namespace CMG.UI
             _mainViewModel.SelectedViewModel = configurationViewModel;
             DataContext = _mainViewModel;            
         }
-        private void GetSelectedClient()
+        private void PeopleMenu_Click(object sender, RoutedEventArgs e)
         {
-            if(_mainViewModel.SelectedViewModel != null
-                && _mainViewModel.SelectedViewModel is PolicyViewModel)
+            GetSelectedClient();
+            ResetMenuSelection(false);
+            PeopleMenu.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#00A3FF"));
+            PeopleViewModel peopleViewModel;
+            if (_mainViewModel.MainSelectedClient != null)
             {
-                _mainViewModel.ClientCollection = ((PolicyViewModel)_mainViewModel.SelectedViewModel).ClientCollection;
-                _mainViewModel.MainSelectedClient = ((PolicyViewModel)_mainViewModel.SelectedViewModel).SelectedClient;
+                peopleViewModel = new PeopleViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier, _mainViewModel.MainSelectedClient);
             }
-            else if(_mainViewModel.SelectedViewModel != null
-                && _mainViewModel.SelectedViewModel is FileManagerViewModel)
+            else
             {
-                _mainViewModel.ClientCollection = ((FileManagerViewModel)_mainViewModel.SelectedViewModel).ClientCollection;
-                _mainViewModel.MainSelectedClient = ((FileManagerViewModel)_mainViewModel.SelectedViewModel).SelectedClient;
+                peopleViewModel = new PeopleViewModel(_unitOfWork, _mapper, _memoryCache, _dialogService, _notifier);
             }
+            peopleViewModel.ClientCollection = _mainViewModel.ClientCollection;
+            _mainViewModel.SelectedViewModel = peopleViewModel;
+            peopleViewModel.PolicyNumber = _mainViewModel.PolicyNumber;
+            DataContext = _mainViewModel;
         }
+       
         private void Salesforce_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             NavigateToSalesforce();
@@ -218,11 +231,35 @@ namespace CMG.UI
             PolicyMenu.Background = null;
             FileManagerMenu.Background = null;
             ConfigurationMenu.Background = null;
+            PeopleMenu.Background = null;
             if (!isCommissionMenuSelected)
             {
                 CloseCommissionMenu();
             }
         }
+        private void GetSelectedClient()
+        {
+            if (_mainViewModel.SelectedViewModel != null
+                && _mainViewModel.SelectedViewModel is PolicyViewModel)
+            {
+                _mainViewModel.ClientCollection = ((PolicyViewModel)_mainViewModel.SelectedViewModel).ClientCollection;
+                _mainViewModel.MainSelectedClient = ((PolicyViewModel)_mainViewModel.SelectedViewModel).SelectedClient;
+            }
+            else if (_mainViewModel.SelectedViewModel != null
+                && _mainViewModel.SelectedViewModel is FileManagerViewModel)
+            {
+                _mainViewModel.ClientCollection = ((FileManagerViewModel)_mainViewModel.SelectedViewModel).ClientCollection;
+                _mainViewModel.MainSelectedClient = ((FileManagerViewModel)_mainViewModel.SelectedViewModel).SelectedClient;
+            }
+            else if (_mainViewModel.SelectedViewModel != null
+                && _mainViewModel.SelectedViewModel is PeopleViewModel)
+            {
+                _mainViewModel.ClientCollection = ((PeopleViewModel)_mainViewModel.SelectedViewModel).ClientCollection;
+                _mainViewModel.MainSelectedClient = ((PeopleViewModel)_mainViewModel.SelectedViewModel).SelectedClient;
+            }
+        }
         #endregion
+
+
     }
 }
