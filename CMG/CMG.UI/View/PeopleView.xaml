@@ -45,7 +45,7 @@
                 <ColumnDefinition Width="575" x:Name="BusinessDetailsColumn"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Row="0" Grid.Column="0" Background="#FF252627" x:Name="SearchSliderPannel" ShowGridLines="False">
-                <uc:SearchPanelControl CustomClick="ButtonSearchSliderClose_Click"></uc:SearchPanelControl>
+                <uc:SearchPanelControl CustomSearchSliderCloseClick="ButtonSearchSliderClose_Click"></uc:SearchPanelControl>
             </Grid>
             <Grid Grid.Row="0" Grid.Column="1">
                 <Grid.RowDefinitions>

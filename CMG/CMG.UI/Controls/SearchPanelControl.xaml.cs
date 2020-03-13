@@ -19,24 +19,24 @@ namespace CMG.UI.Controls
         private DragAdorner _adorner;
         private AdornerLayer _layer;
         private Point startPoint;
-        private PeopleViewModel peopleViewModel;
-        public event RoutedEventHandler CustomClick;
+        private MainViewModel mainViewModel;
+        public event RoutedEventHandler CustomSearchSliderCloseClick;
         #endregion Member variables
         public SearchPanelControl()
         {
             InitializeComponent();
             Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() =>
             {
-                if (peopleViewModel == null)
+                if (mainViewModel == null)
                 {
-                    peopleViewModel = (PeopleViewModel)this.DataContext;
+                    mainViewModel = (MainViewModel)DataContext;
                 }
             }));
 
         }
         private void ButtonSearchSliderClose_Click(object sender, RoutedEventArgs e)
         {
-            CustomClick?.Invoke(this, new RoutedEventArgs());
+            CustomSearchSliderCloseClick?.Invoke(this, new RoutedEventArgs());
         }
         private void SearchOptionsList_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -59,7 +59,7 @@ namespace CMG.UI.Controls
         {
             try
             {
-                peopleViewModel = (PeopleViewModel)this.DataContext;
+                mainViewModel = (MainViewModel)this.DataContext;
                 ListView searchOptionsListView = (ListView)sender;
                 ViewSearchOptionsDto droppedData = (ViewSearchOptionsDto)FindAnchestor<ListViewItem>((DependencyObject)e.OriginalSource)?.DataContext;
                 ViewSearchOptionsDto draggedData = (ViewSearchOptionsDto)searchOptionsListView.SelectedItem;
@@ -73,21 +73,21 @@ namespace CMG.UI.Controls
                     {
                         for (var i = droppedDataIndex; i < draggedDataIndex; i++)
                         {
-                            peopleViewModel.SearchOptions[i].ColumnOrder = i + 1;
+                            mainViewModel.SearchOptions[i].ColumnOrder = i + 1;
                         }
-                        peopleViewModel.SearchOptions.Where(s => s.ColumnName == draggedData.ColumnName).Select(o => { o.ColumnOrder = droppedDataIndex; return o; }).ToList();
-                        peopleViewModel.SearchOptions = new ObservableCollection<ViewSearchOptionsDto>(peopleViewModel.SearchOptions.OrderBy(c => c.ColumnOrder).ToList());
+                        mainViewModel.SearchOptions.Where(s => s.ColumnName == draggedData.ColumnName).Select(o => { o.ColumnOrder = droppedDataIndex; return o; }).ToList();
+                        mainViewModel.SearchOptions = new ObservableCollection<ViewSearchOptionsDto>(mainViewModel.SearchOptions.OrderBy(c => c.ColumnOrder).ToList());
                     }
                     else if (droppedDataIndex > draggedDataIndex)
                     {
                         for (var i = droppedDataIndex; i > draggedDataIndex; i--)
                         {
-                            peopleViewModel.SearchOptions[i].ColumnOrder = i - 1;
+                            mainViewModel.SearchOptions[i].ColumnOrder = i - 1;
                         }
-                        peopleViewModel.SearchOptions.Where(s => s.ColumnName == draggedData.ColumnName).Select(o => { o.ColumnOrder = droppedDataIndex; return o; }).ToList();
-                        peopleViewModel.SearchOptions = new ObservableCollection<ViewSearchOptionsDto>(peopleViewModel.SearchOptions.OrderBy(c => c.ColumnOrder).ToList());
+                        mainViewModel.SearchOptions.Where(s => s.ColumnName == draggedData.ColumnName).Select(o => { o.ColumnOrder = droppedDataIndex; return o; }).ToList();
+                        mainViewModel.SearchOptions = new ObservableCollection<ViewSearchOptionsDto>(mainViewModel.SearchOptions.OrderBy(c => c.ColumnOrder).ToList());
                     }
-                    peopleViewModel.SaveSearchOptions();
+                    mainViewModel.SaveSearchOptions();
                 }
             }
             catch (Exception ex)
@@ -98,14 +98,14 @@ namespace CMG.UI.Controls
         }
         private void UserControlPolicyNumber_Loaded(object sender, RoutedEventArgs e)
         {
-            if (peopleViewModel != null
-                && !string.IsNullOrEmpty(peopleViewModel.PolicyNumber))
+            mainViewModel = (MainViewModel)this.DataContext;
+            if (!string.IsNullOrEmpty(mainViewModel.PolicyNumber))
             {
 
                 AutoCompleteBox autoCompleteBox = (AutoCompleteBox)sender;
                 if (autoCompleteBox != null)
                 {
-                    autoCompleteBox.autoTextBox.Text = peopleViewModel.PolicyNumber;
+                    autoCompleteBox.autoTextBox.Text = mainViewModel.PolicyNumber;
                 }
                 var searchOption = (ViewSearchOptionsDto)autoCompleteBox.DataContext;
                 if (searchOption.ColumnOrder == 0)
@@ -114,7 +114,6 @@ namespace CMG.UI.Controls
                 }
             }
         }
-
         #region Helper Methods
         private void BeginDrag(MouseEventArgs e)
         {

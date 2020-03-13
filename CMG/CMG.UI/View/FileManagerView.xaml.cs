@@ -24,9 +24,6 @@ namespace CMG.UI.View
     public partial class FileManagerView : UserControl
     {
         #region Member variables
-        private DragAdorner _adorner;
-        private AdornerLayer _layer;
-        private Point startPoint;
         private FileManagerViewModel fileManagerViewModel;
         #endregion Member variables
 
@@ -52,6 +49,7 @@ namespace CMG.UI.View
                     }
                 }
             }));
+            SearchPanelUserControl.search.SelectionChanged += Search_SelectionChanged;
         }
         #endregion Constructor
 
@@ -73,122 +71,6 @@ namespace CMG.UI.View
             SearchBar.Visibility = Visibility.Collapsed;
             SearchSliderColumn.Width = new GridLength(450);
             searchBarColumn.Width = new GridLength(0);
-        }
-        private void UserControlPolicyNumber_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (fileManagerViewModel != null
-                && !string.IsNullOrEmpty(fileManagerViewModel.PolicyNumber))
-            {
-
-                AutoCompleteBox autoCompleteBox = (AutoCompleteBox)sender;
-                if (autoCompleteBox != null)
-                {
-                    autoCompleteBox.autoTextBox.Text = fileManagerViewModel.PolicyNumber;
-                }
-                var searchOption = (ViewSearchOptionsDto)autoCompleteBox.DataContext;
-                if (searchOption.ColumnOrder == 0)
-                {
-                    autoCompleteBox.autoTextBox.Focus();
-                }
-            }
-        }
-        private void SearchOptionsList_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            startPoint = e.GetPosition(null);
-        }
-        private void SearchOptionsList_PreviewMouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                Point position = e.GetPosition(null);
-
-                if (Math.Abs(position.X - startPoint.X) > SystemParameters.MinimumHorizontalDragDistance ||
-                    Math.Abs(position.Y - startPoint.Y) > SystemParameters.MinimumVerticalDragDistance)
-                {
-                    BeginDrag(e);
-                }
-            }
-        }
-        private void SearchOptionsList_Drop(object sender, DragEventArgs e)
-        {
-            try
-            {
-                fileManagerViewModel = (FileManagerViewModel)this.DataContext;
-                ListView searchOptionsListView = (ListView)sender;
-                ViewSearchOptionsDto droppedData = (ViewSearchOptionsDto)FindAnchestor<ListViewItem>((DependencyObject)e.OriginalSource)?.DataContext;
-                ViewSearchOptionsDto draggedData = (ViewSearchOptionsDto)searchOptionsListView.SelectedItem;
-
-                var droppedDataIndex = searchOptionsListView.Items.IndexOf(droppedData);
-                var draggedDataIndex = searchOptionsListView.Items.IndexOf(draggedData);
-
-                if (draggedDataIndex >= 0 && droppedDataIndex >= 0)
-                {
-                    if (draggedDataIndex > droppedDataIndex)
-                    {
-                        for (var i = droppedDataIndex; i < draggedDataIndex; i++)
-                        {
-                            fileManagerViewModel.SearchOptions[i].ColumnOrder = i + 1;
-                        }
-                        fileManagerViewModel.SearchOptions.Where(s => s.ColumnName == draggedData.ColumnName).Select(o => { o.ColumnOrder = droppedDataIndex; return o; }).ToList();
-                        fileManagerViewModel.SearchOptions = new ObservableCollection<ViewSearchOptionsDto>(fileManagerViewModel.SearchOptions.OrderBy(c => c.ColumnOrder).ToList());
-                    }
-                    else if (droppedDataIndex > draggedDataIndex)
-                    {
-                        for (var i = droppedDataIndex; i > draggedDataIndex; i--)
-                        {
-                            fileManagerViewModel.SearchOptions[i].ColumnOrder = i - 1;
-                        }
-                        fileManagerViewModel.SearchOptions.Where(s => s.ColumnName == draggedData.ColumnName).Select(o => { o.ColumnOrder = droppedDataIndex; return o; }).ToList();
-                        fileManagerViewModel.SearchOptions = new ObservableCollection<ViewSearchOptionsDto>(fileManagerViewModel.SearchOptions.OrderBy(c => c.ColumnOrder).ToList());
-                    }
-                    fileManagerViewModel.SaveSearchOptions();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-        }
-        private static T FindAnchestor<T>(DependencyObject current)
-        where T : DependencyObject
-        {
-            do
-            {
-                if (current is T)
-                {
-                    return (T)current;
-                }
-                current = VisualTreeHelper.GetParent(current);
-            }
-            while (current != null);
-            return null;
-        }
-        private void InitialiseAdorner(ListViewItem listViewItem)
-        {
-            VisualBrush brush = new VisualBrush(listViewItem);
-            _adorner = new DragAdorner((UIElement)listViewItem, listViewItem.RenderSize, brush);
-            _adorner.Opacity = 0.5;
-            _layer = AdornerLayer.GetAdornerLayer(SearchOptionsList as Visual);
-            _layer.Add(_adorner);
-        }
-        private void BeginDrag(MouseEventArgs e)
-        {
-            ListView searchOptionsListView = SearchOptionsList;
-            ListViewItem listViewItem = FindAnchestor<ListViewItem>((DependencyObject)e.OriginalSource);
-            if (listViewItem == null)
-                return;
-
-            var currentColumn = searchOptionsListView.ItemContainerGenerator.ItemFromContainer(listViewItem);
-            //setup the drag adorner.
-            InitialiseAdorner(listViewItem);
-            DataObject data = new DataObject(currentColumn);
-            DragDropEffects de = DragDrop.DoDragDrop(SearchOptionsList, data, DragDropEffects.Move);
-            if (_adorner != null)
-            {
-                AdornerLayer.GetAdornerLayer(searchOptionsListView).Remove(_adorner);
-                _adorner = null;
-            }
         }
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {

@@ -24,9 +24,6 @@ namespace CMG.UI.View
     public partial class PolicyView : UserControl
     {
         #region Member variables
-        private DragAdorner _adorner;
-        private AdornerLayer _layer;
-        private Point startPoint;
         private PolicyViewModel policyViewModel;
         private ContextMenu ctxMenu;
         private MenuItem menuItem;
@@ -184,83 +181,6 @@ namespace CMG.UI.View
                 AddRelationship.Visibility = Visibility.Collapsed;
                 PolicyMainView.Opacity = 1;
             };
-        }
-        private void SearchOptionsList_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            startPoint = e.GetPosition(null);
-        }
-        private void SearchOptionsList_PreviewMouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                Point position = e.GetPosition(null);
-
-                if (Math.Abs(position.X - startPoint.X) > SystemParameters.MinimumHorizontalDragDistance ||
-                    Math.Abs(position.Y - startPoint.Y) > SystemParameters.MinimumVerticalDragDistance)
-                {
-                    BeginDrag(e);
-                }
-            }
-        }
-        private void SearchOptionsList_Drop(object sender, DragEventArgs e)
-        {
-            try
-            {
-                policyViewModel = (PolicyViewModel)this.DataContext;
-                ListView searchOptionsListView = (ListView)sender;
-                ViewSearchOptionsDto droppedData = (ViewSearchOptionsDto)FindAnchestor<ListViewItem>((DependencyObject)e.OriginalSource)?.DataContext;
-                ViewSearchOptionsDto draggedData = (ViewSearchOptionsDto)searchOptionsListView.SelectedItem;
-
-                var droppedDataIndex = searchOptionsListView.Items.IndexOf(droppedData);
-                var draggedDataIndex = searchOptionsListView.Items.IndexOf(draggedData);
-
-                if (draggedDataIndex >= 0 && droppedDataIndex >= 0)
-                {
-                    if (draggedDataIndex > droppedDataIndex)
-                    {
-                        for (var i = droppedDataIndex; i < draggedDataIndex; i++)
-                        {
-                            policyViewModel.SearchOptions[i].ColumnOrder = i + 1;
-                        }
-                        policyViewModel.SearchOptions.Where(s => s.ColumnName == draggedData.ColumnName).Select(o => { o.ColumnOrder = droppedDataIndex; return o; }).ToList();
-                        policyViewModel.SearchOptions = new ObservableCollection<ViewSearchOptionsDto>(policyViewModel.SearchOptions.OrderBy(c => c.ColumnOrder).ToList());
-                    }
-                    else if (droppedDataIndex > draggedDataIndex)
-                    {
-                        for (var i = droppedDataIndex; i > draggedDataIndex; i--)
-                        {
-                            policyViewModel.SearchOptions[i].ColumnOrder = i - 1;
-                        }
-                        policyViewModel.SearchOptions.Where(s => s.ColumnName == draggedData.ColumnName).Select(o => { o.ColumnOrder = droppedDataIndex; return o; }).ToList();
-                        policyViewModel.SearchOptions = new ObservableCollection<ViewSearchOptionsDto>(policyViewModel.SearchOptions.OrderBy(c => c.ColumnOrder).ToList());
-                    }
-                    policyViewModel.SaveSearchOptions();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-        }
-        private void UserControlPolicyNumber_Loaded(object sender, RoutedEventArgs e)
-        {
-            string value = string.Empty;
-            if (policyViewModel != null
-                && !string.IsNullOrEmpty(policyViewModel.PolicyNumber))
-            {
-
-                AutoCompleteBox autoCompleteBox = (AutoCompleteBox)sender;
-                if (autoCompleteBox != null)
-                {
-                    autoCompleteBox.autoTextBox.Text = policyViewModel.PolicyNumber;
-                }
-                var searchOption = (ViewSearchOptionsDto)autoCompleteBox.DataContext;
-                if (searchOption.ColumnOrder == 0)
-                {
-                    autoCompleteBox.autoTextBox.Focus();
-                }
-            }
         }
         private void Policies_AutoGenerateColumns(object sender, EventArgs e)
         {
@@ -781,51 +701,6 @@ namespace CMG.UI.View
             }
             policies.Columns.Insert(0, policyEditColumn);
         }
-        private void BeginDrag(MouseEventArgs e)
-        {
-            try
-            {
-                ListView searchOptionsListView = SearchOptionsList;
-                ListViewItem listViewItem = FindAnchestor<ListViewItem>((DependencyObject)e.OriginalSource);
-                if (listViewItem == null)
-                    return;
-
-                var currentColumn = searchOptionsListView.ItemContainerGenerator.ItemFromContainer(listViewItem);
-                //setup the drag adorner.
-                InitialiseAdorner(listViewItem);
-                DataObject data = new DataObject(currentColumn);
-                DragDropEffects de = DragDrop.DoDragDrop(SearchOptionsList, data, DragDropEffects.Move);
-                if (_adorner != null)
-                {
-                    AdornerLayer.GetAdornerLayer(searchOptionsListView).Remove(_adorner);
-                    _adorner = null;
-                }
-            }
-            catch { }
-        }
-        private void InitialiseAdorner(ListViewItem listViewItem)
-        {
-            VisualBrush brush = new VisualBrush(listViewItem);
-            _adorner = new DragAdorner((UIElement)listViewItem, listViewItem.RenderSize, brush);
-            _adorner.Opacity = 0.5;
-            _layer = AdornerLayer.GetAdornerLayer(SearchOptionsList as Visual);
-            _layer.Add(_adorner);
-        }
-        private static T FindAnchestor<T>(DependencyObject current)
-        where T : DependencyObject
-        {
-            do
-            {
-                if (current is T)
-                {
-                    return (T)current;
-                }
-                current = VisualTreeHelper.GetParent(current);
-            }
-            while (current != null);
-            return null;
-        }
-
         private void SetAutomCompleteStyle(AutoCompleteBox autoCompleteBox)
         {
             autoCompleteBox.autoList.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom("#FFFFFF"));

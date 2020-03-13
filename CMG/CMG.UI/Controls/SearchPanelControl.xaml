@@ -130,7 +130,7 @@
                 <Grid Grid.Row="1">
                     <DataGrid AutoGenerateColumns="False" x:Name="search" IsReadOnly="True" Background="{x:Null}" GridLinesVisibility="None"
                           ItemsSource="{Binding DataContext.SelectedViewModel.ClientCollection, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}" 
-                          ColumnHeaderStyle="{StaticResource ClientHeaderStyle}" RowStyle="{StaticResource ClientRowStyle }"
+                          ColumnHeaderStyle="{StaticResource ClientHeaderStyle}" RowStyle="{StaticResource ClientRowStyle }" 
                           SelectionUnit="FullRow" SelectedItem="{Binding DataContext.SelectedViewModel.SelectedClient, 
                                                                          UpdateSourceTrigger=PropertyChanged, 
                                                                          RelativeSource={RelativeSource AncestorType=Window}}">
