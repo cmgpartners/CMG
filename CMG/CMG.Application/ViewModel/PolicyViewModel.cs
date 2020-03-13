@@ -817,6 +817,10 @@ namespace CMG.Application.ViewModel
                 {
                     SelectedPolicy = PolicyCollection.Where(x => x.Id == SavedPolicyDetail.Id).FirstOrDefault();
                 }
+                else
+                {
+                    SelectedPolicy = PolicyCollection[0];
+                }
             }
         }
         private void ViewIllustration(object dividentScale)

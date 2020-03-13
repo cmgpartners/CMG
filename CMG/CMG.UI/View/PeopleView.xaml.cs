@@ -39,7 +39,6 @@ namespace CMG.UI.View
             SearchSliderColumn.Width = new GridLength(450);
             searchBarColumn.Width = new GridLength(0);
         }
-
         #region Helper Methods
         #endregion
     }
