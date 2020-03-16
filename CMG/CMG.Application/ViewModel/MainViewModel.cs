@@ -57,21 +57,21 @@ namespace CMG.Application.ViewModel
         private const string ColumnNameOwner = "Owner";
 
         private const string ColumnNameYear = "Year";
-        private const string ColumnNameAD = "AD";
-        private const string ColumnNameADA = "ADA";
-        private const string ColumnNameADR = "ADR";
-        private const string ColumnNameCV = "CV";
-        private const string ColumnNameCVA = "CVA";
-        private const string ColumnNameCVR = "CVR";
-        private const string ColumnNameDB = "DB";
-        private const string ColumnNameDBA = "DBA";
-        private const string ColumnNameDBR = "DBR";
-        private const string ColumnNameACB = "ACB";
-        private const string ColumnNameACBA = "ACBA";
-        private const string ColumnNameACBR = "ACBR";
+        private const string ColumnNameAD = "Annual Deposit";
+        private const string ColumnNameADA = "Annual Deposit Actual";
+        private const string ColumnNameADR = "Annual Deposit Reprojection";
+        private const string ColumnNameCV = "Cash Value";
+        private const string ColumnNameCVA = "Cash Value Actual";
+        private const string ColumnNameCVR = "Cash Value Reprojection";
+        private const string ColumnNameDB = "Death Benefit";
+        private const string ColumnNameDBA = "Death Benefit Actual";
+        private const string ColumnNameDBR = "Death Benefit Reprojection";
+        private const string ColumnNameACB = "Adjusted Costbase";
+        private const string ColumnNameACBA = "Adjusted Costbase Actual";
+        private const string ColumnNameACBR = "Adjusted Costbase Reprojection";
         private const string ColumnNameNCPI = "NCPI";
-        private const string ColumnNameNCPIA = "NCPIA";
-        private const string ColumnNameNCPIR = "NCPIR";
+        private const string ColumnNameNCPIA = "NCPI Actual";
+        private const string ColumnNameNCPIR = "NCPI Reprojection";
         #endregion MemberVariables
 
         #region Constructor
@@ -451,19 +451,19 @@ namespace CMG.Application.ViewModel
             IllustrationColumnNames = new List<string>();
             IllustrationColumnNames.Add(ColumnNameYear);
             IllustrationColumnNames.Add(ColumnNameAD);
-            IllustrationColumnNames.Add(ColumnNameADA);
-            IllustrationColumnNames.Add(ColumnNameADR);
             IllustrationColumnNames.Add(ColumnNameCV);
-            IllustrationColumnNames.Add(ColumnNameCVA);
-            IllustrationColumnNames.Add(ColumnNameCVR);
             IllustrationColumnNames.Add(ColumnNameDB);
-            IllustrationColumnNames.Add(ColumnNameDBA);
-            IllustrationColumnNames.Add(ColumnNameDBR);
             IllustrationColumnNames.Add(ColumnNameACB);
-            IllustrationColumnNames.Add(ColumnNameACBA);
-            IllustrationColumnNames.Add(ColumnNameACBR);
             IllustrationColumnNames.Add(ColumnNameNCPI);
+            IllustrationColumnNames.Add(ColumnNameADA);
+            IllustrationColumnNames.Add(ColumnNameCVA);
+            IllustrationColumnNames.Add(ColumnNameDBA);
+            IllustrationColumnNames.Add(ColumnNameACBA);
             IllustrationColumnNames.Add(ColumnNameNCPIA);
+            IllustrationColumnNames.Add(ColumnNameADR);
+            IllustrationColumnNames.Add(ColumnNameCVR);
+            IllustrationColumnNames.Add(ColumnNameDBR);
+            IllustrationColumnNames.Add(ColumnNameACBR);
             IllustrationColumnNames.Add(ColumnNameNCPIR);
         }
         public void GetComboData()
@@ -872,32 +872,32 @@ namespace CMG.Application.ViewModel
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = ColumnNameADA,
+                ColumnName = ColumnNameCV,
                 ColumnOrder = 3
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = ColumnNameADR,
+                ColumnName = ColumnNameDB,
                 ColumnOrder = 4
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = ColumnNameCV,
+                ColumnName = ColumnNameACB,
                 ColumnOrder = 5
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = ColumnNameCVA,
+                ColumnName = ColumnNameNCPI,
                 ColumnOrder = 6
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = ColumnNameCVR,
+                ColumnName = ColumnNameADA,
                 ColumnOrder = 7
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = ColumnNameDB,
+                ColumnName = ColumnNameCVA,
                 ColumnOrder = 8
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
@@ -907,32 +907,33 @@ namespace CMG.Application.ViewModel
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = ColumnNameDBR,
+                ColumnName = ColumnNameACBA,
                 ColumnOrder = 10
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = ColumnNameACB,
+                ColumnName = ColumnNameNCPIA,
                 ColumnOrder = 11
             });
+
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = ColumnNameACBA,
+                ColumnName = ColumnNameADR,
                 ColumnOrder = 12
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = ColumnNameACBR,
+                ColumnName = ColumnNameCVR,
                 ColumnOrder = 13
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = ColumnNameNCPI,
+                ColumnName = ColumnNameDBR,
                 ColumnOrder = 14
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
-                ColumnName = ColumnNameNCPIA,
+                ColumnName = ColumnNameACBR,
                 ColumnOrder = 15
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()

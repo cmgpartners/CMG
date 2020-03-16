@@ -53,21 +53,21 @@ namespace CMG.UI.View
         private const string ColumnNameOwner = "Owner";
 
         private const string ColumnNameYear = "Year";
-        private const string ColumnNameAD = "AD";
-        private const string ColumnNameADA = "ADA";
-        private const string ColumnNameADR = "ADR";
-        private const string ColumnNameCV = "CV";
-        private const string ColumnNameCVA = "CVA";
-        private const string ColumnNameCVR = "CVR";
-        private const string ColumnNameDB = "DB";
-        private const string ColumnNameDBA = "DBA";
-        private const string ColumnNameDBR = "DBR";
-        private const string ColumnNameACB = "ACB";
-        private const string ColumnNameACBA = "ACBA";
-        private const string ColumnNameACBR = "ACBR";
+        private const string ColumnNameAD = "Annual Deposit";
+        private const string ColumnNameADA = "Annual Deposit Actual";
+        private const string ColumnNameADR = "Annual Deposit Reprojection";
+        private const string ColumnNameCV = "Cash Value";
+        private const string ColumnNameCVA = "Cash Value Actual";
+        private const string ColumnNameCVR = "Cash Value Reprojection";
+        private const string ColumnNameDB = "Death Benefit";
+        private const string ColumnNameDBA = "Death Benefit Actual";
+        private const string ColumnNameDBR = "Death Benefit Reprojection";
+        private const string ColumnNameACB = "Adjusted Costbase";
+        private const string ColumnNameACBA = "Adjusted Costbase Actual";
+        private const string ColumnNameACBR = "Adjusted Costbase Reprojection";
         private const string ColumnNameNCPI = "NCPI";
-        private const string ColumnNameNCPIA = "NCPIA";
-        private const string ColumnNameNCPIR = "NCPIR";
+        private const string ColumnNameNCPIA = "NCPI Actual";
+        private const string ColumnNameNCPIR = "NCPI Reprojection";
 
         private const string AddColumns = "Add Columns";
         private const string Remove = "Remove";
@@ -274,10 +274,10 @@ namespace CMG.UI.View
         private void MenuItemRemoveIllustrationColumn_Click(object sender, RoutedEventArgs e)
         {
             MenuItem selectedMenu = (MenuItem)sender;
-            var removeColumnName = selectedMenu.DataContext.ToString();
-            if (!string.IsNullOrEmpty(removeColumnName))
+            TextBlock removeColumnName = (TextBlock)selectedMenu.DataContext;
+            if (!string.IsNullOrEmpty(removeColumnName.Text))
             {
-                var columnIndex = illustration.Columns.IndexOf(illustration.Columns.FirstOrDefault(c => c.Header.ToString() == removeColumnName));
+                var columnIndex = illustration.Columns.IndexOf(illustration.Columns.FirstOrDefault(c => c.Header is TextBlock && ((TextBlock)c.Header).Text.ToString() == removeColumnName.Text));
 
                 RemoveIllustrationGridColumn(removeColumnName);
                 policyViewModel.IllustrationColumns.RemoveAt(columnIndex - 1);
@@ -318,13 +318,13 @@ namespace CMG.UI.View
         private void SubMenuAddIllustrationColumn_Click(object sender, RoutedEventArgs e)
         {
             MenuItem selectedMenu = (MenuItem)sender;
-            var columnIndex = illustration.Columns.IndexOf(illustration.Columns.FirstOrDefault(c => c.Header.ToString() == selectedMenu.DataContext.ToString()));
-            var newColumnName = selectedMenu.Header.ToString();
-            var isColumnExist = illustration.Columns.Any(x => x.Header.ToString() == newColumnName);
-            if (columnIndex == 0)
+            int columnIndex = 1;
+            if (!string.IsNullOrEmpty(selectedMenu.DataContext.ToString()))
             {
-                columnIndex = 1;
+                columnIndex = illustration.Columns.IndexOf(illustration.Columns.FirstOrDefault(c => c.Header is TextBlock && ((TextBlock)c.Header).Text.ToString() == ((TextBlock)selectedMenu.DataContext).Text.ToString()));
             }
+            var newColumnName = selectedMenu.Header.ToString();
+            var isColumnExist = illustration.Columns.Any(x => x.Header is TextBlock && ((TextBlock)x.Header).Text.ToString() == newColumnName);
             if (!string.IsNullOrEmpty(newColumnName))
             {
                 if (!isColumnExist)
@@ -437,8 +437,13 @@ namespace CMG.UI.View
             IllustrationDefaultSetting();
             for (int i = 0; i < illustration.Columns.Count; i++)
             {
-                ResizeGridColumns(illustration.Columns[i].Header.ToString(), GridNameIllustration);
+                if (illustration.Columns[i].Header is TextBlock)
+                {
+                    ResizeGridColumns(((TextBlock)illustration.Columns[i].Header).Text, GridNameIllustration);
+                }
             }
+            if (illustration.Items.Count > 0)
+                illustration.SelectedItem = illustration.Items[0];
         }
         private void Illustration_ColumnReordered(object sender, DataGridColumnEventArgs e)
         {
@@ -447,8 +452,8 @@ namespace CMG.UI.View
                 DataGridTextColumn draggedColumn = (DataGridTextColumn)e.Column;
                 int droppedColumnIndex = draggedColumn.DisplayIndex;
 
-                ViewSearchOptionsDto vsodto = policyViewModel.IllustrationColumns.Where(x => x.ColumnName.ToString().ToLower().Trim() == draggedColumn.Header.ToString().ToLower().Trim()).FirstOrDefault();
-                int draggedColumnIndex = illustration.Columns.IndexOf(illustration.Columns.Where(x => x.Header.ToString() == draggedColumn.Header.ToString()).FirstOrDefault());
+                ViewSearchOptionsDto vsodto = policyViewModel.IllustrationColumns.Where(x => x.ColumnName.ToString().ToLower().Trim() == ((TextBlock)draggedColumn.Header).Text.ToString().ToLower().Trim()).FirstOrDefault();
+                int draggedColumnIndex = illustration.Columns.IndexOf(illustration.Columns.Where(x => x.Header is TextBlock && ((TextBlock)x.Header).Text.ToString() == ((TextBlock)draggedColumn.Header).Text.ToString()).FirstOrDefault());
                 if (draggedColumnIndex > 0
                     && droppedColumnIndex > 0)
                 {
@@ -464,6 +469,20 @@ namespace CMG.UI.View
                     }
                     policyViewModel.IllustrationColumns.Insert(droppedColumnIndex - 1, vsodto);
                     policyViewModel.SaveOptionKeyIllustrationColumns();
+                }
+                else
+                {
+                    draggedColumn.CanUserReorder = false;
+                    IllustrationDefaultSetting();
+                    for (int i = 0; i < illustration.Columns.Count; i++)
+                    {
+                        if (illustration.Columns[i].Header is TextBlock)
+                        {
+                            ResizeGridColumns(((TextBlock)illustration.Columns[i].Header).Text, GridNameIllustration);
+                        }
+                    }
+                    if (illustration.Items.Count > 0)
+                        illustration.SelectedItem = illustration.Items[0];
                 }
             }
         }
@@ -523,23 +542,27 @@ namespace CMG.UI.View
                 case ColumnNameOwner:
                     SetGridColumnWidth(columnName, 150, gridName);
                     break;
-                case ColumnNameYear:
                 case ColumnNameAD:
+                case ColumnNameCV:
+                case ColumnNameDB:
+                case ColumnNameNCPIA:
+                case ColumnNameNCPIR:
+                    SetGridColumnWidth(columnName, 100, gridName);
+                    break;
                 case ColumnNameADA:
                 case ColumnNameADR:
-                case ColumnNameCV:
                 case ColumnNameCVA:
                 case ColumnNameCVR:
-                case ColumnNameDB:
                 case ColumnNameDBA:
                 case ColumnNameDBR:
                 case ColumnNameACB:
                 case ColumnNameACBA:
-                case ColumnNameACBR:
+                case ColumnNameACBR:             
+                    SetGridColumnWidth(columnName, 130, gridName);
+                    break;
+                case ColumnNameYear:
                 case ColumnNameNCPI:
-                case ColumnNameNCPIA:
-                case ColumnNameNCPIR:
-                    SetGridColumnWidth(columnName, 100, gridName);
+                    SetGridColumnWidth(columnName, 40, gridName);
                     break;
                 default:
                     SetGridColumnWidth(columnName, 0, gridName);
@@ -555,7 +578,7 @@ namespace CMG.UI.View
                     dataGridColumn = policies.Columns.Where(x => x.Header.ToString() == columnName).FirstOrDefault();
                     break;
                 case GridNameIllustration:
-                    dataGridColumn = illustration.Columns.Where(x => x.Header.ToString() == columnName).FirstOrDefault();
+                    dataGridColumn = illustration.Columns.Where(x => x.Header is TextBlock && ((TextBlock)x.Header).Text.ToString() == columnName).FirstOrDefault();
                     break;
             }
             if (dataGridColumn != null)
@@ -601,9 +624,9 @@ namespace CMG.UI.View
             if (dataGridColumn != null)
                 policies.Columns.Remove(dataGridColumn);
         }
-        private void RemoveIllustrationGridColumn(string columnName)
+        private void RemoveIllustrationGridColumn(TextBlock columnName)
         {
-            DataGridColumn dataGridColumn = illustration.Columns.Where(x => x.Header.ToString() == columnName).FirstOrDefault();
+            DataGridColumn dataGridColumn = illustration.Columns.Where(x => x.Header is TextBlock && ((TextBlock)x.Header).Text.ToString() == columnName.Text.ToString()).FirstOrDefault();
             if (dataGridColumn != null)
                 illustration.Columns.Remove(dataGridColumn);
         }
@@ -1042,10 +1065,16 @@ namespace CMG.UI.View
                 default:
                     break;
             }
-            Style elementStyle = new Style(typeof(TextBlock));
+            TextBlock tbHeader = new TextBlock();
+            tbHeader.TextWrapping = TextWrapping.Wrap;
+            tbHeader.Text = columnName;
 
+            Style elementStyle = new Style(typeof(TextBlock));
+            //elementStyle.Setters.Add(new Setter(TextBlock.TextWrappingProperty, TextWrapping.Wrap));
             //dataGridTextColumn.ElementStyle = elementStyle;
-            dataGridTextColumn.Header = columnName;
+            dataGridTextColumn.Header = tbHeader;
+            dataGridTextColumn.MinWidth = 60;
+
             if (dataGridTextColumn.Binding == null)
                 dataGridTextColumn.Binding = new Binding(bindingPath);
 
