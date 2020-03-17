@@ -882,8 +882,9 @@ namespace CMG.UI.View
         }
         private DataGridColumn AddDataGridColumnIllustration(string columnName)
         {
-            DataGridTextColumn dataGridTextColumn = new DataGridTextColumn();
             string bindingPath = string.Empty;
+            DataGridTextColumn dataGridTextColumn = new DataGridTextColumn();
+            
             switch (columnName)
             {
                 case ColumnNameYear:
@@ -895,7 +896,7 @@ namespace CMG.UI.View
                             policyViewModel.PolicyIllustrationCollection[i].Year = policyViewModel.PolicyIllustrationCollection[i].Year;
                         }
                     }
-                    //SetCellStyle(dataGridColumn, bindingPath);
+                    //cellStyle.Setters.Add(new Setter(MarginProperty, new Thickness(10, 0, 0, 0)));
                     break;
                 case ColumnNameAD:
                     bindingPath = BindingAD;
@@ -906,7 +907,6 @@ namespace CMG.UI.View
                             policyViewModel.PolicyIllustrationCollection[i].AnnualDeposit = policyViewModel.PolicyIllustrationCollection[i].AnnualDeposit;
                         }
                     }
-                    //SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNameADA:
                     bindingPath = BindingADA;
@@ -917,7 +917,6 @@ namespace CMG.UI.View
                             policyViewModel.PolicyIllustrationCollection[i].AnnualDepositActual = policyViewModel.PolicyIllustrationCollection[i].AnnualDepositActual;
                         }
                     }
-                    //SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNameADR:
                     bindingPath = BindingADR;
@@ -928,7 +927,6 @@ namespace CMG.UI.View
                             policyViewModel.PolicyIllustrationCollection[i].AnnualDepositReprojection = policyViewModel.PolicyIllustrationCollection[i].AnnualDepositReprojection;
                         }
                     }
-                    //SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNameCV:
                     bindingPath = BindingCV;
@@ -939,7 +937,6 @@ namespace CMG.UI.View
                             policyViewModel.PolicyIllustrationCollection[i].CashValue = policyViewModel.PolicyIllustrationCollection[i].CashValue;
                         }
                     }
-                    //SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNameCVA:
                     bindingPath = BindingCVA;
@@ -950,7 +947,6 @@ namespace CMG.UI.View
                             policyViewModel.PolicyIllustrationCollection[i].CashValueActual = policyViewModel.PolicyIllustrationCollection[i].CashValueActual;
                         }
                     }
-                    //SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNameCVR:
                     bindingPath = BindingCVR;
@@ -961,7 +957,6 @@ namespace CMG.UI.View
                             policyViewModel.PolicyIllustrationCollection[i].CashValueReprojection = policyViewModel.PolicyIllustrationCollection[i].CashValueReprojection;
                         }
                     }
-                    //SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNameDB:
                     bindingPath = BindingDB;
@@ -972,7 +967,6 @@ namespace CMG.UI.View
                             policyViewModel.PolicyIllustrationCollection[i].DeathBenefit = policyViewModel.PolicyIllustrationCollection[i].DeathBenefit;
                         }
                     }
-                    //SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNameDBA:
                     bindingPath = BindingDBA;
@@ -983,7 +977,6 @@ namespace CMG.UI.View
                             policyViewModel.PolicyIllustrationCollection[i].DeathBenefitActual = policyViewModel.PolicyIllustrationCollection[i].DeathBenefitActual;
                         }
                     }
-                    //SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNameDBR:
                     bindingPath = BindingDBR;
@@ -994,7 +987,6 @@ namespace CMG.UI.View
                             policyViewModel.PolicyIllustrationCollection[i].DeathBenefitReprojection = policyViewModel.PolicyIllustrationCollection[i].DeathBenefitReprojection;
                         }
                     }
-                    //SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNameACB:
                     bindingPath = BindingACB;
@@ -1005,7 +997,6 @@ namespace CMG.UI.View
                             policyViewModel.PolicyIllustrationCollection[i].AdjustedCostBase = policyViewModel.PolicyIllustrationCollection[i].AdjustedCostBase;
                         }
                     }
-                    //SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNameACBA:
                     bindingPath = BindingACBA;
@@ -1016,7 +1007,6 @@ namespace CMG.UI.View
                             policyViewModel.PolicyIllustrationCollection[i].AdjustedCostBaseActual = policyViewModel.PolicyIllustrationCollection[i].AdjustedCostBaseActual;
                         }
                     }
-                    //SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNameACBR:
                     bindingPath = BindingACBR;
@@ -1027,7 +1017,6 @@ namespace CMG.UI.View
                             policyViewModel.PolicyIllustrationCollection[i].AdjustedCostBaseReprojection = policyViewModel.PolicyIllustrationCollection[i].AdjustedCostBaseReprojection;
                         }
                     }
-                    //SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNameNCPI:
                     bindingPath = BindingNCPI;
@@ -1038,7 +1027,6 @@ namespace CMG.UI.View
                             policyViewModel.PolicyIllustrationCollection[i].NCPI = policyViewModel.PolicyIllustrationCollection[i].NCPI;
                         }
                     }
-                    //SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNameNCPIA:
                     bindingPath = BindingNCPIA;
@@ -1049,7 +1037,6 @@ namespace CMG.UI.View
                             policyViewModel.PolicyIllustrationCollection[i].NCPIActual = policyViewModel.PolicyIllustrationCollection[i].NCPIActual;
                         }
                     }
-                    //SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNameNCPIR:
                     bindingPath = BindingNCPIR;
@@ -1060,23 +1047,34 @@ namespace CMG.UI.View
                             policyViewModel.PolicyIllustrationCollection[i].NCPIReprojection = policyViewModel.PolicyIllustrationCollection[i].NCPIReprojection;
                         }
                     }
-                    //SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 default:
                     break;
             }
             TextBlock tbHeader = new TextBlock();
             tbHeader.TextWrapping = TextWrapping.Wrap;
+            tbHeader.HorizontalAlignment = HorizontalAlignment.Right;
+            tbHeader.TextAlignment = TextAlignment.Right;
             tbHeader.Text = columnName;
-
-            Style elementStyle = new Style(typeof(TextBlock));
-            //elementStyle.Setters.Add(new Setter(TextBlock.TextWrappingProperty, TextWrapping.Wrap));
-            //dataGridTextColumn.ElementStyle = elementStyle;
             dataGridTextColumn.Header = tbHeader;
             dataGridTextColumn.MinWidth = 60;
 
+            Style headerStyle = new Style(typeof(DataGridColumnHeader), (Style)FindResource("HeaderStyle"));
+            headerStyle.Setters.Add(new Setter(HorizontalAlignmentProperty, HorizontalAlignment.Right));
+            dataGridTextColumn.HeaderStyle = headerStyle;
+
+            //Style elementStyle = new Style(typeof(TextBlock), dataGridTextColumn.ElementStyle);
+            ////elementStyle.Setters.Add(new Setter(HorizontalContentAlignmentProperty, HorizontalAlignment.Right));
+            //elementStyle.Setters.Add(new Setter(HorizontalAlignmentProperty, HorizontalAlignment.Right));
+            //dataGridTextColumn.EditingElementStyle = elementStyle;
+
             if (dataGridTextColumn.Binding == null)
                 dataGridTextColumn.Binding = new Binding(bindingPath);
+
+            if (bindingPath != BindingYear)
+            {
+                dataGridTextColumn.Binding.StringFormat = "#,#";
+            }
 
             return dataGridTextColumn;
         }
