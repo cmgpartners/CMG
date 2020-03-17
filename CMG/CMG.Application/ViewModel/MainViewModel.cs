@@ -26,6 +26,7 @@ namespace CMG.Application.ViewModel
         private readonly Notifier _notifier;
         private const string searchOptionsKey = "searchOptions";
         private const string PolicyColumnsKey = "policyColumns";
+        private const string IllustrationColumnsKey = "illustrationColumns";
         private const string optionsCacheKey = "options";
         private const string comboFieldNamePStatus = "PSTATUS";
         private const string comboFieldNameSVCType = "SVC_TYPE";
@@ -55,6 +56,22 @@ namespace CMG.Application.ViewModel
         private const string ColumnNameBeneficiary = "Beneficiary";
         private const string ColumnNameOwner = "Owner";
 
+        private const string ColumnNameYear = "Year";
+        private const string ColumnNameAD = "Annual Deposit";
+        private const string ColumnNameADA = "Annual Deposit Actual";
+        private const string ColumnNameADR = "Annual Deposit Reprojection";
+        private const string ColumnNameCV = "Cash Value";
+        private const string ColumnNameCVA = "Cash Value Actual";
+        private const string ColumnNameCVR = "Cash Value Reprojection";
+        private const string ColumnNameDB = "Death Benefit";
+        private const string ColumnNameDBA = "Death Benefit Actual";
+        private const string ColumnNameDBR = "Death Benefit Reprojection";
+        private const string ColumnNameACB = "Adjusted Costbase";
+        private const string ColumnNameACBA = "Adjusted Costbase Actual";
+        private const string ColumnNameACBR = "Adjusted Costbase Reprojection";
+        private const string ColumnNameNCPI = "NCPI";
+        private const string ColumnNameNCPIA = "NCPI Actual";
+        private const string ColumnNameNCPIR = "NCPI Reprojection";
         #endregion MemberVariables
 
         #region Constructor
@@ -214,7 +231,21 @@ namespace CMG.Application.ViewModel
                 _policyColumns = value;
                 OnPropertyChanged("PolicyColumns");
             }
-        }        
+        }
+        private ObservableCollection<ViewSearchOptionsDto> _illustrationColumns;
+        public ObservableCollection<ViewSearchOptionsDto> IllustrationColumns
+        {
+            get
+            {
+                return _illustrationColumns;
+            }
+            set
+            {
+                _illustrationColumns = value;
+                OnPropertyChanged("IllustrationColumns");
+            }
+        }
+
         private ObservableCollection<ViewClientSearchDto> _clientCollection;
         public ObservableCollection<ViewClientSearchDto> ClientCollection
         {
@@ -243,7 +274,20 @@ namespace CMG.Application.ViewModel
                 columnNames = value;
                 OnPropertyChanged("ColumnNames");
             }
-        }    
+        }
+        private List<string> _illustrationColumnNames;
+        public List<string> IllustrationColumnNames
+        {
+            get
+            {
+                return _illustrationColumnNames;
+            }
+            set
+            {
+                _illustrationColumnNames = value;
+                OnPropertyChanged("IllustrationColumnNames");
+            }
+        }
         private List<ViewComboDto> _personStatusCollection;
         public List<ViewComboDto> PersonStatusCollection
         {
@@ -374,7 +418,11 @@ namespace CMG.Application.ViewModel
         {
             GetComboData();
             GetAutoSuggestionLists();
-
+            AddPolicyColumnsContextMenu();
+            AddIllustrationColumnsContextMenu();
+        }
+        private void AddPolicyColumnsContextMenu()
+        {
             ColumnNames = new List<string>();
             ColumnNames.Add(ColumnNamePolicyNumber);
             ColumnNames.Add(ColumnNameCompany);
@@ -397,6 +445,26 @@ namespace CMG.Application.ViewModel
             ColumnNames.Add(ColumnNameInsured);
             ColumnNames.Add(ColumnNameBeneficiary);
             ColumnNames.Add(ColumnNameOwner);
+        }
+        private void AddIllustrationColumnsContextMenu()
+        {
+            IllustrationColumnNames = new List<string>();
+            IllustrationColumnNames.Add(ColumnNameYear);
+            IllustrationColumnNames.Add(ColumnNameAD);
+            IllustrationColumnNames.Add(ColumnNameCV);
+            IllustrationColumnNames.Add(ColumnNameDB);
+            IllustrationColumnNames.Add(ColumnNameACB);
+            IllustrationColumnNames.Add(ColumnNameNCPI);
+            IllustrationColumnNames.Add(ColumnNameADA);
+            IllustrationColumnNames.Add(ColumnNameCVA);
+            IllustrationColumnNames.Add(ColumnNameDBA);
+            IllustrationColumnNames.Add(ColumnNameACBA);
+            IllustrationColumnNames.Add(ColumnNameNCPIA);
+            IllustrationColumnNames.Add(ColumnNameADR);
+            IllustrationColumnNames.Add(ColumnNameCVR);
+            IllustrationColumnNames.Add(ColumnNameDBR);
+            IllustrationColumnNames.Add(ColumnNameACBR);
+            IllustrationColumnNames.Add(ColumnNameNCPIR);
         }
         public void GetComboData()
         {
@@ -577,7 +645,7 @@ namespace CMG.Application.ViewModel
             _unitOfWork.Commit();
             if(_memoryCache != null)
                 _memoryCache.Set(optionsCacheKey, originalSearchOptions);
-        }     
+        }             
         public void CheckCommissionAccess()
         {
             if(_memoryCache != null)
@@ -615,6 +683,14 @@ namespace CMG.Application.ViewModel
                 {
                     PolicyColumns = new ObservableCollection<ViewSearchOptionsDto>();
                     GetDefaultPolicyColumns();
+                }
+
+                var illustrationColumnsValue = options.Where(x => x.Key == IllustrationColumnsKey).FirstOrDefault()?.Value;
+                IllustrationColumns = illustrationColumnsValue != null ? JsonConvert.DeserializeObject<ObservableCollection<ViewSearchOptionsDto>>(illustrationColumnsValue) : default;
+                if (IllustrationColumns == null)
+                {
+                    IllustrationColumns = new ObservableCollection<ViewSearchOptionsDto>();
+                    GetDefaultIllustrationColumns();
                 }
             }
         }       
@@ -689,6 +765,26 @@ namespace CMG.Application.ViewModel
             if (_memoryCache != null)
                 _memoryCache.Set(optionsCacheKey, originalPolicyColumn);
         }
+        public void SaveOptionKeyIllustrationColumns()
+        {
+            var originalIllustrationColumn = _unitOfWork.Options.All().Where(o => o.User == Environment.UserName && o.Key == IllustrationColumnsKey).FirstOrDefault();
+            if (originalIllustrationColumn == null)
+            {
+                originalIllustrationColumn = new Options();
+                originalIllustrationColumn.Key = IllustrationColumnsKey;
+                originalIllustrationColumn.Value = JsonConvert.SerializeObject(IllustrationColumns);
+                originalIllustrationColumn.User = Environment.UserName;
+                _unitOfWork.Options.Add(originalIllustrationColumn);
+            }
+            else
+            {
+                originalIllustrationColumn.Value = JsonConvert.SerializeObject(IllustrationColumns);
+                _unitOfWork.Options.Save(originalIllustrationColumn);
+            }
+            _unitOfWork.Commit();
+            if (_memoryCache != null)
+                _memoryCache.Set(optionsCacheKey, originalIllustrationColumn);
+        }
         private void GetDefaultPolicyColumns()
         {
             PolicyColumns.Add(new ViewSearchOptionsDto()
@@ -760,6 +856,90 @@ namespace CMG.Application.ViewModel
             {
                 ColumnName = ColumnNameReprojectedOn,
                 ColumnOrder = 14
+            });
+        }
+        private void GetDefaultIllustrationColumns()
+        {
+            IllustrationColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = ColumnNameYear,
+                ColumnOrder = 1
+            });
+            IllustrationColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = ColumnNameAD,
+                ColumnOrder = 2
+            });
+            IllustrationColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = ColumnNameCV,
+                ColumnOrder = 3
+            });
+            IllustrationColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = ColumnNameDB,
+                ColumnOrder = 4
+            });
+            IllustrationColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = ColumnNameACB,
+                ColumnOrder = 5
+            });
+            IllustrationColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = ColumnNameNCPI,
+                ColumnOrder = 6
+            });
+            IllustrationColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = ColumnNameADA,
+                ColumnOrder = 7
+            });
+            IllustrationColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = ColumnNameCVA,
+                ColumnOrder = 8
+            });
+            IllustrationColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = ColumnNameDBA,
+                ColumnOrder = 9
+            });
+            IllustrationColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = ColumnNameACBA,
+                ColumnOrder = 10
+            });
+            IllustrationColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = ColumnNameNCPIA,
+                ColumnOrder = 11
+            });
+
+            IllustrationColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = ColumnNameADR,
+                ColumnOrder = 12
+            });
+            IllustrationColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = ColumnNameCVR,
+                ColumnOrder = 13
+            });
+            IllustrationColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = ColumnNameDBR,
+                ColumnOrder = 14
+            });
+            IllustrationColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = ColumnNameACBR,
+                ColumnOrder = 15
+            });
+            IllustrationColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = ColumnNameNCPIR,
+                ColumnOrder = 16
             });
         }
         #endregion Methods
