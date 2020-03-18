@@ -1031,18 +1031,16 @@ namespace CMG.UI.View
             tbHeader.HorizontalAlignment = HorizontalAlignment.Right;
             tbHeader.TextAlignment = TextAlignment.Right;
             tbHeader.Text = columnName;
-            dataGridTextColumn.Header = tbHeader;
-            dataGridTextColumn.MinWidth = 60;
 
+            Style cellStyle = new Style(typeof(DataGridCell), (Style)FindResource("TextBlockCellStyle"));
+            dataGridTextColumn.CellStyle = cellStyle;
+            
             Style headerStyle = new Style(typeof(DataGridColumnHeader), (Style)FindResource("HeaderStyle"));
             headerStyle.Setters.Add(new Setter(HorizontalAlignmentProperty, HorizontalAlignment.Right));
             dataGridTextColumn.HeaderStyle = headerStyle;
 
-            //Style elementStyle = new Style(typeof(TextBlock), dataGridTextColumn.ElementStyle);
-            ////elementStyle.Setters.Add(new Setter(HorizontalContentAlignmentProperty, HorizontalAlignment.Right));
-            //elementStyle.Setters.Add(new Setter(HorizontalAlignmentProperty, HorizontalAlignment.Right));
-            //dataGridTextColumn.ElementStyle = elementStyle;
-
+            dataGridTextColumn.Header = tbHeader;
+            dataGridTextColumn.MinWidth = 60;
             if (dataGridTextColumn.Binding == null)
                 dataGridTextColumn.Binding = new Binding(bindingPath);
 
