@@ -150,7 +150,8 @@
                               AutoGenerateColumns="False" ColumnHeaderStyle="{StaticResource HeaderStyle}" RowStyle="{StaticResource GridRowStyle}"
                               GridLinesVisibility="None" IsReadOnly="True" SelectionUnit="FullRow" MinRowHeight="25" MouseDoubleClick="Files_MouseDoubleClick">
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn HeaderStyle="{StaticResource FirstColumnHeaderStyle}">
+                            <DataGridTemplateColumn HeaderStyle="{StaticResource FirstColumnHeaderStyle}" 
+                                                    CanUserReorder="False" CanUserResize="False" CanUserSort="False">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                             <materialDesign:PackIcon Kind="{Binding IconType}" VerticalAlignment="Center" 
@@ -166,24 +167,10 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="20" SortMemberPath="Size" CanUserSort="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text=" " HorizontalAlignment="Right" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="Size" Width="Auto" SortMemberPath="Size" CanUserSort="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Size}" HorizontalAlignment="Right" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Width="40" SortMemberPath="Size" CanUserSort="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text=" " HorizontalAlignment="Right" />
+                                        <TextBlock Text="{Binding Path=Size}" Margin="10 0 15 0" HorizontalAlignment="Right" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
