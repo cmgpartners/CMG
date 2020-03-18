@@ -148,7 +148,8 @@ namespace CMG.UI.View
         private void Files_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             ViewFilesDto item = (ViewFilesDto)((DataGrid)sender).CurrentItem;
-            Process.Start("explorer.exe", item.Path);
+            if(item != null)
+                Process.Start("explorer.exe", item.Path);
         }
         #endregion Events
 
