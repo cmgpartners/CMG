@@ -10,7 +10,7 @@
         ContentRendered="Window_ContentRendered">
     <Grid Background="#D3D3D3">
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Label Content="Please wait..." Foreground="#FF252627" FontSize="15"/>
+            <Label Content="Please wait..." Foreground="#FF252627" FontSize="15" Padding="0"/>
             <ProgressBar Width="400" Height="20" Minimum="0" Maximum="100" Name="pbStatus" />
             <TextBlock FontSize="11" Foreground="#FF252627" Text="{Binding ElementName=pbStatus, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" />
         </StackPanel>
