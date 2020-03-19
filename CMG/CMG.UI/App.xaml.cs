@@ -13,6 +13,7 @@ using CMG.Service.Interface;
 using CMG.Service;
 using System.Threading;
 using System.DirectoryServices.AccountManagement;
+using System.Windows.Input;
 
 namespace CMG.UI
 {
@@ -22,6 +23,7 @@ namespace CMG.UI
     public partial class App : System.Windows.Application
     {
         public IServiceProvider ServiceProvider { get; private set; }
+        public object mainWindow;
 
         protected void OnStartUp(object sernder, StartupEventArgs e)
         {
@@ -55,18 +57,19 @@ namespace CMG.UI
 
             try
             {
+                Mouse.OverrideCursor = Cursors.Wait;
                 var configurationBuilder = new ConfigurationBuilder()
                         .SetBasePath(Directory.GetCurrentDirectory())
                         .AddJsonFile("appsettings.json");
-
+                var progressbarWindow = new ProgressbarWindow();
+                progressbarWindow.Show();
                 IConfiguration configuration = configurationBuilder.Build();
                 ServiceCollection serviceCollection = new ServiceCollection();
 
                 ConfigureServices(serviceCollection, configuration);
                 ServiceProvider = serviceCollection.BuildServiceProvider();
 
-                var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
-                mainWindow.Show();
+                mainWindow = ServiceProvider.GetRequiredService<MainWindow>();                
             }
             catch (Exception ex)
             {
