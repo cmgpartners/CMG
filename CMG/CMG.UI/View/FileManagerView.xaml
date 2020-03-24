@@ -183,12 +183,6 @@
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <TextBlock Grid.Row="1" Text="No file found" 
-                            HorizontalAlignment="Center" 
-                            VerticalAlignment="Center" 
-                            Style="{StaticResource NoRecordsTextBlock}" 
-                            Visibility="{Binding IsNoFile, Converter={StaticResource VisibilityConverter}, 
-                            UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
             </Grid>
         </Grid>
