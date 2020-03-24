@@ -2,12 +2,10 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using CMG.Application.DTO;
-using CMG.UI.Controls;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
@@ -187,20 +185,27 @@ namespace CMG.UI.View
         {
             fileManagerViewModel.FilesCollection = new ObservableCollection<ViewFilesDto>();
             ViewFilesDto viewFilesDto;
-            string[] files = Directory.GetFiles(path.Trim());
-            FileInfo fi;
-            foreach (var file in files)
+            try
             {
-                fi = new FileInfo(file); 
-                viewFilesDto = new ViewFilesDto();
-                viewFilesDto.Name = new DirectoryInfo(file).Name;
-                viewFilesDto.Path = file;
-                viewFilesDto.IconType = GetIconType(fi.Extension.Trim().ToLower());
-                viewFilesDto.Size = file.Length;
-                viewFilesDto.ModifiedDateTime = fi.LastWriteTime;
-                fileManagerViewModel.FilesCollection.Add(viewFilesDto);
+                string[] files = Directory.GetFiles(path.Trim());
+                FileInfo fi;
+                foreach (var file in files)
+                {
+                    fi = new FileInfo(file);
+                    viewFilesDto = new ViewFilesDto();
+                    viewFilesDto.Name = new DirectoryInfo(file).Name;
+                    viewFilesDto.Path = file;
+                    viewFilesDto.IconType = GetIconType(fi.Extension.Trim().ToLower());
+                    viewFilesDto.Size = file.Length;
+                    viewFilesDto.ModifiedDateTime = fi.LastWriteTime;
+                    fileManagerViewModel.FilesCollection.Add(viewFilesDto);
+                }
+                fileManagerViewModel.FilesCollection = fileManagerViewModel.FilesCollection;
             }
-            fileManagerViewModel.FilesCollection = fileManagerViewModel.FilesCollection;
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         private string GetIconType(string fileExtension)
         {
