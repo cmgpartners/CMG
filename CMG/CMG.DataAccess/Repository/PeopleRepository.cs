@@ -43,7 +43,8 @@ namespace CMG.DataAccess.Repository
                 Clienttyp = x.Clienttyp,
                 Pstatus = x.Pstatus,
                 SvcType = x.SvcType,
-                Pnotes = x.Pnotes
+                Pnotes = x.Pnotes,
+                SalesforceId = x.SalesforceId
             }).OrderBy(x => x.Commname).OrderBy(x => x.Lastname).OrderBy(x => x.Firstname);
 
             var totalRecords = result.Count();
