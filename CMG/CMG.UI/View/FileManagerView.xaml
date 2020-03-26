@@ -88,16 +88,15 @@
                         <ColumnDefinition Width="10"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <ScrollViewer Grid.Row="0" Grid.ColumnSpan="3" HorizontalScrollBarVisibility="Visible" >
-                        <StackPanel x:Name="spDrives" Orientation="Horizontal" Margin="0 10 0 0">
-                            <!--<Button x:Name="btnTest" Visibility="Collapsed">
-                                    <StackPanel Orientation="Horizontal">
-                                        <materialDesign:PackIcon Kind="Gift"/>
-                                        <TextBlock x:Name="txtDrive" Text="text"/>
-                                    </StackPanel>
-                                </Button>-->
-                        </StackPanel>
-                    </ScrollViewer>
+                    <StackPanel x:Name="spDrives" Grid.Row="0" Grid.ColumnSpan="3" Orientation="Horizontal"
+                                HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <!--<Button x:Name="btnTest" Visibility="Collapsed">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Gift"/>
+                                <TextBlock x:Name="txtDrive" Text="text"/>
+                            </StackPanel>
+                        </Button>-->
+                    </StackPanel>
                     <Grid Grid.Row="1" Grid.ColumnSpan="3" Background="#FF444444"></Grid>
                         
                     <Grid Grid.Row="2" Grid.Column="0">
