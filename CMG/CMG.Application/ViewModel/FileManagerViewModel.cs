@@ -74,14 +74,6 @@ namespace CMG.Application.ViewModel
             {
                 _filesCollection = value;
                 OnPropertyChanged("FilesCollection");
-                OnPropertyChanged("IsNoFile");
-            }
-        }
-        public bool IsNoFile
-        {
-            get
-            {
-                return FilesCollection != null && FilesCollection.Count == 0;
             }
         }
         #endregion properties
