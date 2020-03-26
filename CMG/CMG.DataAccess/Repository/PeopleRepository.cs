@@ -167,5 +167,98 @@ namespace CMG.DataAccess.Repository
         {
             return Context.People.SingleOrDefault(x => x.Keynump == (id ?? 0));
         }
+
+        public People GetDetails(long id)
+        {
+            var query = _context.People.Where(p => p.Keynump == id).AsQueryable()
+                        .Include(p => p.RelPpKeynump2Navigation).ThenInclude(x => x.KeynumpNavigation)
+                        .Include(p => p.RelPpKeynumpNavigation).ThenInclude(x => x.Keynump2Navigation)
+                        .Include(p => p.RelBp).ThenInclude(x => x.KeynumbNavigation)
+                        .Include(p => p.Cases).ThenInclude(x => x.CaseAgents).ThenInclude(x => x.Agent)
+                        .Include(p => p.PeoplePolicys).ThenInclude(x=> x.Policy);
+            var people = query.Select(x => new People
+            {
+                Keynump = x.Keynump,
+                Firstname = x.Firstname,
+                Commname = x.Commname,
+                Midname = x.Midname,
+                Lastname = x.Lastname,
+                Picpath = x.Picpath,
+                RelBp = x.RelBp.Where(b => b.Primary == true).Select(rb => new RelBp()
+                {
+                    Primary = rb.Primary,
+                    KeynumbNavigation = rb.KeynumbNavigation
+                }).ToList(),
+                Dphonebus = x.Dphonebus,
+                Clienttyp = x.Clienttyp,
+                Pstatus = x.Pstatus,
+                SvcType = x.SvcType,
+                Cases = x.Cases.Select(c => new Cases()
+                { 
+                    Tdate = c.Tdate,
+                    Title = c.Title,
+                    Case1 = c.Case1,
+                    Case2 = c.Case2,
+                    Case3 = c.Case3,
+                    Case4 = c.Case4,
+                    Case5 = c.Case5,
+                    Case6 = c.Case6,
+                    Case7 = c.Case7,
+                    Case8 = c.Case8,
+                    Case1d = c.Case1d,
+                    Case2d = c.Case2d,
+                    Case3d = c.Case3d,
+                    Case4d = c.Case4d,
+                    Case5d = c.Case5d,
+                    Case6d = c.Case6d,
+                    Case7d = c.Case7d,
+                    Case8d = c.Case8d,
+                    Casey1 = c.Casey1,
+                    Casey2 = c.Casey2,
+                    Casey3 = c.Casey3,
+                    Casey4 = c.Casey4,
+                    Casey5 = c.Casey5,
+                    Casey6 = c.Casey6,
+                    Casey7 = c.Casey7,
+                    Casey8 = c.Casey8,
+                    CaseStage = c.CaseStage,
+                    Casenew = c.Casenew,
+                    RevLocn = c.RevLocn,
+                    CaseAgents = c.CaseAgents.Select(ca => new CaseAgent()
+                    {
+                        AgentOrder = ca.AgentOrder,
+                        Agent = ca.Agent
+                    })
+                }),
+                PeoplePolicys = x.PeoplePolicys.Where(p => p.Del == false).Select(p => new PeoplePolicys()
+                {
+                    Keynumo = p.Keynumo,
+                    Policy = new Policys()
+                    {
+                        Amount = p.Policy.Amount,
+                        Payment = p.Policy.Payment
+                    }
+                }).ToList(),
+                RelPpKeynump2Navigation = x.RelPpKeynump2Navigation.Select(rp => new RelPp() 
+                { 
+                    RelCode = rp.RelCode,
+                    RelGrp = rp.RelGrp,
+                    KeynumpNavigation = rp.KeynumpNavigation,
+                    Keynump2Navigation = rp.Keynump2Navigation
+                }),
+                RelPpKeynumpNavigation = x.RelPpKeynumpNavigation.Select(rp => new RelPp()
+                {
+                    RelCode = rp.RelCode,
+                    RelGrp = rp.RelGrp,
+                    KeynumpNavigation = rp.KeynumpNavigation,
+                    Keynump2Navigation = rp.Keynump2Navigation
+                }),
+            }).FirstOrDefault();
+            List<RelPp> peopleRelations = new List<RelPp>();
+            peopleRelations.AddRange(people.RelPpKeynumpNavigation);
+            peopleRelations.AddRange(people.RelPpKeynump2Navigation);
+            people.RelPpKeynumpNavigation = peopleRelations;
+            return people;
+        }
     }
 }

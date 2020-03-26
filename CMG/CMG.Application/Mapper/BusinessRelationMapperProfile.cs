@@ -12,6 +12,14 @@ namespace CMG.Application.Mapper
                 .ForMember(des => des.BusinessName, src => src.MapFrom(src => src.Busname.Trim()))
                 .ForMember(des => des.Address, src => src.MapFrom(src => src.Bstreet.Trim()));
 
+            CreateMap<Business, ViewBusinessDto>()
+                .ForMember(des => des.BusinessName, src => src.MapFrom(src => src.Busname.Trim()))
+                .ForMember(des => des.StreetName, src => src.MapFrom(src => src.Bstreet.Trim()))
+                .ForMember(des => des.City, src => src.MapFrom(src => src.Bcity.Trim()))
+                .ForMember(des => des.Province, src => src.MapFrom(src => src.Bprov.Trim()))
+                .ForMember(des => des.PostalCode, src => src.MapFrom(src => src.Bpostalcod.Trim()))
+                .ForMember(des => des.Phone, src => src.MapFrom(src => src.Phonebus.Trim()));
+
             CreateMap<ViewBusinessRelationDto, BusinessPolicys>();
         }
     }

@@ -25,6 +25,7 @@ namespace CMG.DataAccess.Domain
         public virtual DbSet<BusinessPolicys> BusinessPolicys { get; set; }
         public virtual DbSet<Calls> Calls { get; set; }
         public virtual DbSet<Cases> Cases { get; set; }
+        public virtual DbSet<CaseAgent> CaseAgent { get; set; }
         public virtual DbSet<Combo> Combo { get; set; }
         public virtual DbSet<Comm> Comm { get; set; }
         public virtual DbSet<Grp> Grp { get; set; }
@@ -850,41 +851,6 @@ namespace CMG.DataAccess.Domain
                     .HasColumnName("KEYCASE")
                     .ValueGeneratedNever();
 
-                entity.Property(e => e.Agent1)
-                    .IsRequired()
-                    .HasColumnName("AGENT1")
-                    .HasMaxLength(3)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("('')");
-
-                entity.Property(e => e.Agent2)
-                    .IsRequired()
-                    .HasColumnName("AGENT2")
-                    .HasMaxLength(3)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("('')");
-
-                entity.Property(e => e.Agent3)
-                    .IsRequired()
-                    .HasColumnName("AGENT3")
-                    .HasMaxLength(3)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("('')");
-
-                entity.Property(e => e.Agent4)
-                    .IsRequired()
-                    .HasColumnName("AGENT4")
-                    .HasMaxLength(3)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("('')");
-
-                entity.Property(e => e.Agent5)
-                    .IsRequired()
-                    .HasColumnName("AGENT5")
-                    .HasMaxLength(3)
-                    .IsUnicode(false)
-                    .HasDefaultValueSql("('')");
-
                 entity.Property(e => e.Case1).HasColumnName("CASE1");
 
                 entity.Property(e => e.Case1d)
@@ -1015,8 +981,6 @@ namespace CMG.DataAccess.Domain
                     .HasColumnName("DICTAS")
                     .HasComputedColumnSql("([dbo].[FUNC_Dicta]([keynump],[CASE_stage],[Case1d],[Case2d],[Case3d],[Case4d],[Case5d],[Case6d],[Case7d],[Case8d]))");
 
-                entity.Property(e => e.Keynump).HasColumnName("KEYNUMP");
-
                 entity.Property(e => e.Num)
                     .HasColumnName("num_")
                     .ValueGeneratedOnAdd();
@@ -1048,6 +1012,38 @@ namespace CMG.DataAccess.Domain
                     .HasMaxLength(20)
                     .IsUnicode(false)
                     .HasDefaultValueSql("('')");
+
+                entity.Property(e => e.Keynump)
+                    .HasColumnName("KEYNUMP");
+
+                entity.HasOne(d => d.People)
+                    .WithMany(p => p.Cases)
+                    .HasForeignKey(d => d.Keynump)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CASES_PEOPLE"); ;
+
+            });
+
+            modelBuilder.Entity<CaseAgent>(entity =>
+            {
+                entity.Property(e => e.CreatedBy)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.ModifiedBy)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ModifiedDate).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Case)
+                    .WithMany(p => p.CaseAgents)
+                    .HasForeignKey(d => d.CaseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CASES_CaseAgent");
             });
 
             modelBuilder.Entity<Combo>(entity =>
@@ -2954,6 +2950,8 @@ namespace CMG.DataAccess.Domain
                     .WithMany(p => p.RelPpKeynump2Navigation)
                     .HasForeignKey(d => d.Keynump2)
                     .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasQueryFilter(x => x.Del == false);
             });
 
             modelBuilder.Entity<Todo>(entity =>

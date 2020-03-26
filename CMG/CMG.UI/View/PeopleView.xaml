@@ -6,6 +6,7 @@
              xmlns:uc="clr-namespace:CMG.UI.Controls"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
+             xmlns:converters="clr-namespace:CMG.UI.Converter"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <Storyboard x:Key="SearchSliderOpen" TargetProperty="Margin">
@@ -28,6 +29,7 @@
                 </ThicknessAnimation.To>
             </ThicknessAnimation>
         </Storyboard>
+        <converters:PhoneNumberFormatConverter x:Key="PhoneFormat"/>
     </UserControl.Resources>
     <UserControl.Triggers>
         <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ButtonSearchSliderOpen">
@@ -38,11 +40,10 @@
         </EventTrigger>
     </UserControl.Triggers>
     <Grid>
-        <Grid x:Name="PeopleMainView">
+        <Grid x:Name="PeopleMainView" Margin="0 0 0 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="450" x:Name="SearchSliderColumn" />
                 <ColumnDefinition Width="*" x:Name="DetailsColumn"/>
-                <ColumnDefinition Width="575" x:Name="BusinessDetailsColumn"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Row="0" Grid.Column="0" Background="#FF252627" x:Name="SearchSliderPannel" ShowGridLines="False">
                 <uc:SearchPanelControl CustomSearchSliderCloseClick="ButtonSearchSliderClose_Click"></uc:SearchPanelControl>
@@ -74,11 +75,264 @@
                     </TextBlock>
                     <TextBlock Text="People Details" Margin="10 22 10 10" FontSize="16" Foreground="White" Visibility="{Binding IsClientDetailVisible, Converter={StaticResource VisibilityConverter}}"/>
                 </StackPanel>
-                <Grid Grid.Row="2" Margin="10 0 10 10" Grid.ColumnSpan="2">
-                    <!-- People summary view -->
+                <Grid Grid.Row="1" Margin="10 0 10 50" Grid.ColumnSpan="2" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="80"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0">
+                        <Grid Background="White" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="4.5*"/>
+                            <ColumnDefinition Width="5*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0" Margin="10 0 10 0">
+                            <Ellipse Height="175" Width="175" Stroke="Gray">
+                                <Ellipse.Fill>
+                                    <ImageBrush ImageSource="{Binding People.PhotoPath}" Stretch="UniformToFill"></ImageBrush>
+                                </Ellipse.Fill>
+                            </Ellipse>
+                            <Border Visibility="{Binding IsPhotoEmpty, Converter={StaticResource VisibilityConverter}}"
+                                CornerRadius="90"
+                                Width="175"
+                                Height="175"
+                                Margin="10"
+                                Background="SkyBlue"
+                                BorderBrush="White"
+                                BorderThickness="1">            
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="50" FontWeight="Bold" Text="{Binding NameInitials}" />
+                            </Border>
+                        </Grid>
+                        <Grid Grid.Column="1" ShowGridLines="False">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="90"/>
+                                <RowDefinition Height="45"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <DockPanel Grid.Row="0">
+                                <TextBlock FontSize="20" FontWeight="Bold" Margin="0 50 0 10">
+                                    <Run Text="{Binding People.CommanName}"></Run>
+                                    <Run Text="{Binding People.LastName}"></Run>
+                                </TextBlock>
+                            </DockPanel>
+                            <DockPanel Grid.Row="1">
+                                <TextBlock FontSize="14" Text="{Binding People.PrimaryBusiness.Phone, Converter={StaticResource PhoneFormat}}"/>
+                            </DockPanel>
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Status" FontSize="14"/>
+                                    <TextBlock Text="{Binding People.Status}" FontSize="14" FontWeight="Bold" Foreground="Green"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="Entity" FontSize="14"/>
+                                    <TextBlock Text="{Binding People.ClientType}" FontSize="14" FontWeight="Bold"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Service Type" FontSize="14"/>
+                                    <TextBlock Text="{Binding People.ServiceType}" FontSize="14" FontWeight="Bold"/>
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                        <Grid Grid.Column="2" ShowGridLines="False">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="120"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Margin="20 90 0 10">
+                                <TextBlock Text="Primary Business Information" FontSize="14"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Margin="20 0 0 0">
+                                <TextBlock Margin="0 0 0 5" Text="{Binding People.PrimaryBusiness.BusinessName}" FontWeight="Bold" FontSize="14"/>
+                                <TextBlock Text="{Binding People.PrimaryBusiness.Address}" FontSize="14"/>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                    </ScrollViewer>
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0" Margin="0 0 10 0" Background="white">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="Total Face Amount" FontSize="14"/>
+                                <TextBlock Text="{Binding People.TotalFaceAmount, StringFormat='{}{0:#,#.00}'}" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+                        <Grid Grid.Column="1" Background="white">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="Total Premium Amount" FontSize="14"/>
+                                <TextBlock Text="{Binding People.TotalPremiumAmount, StringFormat='{}{0:#,#.00}'}" FontSize="14" FontWeight="Bold" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                    <ScrollViewer Grid.Row="4" VerticalScrollBarVisibility="Auto">
+                    <Grid Background="White">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="Active Opportunities" Margin="15 20 0 0" FontSize="14" />
+                        <DataGrid Grid.Row="1" x:Name="ActiveOpportunities" AutoGenerateColumns="False" RowHeight="30"
+                                          ItemsSource="{Binding People.Cases}"
+                                          HorizontalGridLinesBrush="White"
+                                          RowStyle="{StaticResource CaseRowStyle}" 
+                                          ColumnHeaderStyle="{StaticResource CaseHeaderStyle}"
+                                          CanUserAddRows="False">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Header="Title" MinWidth="150" HeaderStyle="{StaticResource CasesFirstColumnHeaderStyle}">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=Title}" Padding="15 0 0 0"></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Current Stage" MinWidth="150">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=CaseStageName}"></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Current Stage Date" MinWidth="150">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=CaseStageDate, StringFormat=MM/dd/yyyy}" ></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Last Updated By" MinWidth="150">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=ModifiedBy}"></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Target Date" MinWidth="150">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=TargetDate, StringFormat=MM/dd/yyyy}" ></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Agents" Width="auto">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ListView ItemsSource="{Binding CaseAgents, Mode=OneWay}" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled" >
+                                                <ListView.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Horizontal"></StackPanel>
+                                                    </ItemsPanelTemplate>
+                                                </ListView.ItemsPanel>
+                                                <ListView.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border CornerRadius="10"
+                                                BorderBrush="{Binding Agent.Color}"
+                                                BorderThickness="1"
+                                                Margin="0 0  3 0"
+                                                Background="{Binding Agent.Color}">
+                                                            <Label Content="{Binding Agent.FirstName}" Padding="5 1 5 1" Tag="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" Foreground="Black">
+                                                            </Label>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ListView.ItemTemplate>
+                                            </ListView>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Amount" MinWidth="150" HeaderStyle="{StaticResource AmountColumnHeaderStyle}">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=CaseStageAmount}" HorizontalAlignment="Right"></TextBlock>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                    </ScrollViewer>
+                    <ScrollViewer Grid.Row="6" VerticalScrollBarVisibility="Auto">
+                        <Grid Background="White">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Text="Family" Margin="15 20 0 0" FontSize="14" />
+                                <DataGrid Grid.Row="1" x:Name="Family" AutoGenerateColumns="False" RowHeight="30"
+                                          ItemsSource="{Binding People.Family}"
+                                          HorizontalGridLinesBrush="White"
+                                      Margin="0 0 50 0"
+                                          RowStyle="{StaticResource CaseRowStyle}" 
+                                          ColumnHeaderStyle="{StaticResource CaseHeaderStyle}"
+                                          CanUserAddRows="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTemplateColumn Header="Full Name" MinWidth="150" HeaderStyle="{StaticResource CasesFirstColumnHeaderStyle}">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Path=RelatedPeople.FullName}" Padding="15 0 20 0"></TextBlock>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="Relation" MinWidth="150">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Path=RelationDescription}" Padding="0 0 0 0"></TextBlock>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Grid>
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Text="Key Advisors" Margin="15 20 0 0" FontSize="14" />
+                                <DataGrid Grid.Row="1" x:Name="KeyAdvisors" AutoGenerateColumns="False" RowHeight="30"
+                                          ItemsSource="{Binding People.KeyAdvisors}"
+                                          HorizontalGridLinesBrush="White"
+                                          RowStyle="{StaticResource CaseRowStyle}" 
+                                          ColumnHeaderStyle="{StaticResource CaseHeaderStyle}"
+                                          CanUserAddRows="False">
+                                    <DataGrid.Columns>
+                                        <DataGridTemplateColumn Header="Full Name" MinWidth="150" HeaderStyle="{StaticResource CasesFirstColumnHeaderStyle}">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Path=RelatedPeople.FullName}" Padding="15 0 20 0"></TextBlock>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="Relation" MinWidth="150">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Path=RelationDescription}" Padding="0 0 0 0"></TextBlock>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </Grid>
+                        </Grid>
+                    </ScrollViewer>
                 </Grid>
-            </Grid>
-            <Grid Grid.Row="0" Grid.Column="2">
             </Grid>
         </Grid>
     </Grid>
