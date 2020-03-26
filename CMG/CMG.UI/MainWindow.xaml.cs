@@ -211,9 +211,25 @@ namespace CMG.UI
         }
         private void NavigateToSalesforce()
         {
+            string salesForceId = string.Empty;
+            if (_mainViewModel.SelectedViewModel is PeopleViewModel
+                && ((PeopleViewModel)_mainViewModel.SelectedViewModel).SelectedClient != null)
+            {
+                salesForceId = ((PeopleViewModel)_mainViewModel.SelectedViewModel).SelectedClient.SalesforceId;
+            }
+            if (_mainViewModel.SelectedViewModel is PolicyViewModel
+                && ((PolicyViewModel)_mainViewModel.SelectedViewModel).SelectedClient != null)
+            {
+                salesForceId = ((PolicyViewModel)_mainViewModel.SelectedViewModel).SelectedClient.SalesforceId;
+            }
+            if (_mainViewModel.SelectedViewModel is FileManagerViewModel
+                && ((FileManagerViewModel)_mainViewModel.SelectedViewModel).SelectedClient != null)
+            {
+                salesForceId = ((FileManagerViewModel)_mainViewModel.SelectedViewModel).SelectedClient.SalesforceId;
+            }
             ProcessStartInfo psi = new ProcessStartInfo
             {
-                FileName = _navigateURL,
+                FileName = _navigateURL + salesForceId,
                 UseShellExecute = true
             };
             Process.Start(psi);

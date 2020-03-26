@@ -44,7 +44,6 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="450" x:Name="SearchSliderColumn" />
                 <ColumnDefinition Width="*" x:Name="PolicyGridColumn"/>
-                <ColumnDefinition Width="575" x:Name="PolicyDetailColumn"/>
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Row="0" Grid.Column="0" Background="#FF252627" x:Name="SearchSliderPannel" ShowGridLines="False">
@@ -59,7 +58,7 @@
                     <ColumnDefinition Width="0" x:Name="searchBarColumn"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <DockPanel x:Name="SearchBar" Visibility="Collapsed">
+                <DockPanel Grid.Row="0" Grid.Column="0" x:Name="SearchBar" Visibility="Collapsed">
                     <materialDesign:PackIcon Kind="Search" VerticalAlignment="Center" Margin="20" FontWeight="Bold" Foreground="White"></materialDesign:PackIcon>
                     <TextBlock Text="Search" Margin="0 22 10 10" FontSize="16" Foreground="White" ></TextBlock>
                     <Button Background="Transparent" BorderBrush="Transparent" Width="50" x:Name="ButtonSearchSliderOpen" HorizontalAlignment="Left" Click="ButtonSearchSliderOpen_Click">
@@ -78,25 +77,33 @@
                     <TextBlock Text="File Explorer" Margin="10 22 10 10" FontSize="16" Foreground="White" Visibility="{Binding IsPolicyDetailVisible, Converter={StaticResource VisibilityConverter}}"/>
                 </StackPanel>
                 
-                <Grid Grid.Row="2" Margin="10 0 10 10" Grid.ColumnSpan="2" Background="White">
+                <Grid Grid.Row="1" Margin="10 0 10 10" Grid.ColumnSpan="2" Background="White">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="70"/>
-                        <RowDefinition Height="*" />
+                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <StackPanel x:Name="spDrives" 
-                                Grid.Row="0" Grid.Column="0" 
-                                Orientation="Horizontal">
-                    <!--<Button x:Name="btnTest" Visibility="Collapsed">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Gift"/>
-                            <TextBlock x:Name="txtDrive" Text="text"/>
-                        </StackPanel>
-                    </Button>-->
+                    <StackPanel x:Name="spDrives" Grid.Row="0" Grid.ColumnSpan="3" Orientation="Horizontal"
+                                HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <!--<Button x:Name="btnTest" Visibility="Collapsed">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Gift"/>
+                                <TextBlock x:Name="txtDrive" Text="text"/>
+                            </StackPanel>
+                        </Button>-->
                     </StackPanel>
-                    <TreeView x:Name="FolderView" Grid.Row="1" Grid.Column="0" SelectedItemChanged="FolderView_SelectedItemChanged" >
+                    <Grid Grid.Row="1" Grid.ColumnSpan="3" Background="#FF444444"></Grid>
+                        
+                    <Grid Grid.Row="2" Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>                                                                       
+                        <TreeView Margin="5 10 0 0" x:Name="FolderView" Grid.Row="0" SelectedItemChanged="FolderView_SelectedItemChanged" >
                         <TreeView.Resources>
                             <Style TargetType="TreeViewItem">
                                 <Setter Property="FontSize" Value="14"/>
@@ -124,65 +131,62 @@
                                 </Style.Triggers>
                             </Style>
                         </TreeView.Resources>
-                    </TreeView>                    
-                </Grid>
-            </Grid>
-            <Grid Grid.Row="0" Grid.Column="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="70"/>
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <Grid Grid.Row="2" Background="White" Margin="0 0 10 10">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="70"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0">
-                        <Border x:Name="border"
+                    </TreeView>
+                    </Grid>
+                    <!--Here is partition Explorer | Files-->
+                    <Grid Grid.Row="2" Grid.Column="1" Background="#FF444444"></Grid>
+                    <Grid Grid.Row="2" Grid.Column="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="70"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0">
+                            <Border x:Name="border"
                                 BorderBrush="#FF444444"
                                 BorderThickness="0 0 0 3" Height="70">
-                            <Label x:Name="lblFiles" 
-                                   HorizontalAlignment="Center" VerticalContentAlignment="Center" 
+                                <Label x:Name="lblFiles" 
+                                   HorizontalContentAlignment="Center" HorizontalAlignment="Center" VerticalContentAlignment="Center" 
                                    Content="Files" Style="{StaticResource LabelStyle}" />
-                        </Border>
-                    </StackPanel>
-                    <DataGrid Grid.Row="1" x:Name="Files" ItemsSource="{Binding FilesCollection, UpdateSourceTrigger=PropertyChanged}" 
+                            </Border>
+                        </StackPanel>
+                        <DataGrid Grid.Row="1" x:Name="Files" ItemsSource="{Binding FilesCollection, UpdateSourceTrigger=PropertyChanged}" 
                               AutoGenerateColumns="False" ColumnHeaderStyle="{StaticResource HeaderStyle}" RowStyle="{StaticResource GridRowStyle}"
                               GridLinesVisibility="None" IsReadOnly="True" SelectionUnit="FullRow" MinRowHeight="25" MouseDoubleClick="Files_MouseDoubleClick">
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn HeaderStyle="{StaticResource FirstColumnHeaderStyle}" 
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn HeaderStyle="{StaticResource FirstColumnHeaderStyle}" 
                                                     CanUserReorder="False" CanUserResize="False" CanUserSort="False">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
                                             <materialDesign:PackIcon Kind="{Binding IconType}" VerticalAlignment="Center" 
                                                                      HorizontalAlignment="Center"
                                                                      Foreground="Black"></materialDesign:PackIcon>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Name" Width="Auto" SortMemberPath="Name" CanUserSort="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Name}"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Size" Width="Auto" SortMemberPath="Size" CanUserSort="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Size}" Margin="10 0 15 0" HorizontalAlignment="Right" />
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="Modified" Width="Auto" SortMemberPath="ModifiedDateTime" CanUserSort="True">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=ModifiedDateTime}" HorizontalAlignment="Left"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Name" Width="Auto" SortMemberPath="Name" CanUserSort="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=Name}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Size" Width="Auto" SortMemberPath="Size" CanUserSort="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=Size}" Margin="10 0 15 0" HorizontalAlignment="Right" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Modified" Width="Auto" SortMemberPath="ModifiedDateTime" CanUserSort="True">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path=ModifiedDateTime}" HorizontalAlignment="Left"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
                 </Grid>
             </Grid>
         </Grid>
