@@ -96,6 +96,41 @@
     <Style x:Key="RelationshipFirstColumnHeaderStyle" TargetType="DataGridColumnHeader" BasedOn="{StaticResource RelationshipHeaderStyle}">
         <Setter Property="Margin" Value="8 0 0 0"/>
     </Style>
+    
+    <Style x:Key="AmountColumnHeaderStyle" TargetType="DataGridColumnHeader" BasedOn="{StaticResource RelationshipHeaderStyle}">
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="Cursor" Value="Arrow"/>
+    </Style>
+    <Style x:Key="CaseHeaderStyle" TargetType="DataGridColumnHeader">
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="BorderBrush" Value="White" />
+        <Setter Property="BorderThickness" Value="0 0 0 0" />
+        <Setter Property="SnapsToDevicePixels" Value="False" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="MinWidth" Value="0" />
+        <Setter Property="MinHeight" Value="45" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+    <Style x:Key="CasesFirstColumnHeaderStyle" TargetType="DataGridColumnHeader" BasedOn="{StaticResource RelationshipHeaderStyle}">
+        <Setter Property="Margin" Value="15 0 0 0"/>
+        <Setter Property="Cursor" Value="Arrow"/>
+    </Style>
+    <Style x:Key="CaseRowStyle" TargetType="{x:Type DataGridRow}">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Style.Triggers>
+            <Trigger Property="IsSelected"
+                        Value="True">
+                <Setter Property="Background"
+                        Value="White" />
+                <Setter Property="Opacity" Value="0.9"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="White"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
     <Style x:Key="PageHeader" TargetType="Grid">
         <Setter Property="Background" Value="#FF444444"/>
@@ -122,8 +157,5 @@
                 <Setter Property="Foreground" Value="Black"/>
             </Trigger>
         </Style.Triggers>
-
-
-        
     </Style>
 </ResourceDictionary>

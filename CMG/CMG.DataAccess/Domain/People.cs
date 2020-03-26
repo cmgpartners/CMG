@@ -11,6 +11,7 @@ namespace CMG.DataAccess.Domain
             RelBp = new HashSet<RelBp>();
             RelPpKeynump2Navigation = new HashSet<RelPp>();
             RelPpKeynumpNavigation = new HashSet<RelPp>();
+            Cases = new HashSet<Cases>();
         }
 
         public int Keynump { get; set; }
@@ -102,7 +103,8 @@ namespace CMG.DataAccess.Domain
 
         public virtual ICollection<PeoplePolicys> PeoplePolicys { get; set; }
         public virtual ICollection<RelBp> RelBp { get; set; }
-        public virtual ICollection<RelPp> RelPpKeynump2Navigation { get; set; }
-        public virtual ICollection<RelPp> RelPpKeynumpNavigation { get; set; }
+        public virtual IEnumerable<RelPp> RelPpKeynump2Navigation { get; set; }
+        public virtual IEnumerable<RelPp> RelPpKeynumpNavigation { get; set; }
+        public virtual IEnumerable<Cases> Cases { get; set; }
     }
 }

@@ -92,7 +92,9 @@ namespace CMG.UI
                 mc.AddProfile(new PolicyMapperProfile());
                 mc.AddProfile(new WithdrawalMapperProfile());
                 mc.AddProfile(new ComboMapperProfile());
+                mc.AddProfile(new CaseMapperProfile());
                 mc.AddProfile(new ClientSearchProfiler());
+                mc.AddProfile(new PeopleMapperProfile());
                 mc.AddProfile(new BusinessRelationMapperProfile());
                 mc.AddProfile(new PolicyIllustrationMapperProfile());
             });

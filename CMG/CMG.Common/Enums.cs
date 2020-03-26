@@ -23,5 +23,16 @@
             Search = 3,
             SalesForce = 4
         }
+        public enum CaseStages
+        {
+            Discovery1 = 1,
+            Discovery2 = 2,
+            Design1 = 3,
+            Design2 = 4,
+            Delivery1 = 5,
+            Delivery2 = 6,
+            Destiny1 = 7,
+            Destiny2 = 8
+        }
     }
 }

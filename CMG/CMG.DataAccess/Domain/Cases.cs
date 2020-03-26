@@ -5,13 +5,13 @@ namespace CMG.DataAccess.Domain
 {
     public partial class Cases
     {
+        public Cases()
+        {
+            CaseAgents = new HashSet<CaseAgent>();
+        }
+
         public int Keycase { get; set; }
         public int Keynump { get; set; }
-        public string Agent1 { get; set; }
-        public string Agent2 { get; set; }
-        public string Agent3 { get; set; }
-        public string Agent4 { get; set; }
-        public string Agent5 { get; set; }
         public decimal CaseStage { get; set; }
         public int Case1 { get; set; }
         public int Case2 { get; set; }
@@ -49,5 +49,8 @@ namespace CMG.DataAccess.Domain
         public string Title { get; set; }
         public string SalesforceId { get; set; }
         public int? Dictas { get; set; }
+
+        public virtual People People { get; set; }
+        public virtual IEnumerable<CaseAgent> CaseAgents { get; set; }
     }
 }
