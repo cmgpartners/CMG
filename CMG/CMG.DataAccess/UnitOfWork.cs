@@ -134,7 +134,10 @@ namespace CMG.DataAccess
                 result = result.Where(r => r.Grantee != "dbo").ToList();
                 if(result != null && result.Count > 0)
                 {
-                    if (result.Any(r => (r.Privilege == "INSERT" && r.Is_Grantable == "YES") && (r.Privilege == "UPDATE" && r.Is_Grantable == "YES") && (r.Privilege == "DELETE" && r.Is_Grantable == "YES")))
+                    if (result.Any(r => r.Privilege.Trim() == "INSERT" && r.Is_Grantable.Trim() == "YES")
+                        && result.Any(r => r.Privilege.Trim() == "UPDATE" && r.Is_Grantable.Trim() == "YES")
+                        && result.Any(r => r.Privilege.Trim() == "DELETE" && r.Is_Grantable.Trim() == "YES")
+                        && result.Any(r => r.Privilege.Trim() == "SELECT" && r.Is_Grantable.Trim() == "YES"))
                     {
                         return true;
                     }
