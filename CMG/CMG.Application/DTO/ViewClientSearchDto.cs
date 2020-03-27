@@ -16,5 +16,6 @@ namespace CMG.Application.DTO
         public string Status { get; set; }
         public string SVCType { get; set; }
         public string GeneralNotes { get; set; }
+        public string SalesforceId { get; set; }
     }
 }
