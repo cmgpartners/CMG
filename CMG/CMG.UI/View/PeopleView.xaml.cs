@@ -1,6 +1,7 @@
 ﻿using CMG.Application.DTO;
 using CMG.Application.ViewModel;
 using CMG.UI.Controls;
+using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -9,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace CMG.UI.View
@@ -38,6 +40,25 @@ namespace CMG.UI.View
             SearchBar.Visibility = Visibility.Collapsed;
             SearchSliderColumn.Width = new GridLength(450);
             searchBarColumn.Width = new GridLength(0);
+        }
+        private void PhotoUploadButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog op = new OpenFileDialog();
+            op.Title = "Select a picture";
+            op.Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
+              "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
+              "Portable Network Graphic (*.png)|*.png";
+            if (op.ShowDialog() == true)
+            {
+                PeopleViewModel peopleViewModel = (PeopleViewModel)DataContext;
+                if (peopleViewModel != null && peopleViewModel.People != null)
+                {
+                    peopleViewModel.People.PhotoPath = op.FileName;
+                    peopleViewModel.IsPhotoInEditMode = true;
+                    peopleViewModel.IsPhotoInSavedMode = false;
+                    peopleViewModel.People = peopleViewModel.People;
+                }
+            }
         }
         #region Helper Methods
         #endregion
