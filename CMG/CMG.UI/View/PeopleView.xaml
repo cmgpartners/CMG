@@ -93,21 +93,43 @@
                             <ColumnDefinition Width="5*"/>
                         </Grid.ColumnDefinitions>
                         <Grid Grid.Column="0" Margin="10 0 10 0">
-                            <Ellipse Height="175" Width="175" Stroke="Gray">
-                                <Ellipse.Fill>
-                                    <ImageBrush ImageSource="{Binding People.PhotoPath}" Stretch="UniformToFill"></ImageBrush>
-                                </Ellipse.Fill>
-                            </Ellipse>
-                            <Border Visibility="{Binding IsPhotoEmpty, Converter={StaticResource VisibilityConverter}}"
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition Height="40"/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <Ellipse Height="175" Width="175" Stroke="Gray" VerticalAlignment="Bottom">
+                                        <Ellipse.Fill>
+                                            <ImageBrush x:Name="Photo" ImageSource="{Binding People.PhotoPath, UpdateSourceTrigger=PropertyChanged}" Stretch="UniformToFill"></ImageBrush>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                    <Border Visibility="{Binding IsPhotoEmpty, Converter={StaticResource VisibilityConverter}}"
                                 CornerRadius="90"
                                 Width="175"
                                 Height="175"
-                                Margin="10"
+                                Margin="0"
                                 Background="SkyBlue"
                                 BorderBrush="White"
-                                BorderThickness="1">            
-                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="50" FontWeight="Bold" Text="{Binding NameInitials}" />
-                            </Border>
+                                BorderThickness="1" VerticalAlignment="Bottom">
+                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" FontSize="50" FontWeight="Bold" Text="{Binding NameInitials}" />
+                                    </Border>
+                                </Grid>
+                                <StackPanel Grid.Row="1" Orientation="Horizontal" Visibility="{Binding IsPhotoOptionEnabled, Converter={StaticResource VisibilityConverter}}">
+                                    <Button x:Name="PhotoUploadButton" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" 
+                                            Click="PhotoUploadButton_Click" Visibility="{Binding IsPhotoInSavedMode, Converter={StaticResource VisibilityConverter}}">
+                                        <materialDesign:PackIcon Kind="ImageAdd" Height="25" Width="25" Foreground="#00A3FF"/>
+                                    </Button>
+                                    <Button HorizontalContentAlignment="Left" Height="25" Padding="5" Width="25" 
+                                        Command="{Binding SavePhotoCommand}" Background="#FF57C125" Margin="5 0" BorderBrush="Transparent" 
+                                        Visibility="{Binding IsPhotoInEditMode, Converter={StaticResource VisibilityConverter}}">
+                                        <materialDesign:PackIcon Kind="Check" Height="15" Width="15"/>
+                                    </Button>
+                                    <Button HorizontalContentAlignment="Left" Height="25" Padding="5" Width="25" 
+                                            Command="{Binding CancelPhotoCommand}" Background="#FFEB7533" BorderBrush="Transparent" 
+                                            Visibility="{Binding IsPhotoInEditMode, Converter={StaticResource VisibilityConverter}}">
+                                        <materialDesign:PackIcon Kind="Close" Height="15" Width="15"/>
+                                    </Button>
+                                </StackPanel>
                         </Grid>
                         <Grid Grid.Column="1" ShowGridLines="False">
                             <Grid.RowDefinitions>
