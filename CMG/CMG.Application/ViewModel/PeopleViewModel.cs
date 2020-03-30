@@ -4,9 +4,11 @@ using CMG.DataAccess.Interface;
 using CMG.Service.Interface;
 using Microsoft.Extensions.Caching.Memory;
 using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Windows.Input;
 using ToastNotifications;
+using ToastNotifications.Messages;
 
 namespace CMG.Application.ViewModel
 {
@@ -50,6 +52,8 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("SelectedClient");
                 OnPropertyChanged("IsClientDetailVisible");
                 OnPropertyChanged("IsClientSelected");
+                IsPhotoInSavedMode = true;
+                IsPhotoInEditMode = false;
                 GetClientDetails();
             }
         }
@@ -71,15 +75,41 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("People");
                 OnPropertyChanged("IsPhotoEmpty");
                 OnPropertyChanged("NameInitials");
+                OnPropertyChanged("IsPhotoOptionEnabled");
             }
         }
         public bool IsPhotoEmpty
         {
             get { return string.IsNullOrEmpty(People?.PhotoPath); }
         }
+        public bool _isPhotoInEditMode;
+        public bool IsPhotoInEditMode
+        {
+            get { return _isPhotoInEditMode; }
+            set { _isPhotoInEditMode = value; OnPropertyChanged("IsPhotoInEditMode"); }
+        }
+        public bool _isPhotoInSavedMode = true;
+        public bool IsPhotoInSavedMode
+        {
+            get { return _isPhotoInSavedMode; }
+            set { _isPhotoInSavedMode = value; OnPropertyChanged("IsPhotoInSavedMode"); }
+        }
+        public bool IsPhotoOptionEnabled
+        {
+            get { return People != null; }
+        }
+
         public string NameInitials
         {
             get { return People != null ? $"{People.CommanName.Trim().Substring(0, 1)}{People.LastName.Trim().Substring(0, 1)}" : string.Empty; }
+        }
+        public ICommand SavePhotoCommand
+        {
+            get { return CreateCommand(SavePhoto); }
+        }
+        public ICommand CancelPhotoCommand
+        {
+            get { return CreateCommand(CancelPhoto); }
         }
         #endregion
         #region Helper Methods
@@ -110,8 +140,61 @@ namespace CMG.Application.ViewModel
                     ).ToList();
                 People.TotalFaceAmount = People.PeoplePolicies.Select(p => p.Policy.FaceAmount).Sum();
                 People.TotalPremiumAmount = People.PeoplePolicies.Select(p => p.Policy.Payment).Sum();
+                if(!string.IsNullOrEmpty(People.PhotoPath) && !File.Exists(People.PhotoPath))
+                {
+                    People.PhotoPath = string.Empty;
+                }
                 People = People;
             }
+        }
+        private void SavePhoto()
+        {
+            try
+            {
+                var length = new FileInfo(People.PhotoPath).Length;
+                if (length > 1000000)
+                {
+                    _notifier.ShowError("File size should be less than 1 MB");
+                    return;
+                }
+                var people = _unitOfWork.People.GetById(People.PeopleId);
+                var fileName = People.PhotoPath.Substring(People.PhotoPath.LastIndexOf("/") + 1);
+                var newFileName = $"{People.CommanName.Trim()} {People.LastName.Trim()}{fileName.Substring(fileName.LastIndexOf("."))}";
+                var newFilePath = $"L:\\pix\\{newFileName}";
+                newFilePath = GetNewFileName(newFilePath, newFilePath.Substring(newFilePath.LastIndexOf(".")), 1);
+                File.Copy(People.PhotoPath, newFilePath);
+                people.Picpath = newFilePath;
+                _unitOfWork.People.Save(people);
+                _unitOfWork.Commit();
+                IsPhotoInEditMode = false;
+                IsPhotoInSavedMode = true;
+            }
+            catch
+            {
+                _notifier.ShowError("Error occured while uploading photo");
+            }
+        }
+        private void CancelPhoto()
+        {
+            var people = _unitOfWork.People.GetById(People.PeopleId);
+            People.PhotoPath = people.Picpath;
+            if (!string.IsNullOrEmpty(People.PhotoPath) && !File.Exists(People.PhotoPath))
+            {
+                People.PhotoPath = string.Empty;
+            }
+            People = People;
+            IsPhotoInEditMode = false;
+            IsPhotoInSavedMode = true;
+        }
+        private string GetNewFileName(string fileName, string fileExtension, int i)
+        {
+            while (File.Exists(fileName))
+            {
+                fileName = $"L:\\pix\\{People.CommanName}{i}{fileExtension}";
+                i++;
+                GetNewFileName(fileName, fileName.Substring(fileName.LastIndexOf(".")), i);
+            }
+            return fileName;
         }
         #endregion
     }
