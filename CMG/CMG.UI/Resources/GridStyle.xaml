@@ -25,11 +25,11 @@
     <Style x:Key="FirstColumnHeaderStyle" TargetType="DataGridColumnHeader" BasedOn="{StaticResource HeaderStyle}">
         <Setter Property="Margin" Value="15 0 0 0"/>
     </Style>
-    
+
     <Style x:Key="GridRowStyle" TargetType="DataGridRow">
         <Setter Property="BorderThickness" Value="0 0 0 1"/>
         <Setter Property="BorderBrush" Value="Gray"/>
-        <Style.Triggers>
+        <Style.Triggers>            
             <Trigger Property="ItemsControl.AlternationIndex" Value="1">
                 <Setter Property="Background" Value="#D3D3D3"></Setter>
             </Trigger>
@@ -48,7 +48,40 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    
+
+    <Style x:Key="PolicyGridRowStyle" TargetType="DataGridRow">
+        <Setter Property="BorderThickness" Value="0 0 0 1"/>
+        <Setter Property="BorderBrush" Value="Gray"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding CompanyName}" Value="Sun Life">
+                <Setter Property="Background" Value="#fdfd96"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding CompanyName}" Value="London Life">
+                <Setter Property="Background" Value="#FFADD8E6"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding CompanyName}" Value="Great West Life">
+                <Setter Property="Background" Value="#FFFFDAB9"></Setter>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding CompanyName}" Value="Manulife">
+                <Setter Property="Background" Value="#90ee90"></Setter>
+            </DataTrigger>
+            <Trigger Property="IsSelected"
+                        Value="True">
+                <Setter Property="Background"
+                        Value="#00A3FF" />
+                <Setter Property="Opacity" Value="0.9"/>
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="FontWeight" Value="Bold"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#00A3FF"/>
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="Opacity" Value="0.9"/>
+            </Trigger>
+            
+        </Style.Triggers>
+    </Style>
+
     <Style x:Key="TextBlockCellStyle" TargetType="DataGridCell">
         <Style.Setters>
             <Setter Property="TextBlock.TextAlignment" Value="Right" />

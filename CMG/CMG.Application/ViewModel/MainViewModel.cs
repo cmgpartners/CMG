@@ -48,9 +48,6 @@ namespace CMG.Application.ViewModel
         private const string ColumnNamePolicyDate = "Policy Date";
         private const string ColumnNamePlacedOn = "Placed On";
         private const string ColumnNameReprojectedOn = "Reprojected On";
-        private const string ColumnNamePolicyNotes = "Policy Notes";
-        private const string ColumnNameClientNotes = "Client Notes";
-        private const string ColumnNameInternalNotes = "Internal Notes";
         private const string ColumnNameAge = "Age";
         private const string ColumnNameInsured = "Insured";
         private const string ColumnNameBeneficiary = "Beneficiary";
@@ -439,12 +436,11 @@ namespace CMG.Application.ViewModel
             ColumnNames.Add(ColumnNamePlacedOn);
             ColumnNames.Add(ColumnNameReprojectedOn);
             ColumnNames.Add(ColumnNameAge);
-            ColumnNames.Add(ColumnNamePolicyNotes);
-            ColumnNames.Add(ColumnNameClientNotes);
-            ColumnNames.Add(ColumnNameInternalNotes);
             ColumnNames.Add(ColumnNameInsured);
             ColumnNames.Add(ColumnNameBeneficiary);
             ColumnNames.Add(ColumnNameOwner);
+
+            columnNames.Sort();
         }
         private void AddIllustrationColumnsContextMenu()
         {
@@ -465,6 +461,8 @@ namespace CMG.Application.ViewModel
             IllustrationColumnNames.Add(ColumnNameDBR);
             IllustrationColumnNames.Add(ColumnNameACBR);
             IllustrationColumnNames.Add(ColumnNameNCPIR);
+
+            IllustrationColumnNames.Sort();
         }
         public void GetComboData()
         {
