@@ -2,19 +2,17 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using CMG.Application.DTO;
 using CMG.UI.Controls;
 using System.Linq;
-using System.Collections.ObjectModel;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using ToastNotifications.Messages;
 using System.Collections.Generic;
-using CMG.UI.Converter;
+using System.Data;
 
 namespace CMG.UI.View
 {
@@ -486,7 +484,7 @@ namespace CMG.UI.View
                     SetGridColumnWidth(columnName, 70, gridName);
                     break;
                 case ColumnNameCompany:
-                    SetGridColumnWidth(columnName, 110, gridName);
+                    SetGridColumnWidth(columnName, 0, gridName);
                     break;
                 case ColumnNameFaceAmount:
                 case ColumnNamePayment:
@@ -871,7 +869,6 @@ namespace CMG.UI.View
                             policyViewModel.PolicyIllustrationCollection[i].Year = policyViewModel.PolicyIllustrationCollection[i].Year;
                         }
                     }
-                    //cellStyle.Setters.Add(new Setter(MarginProperty, new Thickness(10, 0, 0, 0)));
                     break;
                 case ColumnNameAD:
                     bindingPath = BindingAD;
@@ -1059,17 +1056,8 @@ namespace CMG.UI.View
             cellStyle.Setters.Add(new Setter(FontWeightProperty, FontWeights.Bold));
             cellStyle.Setters.Add(new Setter(BorderThicknessProperty, new Thickness(0)));
             cellStyle.Setters.Add(new Setter(ForegroundProperty, Brushes.Black));
-            if (bindingPath == BindingCompanyName)
-            {
-                Binding backgroundBinding = new Binding(bindingPath) { Converter = new CompanyCellBackgroundConverter() };
-                cellStyle.Setters.Add(new Setter(BackgroundProperty, backgroundBinding));
-                cellStyle.Setters.Add(new Setter(MarginProperty, new Thickness(0,0,10,0)));
-            }
-            else
-            {
-                cellStyle.Setters.Add(new Setter(BackgroundProperty, Brushes.Transparent));
-            }
-            if(bindingPath == BindingFaceAmount)
+            cellStyle.Setters.Add(new Setter(BackgroundProperty, Brushes.Transparent));
+            if (bindingPath == BindingFaceAmount)
             {
                 binding.StringFormat = "#,#";
                 cellStyle.Setters.Add(new Setter(MarginProperty, new Thickness(0, 0, 10, 0)));
