@@ -3154,6 +3154,8 @@ namespace CMG.DataAccess.Domain
             {
                 entity.HasKey(e => e.Id)
                     .ForSqlServerIsClustered(false);
+
+                entity.HasQueryFilter(x => x.IsDeleted == false);
             });
         }
 

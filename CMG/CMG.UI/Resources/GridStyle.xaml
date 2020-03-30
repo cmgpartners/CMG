@@ -65,9 +65,6 @@
             <DataTrigger Binding="{Binding CompanyName}" Value="Manulife">
                 <Setter Property="Background" Value="#90ee90"></Setter>
             </DataTrigger>
-            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                <Setter Property="Background" Value="#D3D3D3"></Setter>
-            </Trigger>
             <Trigger Property="IsSelected"
                         Value="True">
                 <Setter Property="Background"
