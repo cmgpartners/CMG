@@ -167,7 +167,6 @@ namespace CMG.DataAccess.Repository
         {
             return Context.People.SingleOrDefault(x => x.Keynump == (id ?? 0));
         }
-
         public People GetDetails(long id)
         {
             var query = _context.People.Where(p => p.Keynump == id).AsQueryable()
@@ -190,6 +189,7 @@ namespace CMG.DataAccess.Repository
                     KeynumbNavigation = rb.KeynumbNavigation
                 }).ToList(),
                 Dphonebus = x.Dphonebus,
+                Phonecar = x.Phonecar,
                 Clienttyp = x.Clienttyp,
                 Pstatus = x.Pstatus,
                 SvcType = x.SvcType,
