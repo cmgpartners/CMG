@@ -30,17 +30,18 @@ namespace CMG.UI
         public string _navigateURL = "https://cmgpartners.my.salesforce.com/";
         private MainViewModel _mainViewModel;
         private Notifier _notifier;
+        private Window window;
 
         public int[] years { get; set; }
         public MainWindow(IUnitOfWork unitOfWork, IMapper mapper, IMemoryCache memoryCache = null, IDialogService dialogService = null, IReportService reportService = null)
         {
+            InitializeComponent();
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _memoryCache = memoryCache;
             _dialogService = dialogService;
             _reportService = reportService;
             _notifier = InitializeNotifier();
-            InitializeComponent();
             _mainViewModel = new MainViewModel(_unitOfWork, _mapper, _memoryCache, _notifier);
             if (_mainViewModel.HasCommissionAccess)
                 lstNavItems.SelectedItem = lstNavItems.Items[0];
@@ -194,10 +195,15 @@ namespace CMG.UI
         #region Helper Methods
         private Notifier InitializeNotifier()
         {
+            if (System.Windows.Application.Current.Windows.Count > 1
+                && System.Windows.Application.Current.Windows[1].Name == "CmgApp")
+            {
+                window = System.Windows.Application.Current.Windows[1];
+            }
             return new Notifier(cfg =>
             {
                 cfg.PositionProvider = new WindowPositionProvider(
-                    parentWindow: System.Windows.Application.Current.MainWindow,
+                    parentWindow: window,
                     corner: Corner.TopRight,
                     offsetX: 10,
                     offsetY: 10);
