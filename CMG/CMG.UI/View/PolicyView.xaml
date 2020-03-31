@@ -161,13 +161,13 @@
                 </DockPanel>
                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
                     <materialDesign:PackIcon Kind="Snowflake" Margin="10 10 0 10" VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
-                    <TextBlock Margin="10 22 10 10" FontSize="16" Foreground="White" Visibility="{Binding IsClientSelected, Converter={StaticResource VisibilityConverter}}">
+                    <TextBlock Margin="10 22 10 10" FontSize="20" Foreground="White" Visibility="{Binding IsClientSelected, Converter={StaticResource VisibilityConverter}}">
                         <Run Text="{Binding SelectedClient.ClientType}"/>
                         <Run Text=" : "/>
-                        <Run Text="{Binding SelectedClient.CommonName}"/>
-                        <Run Text="{Binding SelectedClient.LastName}"/>
+                        <Run Text="{Binding SelectedClient.CommonName}" FontWeight="Bold"/>
+                        <Run Text="{Binding SelectedClient.LastName}" FontWeight="Bold"/>
                     </TextBlock>
-                    <TextBlock Text="Policy Details" Margin="10 22 10 10" FontSize="16" Foreground="White" Visibility="{Binding IsPolicyDetailVisible, Converter={StaticResource VisibilityConverter}}"/>
+                    <TextBlock Text="Policy Details" Margin="10 22 10 10" FontSize="20" Foreground="White" Visibility="{Binding IsPolicyDetailVisible, Converter={StaticResource VisibilityConverter}}"/>
                 </StackPanel>
                 <Grid Grid.Row="1" Margin="10 0 10 10" Grid.ColumnSpan="2">
                     <DataGrid AutoGenerateColumns="True" x:Name="policies" IsReadOnly="True" GridLinesVisibility="None"
