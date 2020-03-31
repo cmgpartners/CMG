@@ -60,8 +60,8 @@
                 <DockPanel x:Name="SearchBar" Visibility="Collapsed">
                     <materialDesign:PackIcon Kind="Search" VerticalAlignment="Center" Margin="20" FontWeight="Bold" Foreground="White"></materialDesign:PackIcon>
                     <TextBlock Text="Search" Margin="0 22 10 10" FontSize="16" Foreground="White" ></TextBlock>
-                    <Button Background="Transparent" BorderBrush="Transparent" Width="50" x:Name="ButtonSearchSliderOpen" HorizontalAlignment="Left" Click="ButtonSearchSliderOpen_Click">
-                        <materialDesign:PackIcon Kind="ArrowRightBoldCircleOutline" VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
+                    <Button Background="Transparent" BorderBrush="Transparent" x:Name="ButtonSearchSliderOpen" HorizontalAlignment="Left" Click="ButtonSearchSliderOpen_Click">
+                        <materialDesign:PackIcon Kind="ArrowRightBoldCircle" VerticalAlignment="Center" Height="29" Width="29" Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
                     </Button>
                     <TextBlock Text="|" Margin="0 10 10 10" FontSize="35" Foreground="#FFF0F9FF" FontWeight="Light" Opacity="0.3"></TextBlock>
                 </DockPanel>
