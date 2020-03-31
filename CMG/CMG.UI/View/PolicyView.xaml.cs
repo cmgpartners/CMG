@@ -473,12 +473,7 @@ namespace CMG.UI.View
         private void ResizeGridColumns(string columnName, string gridName)
         {
             switch (columnName)
-            {
-                case ColumnNameCompany:
-                case ColumnNameRating:
-                case ColumnNamePlanCode:
-                    SetGridColumnWidth(columnName, 0, gridName);
-                    break;
+            {                
                 case ColumnNameFaceAmount:
                 case ColumnNamePayment:
                     SetGridColumnWidth(columnName, 90, gridName);
@@ -493,7 +488,6 @@ namespace CMG.UI.View
                 case ColumnNamePolicyDate:
                 case ColumnNamePlacedOn:
                 case ColumnNameReprojectedOn:
-                case ColumnNameStatus:
                 case ColumnNameInsured:
                     SetGridColumnWidth(columnName, 100, gridName);
                     break;
@@ -523,7 +517,6 @@ namespace CMG.UI.View
                     SetGridColumnWidth(columnName, 130, gridName);
                     break;
                 case ColumnNameYear:
-                case ColumnNameNCPI:
                     SetGridColumnWidth(columnName, 40, gridName);
                     break;
                 default:
