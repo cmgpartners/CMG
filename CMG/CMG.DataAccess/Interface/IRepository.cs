@@ -15,7 +15,6 @@ namespace CMG.DataAccess.Interface
     {
         int TotalRecords { get; set; }
         ICollection<TEntity> Result { get; set; }
-
         public decimal TotalAmount { get; set; }
     }
 

@@ -59,7 +59,7 @@ namespace CMG.UI.Controls
         {
             try
             {
-                mainViewModel = (MainViewModel)this.DataContext;
+                mainViewModel = (MainViewModel)DataContext;
                 ListView searchOptionsListView = (ListView)sender;
                 ViewSearchOptionsDto droppedData = (ViewSearchOptionsDto)FindAnchestor<ListViewItem>((DependencyObject)e.OriginalSource)?.DataContext;
                 ViewSearchOptionsDto draggedData = (ViewSearchOptionsDto)searchOptionsListView.SelectedItem;
@@ -114,6 +114,23 @@ namespace CMG.UI.Controls
                 }
             }
         }
+        private void ClearAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                mainViewModel = (MainViewModel)DataContext;
+                int? policyNumberColumnOrder = mainViewModel.SearchOptions.Where(s => s.ColumnName == "Policy Number").FirstOrDefault()?.ColumnOrder;
+                if (policyNumberColumnOrder != null)
+                {
+                    ListViewItem policyNumberItem = (ListViewItem)(SearchOptionsList.ItemContainerGenerator.ContainerFromItem(SearchOptionsList.Items[policyNumberColumnOrder ?? 0]));
+                    ContentPresenter contentPresenter = FindVisualChild<ContentPresenter>(policyNumberItem);
+                    DataTemplate dataTemplate = contentPresenter.FindResource("policyNumberTemplate") as DataTemplate;
+                    AutoCompleteBox autoCompleteBox = (AutoCompleteBox)dataTemplate.FindName("UserControlPolicyNumber", contentPresenter);
+                    autoCompleteBox.autoTextBox.Text = string.Empty;
+                }
+            }
+            catch { }
+        }
         #region Helper Methods
         private void BeginDrag(MouseEventArgs e)
         {
@@ -154,6 +171,26 @@ namespace CMG.UI.Controls
             while (current != null);
             return null;
         }
+        private childItem FindVisualChild<childItem>(DependencyObject obj)
+        where childItem : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(obj); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(obj, i);
+                if (child != null && child is childItem)
+                {
+                    return (childItem)child;
+                }
+                else
+                {
+                    childItem childOfChild = FindVisualChild<childItem>(child);
+                    if (childOfChild != null)
+                        return childOfChild;
+                }
+            }
+            return null;
+        }
+
         #endregion
     }
 }

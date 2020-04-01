@@ -114,8 +114,20 @@
                             </ItemsPanelTemplate>
                         </ListView.ItemsPanel>
                     </ListView>
-                    <StackPanel Grid.Row="1" Margin="295 10 0 0">
-                        <Button Content="Search" Width="85" Command="{Binding DataContext.SearchClientCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" IsDefault="True"></Button>
+                    <StackPanel Grid.Row="1" Margin="190 10 0 0" Orientation="Horizontal">
+                        <Button Margin="0 0 15 0" Background="Transparent" x:Name="ClearAllButton" Cursor="Hand" Click="ClearAllButton_Click" 
+                                Command="{Binding DataContext.ClearSearchCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=Window}}">
+                            <StackPanel Orientation="Horizontal" Cursor="Hand">
+                            <materialDesign:PackIcon Kind="Clear" Margin="0 0 10 0" />
+                            <TextBlock Text="Clear All"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Cursor="Hand"  Width="105" Command="{Binding DataContext.SearchClientCommand,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}" IsDefault="True">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Search" Margin="0 0 10 0"/>
+                                <TextBlock Text="Search"/>
+                            </StackPanel>
+                        </Button>
                     </StackPanel>
                 </Grid>
             </Grid>

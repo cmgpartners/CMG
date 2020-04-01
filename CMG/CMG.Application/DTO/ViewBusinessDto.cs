@@ -8,6 +8,7 @@ namespace CMG.Application.DTO
     public class ViewBusinessDto
     {
         public string BusinessName { get; set; }
+        public string BusinessPhone { get; set; }
         public string StreetName { get; set; }
         public string City { get; set; }
         public string Province { get; set; }
@@ -20,6 +21,5 @@ namespace CMG.Application.DTO
                 return string.Join(", ", address.Where(s => !string.IsNullOrEmpty(s)));
             }
         }
-        public string Phone { get; set; }
     }
 }
