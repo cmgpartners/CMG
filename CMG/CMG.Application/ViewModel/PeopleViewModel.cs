@@ -101,7 +101,12 @@ namespace CMG.Application.ViewModel
 
         public string NameInitials
         {
-            get { return People != null ? $"{People.CommanName.Trim().Substring(0, 1)}{People.LastName.Trim().Substring(0, 1)}" : string.Empty; }
+            get 
+            {
+                var commonNameInitial = People != null ? !string.IsNullOrEmpty(People.CommanName.Trim()) ? People.CommanName.Trim().Substring(0, 1) : string.Empty : string.Empty;
+                var lastNameInitial = People != null ? !string.IsNullOrEmpty(People.LastName.Trim()) ? People.LastName.Trim().Substring(0, 1) : string.Empty : string.Empty;
+                return $"{commonNameInitial}{lastNameInitial}";
+            }
         }
         public ICommand SavePhotoCommand
         {

@@ -359,7 +359,11 @@ namespace CMG.Application.ViewModel
         public ICommand SearchClientCommand
         {
             get { return CreateCommand(SearchClient); }
-        }        
+        }  
+        public ICommand ClearSearchCommand
+        {
+            get { return CreateCommand(ClearSearch); }
+        }
         public void SearchPolicy(object parameter)
         {
             if (parameter != null)
@@ -941,6 +945,17 @@ namespace CMG.Application.ViewModel
                 ColumnName = ColumnNameNCPIR,
                 ColumnOrder = 16
             });
+        }
+        private void ClearSearch()
+        {
+            CommanName = string.Empty;
+            LastName = string.Empty;
+            FirstName = string.Empty;
+            EntityType = default;
+            PolicyNumber = string.Empty;
+            CompanyName = default;
+            FromPolicyDate = default;
+            ToPolicyDate = default;
         }
         #endregion Methods
     }
