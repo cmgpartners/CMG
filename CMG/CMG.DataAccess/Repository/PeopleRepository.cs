@@ -244,19 +244,23 @@ namespace CMG.DataAccess.Repository
                     RelCode = rp.RelCode,
                     RelGrp = rp.RelGrp,
                     KeynumpNavigation = rp.KeynumpNavigation,
-                    Keynump2Navigation = rp.Keynump2Navigation
+                    Keynump2Navigation = rp.Keynump2Navigation,
+                    Keynump = rp.Keynump,
+                    Keynump2 = rp.Keynump2
                 }),
                 RelPpKeynumpNavigation = x.RelPpKeynumpNavigation.Select(rp => new RelPp()
                 {
                     RelCode = rp.RelCode,
                     RelGrp = rp.RelGrp,
                     KeynumpNavigation = rp.KeynumpNavigation,
-                    Keynump2Navigation = rp.Keynump2Navigation
+                    Keynump2Navigation = rp.Keynump2Navigation,
+                    Keynump = rp.Keynump,
+                    Keynump2 = rp.Keynump2
                 }),
             }).FirstOrDefault();
             List<RelPp> peopleRelations = new List<RelPp>();
-            peopleRelations.AddRange(people.RelPpKeynumpNavigation);
-            peopleRelations.AddRange(people.RelPpKeynump2Navigation);
+            peopleRelations.AddRange(people.RelPpKeynumpNavigation.Where(r => r.Keynump > 0 && r.Keynump2 > 0));
+            peopleRelations.AddRange(people.RelPpKeynump2Navigation.Where(r => r.Keynump > 0 && r.Keynump2 > 0));
             people.RelPpKeynumpNavigation = peopleRelations;
             return people;
         }
