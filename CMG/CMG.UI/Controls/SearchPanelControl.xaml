@@ -95,8 +95,8 @@
             <DockPanel Grid.Row="0">
                 <materialDesign:PackIcon Kind="Search" VerticalAlignment="Center" Margin="20" Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
                 <TextBlock Text="Search" Margin="0 23 10 10" FontSize="16" Foreground="White" ></TextBlock>
-                <Button Background="Transparent" BorderBrush="Transparent" Width="50" HorizontalAlignment="Right" x:Name="ButtonSearchSliderClose" Click="ButtonSearchSliderClose_Click">
-                    <materialDesign:PackIcon Kind="ArrowLeftBoldCircleOutline"  VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
+                <Button Background="Transparent" BorderBrush="Transparent" HorizontalAlignment="Right" x:Name="ButtonSearchSliderClose" Click="ButtonSearchSliderClose_Click">
+                    <materialDesign:PackIcon Kind="ArrowLeftBoldCircle" Height="29" Width="29" VerticalAlignment="Center" Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
                 </Button>
             </DockPanel>
             <Grid Grid.Row="1" ShowGridLines="False">

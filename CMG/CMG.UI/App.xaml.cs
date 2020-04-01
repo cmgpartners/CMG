@@ -57,7 +57,6 @@ namespace CMG.UI
 
             try
             {
-                Mouse.OverrideCursor = Cursors.Wait;
                 var configurationBuilder = new ConfigurationBuilder()
                         .SetBasePath(Directory.GetCurrentDirectory())
                         .AddJsonFile("appsettings.json");

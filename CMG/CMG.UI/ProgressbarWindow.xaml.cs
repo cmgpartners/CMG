@@ -35,7 +35,6 @@ namespace CMG.UI
                 ((Window)app.mainWindow).Show();
             }
             this.Hide();
-            Mouse.OverrideCursor = System.Windows.Input.Cursors.Arrow;
         }
 
         void worker_DoWork(object sender, DoWorkEventArgs e)
