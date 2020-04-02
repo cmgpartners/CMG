@@ -563,7 +563,6 @@ namespace CMG.UI.View
         }
         private void IllustrationDefaultSetting()
         {
-            int totalColumns = illustration.Columns.Count;
             for (int i = illustration.Columns.Count - 1; i > 0; i--)
             {
                 if (i != 0)
