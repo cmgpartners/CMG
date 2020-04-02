@@ -67,13 +67,13 @@
                 </DockPanel>
                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
                     <materialDesign:PackIcon Kind="People" Margin="10 10 0 10" VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
-                    <TextBlock Margin="10 22 10 10" FontSize="16" Foreground="White" Visibility="{Binding IsClientSelected, Converter={StaticResource VisibilityConverter}}">
-                        <Run Text="People Details"/>
+                    <TextBlock Margin="10 22 10 10" FontSize="20" Foreground="White" Visibility="{Binding IsClientSelected, Converter={StaticResource VisibilityConverter}}">
+                        <Run Text="People"/>
                         <Run Text=" : "/>
-                        <Run Text="{Binding SelectedClient.CommonName}"/>
-                        <Run Text="{Binding SelectedClient.LastName}"/>
+                        <Run Text="{Binding SelectedClient.CommonName}" FontWeight="Bold"/>
+                        <Run Text="{Binding SelectedClient.LastName}" FontWeight="Bold"/>
                     </TextBlock>
-                    <TextBlock Text="People Details" Margin="10 22 10 10" FontSize="16" Foreground="White" Visibility="{Binding IsClientDetailVisible, Converter={StaticResource VisibilityConverter}}"/>
+                    <TextBlock Text="People" Margin="10 22 10 10" FontSize="20" Foreground="White" Visibility="{Binding IsClientDetailVisible, Converter={StaticResource VisibilityConverter}}"/>
                 </StackPanel>
                 <Grid Grid.Row="1" Margin="10 0 10 50" Grid.ColumnSpan="2" >
                     <Grid.RowDefinitions>
@@ -85,14 +85,14 @@
                         <RowDefinition Height="10"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0">
-                        <Grid Background="White" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0" HorizontalScrollBarVisibility="Auto">
+                        <Grid Background="White" ShowGridLines="False">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="4.5*"/>
-                            <ColumnDefinition Width="5*"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
                         </Grid.ColumnDefinitions>
-                        <Grid Grid.Column="0" Margin="10 0 10 0">
+                        <Grid Grid.Column="0" Margin="30 0 50 0" Width="auto">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition Height="40"/>
@@ -134,39 +134,56 @@
                         <Grid Grid.Column="1" ShowGridLines="False">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="90"/>
-                                <RowDefinition Height="45"/>
+                                <RowDefinition Height="60"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <DockPanel Grid.Row="0">
+                            <Grid Grid.Row="0">
                                 <TextBlock FontSize="20" FontWeight="Bold" Margin="0 50 0 10">
                                     <Run Text="{Binding People.CommanName}"></Run>
                                     <Run Text="{Binding People.LastName}"></Run>
                                 </TextBlock>
-                            </DockPanel>
-                            <DockPanel Grid.Row="1">
-                                <TextBlock FontSize="14" Text="{Binding People.PrimaryBusiness.Phone, Converter={StaticResource PhoneFormat}}"/>
-                            </DockPanel>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock FontSize="14" Margin="0 0 15 0">
+                                            <materialDesign:PackIcon Kind="PhoneClassic"/>
+                                            <Run Text="Direct Business Phone"/>
+                                        </TextBlock>
+                                        <TextBlock FontSize="14" FontWeight="Bold" Margin="0 0 15 0" Text="{Binding People.DirectBussinesPhone, Converter={StaticResource PhoneFormat}}"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock FontSize="14" Margin="0 0 15 0">
+                                            <materialDesign:PackIcon Kind="CellphoneBasic"/>
+                                            <Run Text="Mobile"/>
+                                        </TextBlock>
+                                        <TextBlock FontSize="14" FontWeight="Bold" Margin="0 0 15 0" Text="{Binding People.CellPhone, Converter={StaticResource PhoneFormat}}"/>
+                                    </StackPanel>
+                                </Grid>
                             <Grid Grid.Row="2">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
                                 <StackPanel Grid.Column="0">
-                                    <TextBlock Text="Status" FontSize="14"/>
-                                    <TextBlock Text="{Binding People.Status}" FontSize="14" FontWeight="Bold" Foreground="Green"/>
+                                    <TextBlock Text="Status" FontSize="14" Margin="0 0 15 0"/>
+                                        <TextBlock Text="{Binding People.Status}" Margin="0 0 15 0" FontSize="14" FontWeight="Bold" Foreground="Green"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="1">
-                                    <TextBlock Text="Entity" FontSize="14"/>
-                                    <TextBlock Text="{Binding People.ClientType}" FontSize="14" FontWeight="Bold"/>
+                                        <TextBlock Text="Entity" FontSize="14" Margin="0 0 15 0"/>
+                                        <TextBlock Text="{Binding People.ClientType}" Margin="0 0 15 0" FontSize="14" FontWeight="Bold"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="2">
-                                    <TextBlock Text="Service Type" FontSize="14"/>
-                                    <TextBlock Text="{Binding People.ServiceType}" FontSize="14" FontWeight="Bold"/>
+                                        <TextBlock Text="Service Type" FontSize="14" Margin="0 0 15 0"/>
+                                    <TextBlock Text="{Binding People.ServiceType}" Margin="0 0 15 0" FontSize="14" FontWeight="Bold"/>
                                 </StackPanel>
                             </Grid>
                         </Grid>
-                        <Grid Grid.Column="2" ShowGridLines="False">
+                        <Grid Grid.Column="2" ShowGridLines="False" Width="auto">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="120"/>
                                 <RowDefinition/>
@@ -177,6 +194,10 @@
                             <StackPanel Grid.Row="1" Margin="20 0 0 0">
                                 <TextBlock Margin="0 0 0 5" Text="{Binding People.PrimaryBusiness.BusinessName}" FontWeight="Bold" FontSize="14"/>
                                 <TextBlock Text="{Binding People.PrimaryBusiness.Address}" FontSize="14"/>
+                                <TextBlock FontSize="14" Margin="0 5 15 0">
+                                    <materialDesign:PackIcon Kind="PhoneClassic"/>
+                                    <Run Text="{Binding People.PrimaryBusiness.BusinessPhone, Converter={StaticResource PhoneFormat}}"/>
+                                </TextBlock>
                             </StackPanel>
                         </Grid>
                     </Grid>

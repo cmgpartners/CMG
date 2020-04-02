@@ -167,7 +167,6 @@ namespace CMG.DataAccess.Repository
         {
             return Context.People.SingleOrDefault(x => x.Keynump == (id ?? 0));
         }
-
         public People GetDetails(long id)
         {
             var query = _context.People.Where(p => p.Keynump == id).AsQueryable()
@@ -190,6 +189,7 @@ namespace CMG.DataAccess.Repository
                     KeynumbNavigation = rb.KeynumbNavigation
                 }).ToList(),
                 Dphonebus = x.Dphonebus,
+                Phonecar = x.Phonecar,
                 Clienttyp = x.Clienttyp,
                 Pstatus = x.Pstatus,
                 SvcType = x.SvcType,
@@ -244,19 +244,23 @@ namespace CMG.DataAccess.Repository
                     RelCode = rp.RelCode,
                     RelGrp = rp.RelGrp,
                     KeynumpNavigation = rp.KeynumpNavigation,
-                    Keynump2Navigation = rp.Keynump2Navigation
+                    Keynump2Navigation = rp.Keynump2Navigation,
+                    Keynump = rp.Keynump,
+                    Keynump2 = rp.Keynump2
                 }),
                 RelPpKeynumpNavigation = x.RelPpKeynumpNavigation.Select(rp => new RelPp()
                 {
                     RelCode = rp.RelCode,
                     RelGrp = rp.RelGrp,
                     KeynumpNavigation = rp.KeynumpNavigation,
-                    Keynump2Navigation = rp.Keynump2Navigation
+                    Keynump2Navigation = rp.Keynump2Navigation,
+                    Keynump = rp.Keynump,
+                    Keynump2 = rp.Keynump2
                 }),
             }).FirstOrDefault();
             List<RelPp> peopleRelations = new List<RelPp>();
-            peopleRelations.AddRange(people.RelPpKeynumpNavigation);
-            peopleRelations.AddRange(people.RelPpKeynump2Navigation);
+            peopleRelations.AddRange(people.RelPpKeynumpNavigation.Where(r => r.Keynump > 0 && r.Keynump2 > 0));
+            peopleRelations.AddRange(people.RelPpKeynump2Navigation.Where(r => r.Keynump > 0 && r.Keynump2 > 0));
             people.RelPpKeynumpNavigation = peopleRelations;
             return people;
         }

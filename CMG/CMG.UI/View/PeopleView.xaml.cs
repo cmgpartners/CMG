@@ -45,7 +45,7 @@ namespace CMG.UI.View
         {
             OpenFileDialog op = new OpenFileDialog();
             op.Title = "Select a picture";
-            op.Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
+            op.Filter = "All supported graphics|*.jpg;*.jpeg;*.png;*.jfif;*.jif|" +
               "JPEG (*.jpg;*.jpeg)|*.jpg;*.jpeg|" +
               "Portable Network Graphic (*.png)|*.png";
             if (op.ShowDialog() == true)

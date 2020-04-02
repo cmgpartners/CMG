@@ -10,7 +10,8 @@ namespace CMG.Application.DTO
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public string PhotoPath { get; set; }
-        public string DirectPhoneBus { get; set; }
+        public string DirectBussinesPhone { get; set; }
+        public string CellPhone { get; set; }
         public string ClientType { get; set; }
         public string  Status { get; set; }
         public string ServiceType { get; set; }
