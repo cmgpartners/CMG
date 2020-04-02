@@ -125,26 +125,6 @@ namespace CMG.DataAccess
                 }
             }
         }
-
-        public bool HasCommissionAccess()
-        {
-            var result = _context.TablePermissions.FromSql("EXEC sp_table_privileges @table_name = 'COMM';").ToList();
-            if(result != null && result.Count > 0)
-            {
-                result = result.Where(r => r.Grantee != "dbo").ToList();
-                if(result != null && result.Count > 0)
-                {
-                    if (result.Any(r => r.Privilege.Trim() == "INSERT" && r.Is_Grantable.Trim() == "YES")
-                        && result.Any(r => r.Privilege.Trim() == "UPDATE" && r.Is_Grantable.Trim() == "YES")
-                        && result.Any(r => r.Privilege.Trim() == "DELETE" && r.Is_Grantable.Trim() == "YES")
-                        && result.Any(r => r.Privilege.Trim() == "SELECT" && r.Is_Grantable.Trim() == "YES"))
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
     }
 }
 #endregion 
