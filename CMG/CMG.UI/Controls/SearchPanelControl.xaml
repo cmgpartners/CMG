@@ -35,9 +35,11 @@
         </DataTemplate>
         <DataTemplate x:Key="entityTypeTemplate">
             <WrapPanel AllowDrop="True" Orientation="Vertical" x:Name="EntityTypePanel">
-                <TextBlock Text="{Binding ColumnName}" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
+                <TextBlock Text="{Binding ColumnName}" Margin="0 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                 <ComboBox ItemsSource="{Binding DataContext.ClientTypeCollection, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}" 
-                          SelectedValue="{Binding DataContext.EntityType, RelativeSource={RelativeSource AncestorType=Window}}" DisplayMemberPath="Description" Foreground="White" FontSize="13" Margin="10 0 15 5" Style="{StaticResource EntityTypeStyle}">
+                          SelectedValue="{Binding DataContext.EntityType, RelativeSource={RelativeSource AncestorType=Window}}" 
+                          DisplayMemberPath="Description" Foreground="White" FontSize="13" 
+                          Style="{StaticResource EntityTypeStyle}" Width="90" >
                 </ComboBox>
             </WrapPanel>
         </DataTemplate>
