@@ -15,7 +15,8 @@ namespace CMG.DataAccess.Interface
     {
         int TotalRecords { get; set; }
         ICollection<TEntity> Result { get; set; }
-        public decimal TotalAmount { get; set; }
+        decimal TotalAmount { get; set; }
+        ICollection<GroupByResult> AggregateResult { get; set; }
     }
 
     public class PagedQueryResult<TEntity> : IQueryResult<TEntity>
@@ -23,5 +24,11 @@ namespace CMG.DataAccess.Interface
         public decimal TotalAmount { get; set; }
         public int TotalRecords { get; set; }
         public ICollection<TEntity> Result { get; set; }
+        public ICollection<GroupByResult> AggregateResult { get; set; }
+    }
+    public class GroupByResult
+    {
+        public int? Id { get; set; }
+        public double? Total { get; set; }
     }
 }

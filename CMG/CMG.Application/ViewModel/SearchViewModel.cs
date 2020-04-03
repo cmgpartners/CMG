@@ -205,6 +205,12 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("TotalAmount");
             }
         }
+        private ObservableCollection<ViewAggregateResultDto> _totalAgentCommissions;
+        public ObservableCollection<ViewAggregateResultDto> TotalAgentCommissions
+        {
+            get { return _totalAgentCommissions; }
+            set { _totalAgentCommissions = value; OnPropertyChanged("TotalAgentCommissions"); }
+        }
         #region pagination properties
         private int _totalRecords;
         public int TotalRecords
@@ -324,6 +330,19 @@ namespace CMG.Application.ViewModel
                 DataCollection = new ObservableCollection<ViewCommissionDto>(dataCollection.Select(r => _mapper.Map<ViewCommissionDto>(r)).ToList());
                 TotalRecords = dataSearchBy.TotalRecords;
                 TotalAmount = dataSearchBy.TotalAmount;
+                TotalAgentCommissions = new ObservableCollection<ViewAggregateResultDto>();
+                dataSearchBy.AggregateResult.ToList().ForEach(t =>
+                {
+                    var agent = AgentList.Where(a => a.Id == t.Id).FirstOrDefault();
+                    TotalAgentCommissions.Add(new ViewAggregateResultDto() 
+                    { 
+                        AgentId = t.Id,
+                        AgentColor = agent.Color,
+                        AgentName = agent.FirstName,
+                        TotalCommission = t.Total,
+                        FontWeight = Agent != null && Agent.Id == t.Id ? "Bold" : "Regular"
+                    });
+                });
                 LoadPagination();
             }
         }
