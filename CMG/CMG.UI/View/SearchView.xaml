@@ -13,6 +13,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="60"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="45"></RowDefinition>
                     <RowDefinition Height="35"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid>
@@ -302,6 +303,29 @@
                            Style="{StaticResource NoRecordsTextBlock}" />
                 </Grid>
                 <Grid Grid.Row="2" Background="#FFCEEAFF">
+                    <ListView HorizontalAlignment="Right" VerticalAlignment="Center" ItemsSource="{Binding TotalAgentCommissions}" ItemContainerStyle="{StaticResource ItemStyle}" ScrollViewer.VerticalScrollBarVisibility="Disabled" >
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"></StackPanel>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Border CornerRadius="10"
+                                                BorderBrush="{Binding AgentColor}"
+                                                BorderThickness="1"
+                                                Margin="0 0  3 0"
+                                                Background="{Binding AgentColor}">
+                                    <TextBlock Padding="15 5 15 5" Foreground="Black" FontWeight="{Binding FontWeight}">
+                                        <Run Text="{Binding AgentName}"/>
+                                        <Run Text="{Binding TotalCommission, StringFormat='{}{0:#,#.00}'}"/>
+                                    </TextBlock>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+                <Grid Grid.Row="3" Background="#FFCEEAFF">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="300"></ColumnDefinition>
                         <ColumnDefinition Width="*"></ColumnDefinition>

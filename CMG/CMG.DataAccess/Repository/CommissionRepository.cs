@@ -40,6 +40,9 @@ namespace CMG.DataAccess.Repository
                 queryable = OrderByPredicate(queryable, criteria.SortBy);
             }
 
+            var agentCommissions = queryable.SelectMany(x => x.AgentCommissions).Select(t => new AgentCommission { AgentId = t.AgentId, Commission = t.Commission }).ToList();
+            var aggregateResult = agentCommissions.GroupBy(a => a.AgentId).Select(ac => new GroupByResult { Id = ac.Key, Total = ac.Sum(t => t.Commission) }).ToList();
+
             var result = queryable.Select(x => new Comm
             {
                 Keycomm = x.Keycomm,
@@ -92,7 +95,8 @@ namespace CMG.DataAccess.Repository
             {
                 TotalAmount = Convert.ToDecimal(totalAmount),
                 Result = result.ToList(),
-                TotalRecords = totalRecords
+                TotalRecords = totalRecords,
+                AggregateResult = aggregateResult
             };
         }
         private static Expression<Func<Comm, bool>> GetPredicate(ISearchCriteria criteria)
@@ -205,7 +209,7 @@ namespace CMG.DataAccess.Repository
         }
         private static Expression<Func<Comm, bool>> PolicyNumberExpression(string contains)
         {
-            return w => w.Policy.Policynum.ToLowerInvariant().Contains(contains.ToLowerInvariant());
+            return w => w.Policynum.ToLowerInvariant().Contains(contains.ToLowerInvariant());
         }
         private static Expression<Func<Comm, bool>> InsuredNameExpession(string contains)
         {

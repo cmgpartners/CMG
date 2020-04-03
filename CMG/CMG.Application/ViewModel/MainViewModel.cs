@@ -14,6 +14,7 @@ using CMG.DataAccess.Query;
 using ToastNotifications.Messages;
 using Newtonsoft.Json;
 using System.Data;
+using System.DirectoryServices.AccountManagement;
 
 namespace CMG.Application.ViewModel
 {
@@ -70,7 +71,7 @@ namespace CMG.Application.ViewModel
         private const string ColumnNameNCPI = "NCPI";
         private const string ColumnNameNCPIA = "NCPI Actual";
         private const string ColumnNameNCPIR = "NCPI Reprojection";
-
+        private const string ADFinanceGroupName = "CMG_Finance";
         private const string ColumnNameCommonName = "Common Name";
         private const string ColumnNameFirstName = "First Name";
         private const string ColumnNameLastName = "Last Name";
@@ -674,7 +675,8 @@ namespace CMG.Application.ViewModel
             {
                 if(!_memoryCache.TryGetValue(commissionAccessCacheKey, out bool hasCommissionAccess))
                 {
-                    HasCommissionAccess = _unitOfWork.HasCommissionAccess();
+                    HasCommissionAccess = CheckUserInADGroup();
+                    _memoryCache.Set(commissionAccessCacheKey, HasCommissionAccess);
                 }
                 else
                 {
@@ -1024,6 +1026,28 @@ namespace CMG.Application.ViewModel
             CompanyName = default;
             FromPolicyDate = default;
             ToPolicyDate = default;
+        }
+        private bool CheckUserInADGroup()
+        {
+            bool hasPermission = false;
+            try
+            {
+                using (var ctx = new PrincipalContext(ContextType.Domain))
+                {
+                    using (var user = UserPrincipal.FindByIdentity(ctx, Environment.UserName))
+                    {
+                        if (user != null)
+                        {
+                            using (PrincipalSearchResult<Principal> groups = user.GetAuthorizationGroups())
+                            {
+                                return groups.OfType<GroupPrincipal>().Any(g => g.Name.Equals(ADFinanceGroupName, StringComparison.OrdinalIgnoreCase));
+                            }
+                        }
+                    }
+                }   
+            }
+            catch {}
+            return hasPermission;
         }
         #endregion Methods
     }
