@@ -2,10 +2,12 @@
 using CMG.Application.ViewModel;
 using CMG.UI.View;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -21,6 +23,17 @@ namespace CMG.UI.Controls
         private Point startPoint;
         private MainViewModel mainViewModel;
         public event RoutedEventHandler CustomSearchSliderCloseClick;
+
+        private const string ColumnNameCommonName = "Common Name";
+        private const string ColumnNameFirstName = "First Name";
+        private const string ColumnNameLastName = "Last Name";
+        private const string ColumnNameEntityType = "Entity Type";
+
+        private const string BindingCommonName = "CommonName";
+        private const string BindingLastName = "LastName";
+        private const string BindingFirstName = "FirstName";
+        private const string BindingEntityType = "ClientType";
+
         #endregion Member variables
         public SearchPanelControl()
         {
@@ -192,5 +205,106 @@ namespace CMG.UI.Controls
         }
 
         #endregion
+
+        private void search_ColumnReordered(object sender, DataGridColumnEventArgs e)
+        {
+            if (e.Column is DataGridTextColumn)
+            {
+                DataGridTextColumn draggedColumn = (DataGridTextColumn)e.Column;
+                int droppedColumnIndex = draggedColumn.DisplayIndex;
+
+                ViewSearchOptionsDto vsodto = mainViewModel.ClientColumns.Where(x => x.ColumnName.ToString().ToLower().Trim() == draggedColumn.Header.ToString().ToLower().Trim()).FirstOrDefault();
+                int draggedColumnIndex = search.Columns.IndexOf(search.Columns.Where(x => x.Header.ToString() == draggedColumn.Header.ToString()).FirstOrDefault());
+                mainViewModel.ClientColumns.Remove(vsodto);
+                vsodto.ColumnOrder = droppedColumnIndex + 1;
+                if (draggedColumnIndex > droppedColumnIndex)
+                {
+                    mainViewModel.ClientColumns.ToList().Where(x => x.ColumnOrder <= draggedColumnIndex && x.ColumnOrder > droppedColumnIndex).ToList().ForEach(c => c.ColumnOrder = c.ColumnOrder + 1);
+                }
+                else
+                {
+                    mainViewModel.ClientColumns.ToList().Where(x => x.ColumnOrder > draggedColumnIndex && x.ColumnOrder <= droppedColumnIndex + 1).ToList().ForEach(c => c.ColumnOrder = c.ColumnOrder - 1);
+                }
+                mainViewModel.ClientColumns.Insert(droppedColumnIndex, vsodto);
+                mainViewModel.SaveOptionKeyClientColumns();
+
+                SearchGridDefaultSetting();
+            }
+        }
+
+        private void DefaultSearhGridColumns(List<string> columnNames)
+        {
+            for (int a = 0; a < columnNames.Count; a++)
+            {
+                search.Columns.Insert(a, AddDataGridColumnSearch(columnNames[a]));
+
+                if(a == columnNames.Count-1)
+                {
+                    Style cellStyle = new Style(typeof(DataGridCell), (Style)FindResource("ClientLastColumnCellStyle"));
+                    search.Columns[a].CellStyle = cellStyle;
+                }
+            }
+        }
+        private DataGridColumn AddDataGridColumnSearch(string columnName)
+        {
+            string bindingPath = string.Empty;
+            DataGridTextColumn dataGridTextColumn = new DataGridTextColumn();
+
+            switch (columnName)
+            {
+                case ColumnNameCommonName:
+                    bindingPath = BindingCommonName;
+                    break;
+                case ColumnNameLastName:
+                    bindingPath = BindingLastName;
+                    break;
+                case ColumnNameFirstName:
+                    bindingPath = BindingFirstName;
+                    break;
+                case ColumnNameEntityType:
+                    bindingPath = BindingEntityType;
+                    break;
+                default:
+                    break;
+            }
+            Style elementStyle = new Style(typeof(TextBlock));
+            elementStyle.Setters.Add(new Setter(TextBlock.ForegroundProperty, (SolidColorBrush)new BrushConverter().ConvertFrom("#FFFFFF")));
+            elementStyle.Setters.Add(new Setter(TextBlock.VerticalAlignmentProperty, VerticalAlignment.Center));
+            elementStyle.Setters.Add(new Setter(MarginProperty, new Thickness(10, 0, 0, 0)));
+            dataGridTextColumn.ElementStyle = elementStyle;
+            if(columnName == ColumnNameCommonName)
+            {
+                dataGridTextColumn.MinWidth = 105;
+            }
+            if (columnName == ColumnNameLastName)
+            {
+                dataGridTextColumn.MinWidth = 105;
+            }
+            if (columnName == ColumnNameFirstName)
+            {
+                dataGridTextColumn.MinWidth = 110;
+            }
+            if (columnName == ColumnNameEntityType)
+            {
+                dataGridTextColumn.MinWidth = 107;
+            }
+
+            dataGridTextColumn.Header = columnName;
+            if (dataGridTextColumn.Binding == null)
+                dataGridTextColumn.Binding = new Binding(bindingPath);
+
+            return dataGridTextColumn;
+        }
+
+        private void SearchGridDefaultSetting()
+        {
+            mainViewModel = (MainViewModel)this.DataContext;
+            search.Columns.Clear();
+            DefaultSearhGridColumns(mainViewModel.ClientColumns.Select(x => x.ColumnName).ToList());
+        }
+        private void search_AutoGeneratedColumns(object sender, EventArgs e)
+        {
+            SearchGridDefaultSetting();
+        }
     }
 }

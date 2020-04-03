@@ -479,7 +479,6 @@ namespace CMG.UI.View
                     SetGridColumnWidth(columnName, 90, gridName);
                     break;
                 case ColumnNameFrequency:
-                case ColumnNameType:
                 case ColumnNameClass:
                 case ColumnNameCurrency:
                     SetGridColumnWidth(columnName, 80, gridName);
@@ -563,7 +562,6 @@ namespace CMG.UI.View
         }
         private void IllustrationDefaultSetting()
         {
-            int totalColumns = illustration.Columns.Count;
             for (int i = illustration.Columns.Count - 1; i > 0; i--)
             {
                 if (i != 0)
@@ -593,195 +591,69 @@ namespace CMG.UI.View
             {
                 case ColumnNamePolicyNumber:
                     bindingPath = BindingPolicyNumner;
-                    if (policyViewModel.PolicyCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyCollection[i].PolicyNumber = policyViewModel.PolicyCollection[i].PolicyNumber;
-                        }
-                    }
                     SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNameCompany:
                     bindingPath = BindingCompanyName;
-                    if (policyViewModel.PolicyCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyCollection[i].CompanyName = policyViewModel.PolicyCollection[i].CompanyName;
-                        }
-                    }
                     SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNameFaceAmount:
                     bindingPath = BindingFaceAmount;
-                    if (policyViewModel.PolicyCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyCollection[i].FaceAmount = policyViewModel.PolicyCollection[i].FaceAmount;
-                        }
-                    }
                     SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNamePayment:
                     bindingPath = BindingPayment;
-                    if (policyViewModel.PolicyCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyCollection[i].Payment = policyViewModel.PolicyCollection[i].Payment;
-                        }
-                    }
                     SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNameStatus:
                     bindingPath = BindingStatus;
-                    if (policyViewModel.PolicyCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyCollection[i].Status = policyViewModel.PolicyCollection[i].Status;
-                        }
-                    }
                     SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNameFrequency:
                     bindingPath = BindingFrequency;
-                    if (policyViewModel.PolicyCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyCollection[i].Frequency = policyViewModel.PolicyCollection[i].Frequency;
-                        }
-                    }
                     SetCellStyle(dataGridColumn, bindingPath);
                     break;
                 case ColumnNameType:
                     bindingPath = BindingType;
-                    if (policyViewModel.PolicyCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyCollection[i].Type = policyViewModel.PolicyCollection[i].Type;
-                        }
-                    }
                     break;
                 case ColumnNamePlanCode:
                     bindingPath = BindingPlanCode;
-                    if (policyViewModel.PolicyCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyCollection[i].PlanCode = policyViewModel.PolicyCollection[i].PlanCode;
-                        }
-                    }
                     break;
                 case ColumnNameRating:
                     bindingPath = BindingRating;
-                    if (policyViewModel.PolicyCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyCollection[i].Rating = policyViewModel.PolicyCollection[i].Rating;
-                        }
-                    }
                     break;
                 case ColumnNameClass:
                     bindingPath = BindingClass;
-                    if (policyViewModel.PolicyCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyCollection[i].Class = policyViewModel.PolicyCollection[i].Class;
-                        }
-                    }
                     break;
                 case ColumnNameCurrency:
                     bindingPath = BindingCurrency;
-                    if (policyViewModel.PolicyCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyCollection[i].Currency = policyViewModel.PolicyCollection[i].Currency;
-                        }
-                    }
                     break;
                 case ColumnNamePolicyDate:
                     bindingPath = BindingPolicyDate;
-                    if (policyViewModel.PolicyCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyCollection[i].PolicyDate = policyViewModel.PolicyCollection[i].PolicyDate;
-                        }
-                    }
                     dataGridColumn.Binding = new Binding(bindingPath);
                     dataGridColumn.Binding.StringFormat = "MMM d, yyyy";
                     break;
                 case ColumnNamePlacedOn:
                     bindingPath = BindingPlacedOn;
-                    if (policyViewModel.PolicyCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyCollection[i].PlacedOn = policyViewModel.PolicyCollection[i].PlacedOn;
-                        }
-                    }
                     dataGridColumn.Binding = new Binding(bindingPath);
                     dataGridColumn.Binding.StringFormat = "MMM d, yyyy";
                     break;
                 case ColumnNameReprojectedOn:
                     bindingPath = BindingReprojectedOn;
-                    if (policyViewModel.PolicyCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyCollection[i].ReprojectedOn = policyViewModel.PolicyCollection[i].ReprojectedOn;
-                        }
-                    }
                     dataGridColumn.Binding = new Binding(bindingPath);
                     dataGridColumn.Binding.StringFormat = "MMM d, yyyy";
                     break;
                 case ColumnNameAge:
                     bindingPath = BindingAge;
-                    if (policyViewModel.PolicyCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyCollection[i].Age = policyViewModel.PolicyCollection[i].Age;
-                        }
-                    }
                     break;
                 case ColumnNameOwner:
                     bindingPath = BindingOwner;
-                    if (policyViewModel.PolicyCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyCollection[i].Owner = policyViewModel.PolicyCollection[i].Owner;
-                        }
-                    }
                     break;
                 case ColumnNameBeneficiary:
                     bindingPath = BindingBeneficiary;
-                    if (policyViewModel.PolicyCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyCollection[i].Beneficiary = policyViewModel.PolicyCollection[i].Beneficiary;
-                        }
-                    }
                     break;
                 case ColumnNameInsured:
                     bindingPath = BindingInsured;
-                    if (policyViewModel.PolicyCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyCollection[i].Insured = policyViewModel.PolicyCollection[i].Insured;
-                        }
-                    }
                     break;
                 default:
                     break;

@@ -27,6 +27,7 @@ namespace CMG.Application.ViewModel
         private const string searchOptionsKey = "searchOptions";
         private const string PolicyColumnsKey = "policyColumns";
         private const string IllustrationColumnsKey = "illustrationColumns";
+        private const string ClientColumnsKey = "clientColumns";
         private const string optionsCacheKey = "options";
         private const string comboFieldNamePStatus = "PSTATUS";
         private const string comboFieldNameSVCType = "SVC_TYPE";
@@ -69,6 +70,11 @@ namespace CMG.Application.ViewModel
         private const string ColumnNameNCPI = "NCPI";
         private const string ColumnNameNCPIA = "NCPI Actual";
         private const string ColumnNameNCPIR = "NCPI Reprojection";
+
+        private const string ColumnNameCommonName = "Common Name";
+        private const string ColumnNameFirstName = "First Name";
+        private const string ColumnNameLastName = "Last Name";
+        private const string ColumnNameEntityType = "Entity Type";
         #endregion MemberVariables
 
         #region Constructor
@@ -240,6 +246,20 @@ namespace CMG.Application.ViewModel
             {
                 _illustrationColumns = value;
                 OnPropertyChanged("IllustrationColumns");
+            }
+        }
+
+        private ObservableCollection<ViewSearchOptionsDto> _clientColumns;
+        public ObservableCollection<ViewSearchOptionsDto> ClientColumns
+        {
+            get
+            {
+                return _clientColumns;
+            }
+            set
+            {
+                _clientColumns = value;
+                OnPropertyChanged("ClientColumns");
             }
         }
 
@@ -694,6 +714,14 @@ namespace CMG.Application.ViewModel
                     IllustrationColumns = new ObservableCollection<ViewSearchOptionsDto>();
                     GetDefaultIllustrationColumns();
                 }
+
+                var clientColumnsValue = options.Where(x => x.Key == ClientColumnsKey).FirstOrDefault()?.Value;
+                ClientColumns = clientColumnsValue != null ? JsonConvert.DeserializeObject<ObservableCollection<ViewSearchOptionsDto>>(clientColumnsValue) : default;
+                if (ClientColumns == null)
+                {
+                    ClientColumns = new ObservableCollection<ViewSearchOptionsDto>();
+                    GetDefaultClientColumns();
+                }
             }
         }       
         public void GetDefaultSearchOptions()
@@ -786,6 +814,26 @@ namespace CMG.Application.ViewModel
             _unitOfWork.Commit();
             if (_memoryCache != null)
                 _memoryCache.Set(optionsCacheKey, originalIllustrationColumn);
+        }
+        public void SaveOptionKeyClientColumns()
+        {
+            var originalClientColumn = _unitOfWork.Options.All().Where(o => o.User == Environment.UserName && o.Key == ClientColumnsKey).FirstOrDefault();
+            if(originalClientColumn == null)
+            {
+                originalClientColumn = new Options();
+                originalClientColumn.Key = ClientColumnsKey;
+                originalClientColumn.Value = JsonConvert.SerializeObject(ClientColumns);
+                originalClientColumn.User = Environment.UserName;
+                _unitOfWork.Options.Add(originalClientColumn);
+            }
+            else
+            {
+                originalClientColumn.Value = JsonConvert.SerializeObject(ClientColumns);
+                _unitOfWork.Options.Save(originalClientColumn);
+            }
+            _unitOfWork.Commit();
+            if (_memoryCache != null)
+                _memoryCache.Set(optionsCacheKey, originalClientColumn);
         }
         private void GetDefaultPolicyColumns()
         {
@@ -917,7 +965,6 @@ namespace CMG.Application.ViewModel
                 ColumnName = ColumnNameNCPIA,
                 ColumnOrder = 11
             });
-
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameADR,
@@ -942,6 +989,29 @@ namespace CMG.Application.ViewModel
             {
                 ColumnName = ColumnNameNCPIR,
                 ColumnOrder = 16
+            });
+        }
+        private void GetDefaultClientColumns()
+        {
+            ClientColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = ColumnNameCommonName,
+                ColumnOrder = 1
+            });
+            ClientColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = ColumnNameLastName,
+                ColumnOrder = 2
+            });
+            ClientColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = ColumnNameFirstName,
+                ColumnOrder = 3
+            });
+            ClientColumns.Add(new ViewSearchOptionsDto()
+            {
+                ColumnName = ColumnNameEntityType,
+                ColumnOrder = 4
             });
         }
         private void ClearSearch()
