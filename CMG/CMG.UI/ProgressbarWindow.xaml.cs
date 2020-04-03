@@ -25,7 +25,6 @@ namespace CMG.UI
 
             worker.RunWorkerAsync();
         }
-
         private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             pbStatus.Value = 100;            
@@ -36,7 +35,6 @@ namespace CMG.UI
             }
             this.Hide();
         }
-
         void worker_DoWork(object sender, DoWorkEventArgs e)
         {
             for (int i = 0; i < 100; i++)
