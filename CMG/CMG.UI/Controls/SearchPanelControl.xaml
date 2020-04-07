@@ -63,7 +63,10 @@
             <WrapPanel AllowDrop="True" Orientation="Vertical">
                 <TextBlock Text="Company" Margin="10 5 0 0" FontSize="13" Foreground="#FFCEEAFF"></TextBlock>
                 <ComboBox ItemsSource="{Binding DataContext.CompanyCollection, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}" 
-                          SelectedValue="{Binding DataContext.CompanyName, RelativeSource={RelativeSource AncestorType=Window}}" DisplayMemberPath="Description" Foreground="White" FontSize="13" Margin="10 0 15 5" Style="{StaticResource EntityTypeStyle}">
+                          SelectedValue="{Binding DataContext.CompanyName, RelativeSource={RelativeSource AncestorType=Window}}" 
+                          DisplayMemberPath="Description" Foreground="White" FontSize="13" Margin="10 0 0 5" 
+                          Style="{StaticResource EntityTypeStyle}"
+                          Width="88">
                 </ComboBox>
             </WrapPanel>
         </DataTemplate>

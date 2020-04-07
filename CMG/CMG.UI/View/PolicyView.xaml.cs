@@ -478,7 +478,6 @@ namespace CMG.UI.View
                 case ColumnNamePayment:
                     SetGridColumnWidth(columnName, 90, gridName);
                     break;
-                case ColumnNameFrequency:
                 case ColumnNameClass:
                 case ColumnNameCurrency:
                     SetGridColumnWidth(columnName, 80, gridName);
@@ -687,163 +686,51 @@ namespace CMG.UI.View
             {
                 case ColumnNameYear:
                     bindingPath = BindingYear;
-                    if (policyViewModel.PolicyIllustrationCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyIllustrationCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyIllustrationCollection[i].Year = policyViewModel.PolicyIllustrationCollection[i].Year;
-                        }
-                    }
                     break;
                 case ColumnNameAD:
                     bindingPath = BindingAD;
-                    if (policyViewModel.PolicyIllustrationCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyIllustrationCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyIllustrationCollection[i].AnnualDeposit = policyViewModel.PolicyIllustrationCollection[i].AnnualDeposit;
-                        }
-                    }
                     break;
                 case ColumnNameADA:
                     bindingPath = BindingADA;
-                    if (policyViewModel.PolicyIllustrationCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyIllustrationCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyIllustrationCollection[i].AnnualDepositActual = policyViewModel.PolicyIllustrationCollection[i].AnnualDepositActual;
-                        }
-                    }
                     break;
                 case ColumnNameADR:
                     bindingPath = BindingADR;
-                    if (policyViewModel.PolicyIllustrationCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyIllustrationCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyIllustrationCollection[i].AnnualDepositReprojection = policyViewModel.PolicyIllustrationCollection[i].AnnualDepositReprojection;
-                        }
-                    }
                     break;
                 case ColumnNameCV:
                     bindingPath = BindingCV;
-                    if (policyViewModel.PolicyIllustrationCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyIllustrationCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyIllustrationCollection[i].CashValue = policyViewModel.PolicyIllustrationCollection[i].CashValue;
-                        }
-                    }
                     break;
                 case ColumnNameCVA:
                     bindingPath = BindingCVA;
-                    if (policyViewModel.PolicyIllustrationCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyIllustrationCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyIllustrationCollection[i].CashValueActual = policyViewModel.PolicyIllustrationCollection[i].CashValueActual;
-                        }
-                    }
                     break;
                 case ColumnNameCVR:
                     bindingPath = BindingCVR;
-                    if (policyViewModel.PolicyIllustrationCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyIllustrationCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyIllustrationCollection[i].CashValueReprojection = policyViewModel.PolicyIllustrationCollection[i].CashValueReprojection;
-                        }
-                    }
                     break;
                 case ColumnNameDB:
                     bindingPath = BindingDB;
-                    if (policyViewModel.PolicyIllustrationCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyIllustrationCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyIllustrationCollection[i].DeathBenefit = policyViewModel.PolicyIllustrationCollection[i].DeathBenefit;
-                        }
-                    }
                     break;
                 case ColumnNameDBA:
                     bindingPath = BindingDBA;
-                    if (policyViewModel.PolicyIllustrationCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyIllustrationCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyIllustrationCollection[i].DeathBenefitActual = policyViewModel.PolicyIllustrationCollection[i].DeathBenefitActual;
-                        }
-                    }
                     break;
                 case ColumnNameDBR:
                     bindingPath = BindingDBR;
-                    if (policyViewModel.PolicyIllustrationCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyIllustrationCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyIllustrationCollection[i].DeathBenefitReprojection = policyViewModel.PolicyIllustrationCollection[i].DeathBenefitReprojection;
-                        }
-                    }
                     break;
                 case ColumnNameACB:
                     bindingPath = BindingACB;
-                    if (policyViewModel.PolicyIllustrationCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyIllustrationCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyIllustrationCollection[i].AdjustedCostBase = policyViewModel.PolicyIllustrationCollection[i].AdjustedCostBase;
-                        }
-                    }
                     break;
                 case ColumnNameACBA:
                     bindingPath = BindingACBA;
-                    if (policyViewModel.PolicyIllustrationCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyIllustrationCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyIllustrationCollection[i].AdjustedCostBaseActual = policyViewModel.PolicyIllustrationCollection[i].AdjustedCostBaseActual;
-                        }
-                    }
                     break;
                 case ColumnNameACBR:
                     bindingPath = BindingACBR;
-                    if (policyViewModel.PolicyIllustrationCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyIllustrationCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyIllustrationCollection[i].AdjustedCostBaseReprojection = policyViewModel.PolicyIllustrationCollection[i].AdjustedCostBaseReprojection;
-                        }
-                    }
                     break;
                 case ColumnNameNCPI:
                     bindingPath = BindingNCPI;
-                    if (policyViewModel.PolicyIllustrationCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyIllustrationCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyIllustrationCollection[i].NCPI = policyViewModel.PolicyIllustrationCollection[i].NCPI;
-                        }
-                    }
                     break;
                 case ColumnNameNCPIA:
                     bindingPath = BindingNCPIA;
-                    if (policyViewModel.PolicyIllustrationCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyIllustrationCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyIllustrationCollection[i].NCPIActual = policyViewModel.PolicyIllustrationCollection[i].NCPIActual;
-                        }
-                    }
                     break;
                 case ColumnNameNCPIR:
                     bindingPath = BindingNCPIR;
-                    if (policyViewModel.PolicyIllustrationCollection != null)
-                    {
-                        for (int i = 0; i < policyViewModel.PolicyIllustrationCollection.Count(); i++)
-                        {
-                            policyViewModel.PolicyIllustrationCollection[i].NCPIReprojection = policyViewModel.PolicyIllustrationCollection[i].NCPIReprojection;
-                        }
-                    }
                     break;
                 default:
                     break;
