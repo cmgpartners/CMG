@@ -478,7 +478,6 @@ namespace CMG.UI.View
                 case ColumnNamePayment:
                     SetGridColumnWidth(columnName, 90, gridName);
                     break;
-                case ColumnNameFrequency:
                 case ColumnNameClass:
                 case ColumnNameCurrency:
                     SetGridColumnWidth(columnName, 80, gridName);
