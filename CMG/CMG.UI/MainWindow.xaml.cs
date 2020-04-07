@@ -183,7 +183,7 @@ namespace CMG.UI
         {
             ButtonMenuOpen.Visibility = Visibility.Collapsed;
             ButtonMenuClose.Visibility = Visibility.Visible;
-            CollapsibleRow.Height = new GridLength(225);
+            CollapsibleRow.Height = new GridLength(245);
             FileManagerMenu.Background = null;
             lstNavItems.SelectedIndex = -1;
         }

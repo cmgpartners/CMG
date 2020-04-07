@@ -469,13 +469,13 @@
 
         <Grid x:Name="IllustrationSliderPanel" Visibility="Collapsed" Background="#FF444444" HorizontalAlignment="Right">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="26"/>
+                <ColumnDefinition Width="32"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Background="#00A3FF" VerticalAlignment="Stretch" Margin="0 0 8 0">
                 <Button Background="Transparent" BorderBrush="Transparent" Width="30" Padding="0" HorizontalContentAlignment="Left" HorizontalAlignment="Left" 
                         x:Name="ButtonIllustrationClose" Click="ButtonIllustrationClose_Click">
-                    <materialDesign:PackIcon Kind="CloseCircleOutline"  VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
+                    <materialDesign:PackIcon Kind="CloseBox" Height="25" Width="25"  VerticalAlignment="Center"  Foreground="White" FontWeight="Bold"></materialDesign:PackIcon>
                 </Button>
             </StackPanel>
             <DockPanel Grid.Column="1" Margin="5 0 0 10">

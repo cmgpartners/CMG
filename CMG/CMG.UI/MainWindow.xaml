@@ -71,7 +71,7 @@
         <Grid Grid.Row="0" Grid.Column="0" Background="{StaticResource GridBackGround}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="75"></RowDefinition>
-                <RowDefinition Height="225" x:Name="CollapsibleRow"></RowDefinition>
+                <RowDefinition Height="245" x:Name="CollapsibleRow"></RowDefinition>
                 <RowDefinition Height="10"></RowDefinition>
                 <RowDefinition Height="40"></RowDefinition>
                 <RowDefinition Height="10"></RowDefinition>
@@ -116,25 +116,25 @@
                     <TextBlock Background="#00A3FF"></TextBlock>
                     <StackPanel Grid.Column="1">
                         <ListView x:Name="lstNavItems" SelectedIndex="{Binding SelectedIndexLeftNavigation}" SelectionChanged="LstNavItems_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource LeftNavigationListView}">
-                            <ListViewItem Height="45">
+                            <ListViewItem Height="50">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="/Asset/Renewals_white.png" Style="{StaticResource ImageIconStyle}" Margin="10"></Image>
                                     <TextBlock Style="{StaticResource TextBlockStyle}" VerticalAlignment="Center" Text="Renewals" Foreground="White"></TextBlock>
                                 </StackPanel>
                             </ListViewItem>
-                            <ListViewItem Height="45">
+                            <ListViewItem Height="50">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="/Asset/FYC_white.png" Style="{StaticResource ImageIconStyle}" Margin="10"></Image>
                                     <TextBlock Style="{StaticResource TextBlockStyle}" Text="FYC" VerticalAlignment="Center" Foreground="White"></TextBlock>
                                 </StackPanel>
                             </ListViewItem>
-                            <ListViewItem Height="45">
+                            <ListViewItem Height="50">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="/Asset/Financial Summary_white.png" Style="{StaticResource ImageIconStyle}" Margin="10"></Image>
                                     <TextBlock Style="{StaticResource TextBlockStyle}" Text="Summary" VerticalAlignment="Center" Foreground="White"></TextBlock>
                                 </StackPanel>
                             </ListViewItem>
-                            <ListViewItem Height="45">
+                            <ListViewItem Height="50">
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="/Asset/Search_white.png" Style="{StaticResource ImageIconStyle}" Margin="10"></Image>
                                     <TextBlock Style="{StaticResource TextBlockStyle}" Text="Search" VerticalAlignment="Center" Foreground="White"></TextBlock>
