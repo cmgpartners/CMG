@@ -32,6 +32,7 @@ namespace CMG.Application.DTO
         public string ModifiedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public string CreatedBy { get; set; }
+        public ICollection<ViewClientSearchDto> InsuredPeople { get; set; }
         public ICollection<ViewCommissionAgentDto> CommissionAgents { get; set; } = new List<ViewCommissionAgentDto>();
         public ObservableCollection<ViewRelationshipDto> Relationships { get; set; } = new ObservableCollection<ViewRelationshipDto>();
         public ICollection<ViewRelationshipDto> PolicyAgents { get; set; } = new List<ViewRelationshipDto>();

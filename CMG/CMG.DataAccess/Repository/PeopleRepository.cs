@@ -17,6 +17,10 @@ namespace CMG.DataAccess.Repository
         {
             _context = context;
         }
+        public ICollection<People> GetInsuredDetails(int policyId)
+        {
+            return _context.People.FromSql($"SP_GetInsuredDetails {policyId}").ToList();
+        }
         public IQueryResult<People> Find(ISearchCriteria criteria)
         {
             var query = Context.People.AsQueryable().Include(x => x.PeoplePolicys).Where(x => x.Keynump > 0);
