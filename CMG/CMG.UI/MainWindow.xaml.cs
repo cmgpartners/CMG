@@ -169,15 +169,14 @@ namespace CMG.UI
             peopleViewModel.PolicyNumber = _mainViewModel.PolicyNumber;
             DataContext = _mainViewModel;
         }
+        private void SalesforceMenu_Click(object sender, RoutedEventArgs e)
+        {
+            NavigateToSalesforce();
+        }
         protected override void OnClosed(EventArgs e)
         {
             base.OnClosed(e);
-
             App.Current.Shutdown();
-        }
-        private void Salesforce_RequestNavigate(object sender, RequestNavigateEventArgs e)
-        {
-            NavigateToSalesforce();
         }
         private void ButtonMenuOpen_Click(object sender, RoutedEventArgs e)
         {
@@ -285,8 +284,6 @@ namespace CMG.UI
                 _mainViewModel.MainSelectedClient = ((PeopleViewModel)_mainViewModel.SelectedViewModel).SelectedClient;
             }
         }
-        #endregion
-
-
+        #endregion     
     }
 }
