@@ -658,7 +658,6 @@ namespace CMG.UI.View
                     break;
             }
             Style elementStyle = new Style(typeof(TextBlock));
-            elementStyle.Setters.Add(new Setter(TextBlock.TextWrappingProperty, TextWrapping.WrapWithOverflow));
             elementStyle.Setters.Add(new Setter(VerticalContentAlignmentProperty, VerticalAlignment.Center));
             elementStyle.Setters.Add(new Setter(VerticalAlignmentProperty, VerticalAlignment.Center));
             elementStyle.Setters.Add(new Setter(MarginProperty, new Thickness(0, 0, 10, 0)));
