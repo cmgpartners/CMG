@@ -3,7 +3,7 @@
 
     <SolidColorBrush x:Key="GridBackGround" Color="#FF444444" Opacity="0.95"/>
     
-    <Style x:Key="HeaderStyle" TargetType="DataGridColumnHeader">
+    <Style x:Key="HeaderStyle" TargetType="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
         <Setter Property="Background" Value="#FFCEEAFF" />
         <Setter Property="Foreground" Value="#003A3C" />
         <Setter Property="BorderBrush" Value="#FF444444" />
