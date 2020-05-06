@@ -13,6 +13,7 @@ using System.Windows.Data;
 using ToastNotifications.Messages;
 using System.Collections.Generic;
 using System.Data;
+using System.ComponentModel;
 
 namespace CMG.UI.View
 {
@@ -27,6 +28,9 @@ namespace CMG.UI.View
         private ContextMenu illustrationContextMenu;
         private MenuItem menuItem;
         private MenuItem IllustrationMenuItem;
+        private bool columnWidthChanging;
+        private string resizedColumnName;
+        private bool handlerAdded;
 
         private const string ColumnNamePolicyNumber = "Policy Number";
         private const string ColumnNameCompany = "Company";
@@ -243,10 +247,15 @@ namespace CMG.UI.View
             PolicyGridDefaultSetting();
             for (int i = 0; i < policies.Columns.Count; i++)
             {
-                ResizeGridColumns(policies.Columns[i].Header.ToString(), GridNamePolicies);
+                int columnWidth = string.IsNullOrEmpty(policies.Columns[i].Header.ToString()) 
+                                    ? 0 
+                                    : policyViewModel.PolicyColumns.FirstOrDefault(x => x.ColumnName == policies.Columns[i].Header.ToString()).ColumnWidth;
+
+                SetGridColumnWidth(policies.Columns[i].Header.ToString(), columnWidth, GridNamePolicies);
             }
             if(policies.Items.Count > 0)
                 policies.SelectedItem = policies.Items[0];
+            AddWidthChangeEvent();
         }
         private void MenuItemRemoveColumn_Click(object sender, RoutedEventArgs e)
         {
@@ -260,7 +269,7 @@ namespace CMG.UI.View
                 RemovePolicyGridColumn(removeColumnName);
                 policyViewModel.PolicyColumns.RemoveAt(columnIndex - 1);
                 policyViewModel.PolicyColumns.ToList().Where(x => x.ColumnOrder >= columnIndex).ToList().ForEach(c => c.ColumnOrder = c.ColumnOrder - 1);
-                policyViewModel.SaveOptionKeyPolicyColumns();
+                policyViewModel.SavePolicyColumns();
             }
         }
         private void MenuItemRemoveIllustrationColumn_Click(object sender, RoutedEventArgs e)
@@ -274,7 +283,7 @@ namespace CMG.UI.View
                 RemoveIllustrationGridColumn(removeColumnName);
                 policyViewModel.IllustrationColumns.RemoveAt(columnIndex - 1);
                 policyViewModel.IllustrationColumns.ToList().Where(x => x.ColumnOrder >= columnIndex).ToList().ForEach(c => c.ColumnOrder = c.ColumnOrder - 1);
-                policyViewModel.SaveOptionKeyIllustrationColumns();
+                policyViewModel.SaveIllustrationColumns();
             }
         }
         private void SubMenuAddPolicyColumn_Click(object sender, RoutedEventArgs e)
@@ -292,11 +301,12 @@ namespace CMG.UI.View
                 if (!isColumnExist)
                 {
                     policies.Columns.Insert(columnIndex, AddDataGridColumn(newColumnName));
-                    ViewSearchOptionsDto newColumnView = new ViewSearchOptionsDto() { ColumnName = newColumnName, ColumnOrder = columnIndex };
-                    ResizeGridColumns(newColumnName, GridNamePolicies);
+                    ViewSearchOptionsDto newColumnView = new ViewSearchOptionsDto() { ColumnName = newColumnName, ColumnOrder = columnIndex, ColumnWidth = 0 };
+                    SetGridColumnWidth(newColumnName, 0, GridNamePolicies);
                     policyViewModel.PolicyColumns.ToList().Where(x => x.ColumnOrder >= columnIndex).ToList().ForEach(c => c.ColumnOrder = c.ColumnOrder + 1);
                     policyViewModel.PolicyColumns.Insert(columnIndex - 1, newColumnView);
-                    policyViewModel.SaveOptionKeyPolicyColumns();
+                    policyViewModel.SavePolicyColumns();
+                    AddWidthChangeEvent();
                 }
                 else
                 {
@@ -323,7 +333,7 @@ namespace CMG.UI.View
                     ResizeGridColumns(newColumnName, GridNameIllustration);
                     policyViewModel.IllustrationColumns.ToList().Where(x => x.ColumnOrder >= columnIndex).ToList().ForEach(c => c.ColumnOrder = c.ColumnOrder + 1);
                     policyViewModel.IllustrationColumns.Insert(columnIndex - 1, newColumnView);
-                    policyViewModel.SaveOptionKeyIllustrationColumns();
+                    policyViewModel.SaveIllustrationColumns();
                 }
                 else
                 {
@@ -371,13 +381,18 @@ namespace CMG.UI.View
                         policyViewModel.PolicyColumns.ToList().Where(x => x.ColumnOrder >= draggedColumnIndex && x.ColumnOrder <= droppedColumnIndex).ToList().ForEach(c => c.ColumnOrder = c.ColumnOrder - 1);
                     }
                     policyViewModel.PolicyColumns.Insert(droppedColumnIndex - 1, vsodto);
-                    policyViewModel.SaveOptionKeyPolicyColumns();                    
+                    policyViewModel.SavePolicyColumns();                    
                 }
                 PolicyGridDefaultSetting();
                 for (int i = 0; i < policies.Columns.Count; i++)
                 {
-                    ResizeGridColumns(policies.Columns[i].Header.ToString(), GridNamePolicies);
+                    int columnWidth = string.IsNullOrEmpty(policies.Columns[i].Header.ToString())
+                                    ? 0
+                                    : policyViewModel.PolicyColumns.FirstOrDefault(x => x.ColumnName == policies.Columns[i].Header.ToString()).ColumnWidth;
+
+                    SetGridColumnWidth(policies.Columns[i].Header.ToString(), columnWidth, GridNamePolicies);
                 }
+                AddWidthChangeEvent();
             }
         }
         private void Illustration_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
@@ -453,7 +468,7 @@ namespace CMG.UI.View
                         policyViewModel.IllustrationColumns.ToList().Where(x => x.ColumnOrder >= draggedColumnIndex && x.ColumnOrder <= droppedColumnIndex).ToList().ForEach(c => c.ColumnOrder = c.ColumnOrder - 1);
                     }
                     policyViewModel.IllustrationColumns.Insert(droppedColumnIndex - 1, vsodto);
-                    policyViewModel.SaveOptionKeyIllustrationColumns();
+                    policyViewModel.SaveIllustrationColumns();
                 }
                 IllustrationDefaultSetting();
                 for (int i = 0; i < illustration.Columns.Count; i++)
@@ -660,8 +675,8 @@ namespace CMG.UI.View
             Style elementStyle = new Style(typeof(TextBlock));
             elementStyle.Setters.Add(new Setter(VerticalContentAlignmentProperty, VerticalAlignment.Center));
             elementStyle.Setters.Add(new Setter(VerticalAlignmentProperty, VerticalAlignment.Center));
-            elementStyle.Setters.Add(new Setter(MarginProperty, new Thickness(0, 0, 10, 0)));
-            if(columnName == ColumnNameFaceAmount || columnName == ColumnNamePayment)
+            elementStyle.Setters.Add(new Setter(MarginProperty, new Thickness(18, 0, 10, 0)));
+            if (columnName == ColumnNameFaceAmount || columnName == ColumnNamePayment)
             {
                 elementStyle.Setters.Add(new Setter(HorizontalAlignmentProperty, HorizontalAlignment.Right));
                 Style headerStyle = new Style(typeof(DataGridColumnHeader), (Style)FindResource("HeaderStyle"));
@@ -823,6 +838,53 @@ namespace CMG.UI.View
                 && (PolicyViewModel)this.DataContext != null)
             {
                 policyViewModel = (PolicyViewModel)this.DataContext;
+            }
+        }
+        private void AddWidthChangeEvent()
+        {
+            PropertyDescriptor pd = DependencyPropertyDescriptor
+                             .FromProperty(DataGridColumn.ActualWidthProperty, typeof(DataGridColumn));
+
+            foreach (DataGridColumn column in policies.Columns)
+            {
+                pd.AddValueChanged(column, new EventHandler(ColumnWidthPropertyChanged));
+            }
+        }
+        private void ColumnWidthPropertyChanged(object sender, EventArgs e)
+        {
+            columnWidthChanging = true;
+            if (sender is DataGridTextColumn)
+                resizedColumnName = ((DataGridTextColumn)sender).Header.ToString();
+            if (!handlerAdded && sender != null)
+            {
+                handlerAdded = true;  /* only add this once */
+                Mouse.AddPreviewMouseUpHandler(this, BaseDataGrid_MouseLeftButtonUp);
+            }
+        }
+        void BaseDataGrid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (columnWidthChanging)
+            {
+                columnWidthChanging = false;
+                if(!string.IsNullOrEmpty(resizedColumnName))
+                {
+                    if (policyViewModel == null)
+                        policyViewModel = (PolicyViewModel)this.DataContext;
+                    DataGridColumn column = policies.Columns.FirstOrDefault(c => c.Header.ToString() == resizedColumnName);
+                    if (column == null)
+                        return;
+                    ViewSearchOptionsDto policyColumn = policyViewModel.PolicyColumns.FirstOrDefault(c => c.ColumnName == column.Header.ToString());
+                    if (policyColumn != null && policyColumn.ColumnWidth != Convert.ToInt32(column.ActualWidth))
+                    {
+                        policyColumn.ColumnWidth = Convert.ToInt32(column.ActualWidth);
+                        policyViewModel.SavePolicyColumns();
+                    }
+                }
+            }
+            if (handlerAdded)  /* remove the handler we added earlier */
+            {
+                handlerAdded = false;
+                Mouse.RemovePreviewMouseUpHandler(this, BaseDataGrid_MouseLeftButtonUp);
             }
         }
         #endregion Methods

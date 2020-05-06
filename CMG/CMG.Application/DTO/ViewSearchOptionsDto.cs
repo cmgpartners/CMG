@@ -9,5 +9,6 @@ namespace CMG.Application.DTO
         public string ColumnName { get; set; }
         public int ColumnOrder { get; set; }
         public string ColumnType { get; set; }
+        public int ColumnWidth { get; set; }
     }
 }

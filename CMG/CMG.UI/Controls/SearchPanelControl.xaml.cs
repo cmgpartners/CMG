@@ -226,7 +226,7 @@ namespace CMG.UI.Controls
                     mainViewModel.ClientColumns.ToList().Where(x => x.ColumnOrder > draggedColumnIndex && x.ColumnOrder <= droppedColumnIndex + 1).ToList().ForEach(c => c.ColumnOrder = c.ColumnOrder - 1);
                 }
                 mainViewModel.ClientColumns.Insert(droppedColumnIndex, vsodto);
-                mainViewModel.SaveOptionKeyClientColumns();
+                mainViewModel.SaveClientColumns();
 
                 SearchGridDefaultSetting();
             }

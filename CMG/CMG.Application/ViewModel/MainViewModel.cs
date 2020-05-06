@@ -777,7 +777,7 @@ namespace CMG.Application.ViewModel
                 ColumnType = "DatePicker"
             });
         }
-        public void SaveOptionKeyPolicyColumns()
+        public void SavePolicyColumns()
         {
             var originalPolicyColumn = _unitOfWork.Options.All().Where(o => o.User == Environment.UserName && o.Key == PolicyColumnsKey).FirstOrDefault();
             if (originalPolicyColumn == null)
@@ -797,7 +797,7 @@ namespace CMG.Application.ViewModel
             if (_memoryCache != null)
                 _memoryCache.Set(optionsCacheKey, originalPolicyColumn);
         }
-        public void SaveOptionKeyIllustrationColumns()
+        public void SaveIllustrationColumns()
         {
             var originalIllustrationColumn = _unitOfWork.Options.All().Where(o => o.User == Environment.UserName && o.Key == IllustrationColumnsKey).FirstOrDefault();
             if (originalIllustrationColumn == null)
@@ -817,7 +817,7 @@ namespace CMG.Application.ViewModel
             if (_memoryCache != null)
                 _memoryCache.Set(optionsCacheKey, originalIllustrationColumn);
         }
-        public void SaveOptionKeyClientColumns()
+        public void SaveClientColumns()
         {
             var originalClientColumn = _unitOfWork.Options.All().Where(o => o.User == Environment.UserName && o.Key == ClientColumnsKey).FirstOrDefault();
             if(originalClientColumn == null)
@@ -842,72 +842,86 @@ namespace CMG.Application.ViewModel
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNamePolicyNumber,
-                ColumnOrder = 1
+                ColumnOrder = 1,
+                ColumnWidth = 100
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameCompany,
-                ColumnOrder = 2
+                ColumnOrder = 2,
+                ColumnWidth = 0
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameFaceAmount,
-                ColumnOrder = 3
+                ColumnOrder = 3,
+                ColumnWidth = 90
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNamePayment,
-                ColumnOrder = 4
+                ColumnOrder = 4,
+                ColumnWidth = 90
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameStatus,
-                ColumnOrder = 5
+                ColumnOrder = 0,
+                ColumnWidth = 0
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameFrequency,
-                ColumnOrder = 6
+                ColumnOrder = 6,
+                ColumnWidth = 0
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameType,
-                ColumnOrder = 7
+                ColumnOrder = 7,
+                ColumnWidth = 0
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNamePlanCode,
-                ColumnOrder = 8
+                ColumnOrder = 8,
+                ColumnWidth = 0
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameRating,
-                ColumnOrder = 9
+                ColumnOrder = 9,
+                ColumnWidth = 0
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameClass,
-                ColumnOrder = 10
+                ColumnOrder = 10,
+                ColumnWidth = 80
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameCurrency,
-                ColumnOrder = 11
+                ColumnOrder = 11,
+                ColumnWidth = 80
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNamePolicyDate,
-                ColumnOrder = 12
+                ColumnOrder = 12,
+                ColumnWidth = 100
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNamePlacedOn,
-                ColumnOrder = 13
+                ColumnOrder = 13,
+                ColumnWidth = 100
             });
             PolicyColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameReprojectedOn,
-                ColumnOrder = 14
+                ColumnOrder = 14,
+                ColumnWidth = 100
             });
         }
         private void GetDefaultIllustrationColumns()
