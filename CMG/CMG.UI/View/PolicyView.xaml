@@ -201,7 +201,7 @@
                             </ContextMenu>
                         </DataGrid.ContextMenu>
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="" Width="40" HeaderStyle="{StaticResource FirstColumnHeaderStyle }" CanUserReorder="False">
+                            <DataGridTemplateColumn Header="" Width="40" HeaderStyle="{StaticResource FirstColumnHeaderStyle }" CanUserReorder="False" CanUserResize="False" CanUserSort="False">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Background="Transparent" BorderBrush="Transparent" Width="50" x:Name="ButtonPolicyEditOpen" HorizontalAlignment="Left" Click="ButtonPolicyEditOpen_Click">
@@ -236,7 +236,7 @@
                             <RowDefinition Height="250"/>
                             <RowDefinition Height="150"/>
                             <RowDefinition Height="150"/>
-                            <RowDefinition Height="85"/>
+                            <RowDefinition Height="1*"/>
                             <RowDefinition Height="100"/>
                             <RowDefinition Height="150"/>
                         </Grid.RowDefinitions>
@@ -383,31 +383,51 @@
                         </Grid>
                         <StackPanel Grid.Row="4" Margin="20 10 10 10">
                             <Separator Background="LightGray" Margin="0 10"/>
-                            <Grid Background="LightBlue" Height="70">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <StackPanel Margin="5">
-                                    <TextBlock Text="Birthday"/>
-                                    <TextBlock Text="{Binding SelectedClient.BirthDate, StringFormat='{}{0: MM/dd/yyyy}'}"/>
-                                </StackPanel>
-                                <StackPanel Grid.Column="1" Margin="5">
-                                    <TextBlock Text="Smoker" HorizontalAlignment="Center"/>
-                                    <TextBlock Text="{Binding SelectedClient.Smoker}" HorizontalAlignment="Center"/>
-                                </StackPanel>
-                                <StackPanel Grid.Column="2" Margin="5">
-                                    <TextBlock Text="Status" HorizontalAlignment="Center"/>
-                                    <TextBlock Text="{Binding SelectedClient.Status}" HorizontalAlignment="Center"/>
-                                </StackPanel>
-                                <StackPanel Grid.Column="3" Margin="5">
-                                    <TextBlock Text="SVC Type" HorizontalAlignment="Center"/>
-                                    <TextBlock Text="{Binding SelectedClient.SVCType}" HorizontalAlignment="Center"/>
-                                </StackPanel>
+                            <Grid Background="LightBlue">
+                                <DataGrid x:Name="insured" ItemsSource="{Binding SelectedPolicy.InsuredPeople, UpdateSourceTrigger=PropertyChanged}" MinRowHeight="20" 
+                            AutoGenerateColumns="False" IsReadOnly="True" Background="{x:Null}" GridLinesVisibility="None"
+                            HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" MinWidth="360"
+                            ColumnHeaderStyle="{StaticResource InsuredHeaderStyle}" 
+                            SelectionUnit="FullRow">
+                                    <DataGrid.Columns>
+                                        <DataGridTemplateColumn Header="Name" Width="65" HeaderStyle="{StaticResource RelationshipFirstColumnHeaderStyle}">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Path=CommonName}" Margin="10 0 10 0" />
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="Birthday" Width="85">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Path=BirthDate, StringFormat='{}{0:MM/dd/yyyy}'}"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="Smoker" Width="55">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Path=Smoker}" ></TextBlock>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="Status" Width="55" >
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Path=Status}"></TextBlock>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTemplateColumn Header="SVC Type" Width="Auto">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Path=SVCType}"></TextBlock>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
                             </Grid>
-
                         </StackPanel>
                         <StackPanel Grid.Row="5" Margin="20 0 10 0">
                             <Separator Background="LightGray" Margin="0 2"/>

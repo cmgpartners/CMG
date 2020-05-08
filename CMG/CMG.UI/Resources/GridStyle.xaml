@@ -3,7 +3,7 @@
 
     <SolidColorBrush x:Key="GridBackGround" Color="#FF444444" Opacity="0.95"/>
     
-    <Style x:Key="HeaderStyle" TargetType="DataGridColumnHeader">
+    <Style x:Key="HeaderStyle" TargetType="DataGridColumnHeader" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
         <Setter Property="Background" Value="#FFCEEAFF" />
         <Setter Property="Foreground" Value="#003A3C" />
         <Setter Property="BorderBrush" Value="#FF444444" />
@@ -41,11 +41,6 @@
                 <Setter Property="Foreground" Value="Black"/>
                 <Setter Property="FontWeight" Value="Bold"/>
             </Trigger>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#00A3FF"/>
-                <Setter Property="Foreground" Value="Black"/>
-                <Setter Property="Opacity" Value="0.9"/>
-            </Trigger>
         </Style.Triggers>
     </Style>
 
@@ -54,16 +49,16 @@
         <Setter Property="BorderBrush" Value="Gray"/>
         <Style.Triggers>
             <DataTrigger Binding="{Binding CompanyName}" Value="Sun Life">
-                <Setter Property="Background" Value="#fdfd96"></Setter>
+                <Setter Property="Background" Value="#FFFFFFCF"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding CompanyName}" Value="London Life">
-                <Setter Property="Background" Value="#FFADD8E6"></Setter>
+                <Setter Property="Background" Value="#FFDFFFEF"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding CompanyName}" Value="Great West Life">
-                <Setter Property="Background" Value="#FFFFDAB9"></Setter>
+                <Setter Property="Background" Value="#FFE7F7EF"></Setter>
             </DataTrigger>
             <DataTrigger Binding="{Binding CompanyName}" Value="Manulife">
-                <Setter Property="Background" Value="#90ee90"></Setter>
+                <Setter Property="Background" Value="#FFEFFFDF"></Setter>
             </DataTrigger>
             <Trigger Property="IsSelected"
                         Value="True">
@@ -73,12 +68,6 @@
                 <Setter Property="Foreground" Value="Black"/>
                 <Setter Property="FontWeight" Value="Bold"/>
             </Trigger>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#D3D3D3"/>
-                <Setter Property="Foreground" Value="Black"/>
-                <Setter Property="Opacity" Value="0.9"/>
-            </Trigger>
-            
         </Style.Triggers>
     </Style>
 
@@ -197,6 +186,20 @@
                 <Setter Property="Background" Value="White"/>
             </Trigger>
         </Style.Triggers>
+    </Style>
+
+
+    <Style x:Key="InsuredHeaderStyle" TargetType="DataGridColumnHeader">
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0 0 0 0" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="MinWidth" Value="0" />
+        <Setter Property="MinHeight" Value="25" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontSize" Value="12"/>
     </Style>
 
     <Style x:Key="PageHeader" TargetType="Grid">

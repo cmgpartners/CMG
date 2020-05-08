@@ -144,17 +144,22 @@
                     </StackPanel>
                 </Grid>
             </Grid>
-            <Button Grid.Row="3"  Content="People" Style="{StaticResource LeftNavMenuButton}" x:Name="PeopleMenu" Width="145"  Click="PeopleMenu_Click"></Button>
-            <Button Grid.Row="5"  Content="Policies" Style="{StaticResource LeftNavMenuButton}" x:Name="PolicyMenu" Width="145"  Click="PolicyMenu_Click"></Button>
-            <Button  Grid.Row="7" Content="File Manager" Style="{StaticResource LeftNavMenuButton}" x:Name="FileManagerMenu" Width="145"  Click="FileManagerMenu_Click"></Button>
-            <Button  Grid.Row="9" Content="Configuration" Style="{StaticResource LeftNavMenuButton}" x:Name="ConfigurationMenu" Width="145"  Click="ConfigurationMenu_Click"></Button>
-            <Button Grid.Row="11" Style="{StaticResource LeftNavMenuButton}" Width="145">
-                <Hyperlink  NavigateUri="http://www.google.com" RequestNavigate="Salesforce_RequestNavigate" Style="{StaticResource HyperLinkStyle}">
-                    Salesforce
-                </Hyperlink>
+            <Button Grid.Row="3"  Style="{StaticResource LeftNavMenuButton}" x:Name="PeopleMenu" Width="145"  Click="PeopleMenu_Click">
+                <AccessText>P_eople</AccessText>
+            </Button>
+            <Button Grid.Row="5"  Style="{StaticResource LeftNavMenuButton}" x:Name="PolicyMenu" Width="145"  Click="PolicyMenu_Click">
+                <AccessText>_Policies</AccessText>
+            </Button>
+            <Button  Grid.Row="7" Style="{StaticResource LeftNavMenuButton}" x:Name="FileManagerMenu" Width="145"  Click="FileManagerMenu_Click">
+                <AccessText>_File Manager</AccessText>
+            </Button>
+            <Button  Grid.Row="9" Style="{StaticResource LeftNavMenuButton}" x:Name="ConfigurationMenu" Width="145"  Click="ConfigurationMenu_Click">
+                <AccessText>_Configuration</AccessText>
+            </Button>
+            <Button Grid.Row="11" Style="{StaticResource LeftNavMenuButton}" x:Name="SalesforceMenu" Click="SalesforceMenu_Click" Width="145">
+                <AccessText>_Salesforce</AccessText>
             </Button>
         </Grid>
-       
         <Grid Grid.Row="1" Grid.Column="1" Style="{StaticResource PageHeader}">
             <ContentPresenter  Content="{Binding SelectedViewModel}" ></ContentPresenter>
         </Grid>

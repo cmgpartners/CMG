@@ -354,10 +354,11 @@ namespace CMG.Application.ViewModel
             {
                 _selectedPolicy = value;
                 OnPropertyChanged("IsAddRelationshipVisible");
-                OnPropertyChanged("SelectedPolicy");
                 GetSelectedPolicyDropdownData();
                 CancelPolicyNotes();
                 CancelGeneralNotes();
+                SetInsuredDetails();
+                OnPropertyChanged("SelectedPolicy");
             }
         }
         private ViewClientSearchDto _selectedClient;
@@ -714,6 +715,25 @@ namespace CMG.Application.ViewModel
                 SelectedPolicyType = PolicyTypeCollection.Where(x => x.Description.Trim() == SelectedPolicy.Type.Trim()).FirstOrDefault();
                 SelectedPolicyCompany = CompanyCollection.Where(x => x.Description.Trim() == SelectedPolicy.CompanyName.Trim()).FirstOrDefault();
                 SelectedPolicyCurrency = CurrencyCollection.Where(x => x.Description.Trim() == SelectedPolicy.Currency.Trim()).FirstOrDefault();
+            }
+        }
+        private void SetInsuredDetails()
+        {
+            if (SelectedPolicy != null)
+            {
+                var insured = _unitOfWork.People.GetInsuredDetails(SelectedPolicy.Id);
+                SelectedPolicy.InsuredPeople = _mapper.Map<ICollection<ViewClientSearchDto>>(insured);
+
+                SelectedPolicy.InsuredPeople.ToList().ForEach(i =>
+                {
+                    var status = i?.Status;
+                    if (!string.IsNullOrEmpty(status))
+                        i.Status = PersonStatusCollection.Where(c => c.FieldCode == status.Trim()).FirstOrDefault()?.Description;
+
+                    var svcType = i?.SVCType;
+                    if (!string.IsNullOrEmpty(svcType))
+                        i.SVCType = SVCTypeCollection.Where(c => c.FieldCode == svcType.Trim()).FirstOrDefault()?.Description;
+                });
             }
         }
         private new void GetComboData()
