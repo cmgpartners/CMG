@@ -929,82 +929,98 @@ namespace CMG.Application.ViewModel
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameYear,
-                ColumnOrder = 1
+                ColumnOrder = 1,
+                ColumnWidth = 40
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameAD,
-                ColumnOrder = 2
+                ColumnOrder = 2,
+                ColumnWidth = 100
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameCV,
-                ColumnOrder = 3
+                ColumnOrder = 3,
+                ColumnWidth = 100
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameDB,
-                ColumnOrder = 4
+                ColumnOrder = 4,
+                ColumnWidth = 100
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameACB,
-                ColumnOrder = 5
+                ColumnOrder = 5,
+                ColumnWidth = 130
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameNCPI,
-                ColumnOrder = 6
+                ColumnOrder = 6,
+                ColumnWidth = 100
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameADA,
-                ColumnOrder = 7
+                ColumnOrder = 7,
+                ColumnWidth = 130
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameCVA,
-                ColumnOrder = 8
+                ColumnOrder = 8,
+                ColumnWidth = 130
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameDBA,
-                ColumnOrder = 9
+                ColumnOrder = 9,
+                ColumnWidth = 130
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameACBA,
-                ColumnOrder = 10
+                ColumnOrder = 10,
+                ColumnWidth = 130
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameNCPIA,
-                ColumnOrder = 11
+                ColumnOrder = 11,
+                ColumnWidth = 100
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameADR,
-                ColumnOrder = 12
+                ColumnOrder = 12,
+                ColumnWidth = 130
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameCVR,
-                ColumnOrder = 13
+                ColumnOrder = 13,
+                ColumnWidth = 130
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameDBR,
-                ColumnOrder = 14
+                ColumnOrder = 14,
+                ColumnWidth = 130
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameACBR,
-                ColumnOrder = 15
+                ColumnOrder = 15,
+                ColumnWidth = 130
             });
             IllustrationColumns.Add(new ViewSearchOptionsDto()
             {
                 ColumnName = ColumnNameNCPIR,
-                ColumnOrder = 16
+                ColumnOrder = 16,
+                ColumnWidth = 100
             });
         }
         private void GetDefaultClientColumns()
