@@ -169,9 +169,53 @@
                     </TextBlock>
                     <TextBlock Text="Policy Details" Margin="10 22 10 10" FontSize="20" Foreground="White" Visibility="{Binding IsPolicyDetailVisible, Converter={StaticResource VisibilityConverter}}"/>
                 </StackPanel>
-                <Grid Grid.Row="0" Grid.Column="2">
+                <StackPanel Grid.Row="0" Grid.Column="2"  Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 20 0">
+                    <Button x:Name="Reports" Click="Reports_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Reports" Padding="10 0 0 0"/>
+                            <materialDesign:PackIcon Kind="ArrowDown" Margin="10 2 0 0"></materialDesign:PackIcon>
+                        </StackPanel>
+                    </Button>
+                    <Popup x:Name="ReportMenuPopup" VerticalOffset="3" HorizontalOffset="-85" Placement="Bottom" PlacementTarget="{Binding ElementName=Reports}" StaysOpen="False" Width="200">
+                        <Grid Background="#00A3FF">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0">
+                                <TextBlock Text="Discovery" Foreground="White" FontSize="14" FontWeight="Bold" Margin="10 10 0 0"/>
+                                <ListView Foreground="White" Margin="10 0 0 0">
+                                    <ListViewItem Content="FrontStage"/>
+                                    <ListViewItem Content="Prospect Qualification Form"/>
+                                </ListView>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1">
+                                <TextBlock Text="Design" Foreground="White" FontSize="14" FontWeight="Bold" Margin="10 10 0 0"/>
+                                <ListView Foreground="White" Margin="10 0 0 0">
+                                    <ListViewItem Content="Family Funding Report (FFR)"/>
+                                    <ListViewItem Content="Family Legacy Plan (FLP)"/>
+                                    <ListViewItem Content="Life Insurance Reports (LIP)"/>
+                                </ListView>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2">
+                                <TextBlock Text="Destiny" Foreground="White" FontSize="14" FontWeight="Bold" Margin="10 10 0 0"/>
+                                <ListView Foreground="White" Margin="10 0 0 0">
+                                    <ListViewItem Content="PPM"/>
+                                    <ListViewItem Content="Policy Listing"/>
+                                </ListView>
+                            </StackPanel>
+                            <StackPanel Grid.Row="3">
+                                <TextBlock Text="Delivery" Foreground="White" FontSize="14" FontWeight="Bold" Margin="10 10 0 0"/>
+                                <ListView Foreground="White" Margin="10 0 0 0">
+                                    <ListViewItem Content="Closed Action Process(CAP)"/>
+                                </ListView>
+                            </StackPanel>
+                        </Grid>
+                    </Popup>
                     <Button Content="View Policy Illustration" Width="200" Margin="7" x:Name="ButtonIllustrationOpen" Click="ButtonIllustrationOpen_Click" Command="{Binding ViewIllustrationCommand}"/>
-                </Grid>
+                </StackPanel>
                 <Grid Grid.Row="1" Margin="10 0 10 10" Grid.ColumnSpan="3">
                     <DataGrid AutoGenerateColumns="True" x:Name="policies" IsReadOnly="True" GridLinesVisibility="None"
                       ItemsSource="{Binding DataContext.SelectedViewModel.PolicyCollection, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=Window}}" 
