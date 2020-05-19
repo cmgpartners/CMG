@@ -15,6 +15,7 @@ namespace CMG.Application.DTO
         public string ClientType { get; set; }
         public string  Status { get; set; }
         public string ServiceType { get; set; }
+        public string Initials { get; set; }
         public ICollection<ViewRelBPDto> BusinessRelations { get; set; }
         public ICollection<ViewCasesDto> Cases { get; set; }
         public ICollection<ViewRelPPDto> PeopleRelations { get; set; }

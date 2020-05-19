@@ -108,7 +108,7 @@ namespace CMG.DataAccess.Repository
                 Benef = x.Benef,
                 Owner = x.Owner,
                 Insur = x.Insur,
-		PeoplePolicys = x.PeoplePolicys.Where(x => !excludeCategoryList.Contains(x.Catgry) && x.Del == false).Select(a => new PeoplePolicys
+		        PeoplePolicys = x.PeoplePolicys.Where(x => !excludeCategoryList.Contains(x.Catgry) && x.Del == false).Select(a => new PeoplePolicys
                 {
                     Keynuml = a.Keynuml,
                     Keynump = a.Keynump,
@@ -141,11 +141,16 @@ namespace CMG.DataAccess.Repository
                     AgentOrder = p.AgentOrder,
                     IsDeleted = p.IsDeleted
                 }).ToList(),
-                PolicyAgents = x.PeoplePolicys.Where(x => policyAgentCategories.Contains(x.Catgry)).Select(a => new PeoplePolicys
+                PolicyAgents = x.PeoplePolicys.Where(x => policyAgentCategories.Contains(x.Catgry) && x.Del == false).Select(a => new PeoplePolicys
                 {
                     Keynump = a.Keynump,
                     Keynumo = a.Keynumo,
                     Hname = a.Hname,
+                    People = new People()
+                    {
+                       Keynump = a.People.Keynump,
+                       Initials = a.People.Initials
+                    },
                     Catgry = a.Catgry,
                     Relatn = a.Relatn,
                     Split = a.Split

@@ -70,6 +70,7 @@ namespace CMG.Application.Mapper
                 .ForMember(des => des.Name, mo => mo.MapFrom(src => src.Hname.Trim()))
                 .ForMember(des => des.Category, mo => mo.MapFrom(src => src.Catgry.Trim()))
                 .ForMember(des => des.Relation, mo => mo.MapFrom(src => src.Relatn.Trim()))
+                .ForMember(des => des.People, mo => mo.MapFrom(src => src.People))
                 .ForMember(des => des.IsDeleted, mo => mo.MapFrom(src => src.Del));
 
             CreateMap<BusinessPolicys, ViewRelationshipDto>()

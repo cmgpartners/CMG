@@ -822,7 +822,7 @@ namespace CMG.Application.ViewModel
                             {
                                 string[] agentName = a.Name.Split(" ");
                                 agentName = agentName.Length > 0 ? agentName[0].Split(",") : default;
-                                a.Agent = new ViewAgentDto() { FirstName = agentName.Length > 0 ? agentName[0] : string.Empty, Color = "#D3D3D3" };
+                                a.Agent = new ViewAgentDto() { FirstName = agentName.Length > 0 ? agentName[0] : string.Empty, Color = "#D3D3D3", AgentCode = a.People?.Initials };
                             }
                             return a;
                         }

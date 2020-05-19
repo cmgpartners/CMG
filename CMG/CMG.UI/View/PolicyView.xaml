@@ -494,7 +494,7 @@
                                                 Padding="10 0 10 0"
                                                 Background="{Binding Agent.Color}"
                                                 Margin="5">
-                                            <TextBlock Text="{Binding Agent.FirstName}" Foreground="Black" Margin="5"/>
+                                            <TextBlock Text="{Binding Agent.AgentCode}" Foreground="Black" Margin="5"/>
                                         </Border>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
@@ -521,7 +521,7 @@
                                                     <ColumnDefinition/>
                                                     <ColumnDefinition/>
                                                 </Grid.ColumnDefinitions>
-                                                <TextBlock Grid.Column="0" Text="{Binding Agent.FirstName}" Foreground="Black" Margin="5"/>
+                                                    <TextBlock Grid.Column="0" Text="{Binding Agent.AgentCode}" Foreground="Black" Margin="5"/>
                                                 <TextBlock Grid.Column="1"  Text="{Binding Split, StringFormat='{}{0:#,#.00}'}" Foreground="Black" Margin="5"/>
                                             </Grid>
                                         </Border>

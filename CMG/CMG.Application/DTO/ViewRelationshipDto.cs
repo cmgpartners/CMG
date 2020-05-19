@@ -19,5 +19,6 @@ namespace CMG.Application.DTO
         public string ModifiedBy { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public ViewPolicyListDto Policy { get; set; }
+        public ViewPeopleDto People { get; set; }
     }
 }

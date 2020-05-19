@@ -18,6 +18,7 @@ namespace CMG.Application.Mapper
                 .ForMember(des => des.PhotoPath, src => src.MapFrom(src => src.Picpath))
                 .ForMember(des => des.DirectBussinesPhone, src => src.MapFrom(src => src.Dphonebus))
                 .ForMember(des => des.CellPhone, src => src.MapFrom(src => src.Phonecar))
+                .ForMember(des => des.Initials, src => src.MapFrom(src => src.Initials))
                 .ForMember(des => des.BusinessRelations, src => src.MapFrom(src => src.RelBp))
                 .ForMember(des => des.PeopleRelations, src => src.MapFrom(src => src.RelPpKeynumpNavigation))
                 .ForMember(des => des.PeoplePolicies, src => src.MapFrom(src => src.PeoplePolicys))
