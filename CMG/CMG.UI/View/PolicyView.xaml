@@ -148,8 +148,8 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0" x:Name="searchBarColumn"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
                 <DockPanel x:Name="SearchBar" Visibility="Collapsed">
                     <materialDesign:PackIcon Kind="Search" VerticalAlignment="Center" Margin="20" FontWeight="Bold" Foreground="White"></materialDesign:PackIcon>
@@ -170,58 +170,138 @@
                     <TextBlock Text="Policy Details" Margin="10 22 10 10" FontSize="20" Foreground="White" Visibility="{Binding IsPolicyDetailVisible, Converter={StaticResource VisibilityConverter}}"/>
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="2"  Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 20 0">
-                    <Button x:Name="Reports" Click="Reports_Click">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Reports" Padding="10 0 0 0"/>
-                            <materialDesign:PackIcon Kind="ArrowDown" Margin="10 2 0 0"></materialDesign:PackIcon>
-                        </StackPanel>
-                    </Button>
-                    <Popup x:Name="ReportMenuPopup" VerticalOffset="3" HorizontalOffset="-85" Placement="Bottom" PlacementTarget="{Binding ElementName=Reports}" StaysOpen="False" Width="200">
-                        <Grid Background="#00A3FF">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <StackPanel Grid.Row="0">
-                                <TextBlock Text="Discovery" Foreground="White" FontSize="14" FontWeight="Bold" Margin="10 10 0 0"/>
-                                <ListView Foreground="White" Margin="10 0 0 0">
-                                    <ListViewItem Content="FrontStage"/>
-                                    <ListViewItem Content="Prospect Qualification Form"/>
-                                </ListView>
-                            </StackPanel>
-                            <StackPanel Grid.Row="1">
-                                <TextBlock Text="Design" Foreground="White" FontSize="14" FontWeight="Bold" Margin="10 10 0 0"/>
-                                <ListView Foreground="White" Margin="10 0 0 0">
-                                    <ListViewItem Content="Family Funding Report (FFR)"/>
-                                    <ListViewItem Content="Family Legacy Plan (FLP)"/>
-                                    <ListViewItem Content="Life Insurance Reports (LIP)"/>
-                                </ListView>
-                            </StackPanel>
-                            <StackPanel Grid.Row="2">
-                                <TextBlock Text="Destiny" Foreground="White" FontSize="14" FontWeight="Bold" Margin="10 10 0 0"/>
-                                <ListView Foreground="White" Margin="10 0 0 0">
-                                    <ListViewItem Content="PPM"/>
-                                    <ListViewItem Content="Policy Listing"/>
-                                </ListView>
-                            </StackPanel>
-                            <StackPanel Grid.Row="3">
-                                <TextBlock Text="Delivery" Foreground="White" FontSize="14" FontWeight="Bold" Margin="10 10 0 0"/>
-                                <ListView Foreground="White" Margin="10 0 0 0">
-                                    <ListViewItem Content="Closed Action Process(CAP)"/>
-                                </ListView>
-                            </StackPanel>
-                        </Grid>
-                    </Popup>
-                    <Button Content="View Policy Illustration" Width="200" Margin="7" x:Name="ButtonIllustrationOpen" Click="ButtonIllustrationOpen_Click" Command="{Binding ViewIllustrationCommand}"/>
+                    <Menu ItemsSource="{Binding DiscoveryReportMenu}" Height="30">
+                        <Menu.Resources>
+                            <Style TargetType="MenuItem" BasedOn="{StaticResource MaterialDesignMenuItem}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Menu}" Value="-">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <Separator/>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Menu}" Value="Discovery">
+                                        <Setter Property="Background" Value="#FFD5C7A9"/>
+                                        <Setter Property="Height" Value="30"/>
+                                        <Setter Property="Icon">
+                                            <Setter.Value>
+                                                <materialDesign:PackIcon Kind="ArrowDown" Padding="0" Margin="0"></materialDesign:PackIcon>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Menu.Resources>
+                        <Menu.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Submenu}">
+                                <TextBlock Text="{Binding Menu}" Margin="0" Padding="0"/>
+                            </HierarchicalDataTemplate>
+                        </Menu.ItemTemplate>
+                    </Menu>
+                    <Menu ItemsSource="{Binding DesignReportMenu}" Height="30" Margin="10 0 0 0">
+                        <Menu.Resources>
+                            <Style TargetType="MenuItem" BasedOn="{StaticResource MaterialDesignMenuItem}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Menu}" Value="-">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <Separator/>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Menu}" Value="Design">
+                                        <Setter Property="Background" Value="#FFC8D37C"/>
+                                        <Setter Property="Height" Value="30"/>
+                                        <Setter Property="Icon">
+                                            <Setter.Value>
+                                                <materialDesign:PackIcon Kind="ArrowDown" Padding="0" Margin="0"></materialDesign:PackIcon>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Menu.Resources>
+                        <Menu.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Submenu}">
+                                <TextBlock Text="{Binding Menu}" Margin="0" Padding="0"/>
+                            </HierarchicalDataTemplate>
+                        </Menu.ItemTemplate>
+                    </Menu>
+                    <Menu ItemsSource="{Binding DeliveryReportMenu}" Height="30" Margin="10 0 0 0">
+                        <Menu.Resources>
+                            <Style TargetType="MenuItem" BasedOn="{StaticResource MaterialDesignMenuItem}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Menu}" Value="-">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <Separator/>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Menu}" Value="Delivery">
+                                        <Setter Property="Background" Value="#FFDC5C21"/>
+                                        <Setter Property="Height" Value="30"/>
+                                        <Setter Property="Icon">
+                                            <Setter.Value>
+                                                <materialDesign:PackIcon Kind="ArrowDown" Padding="0" Margin="0"></materialDesign:PackIcon>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Menu.Resources>
+                        <Menu.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Submenu}">
+                                <TextBlock Text="{Binding Menu}" Margin="0" Padding="0"/>
+                            </HierarchicalDataTemplate>
+                        </Menu.ItemTemplate>
+                    </Menu>
+                    <Menu ItemsSource="{Binding DestinyReportMenu}" Height="30" Margin="10 0 0 0">
+                        <Menu.Resources>
+                            <Style TargetType="MenuItem" BasedOn="{StaticResource MaterialDesignMenuItem}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Menu}" Value="-">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate>
+                                                    <Separator/>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Menu}" Value="Destiny">
+                                        <Setter Property="Background" Value="#FF8AA2C3"/>
+                                        <Setter Property="Height" Value="30"/>
+                                        <Setter Property="Icon">
+                                            <Setter.Value>
+                                                <materialDesign:PackIcon Kind="ArrowDown" Padding="0" Margin="0"></materialDesign:PackIcon>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Menu.Resources>
+                        <Menu.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Submenu}">
+                                <TextBlock Text="{Binding Menu}" Margin="0" Padding="0"/>
+                            </HierarchicalDataTemplate>
+                        </Menu.ItemTemplate>
+                    </Menu>
+                   <Button Content="View Policy Illustration" Width="200" Margin="7" x:Name="ButtonIllustrationOpen" Click="ButtonIllustrationOpen_Click" Command="{Binding ViewIllustrationCommand}"/>
                 </StackPanel>
                 <Grid Grid.Row="1" Margin="10 0 10 10" Grid.ColumnSpan="3">
                     <DataGrid AutoGenerateColumns="True" x:Name="policies" IsReadOnly="True" GridLinesVisibility="None"
                       ItemsSource="{Binding DataContext.SelectedViewModel.PolicyCollection, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=Window}}" 
                       ColumnHeaderStyle="{StaticResource HeaderStyle}" RowStyle="{StaticResource PolicyGridRowStyle}"
                       CanUserAddRows="False" SelectionUnit="FullRow" SelectedItem="{Binding DataContext.SelectedViewModel.SelectedPolicy, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}"
-                      MouseRightButtonUp="Policies_MouseRightButtonUp" AutoGeneratedColumns="Policies_AutoGeneratedColumns" ColumnReordered = "policies_ColumnReordered">
+                      MouseRightButtonUp="Policies_MouseRightButtonUp" AutoGeneratedColumns="Policies_AutoGeneratedColumns" ColumnReordered = "policies_ColumnReordered" Background="#FFDBDED1">
                         <DataGrid.ContextMenu>
                             <ContextMenu x:Name="PolicyContextMenu" DataContext="{Binding Path=PlacementTarget.DataContext, 
                                                                RelativeSource={RelativeSource Self}}" Visibility="Collapsed" >

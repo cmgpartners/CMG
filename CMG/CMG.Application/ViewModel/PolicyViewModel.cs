@@ -15,6 +15,9 @@ using Microsoft.Extensions.Caching.Memory;
 using System.Data;
 using CMG.Service;
 using static CMG.Common.Enums;
+using NPOI.SS.UserModel;
+using System.IO;
+using NPOI.HSSF.UserModel;
 
 namespace CMG.Application.ViewModel
 {
@@ -50,6 +53,7 @@ namespace CMG.Application.ViewModel
                 SelectedClient = selectedClientInput;
                 GetPolicyCollection();
             }
+            LoadReportMenu();
         }
         #endregion Constructor
 
@@ -607,6 +611,11 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("Ratings");
             }
         }
+
+        public List<ViewReportMenuDTO> DiscoveryReportMenu { get; set; } = new List<ViewReportMenuDTO>();
+        public List<ViewReportMenuDTO> DesignReportMenu { get; set; } = new List<ViewReportMenuDTO>();
+        public List<ViewReportMenuDTO> DeliveryReportMenu { get; set; } = new List<ViewReportMenuDTO>();
+        public List<ViewReportMenuDTO> DestinyReportMenu { get; set; } = new List<ViewReportMenuDTO>();
 
         #region command properties
         public ICommand ViewIllustrationCommand
@@ -1389,6 +1398,103 @@ namespace CMG.Application.ViewModel
                 }
             }
             return PolicyCollection;
+        }
+
+        public void LoadReportMenu()
+        {
+            LoadDiscoveryReportMenu();
+            LoadDesignReportMenu();
+            LoadDeliveryReportMenu();
+            LoadDestinyReportMenu();
+        }
+        public void LoadDiscoveryReportMenu()
+        {
+            CreateReportMenu("Z:\\tmplt\\excel\\menu2.xls", DiscoveryReportMenu);
+        }
+        public void LoadDesignReportMenu()
+        {
+            CreateReportMenu("Z:\\tmplt\\excel\\menu3.xls", DesignReportMenu);
+        }
+        public void LoadDeliveryReportMenu()
+        {
+            CreateReportMenu("Z:\\tmplt\\excel\\menu4.xls", DeliveryReportMenu);
+        }
+        public void LoadDestinyReportMenu()
+        {
+            CreateReportMenu("Z:\\tmplt\\excel\\menu5.xls", DestinyReportMenu);
+        }
+        private void CreateReportMenu(string file, List<ViewReportMenuDTO> reportMenu)
+        {
+            ISheet sheet;
+            using (var stream = new FileStream(file, FileMode.Open, FileAccess.Read))
+            {
+                stream.Position = 0;
+                HSSFWorkbook xssWorkbook = new HSSFWorkbook(stream);
+                sheet = xssWorkbook.GetSheetAt(0);
+                int cellCount = sheet.GetRow(0).LastCellNum;
+
+                for (int i = (sheet.FirstRowNum + 1); i <= sheet.LastRowNum; i++)
+                {
+                    IRow row = sheet.GetRow(i);
+                    if (row == null) continue;
+                    if (row.Cells.All(d => d.CellType == CellType.Blank)) continue;
+                    for (int j = row.FirstCellNum; j < 4; j++) //Need to look for A to E columns only from menu excel sheet
+                    {
+                        if (row.GetCell(j) != null)
+                        {
+                            if (!string.IsNullOrEmpty(row.GetCell(j).ToString()) && !string.IsNullOrWhiteSpace(row.GetCell(j).ToString()))
+                            {
+                                var menuName = row.GetCell(j).ToString().IndexOf('&') >= 0 ?
+                                            row.GetCell(j).ToString().Remove(row.GetCell(j).ToString().IndexOf('&'), 1)
+                                            : row.GetCell(j).ToString();
+                                if (j == 0)
+                                {
+                                    if (row.GetCell(j).CellStyle.BorderTop != BorderStyle.None)
+                                    {
+                                        reportMenu.Add(new ViewReportMenuDTO() { Menu = "-" });
+                                        reportMenu.Add(new ViewReportMenuDTO() { Menu = menuName });
+                                    }
+                                    else if (row.GetCell(j).CellStyle.BorderBottom != BorderStyle.None)
+                                    {
+                                        reportMenu.Add(new ViewReportMenuDTO() { Menu = menuName });
+                                        reportMenu.Add(new ViewReportMenuDTO() { Menu = "-" });
+                                    }
+                                    else
+                                        reportMenu.Add(new ViewReportMenuDTO() { Menu = menuName });
+                                }
+                                else
+                                {
+                                    ViewReportMenuDTO parentMenu = default;
+                                    if (j == 1)
+                                    {
+                                        parentMenu = reportMenu.Last();
+                                    }
+                                    if (j == 2)
+                                    {
+                                        parentMenu = reportMenu.Last().Submenu.Last();
+                                    }
+                                    if (j == 3)
+                                    {
+                                        parentMenu = reportMenu.Last().Submenu.Last().Submenu.Last();
+                                    }
+                                    if (row.GetCell(j).CellStyle.BorderTop != BorderStyle.None)
+                                    {
+                                        parentMenu.Submenu.Add(new ViewReportMenuDTO() { Menu = "-" });
+                                        parentMenu.Submenu.Add(new ViewReportMenuDTO() { Menu = menuName });
+                                    }
+                                    else if (row.GetCell(j).CellStyle.BorderBottom != BorderStyle.None)
+                                    {
+                                        parentMenu.Submenu.Add(new ViewReportMenuDTO() { Menu = menuName });
+                                        parentMenu.Submenu.Add(new ViewReportMenuDTO() { Menu = "-" });
+                                    }
+                                    else
+                                        parentMenu.Submenu.Add(new ViewReportMenuDTO() { Menu = menuName });
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
         #endregion Methods
     }

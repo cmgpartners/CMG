@@ -495,10 +495,6 @@ namespace CMG.UI.View
                 AddWidthChangeEvent(GridNameIllustration);
             }
         }
-        private void Reports_Click(object sender, RoutedEventArgs e)
-        {
-            ReportMenuPopup.IsOpen = true;
-        }
         #endregion Events
 
         #region Methods
@@ -901,6 +897,5 @@ namespace CMG.UI.View
         }
         #endregion Methods
 
-       
     }
 }
