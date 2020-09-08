@@ -34,6 +34,7 @@ namespace CMG.Application.ViewModel
         private const string comboFieldNameStatus = "STATUS";
         private const string comboFieldNameCategory = "CATGRY";
         private const string comboFieldNameCurrency = "CURRENCY";
+        private const string comboFieldNameChangeType = "CHGTYPE";
         List<string> agentCategories = AgentCategories.Split(',').Select(x => x.Trim()).ToList();
 
         #endregion
@@ -100,6 +101,27 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("PolicyIllustrationCollection");
             }
         }
+        private ObservableCollection<ViewPolicyChangeDto> _policyChangeCollection;
+        public ObservableCollection<ViewPolicyChangeDto> PolicyChangeCollection
+        {
+            get { return _policyChangeCollection; }
+            set 
+            { 
+                _policyChangeCollection = value;
+                OnPropertyChanged("PolicyChangeCollection");
+            }
+        }
+        private ObservableCollection<ViewPolicyChangeDto> _clientPolicyChangeCollection;
+        public ObservableCollection<ViewPolicyChangeDto> ClientPolicyChangeCollection
+        {
+            get { return _clientPolicyChangeCollection; }
+            set 
+            {     
+                _clientPolicyChangeCollection = value;
+                OnPropertyChanged("ClientPolicyChangeCollection");
+
+            }
+        }
 
         private List<ViewComboDto> _policyTypeCollection;
         public List<ViewComboDto> PolicyTypeCollection
@@ -120,6 +142,12 @@ namespace CMG.Application.ViewModel
         {
             get { return _currencyCollection; }
             set { _currencyCollection = value; }
+        }
+        private List<ViewComboDto> _changeTypeCollection;
+        public List<ViewComboDto> ChangeTypeCollection
+        {
+            get { return _changeTypeCollection; }
+            set { _changeTypeCollection = value;}
         }
         private string _relationCommonName;
         public string RelationCommonName 
@@ -362,7 +390,31 @@ namespace CMG.Application.ViewModel
                 CancelPolicyNotes();
                 CancelGeneralNotes();
                 SetInsuredDetails();
+                GetPolicyHistory();
+                GetClientPolicyHistory();
                 OnPropertyChanged("SelectedPolicy");
+            }
+        }
+        private ViewPolicyChangeDto _selectedHistory;
+        public ViewPolicyChangeDto SelectedHistory
+        {
+            get { return _selectedHistory; }
+            set
+            {
+                _selectedHistory = value;
+                SelectedHistoryChangeType = _selectedHistory != null ? ChangeTypeCollection.Where(x => x.Description.Trim() == _selectedHistory.Chgtype).FirstOrDefault() : null;
+                OnPropertyChanged("SelectedHistory");
+            }
+        }
+        private ViewPolicyChangeDto _selectedClientHistory;
+        public ViewPolicyChangeDto SelectedClientHistory
+        {
+            get { return _selectedClientHistory; }
+            set
+            {
+                _selectedClientHistory = value;
+                SelectedClientHistoryChangeType = _selectedClientHistory != null ? ChangeTypeCollection.Where(x => x.Description.Trim() == _selectedClientHistory.Chgtype).FirstOrDefault() : null;
+                OnPropertyChanged("SelectedClientHistory");
             }
         }
         private ViewClientSearchDto _selectedClient;
@@ -611,6 +663,26 @@ namespace CMG.Application.ViewModel
                 OnPropertyChanged("Ratings");
             }
         }
+        private ViewComboDto _selectedHistoryChangeType;
+        public ViewComboDto SelectedHistoryChangeType
+        {
+            get { return _selectedHistoryChangeType; }
+            set
+            {
+                _selectedHistoryChangeType = value;
+                OnPropertyChanged("SelectedHistoryChangeType");
+            }
+        }
+        private ViewComboDto _selectedClientHistoryChangeType;
+        public ViewComboDto SelectedClientHistoryChangeType
+        {
+            get { return _selectedClientHistoryChangeType; }
+            set
+            {
+                _selectedClientHistoryChangeType = value;
+                OnPropertyChanged("SelectedClientHistoryChangeType");
+            }
+        }
 
         public List<ViewReportMenuDTO> DiscoveryReportMenu { get; set; } = new List<ViewReportMenuDTO>();
         public List<ViewReportMenuDTO> DesignReportMenu { get; set; } = new List<ViewReportMenuDTO>();
@@ -710,8 +782,41 @@ namespace CMG.Application.ViewModel
         public ICommand DividentScaleFilterCommand
         {
             get { return CreateCommand(DividentScaleFilter); }
-        }        
+        }  
+        public ICommand SaveHistoryCommand
+        {
+            get { return CreateCommand(SaveHistory); }
+        }
+        public ICommand AddHistoryCommand
+        {
+            get { return CreateCommand(AddHistory); } 
+        }
+        public ICommand CancelHistoryCommand
+        {
+            get { return CreateCommand(CancelHistory); }
+        }
+        public ICommand DeleteHistoryCommand
+        {
+            get { return CreateCommand(DeleteHistory); }
+        }
+        public ICommand SaveClientHistoryCommand
+        {
+            get { return CreateCommand(SaveClientHistory); }
+        }
+        public ICommand AddClientHistoryCommand
+        {
+            get { return CreateCommand(AddClientHistory); }
+        }
+        public ICommand CancelClientHistoryCommand
+        {
+            get { return CreateCommand(CancelClientHistory); }
+        }
+        public ICommand DeleteClientHistoryCommand
+        {
+            get { return CreateCommand(DeleteClientHistory); }
+        }
         #endregion command properties
+
         #endregion Properties
 
         #region Methods
@@ -753,6 +858,7 @@ namespace CMG.Application.ViewModel
             CategoryCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameCategory
                                             && !agentCategories.Contains(x.FieldCode)).ToList();
             CurrencyCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameCurrency).ToList();
+            ChangeTypeCollection = Combo.Where(x => x.FieldName.Trim() == comboFieldNameChangeType).ToList();
         }
         private void GetAgents()
         {
@@ -1334,6 +1440,193 @@ namespace CMG.Application.ViewModel
             }
 
         }
+        private void SaveHistory()
+        {
+            try
+            {
+                if(SelectedHistory != null && ValidateHistory(SelectedHistory))
+                {
+                    if (SelectedHistory.Keychgs > 0)
+                    {
+                        var entity = _mapper.Map<PolChg>(SelectedHistory);
+                        entity.Chgtype =  SelectedHistoryChangeType != null ? SelectedHistoryChangeType.FieldCode.Trim() : string.Empty;
+                        _unitOfWork.PolicyChange.Save(entity);
+                        _unitOfWork.Commit();
+                        _notifier.ShowSuccess("History record updated successfully");
+                        var selectedHistoryId = SelectedHistory.Keychgs;
+                        GetPolicyHistory();
+                        SelectedHistory = PolicyChangeCollection.Where(c => c.Keychgs == selectedHistoryId).FirstOrDefault();
+                    }
+                    else
+                    {
+                        var entity = _mapper.Map<PolChg>(SelectedHistory);
+                        entity.Keynumo = SelectedPolicy.Id;
+                        //entity.Keynump = SelectedClient.Keynump; commented this as need to add keynump only when we are adding from History - Client tab
+                        entity.Keychgs = _unitOfWork.PolicyChange.GetNextId();
+                        entity.Chgtype = SelectedHistoryChangeType != null ? SelectedHistoryChangeType.FieldCode.Trim() : string.Empty;
+                        _unitOfWork.PolicyChange.Add(entity);
+                        _unitOfWork.Commit();
+                        _notifier.ShowSuccess("History record added successfully");
+                        GetPolicyHistory();
+                    }
+                    GetClientPolicyHistory();
+                }
+            }
+            catch(Exception ex)
+            {
+                _notifier.ShowError("Error occured:" + ex.Message);
+            }
+        }
+        private void AddHistory()
+        {
+            SelectedHistory = new ViewPolicyChangeDto() { EffDate = DateTime.Today };
+        }
+        private void CancelHistory()
+        {
+            if(SelectedHistory != null)
+            {
+                if(SelectedHistory.Keychgs > 0)
+                {
+                    var entity = _unitOfWork.PolicyChange.FindHistory(SelectedHistory.Keychgs);
+                    var selectedHistory = _mapper.Map<ViewPolicyChangeDto>(entity);
+                    selectedHistory.Chgtype = string.IsNullOrEmpty(selectedHistory.Chgtype.Trim()) ? string.Empty
+                                            : ChangeTypeCollection.Where(c => c.FieldCode.Trim() == selectedHistory.Chgtype.Trim()).FirstOrDefault().Description;
+                    SelectedHistory = selectedHistory;
+                }
+                else
+                {
+                    SelectedHistory = PolicyChangeCollection.Count > 0 ? PolicyChangeCollection[0] : default;
+                }
+            }
+        }
+        private void DeleteHistory(object param)
+        {
+            try
+            {
+                var result = _dialogService.ShowMessageBox("Are you sure you want to delete the record?");
+                if (result == DialogServiceLibrary.MessageBoxResult.Yes)
+                {
+                    if (param != null)
+                    {
+                        ViewPolicyChangeDto selectedPolicyChange = PolicyChangeCollection.Where(p => p.Keychgs == (int)param).FirstOrDefault();
+                        if (selectedPolicyChange != null)
+                        {
+                            var entity = _unitOfWork.PolicyChange.FindHistory(selectedPolicyChange.Keychgs);
+                            entity.Del = true;
+                            _unitOfWork.PolicyChange.Save(entity);
+                            _unitOfWork.Commit();
+                            GetPolicyHistory();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _notifier.ShowError("Error occured:" + ex.Message);
+            }
+        }
+
+        private bool ValidateHistory(ViewPolicyChangeDto policyChangeDto)
+        {
+            if(policyChangeDto != null)
+            {
+                if(string.IsNullOrEmpty(policyChangeDto.Subject))
+                {
+                    _notifier.ShowError("Subject is required");
+                    return false;
+                }
+                if (policyChangeDto.EffDate != null
+                    && !DateTime.TryParse(policyChangeDto.EffDate.ToString(), out DateTime effDate))
+                {
+                    _notifier.ShowError("Effective date is invalid");
+                    return false;
+                }
+            }
+            return true;
+        }
+        private void SaveClientHistory()
+        {
+            try
+            {
+                if (SelectedClientHistory != null && ValidateHistory(SelectedClientHistory))
+                {
+                    if (SelectedClientHistory.Keychgs > 0)
+                    {
+                        var entity = _mapper.Map<PolChg>(SelectedClientHistory);
+                        entity.Chgtype = SelectedClientHistoryChangeType != null ? SelectedClientHistoryChangeType.FieldCode.Trim() : string.Empty;
+                        _unitOfWork.PolicyChange.Save(entity);
+                        _unitOfWork.Commit();
+                        _notifier.ShowSuccess("History record updated successfully");
+                        var selectedClientHistoryId = SelectedClientHistory.Keychgs;
+                        GetClientPolicyHistory();
+                        SelectedClientHistory = ClientPolicyChangeCollection.Where(c => c.Keychgs == selectedClientHistoryId).FirstOrDefault();
+                    }
+                    else
+                    {
+                        var entity = _mapper.Map<PolChg>(SelectedClientHistory);
+                        entity.Keynump = SelectedClient.Keynump;
+                        entity.Keychgs = _unitOfWork.PolicyChange.GetNextId();
+                        entity.Chgtype = SelectedClientHistoryChangeType != null ? SelectedClientHistoryChangeType.FieldCode.Trim() : string.Empty;
+                        _unitOfWork.PolicyChange.Add(entity);
+                        _unitOfWork.Commit();
+                        _notifier.ShowSuccess("History record added successfully");
+                        GetClientPolicyHistory();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _notifier.ShowError("Error occured:" + ex.Message);
+            }
+        }
+        private void AddClientHistory()
+        {
+            SelectedClientHistory = new ViewPolicyChangeDto() { EffDate = DateTime.Today };
+        }
+        private void CancelClientHistory()
+        {
+            if (SelectedClientHistory != null)
+            {
+                if (SelectedClientHistory.Keychgs > 0)
+                {
+                    var entity = _unitOfWork.PolicyChange.FindHistory(SelectedClientHistory.Keychgs);
+                    var selectedClientHistory = _mapper.Map<ViewPolicyChangeDto>(entity);
+                    selectedClientHistory.Chgtype = string.IsNullOrEmpty(selectedClientHistory.Chgtype.Trim()) ? string.Empty
+                                            : ChangeTypeCollection.Where(c => c.FieldCode.Trim() == selectedClientHistory.Chgtype.Trim()).FirstOrDefault().Description;
+                    SelectedClientHistory = selectedClientHistory;
+                }
+                else
+                {
+                    SelectedClientHistory = ClientPolicyChangeCollection.Count > 0 ? ClientPolicyChangeCollection[0] : default;
+                }
+            }
+        }
+        private void DeleteClientHistory(object param)
+        {
+            try
+            {
+                var result = _dialogService.ShowMessageBox("Are you sure you want to delete the record?");
+                if (result == DialogServiceLibrary.MessageBoxResult.Yes)
+                {
+                    if (param != null)
+                    {
+                        ViewPolicyChangeDto selectedClientPolicyChange = ClientPolicyChangeCollection.Where(p => p.Keychgs == (int)param).FirstOrDefault();
+                        if (selectedClientPolicyChange != null)
+                        {
+                            var entity = _unitOfWork.PolicyChange.FindHistory(selectedClientPolicyChange.Keychgs);
+                            entity.Del = true;
+                            _unitOfWork.PolicyChange.Save(entity);
+                            _unitOfWork.Commit();
+                            GetClientPolicyHistory();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _notifier.ShowError("Error occured:" + ex.Message);
+            }
+        }
         private void CancelInternalNotes()
         {
             IsInternalNotesEditVisible = true;
@@ -1399,7 +1692,43 @@ namespace CMG.Application.ViewModel
             }
             return PolicyCollection;
         }
+        public void GetPolicyHistory()
+        {
+            if (SelectedPolicy != null)
+            {
+                var policyHistory = _unitOfWork.PolicyChange.Find(SelectedPolicy.Id);
+                var policyChangeCollection = policyHistory.Select(r => _mapper.Map<ViewPolicyChangeDto>(r));
+                PolicyChangeCollection = new ObservableCollection<ViewPolicyChangeDto>(policyChangeCollection.Select(x =>
+                {
+                    x.Chgtype = string.IsNullOrEmpty(x.Chgtype.Trim()) ? "" : ChangeTypeCollection.Where(c => c.FieldCode == x.Chgtype.Trim()).FirstOrDefault()?.Description;
+                    return x;
+                }).OrderByDescending(o => o.EffDate));
 
+                if (PolicyChangeCollection != null && PolicyChangeCollection.Count > 0)
+                {
+                    SelectedHistory = PolicyChangeCollection[0];
+                }
+            }
+        }
+        public void GetClientPolicyHistory()
+        {
+            if (SelectedClient != null)
+            {
+                var policyHistory = _unitOfWork.PolicyChange.FindClientHistory(SelectedClient.Keynump);
+                var clientPolicyChangeCollection = policyHistory.Select(r => _mapper.Map<ViewPolicyChangeDto>(r));
+
+                ClientPolicyChangeCollection = new ObservableCollection<ViewPolicyChangeDto>(clientPolicyChangeCollection.Select(x =>
+                {
+                    x.Chgtype = string.IsNullOrEmpty(x.Chgtype.Trim()) ? "" : ChangeTypeCollection.Where(c => c.FieldCode == x.Chgtype.Trim()).FirstOrDefault()?.Description;
+                    return x;
+                }).OrderByDescending(o => o.EffDate));
+
+                if (ClientPolicyChangeCollection != null && ClientPolicyChangeCollection.Count > 0)
+                {
+                    SelectedClientHistory = ClientPolicyChangeCollection[0];
+                }
+            }
+        }
         public void LoadReportMenu()
         {
             LoadDiscoveryReportMenu();

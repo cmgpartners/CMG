@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+using System.Text;
 
-namespace CMG.DataAccess.Domain
+namespace CMG.Application.DTO
 {
-    public partial class PolChg : EntityBase
+    public class ViewPolicyChangeDto
     {
-        [Key]
         public int Keychgs { get; set; }
         public int Keynumo { get; set; }
         public DateTime EffDate { get; set; }
@@ -16,5 +15,10 @@ namespace CMG.DataAccess.Domain
         public int Keynump { get; set; }
         public string SalesforceId { get; set; }
         public string Policynum2 { get; set; }
+        public DateTime RevDate { get; set; }
+        public string RevLocn { get; set; }
+        public DateTime Cr8Date { get; set; }
+        public string Cr8Locn { get; set; }
+        public bool Del { get; set; } = false;
     }
 }

@@ -117,7 +117,10 @@ namespace CMG.Application.Mapper
              .ForMember(des => des.AgentCommissions, mo => mo.MapFrom(src => src.CommissionAgents));
 
             CreateMap<ViewCommissionAgentDto, ViewAgentCommissionDto>()
-            .ForMember(des => des.Id, mo => mo.Ignore());           
+            .ForMember(des => des.Id, mo => mo.Ignore());
+
+            CreateMap<ViewPolicyChangeDto, PolChg>()
+            .ReverseMap();
         }
         private void AfterMapPolicysToRelationship(Policys src, ViewPolicyListDto des)
         {

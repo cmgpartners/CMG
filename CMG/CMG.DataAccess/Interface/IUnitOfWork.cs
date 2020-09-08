@@ -19,6 +19,7 @@ namespace CMG.DataAccess.Interface
         IBusinessPolicyRepository BusinessPolicy { get; }
         IPolicyIllustrationRepository PolicyIllustration { get; }
         IOptionsRepository Options { get; }
+        IPolicyChangeRepository PolicyChange { get; }
         void Commit();
         void SaveChanges();
     }
